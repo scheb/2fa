@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 	<services>
-		<service id="scheb_two_factor.trusted_cookie_response_listener" class="Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedCookieResponseListener" lazy="true">
-			<argument type="service" id="scheb_two_factor.trusted_token_storage" />
-			<argument>%scheb_two_factor.trusted_device.lifetime%</argument>
-			<argument>%scheb_two_factor.trusted_device.cookie_name%</argument>
-			<argument>%scheb_two_factor.trusted_device.cookie_secure%</argument>
-			<argument>%scheb_two_factor.trusted_device.cookie_same_site%</argument>
-			<tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" />
-		</service>
-
 		<service id="scheb_two_factor.trusted_jwt_encoder" class="Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\JwtTokenEncoder">
 			<argument>%kernel.secret%</argument>
 		</service>
@@ -19,6 +10,15 @@
 			<argument type="service" id="scheb_two_factor.trusted_jwt_encoder" />
 			<argument>%scheb_two_factor.trusted_device.cookie_name%</argument>
 			<argument>%scheb_two_factor.trusted_device.lifetime%</argument>
+		</service>
+
+		<service id="scheb_two_factor.trusted_cookie_response_listener" class="Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedCookieResponseListener" lazy="true">
+			<argument type="service" id="scheb_two_factor.trusted_token_storage" />
+			<argument>%scheb_two_factor.trusted_device.lifetime%</argument>
+			<argument>%scheb_two_factor.trusted_device.cookie_name%</argument>
+			<argument>%scheb_two_factor.trusted_device.cookie_secure%</argument>
+			<argument>%scheb_two_factor.trusted_device.cookie_same_site%</argument>
+			<tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" />
 		</service>
 
 		<service id="scheb_two_factor.default_trusted_device_manager" class="Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManager">
