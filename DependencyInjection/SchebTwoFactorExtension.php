@@ -42,19 +42,19 @@ class SchebTwoFactorExtension extends Extension
         $loader->load('two_factor.xml');
 
         // Load two-factor modules
-        if ($config['email']['enabled'] === true) {
+        if (true === $config['email']['enabled']) {
             $this->configureEmailAuthenticationProvider($container, $config);
         }
-        if ($config['google']['enabled'] === true) {
+        if (true === $config['google']['enabled']) {
             $this->configureGoogleAuthenticationProvider($container);
         }
 
         // Configure custom services
         $this->configurePersister($container, $config);
-        if ($config['trusted_device']['enabled'] === true) {
+        if (true === $config['trusted_device']['enabled']) {
             $this->configureTrustedDeviceManager($container, $config);
         }
-        if ($config['backup_codes']['enabled'] === true) {
+        if (true === $config['backup_codes']['enabled']) {
             $this->configureBackupCodeManager($container, $config);
         }
     }
