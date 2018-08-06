@@ -3,6 +3,12 @@ Upgrading
 
 Here's an overview if you have to do any work when upgrading.
 
+## 3.x to 4.x
+
+Signature of `Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface::getGoogleAuthenticatorSecret()` has changed to
+return a nullable string: `?string`.
+
+
 ## 2.x to 3.x
 
 Dropped support for Symfony < 3.4.

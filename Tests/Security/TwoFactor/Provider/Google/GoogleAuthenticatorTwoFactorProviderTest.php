@@ -29,7 +29,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
         $this->provider = new GoogleAuthenticatorTwoFactorProvider($this->authenticator, $formRenderer);
     }
 
-    private function createUser(bool $enabled = true, string $secret = 'SECRET'): MockObject
+    private function createUser(bool $enabled = true, ?string $secret = 'SECRET'): MockObject
     {
         $user = $this->createMock(TwoFactorInterface::class);
         $user
@@ -72,7 +72,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
      */
     public function beginAuthentication_twoFactorEnabledNoSecret_returnFalse(): void
     {
-        $user = $this->createUser(true, '');
+        $user = $this->createUser(true, null);
         $context = $this->createAuthenticationContext($user);
 
         $returnValue = $this->provider->beginAuthentication($context);

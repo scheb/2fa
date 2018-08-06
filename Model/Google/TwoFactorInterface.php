@@ -24,5 +24,5 @@ interface TwoFactorInterface
      *
      * @return string
      */
-    public function getGoogleAuthenticatorSecret(): string;
+    public function getGoogleAuthenticatorSecret(): ?string;
 }
