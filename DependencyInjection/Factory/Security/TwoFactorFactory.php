@@ -97,12 +97,12 @@ class TwoFactorFactory implements SecurityFactoryInterface
 
     private function createFailureHandler(ContainerBuilder $container, string $firewallName, array $config): string
     {
-        $successHandlerId = self::FAILURE_HANDLER_ID_PREFIX.$firewallName;
+        $failureHandlerId = self::FAILURE_HANDLER_ID_PREFIX.$firewallName;
         $container
-            ->setDefinition($successHandlerId, new ChildDefinition(self::FAILURE_HANDLER_DEFINITION_ID))
+            ->setDefinition($failureHandlerId, new ChildDefinition(self::FAILURE_HANDLER_DEFINITION_ID))
             ->replaceArgument(1, $config);
 
-        return $successHandlerId;
+        return $failureHandlerId;
     }
 
     private function createTwoFactorFirewallConfig(ContainerBuilder $container, string $firewallName, array $config): void
