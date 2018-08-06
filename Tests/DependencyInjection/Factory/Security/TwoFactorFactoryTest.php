@@ -9,12 +9,13 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Yaml\Parser;
 
 class TwoFactorFactoryTest extends TestCase
 {
     const FIREWALL_NAME = 'firewallName';
-    const CONFIG = ['config' => 'value'];
+    const DEFAULT_CONFIG = ['config' => 'value'];
     const USER_PROVIDER = 'userProvider';
     const DEFAULT_ENTRY_POINT = 'defaultEntryPoint';
     /**
@@ -50,6 +51,8 @@ two_factor:
     auth_form_path: /auth_form_path
     always_use_default_target_path: true
     default_target_path: /default_target_path
+    success_handler: my_success_handler
+    failure_handler: my_failure_handler
     auth_code_parameter_name: auth_code_param_name
     trusted_parameter_name: trusted_param_name
     multi_factor: true
@@ -66,12 +69,12 @@ EOF;
         return (new Processor())->processConfiguration($firewallConfiguration, $config);
     }
 
-    private function callCreateFirewall(): array
+    private function callCreateFirewall(array $customConfig = []): array
     {
         return $this->factory->create(
             $this->container,
             self::FIREWALL_NAME,
-            self::CONFIG,
+            array_merge(self::DEFAULT_CONFIG, $customConfig),
             self::USER_PROVIDER,
             self::DEFAULT_ENTRY_POINT
         );
@@ -89,6 +92,8 @@ EOF;
         $this->assertEquals('/2fa', $processedConfiguration['auth_form_path']);
         $this->assertFalse($processedConfiguration['always_use_default_target_path']);
         $this->assertEquals('/', $processedConfiguration['default_target_path']);
+        $this->assertNull($processedConfiguration['success_handler']);
+        $this->assertNull($processedConfiguration['failure_handler']);
         $this->assertEquals('_auth_code', $processedConfiguration['auth_code_parameter_name']);
         $this->assertEquals('_trusted', $processedConfiguration['trusted_parameter_name']);
         $this->assertFalse($processedConfiguration['multi_factor']);
@@ -106,6 +111,8 @@ EOF;
         $this->assertEquals('/auth_form_path', $processedConfiguration['auth_form_path']);
         $this->assertTrue($processedConfiguration['always_use_default_target_path']);
         $this->assertEquals('/default_target_path', $processedConfiguration['default_target_path']);
+        $this->assertEquals('my_success_handler', $processedConfiguration['success_handler']);
+        $this->assertEquals('my_failure_handler', $processedConfiguration['failure_handler']);
         $this->assertEquals('auth_code_param_name', $processedConfiguration['auth_code_parameter_name']);
         $this->assertEquals('trusted_param_name', $processedConfiguration['trusted_parameter_name']);
         $this->assertTrue($processedConfiguration['multi_factor']);
@@ -133,7 +140,7 @@ EOF;
         $this->assertTrue($this->container->hasDefinition('security.authentication.provider.two_factor.firewallName'));
         $definition = $this->container->getDefinition('security.authentication.provider.two_factor.firewallName');
         $this->assertEquals(self::FIREWALL_NAME, $definition->getArgument(0));
-        $this->assertEquals(self::CONFIG, $definition->getArgument(1));
+        $this->assertEquals(self::DEFAULT_CONFIG, $definition->getArgument(1));
     }
 
     /**
@@ -148,7 +155,7 @@ EOF;
         $this->assertEquals(self::FIREWALL_NAME, $definition->getArgument(3));
         $this->assertEquals('security.authentication.success_handler.two_factor.firewallName', (string) $definition->getArgument(4));
         $this->assertEquals('security.authentication.failure_handler.two_factor.firewallName', (string) $definition->getArgument(5));
-        $this->assertEquals(self::CONFIG, $definition->getArgument(6));
+        $this->assertEquals(self::DEFAULT_CONFIG, $definition->getArgument(6));
     }
 
     /**
@@ -161,7 +168,21 @@ EOF;
         $this->assertTrue($this->container->hasDefinition('security.authentication.success_handler.two_factor.firewallName'));
         $definition = $this->container->getDefinition('security.authentication.success_handler.two_factor.firewallName');
         $this->assertEquals(self::FIREWALL_NAME, $definition->getArgument(1));
-        $this->assertEquals(self::CONFIG, $definition->getArgument(2));
+        $this->assertEquals(self::DEFAULT_CONFIG, $definition->getArgument(2));
+    }
+
+    /**
+     * @test
+     */
+    public function create_customSuccessHandler_useCustomSuccessHandlerDefinition()
+    {
+        $this->callCreateFirewall([
+            'success_handler' => 'my_success_handler',
+        ]);
+
+        $this->assertFalse($this->container->hasDefinition('security.authentication.success_handler.two_factor.firewallName'));
+        $definition = $this->container->getDefinition('security.authentication.listener.two_factor.firewallName');
+        $this->assertEquals(new Reference('my_success_handler'), $definition->getArgument(4));
     }
 
     /**
@@ -173,7 +194,21 @@ EOF;
 
         $this->assertTrue($this->container->hasDefinition('security.authentication.failure_handler.two_factor.firewallName'));
         $definition = $this->container->getDefinition('security.authentication.failure_handler.two_factor.firewallName');
-        $this->assertEquals(self::CONFIG, $definition->getArgument(1));
+        $this->assertEquals(self::DEFAULT_CONFIG, $definition->getArgument(1));
+    }
+
+    /**
+     * @test
+     */
+    public function create_customFailureHandler_useCustomFailureHandlerDefinition()
+    {
+        $this->callCreateFirewall([
+            'failure_handler' => 'my_failure_handler',
+        ]);
+
+        $this->assertFalse($this->container->hasDefinition('security.authentication.failure_handler.two_factor.firewallName'));
+        $definition = $this->container->getDefinition('security.authentication.listener.two_factor.firewallName');
+        $this->assertEquals(new Reference('my_failure_handler'), $definition->getArgument(5));
     }
 
     /**
@@ -185,7 +220,7 @@ EOF;
 
         $this->assertTrue($this->container->hasDefinition('security.firewall_config.two_factor.firewallName'));
         $definition = $this->container->getDefinition('security.firewall_config.two_factor.firewallName');
-        $this->assertEquals(self::CONFIG, $definition->getArgument(0));
+        $this->assertEquals(self::DEFAULT_CONFIG, $definition->getArgument(0));
         $this->assertTrue($definition->hasTag('scheb_two_factor.firewall_config'));
         $tag = $definition->getTag('scheb_two_factor.firewall_config');
         $this->assertEquals(['firewall' => 'firewallName'], $tag[0]);

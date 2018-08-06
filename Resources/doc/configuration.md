@@ -69,6 +69,8 @@ security:
                 auth_form_path: /2fa                   # Path or route name of the two-factor form
                 check_path: /2fa_check                 # Path or route name of the two-factor code check
                 default_target_path: /                 # Where to redirect by default after successful authentication
+                success_handler: acme.custom_success_handler  # Use a custom success handler instead of the default one 
+                failure_handler: acme.custom_failure_handler  # Use a custom failure handler instead of the default one
                 always_use_default_target_path: false  # If it should always redirect to default_target_path
                 auth_code_parameter_name: _auth_code   # Name of the parameter for the two-factor authentication code
                 trusted_parameter_name: _trusted       # Name of the parameter for the trusted device option

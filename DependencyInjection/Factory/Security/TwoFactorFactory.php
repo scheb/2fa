@@ -42,6 +42,8 @@ class TwoFactorFactory implements SecurityFactoryInterface
             ->scalarNode('auth_form_path')->defaultValue(self::DEFAULT_AUTH_FORM_PATH)->end()
             ->booleanNode('always_use_default_target_path')->defaultValue(self::DEFAULT_ALWAYS_USE_DEFAULT_TARGET_PATH)->end()
             ->scalarNode('default_target_path')->defaultValue(self::DEFAULT_TARGET_PATH)->end()
+            ->scalarNode('success_handler')->defaultNull()->end()
+            ->scalarNode('failure_handler')->defaultNull()->end()
             ->scalarNode('auth_code_parameter_name')->defaultValue(self::DEFAULT_AUTH_CODE_PARAMETER_NAME)->end()
             ->scalarNode('trusted_parameter_name')->defaultValue(self::DEFAULT_TRUSTED_PARAMETER_NAME)->end()
             ->booleanNode('multi_factor')->defaultValue(self::DEFAULT_MULTI_FACTOR)->end()
@@ -86,6 +88,10 @@ class TwoFactorFactory implements SecurityFactoryInterface
 
     private function createSuccessHandler(ContainerBuilder $container, string $firewallName, array $config): string
     {
+        if (isset($config['success_handler'])) {
+            return $config['success_handler'];
+        }
+
         $successHandlerId = self::SUCCESS_HANDLER_ID_PREFIX.$firewallName;
         $container
             ->setDefinition($successHandlerId, new ChildDefinition(self::SUCCESS_HANDLER_DEFINITION_ID))
@@ -97,6 +103,10 @@ class TwoFactorFactory implements SecurityFactoryInterface
 
     private function createFailureHandler(ContainerBuilder $container, string $firewallName, array $config): string
     {
+        if (isset($config['failure_handler'])) {
+            return $config['failure_handler'];
+        }
+
         $failureHandlerId = self::FAILURE_HANDLER_ID_PREFIX.$firewallName;
         $container
             ->setDefinition($failureHandlerId, new ChildDefinition(self::FAILURE_HANDLER_DEFINITION_ID))
