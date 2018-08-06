@@ -5,11 +5,11 @@ namespace Scheb\TwoFactorBundle\Security\Http\Firewall;
 use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
+use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -23,12 +23,9 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerI
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
-use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class TwoFactorListener implements ListenerInterface
 {
-    use TargetPathTrait;
-
     private const DEFAULT_OPTIONS = [
         'auth_form_path' => TwoFactorFactory::DEFAULT_AUTH_FORM_PATH,
         'check_path' => TwoFactorFactory::DEFAULT_CHECK_PATH,
@@ -67,6 +64,11 @@ class TwoFactorListener implements ListenerInterface
     private $failureHandler;
 
     /**
+     * @var AuthenticationRequiredHandlerInterface
+     */
+    private $authenticationRequiredHandler;
+
+    /**
      * @var string[]
      */
     private $options;
@@ -103,6 +105,7 @@ class TwoFactorListener implements ListenerInterface
         string $firewallName,
         AuthenticationSuccessHandlerInterface $successHandler,
         AuthenticationFailureHandlerInterface $failureHandler,
+        AuthenticationRequiredHandlerInterface $authenticationRequiredHandler,
         array $options,
         TrustedDeviceManagerInterface $trustedDeviceManager,
         AccessMapInterface $accessMap,
@@ -120,6 +123,7 @@ class TwoFactorListener implements ListenerInterface
         $this->firewallName = $firewallName;
         $this->successHandler = $successHandler;
         $this->failureHandler = $failureHandler;
+        $this->authenticationRequiredHandler = $authenticationRequiredHandler;
         $this->options = array_merge(self::DEFAULT_OPTIONS, $options);
         $this->dispatcher = $dispatcher;
         $this->logger = $logger;
@@ -150,8 +154,7 @@ class TwoFactorListener implements ListenerInterface
         }
 
         if (!$this->isAuthFormRequest($request)) {
-            $response = $this->redirectToAuthForm($request);
-            $this->setTargetPath($request);
+            $response = $this->authenticationRequiredHandler->onAuthenticationRequired($request, $currentToken);
             $event->setResponse($response);
 
             return;
@@ -166,19 +169,6 @@ class TwoFactorListener implements ListenerInterface
     private function isAuthFormRequest(Request $request): bool
     {
         return $this->httpUtils->checkRequestPath($request, $this->options['auth_form_path']);
-    }
-
-    private function redirectToAuthForm(Request $request): RedirectResponse
-    {
-        return $this->httpUtils->createRedirectResponse($request, $this->options['auth_form_path']);
-    }
-
-    private function setTargetPath(Request $request): void
-    {
-        // session isn't required when using HTTP basic authentication mechanism for example
-        if ($request->hasSession() && $request->isMethodSafe(false) && !$request->isXmlHttpRequest()) {
-            $this->saveTargetPath($request->getSession(), $this->firewallName, $request->getUri());
-        }
     }
 
     private function attemptAuthentication(Request $request, TwoFactorToken $currentToken): Response
@@ -217,7 +207,7 @@ class TwoFactorListener implements ListenerInterface
 
         // When it's still a TwoFactorToken, keep showing the auth form
         if ($token instanceof TwoFactorToken) {
-            return $this->redirectToAuthForm($request);
+            return $this->authenticationRequiredHandler->onAuthenticationRequired($request, $token);
         }
 
         $this->dispatchLoginEvent(TwoFactorAuthenticationEvents::COMPLETE, $request, $token);

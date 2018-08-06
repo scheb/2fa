@@ -6,6 +6,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\Authentication\Voter\TwoFactorInProgressVoter;
+use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\Http\Firewall\TwoFactorListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
@@ -15,7 +16,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -59,6 +59,11 @@ class TwoFactorListenerTest extends TestCase
      * @var MockObject|AuthenticationFailureHandlerInterface
      */
     private $failureHandler;
+
+    /**
+     * @var MockObject|AuthenticationRequiredHandlerInterface
+     */
+    private $authenticationRequiredHandler;
 
     /**
      * @var MockObject|TrustedDeviceManagerInterface
@@ -115,6 +120,7 @@ class TwoFactorListenerTest extends TestCase
         $this->httpUtils = $this->createMock(HttpUtils::class);
         $this->successHandler = $this->createMock(AuthenticationSuccessHandlerInterface::class);
         $this->failureHandler = $this->createMock(AuthenticationFailureHandlerInterface::class);
+        $this->authenticationRequiredHandler = $this->createMock(AuthenticationRequiredHandlerInterface::class);
         $this->trustedDeviceManager = $this->createMock(TrustedDeviceManagerInterface::class);
         $this->accessMap = $this->createMock(AccessMapInterface::class);
         $this->accessDecisionManager = $this->createMock(AccessDecisionManagerInterface::class);
@@ -135,11 +141,6 @@ class TwoFactorListenerTest extends TestCase
             ->willReturn($this->request);
 
         $this->authFormRedirectResponse = $this->createMock(RedirectResponse::class);
-        $this->httpUtils
-            ->expects($this->any())
-            ->method('createRedirectResponse')
-            ->with($this->request, self::FORM_PATH)
-            ->willReturn($this->authFormRedirectResponse);
 
         $options = [
             'auth_form_path' => self::FORM_PATH,
@@ -155,6 +156,7 @@ class TwoFactorListenerTest extends TestCase
             self::FIREWALL_NAME,
             $this->successHandler,
             $this->failureHandler,
+            $this->authenticationRequiredHandler,
             $options,
             $this->trustedDeviceManager,
             $this->accessMap,
@@ -267,34 +269,6 @@ class TwoFactorListenerTest extends TestCase
             ->with($this->identicalTo($this->authFormRedirectResponse));
     }
 
-    private function assertSaveTargetUrl(string $targetUrl): void
-    {
-        $session = $this->createMock(SessionInterface::class);
-        $session
-            ->expects($this->once())
-            ->method('set')
-            ->with('_security.firewallName.target_path', $targetUrl);
-
-        $this->request
-            ->expects($this->any())
-            ->method('getSession')
-            ->willReturn($session);
-
-        // Conditions to store target URL
-        $this->request
-            ->expects($this->any())
-            ->method('hasSession')
-            ->willReturn(true);
-        $this->request
-            ->expects($this->any())
-            ->method('isMethodSafe')
-            ->willReturn(true);
-        $this->request
-            ->expects($this->any())
-            ->method('isXmlHttpRequest')
-            ->willReturn(false);
-    }
-
     private function assertEventsDispatched(array $eventTypes): void
     {
         $numEvents = count($eventTypes);
@@ -337,14 +311,18 @@ class TwoFactorListenerTest extends TestCase
     /**
      * @test
      */
-    public function handle_neitherFormNorCheckPath_redirectToFormAndSaveTargetPath()
+    public function handle_neitherFormNorCheckPath_redirectToForm()
     {
         $this->stubTokenManagerHasToken($this->createTwoFactorToken());
         $this->stubCurrentPath('/some_other_path');
         $this->stubPathAccessGranted(false);
 
+        $this->authenticationRequiredHandler
+            ->expects($this->once())
+            ->method('onAuthenticationRequired')
+            ->willReturn($this->authFormRedirectResponse);
+
         $this->assertRedirectToAuthForm();
-        $this->assertSaveTargetUrl('/some_other_path');
 
         $this->listener->handle($this->getResponseEvent);
     }
@@ -470,6 +448,11 @@ class TwoFactorListenerTest extends TestCase
         $this->stubTokenManagerHasToken($twoFactorToken);
         $this->stubCurrentPath(self::CHECK_PATH);
         $this->stubAuthenticationManagerReturnsToken($twoFactorToken); // Must be TwoFactorToken
+
+        $this->authenticationRequiredHandler
+            ->expects($this->once())
+            ->method('onAuthenticationRequired')
+            ->willReturn($this->authFormRedirectResponse);
 
         $this->assertRedirectToAuthForm();
 

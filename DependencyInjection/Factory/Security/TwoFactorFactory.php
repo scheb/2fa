@@ -25,12 +25,14 @@ class TwoFactorFactory implements SecurityFactoryInterface
     public const LISTENER_ID_PREFIX = 'security.authentication.listener.two_factor.';
     public const SUCCESS_HANDLER_ID_PREFIX = 'security.authentication.success_handler.two_factor.';
     public const FAILURE_HANDLER_ID_PREFIX = 'security.authentication.failure_handler.two_factor.';
+    public const AUTHENTICATION_REQUIRED_HANDLER_ID_PREFIX = 'security.authentication.authentication_required_handler.two_factor.';
     public const FIREWALL_CONFIG_ID_PREFIX = 'security.firewall_config.two_factor.';
 
     public const PROVIDER_DEFINITION_ID = 'scheb_two_factor.security.authentication.provider';
     public const LISTENER_DEFINITION_ID = 'scheb_two_factor.security.authentication.listener';
     public const SUCCESS_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.success_handler';
     public const FAILURE_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.failure_handler';
+    public const AUTHENTICATION_REQUIRED_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.authentication_required_handler';
     public const FIREWALL_CONFIG_DEFINITION_ID = 'scheb_two_factor.security.firewall_config';
 
     public function addConfiguration(NodeDefinition $node)
@@ -44,6 +46,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
             ->scalarNode('default_target_path')->defaultValue(self::DEFAULT_TARGET_PATH)->end()
             ->scalarNode('success_handler')->defaultNull()->end()
             ->scalarNode('failure_handler')->defaultNull()->end()
+            ->scalarNode('authentication_required_handler')->defaultNull()->end()
             ->scalarNode('auth_code_parameter_name')->defaultValue(self::DEFAULT_AUTH_CODE_PARAMETER_NAME)->end()
             ->scalarNode('trusted_parameter_name')->defaultValue(self::DEFAULT_TRUSTED_PARAMETER_NAME)->end()
             ->booleanNode('multi_factor')->defaultValue(self::DEFAULT_MULTI_FACTOR)->end()
@@ -74,6 +77,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
     {
         $successHandlerId = $this->createSuccessHandler($container, $firewallName, $config);
         $failureHandlerId = $this->createFailureHandler($container, $firewallName, $config);
+        $authRequiredHandlerId = $this->createAuthenticationRequiredHandler($container, $firewallName, $config);
 
         $listenerId = self::LISTENER_ID_PREFIX.$firewallName;
         $container
@@ -81,7 +85,8 @@ class TwoFactorFactory implements SecurityFactoryInterface
             ->replaceArgument(3, $firewallName)
             ->replaceArgument(4, new Reference($successHandlerId))
             ->replaceArgument(5, new Reference($failureHandlerId))
-            ->replaceArgument(6, $config);
+            ->replaceArgument(6, new Reference($authRequiredHandlerId))
+            ->replaceArgument(7, $config);
 
         return $listenerId;
     }
@@ -113,6 +118,21 @@ class TwoFactorFactory implements SecurityFactoryInterface
             ->replaceArgument(1, $config);
 
         return $failureHandlerId;
+    }
+
+    private function createAuthenticationRequiredHandler(ContainerBuilder $container, string $firewallName, array $config): string
+    {
+        if (isset($config['authentication_required_handler'])) {
+            return $config['authentication_required_handler'];
+        }
+
+        $successHandlerId = self::AUTHENTICATION_REQUIRED_HANDLER_ID_PREFIX.$firewallName;
+        $container
+            ->setDefinition($successHandlerId, new ChildDefinition(self::AUTHENTICATION_REQUIRED_HANDLER_DEFINITION_ID))
+            ->replaceArgument(1, $firewallName)
+            ->replaceArgument(2, $config);
+
+        return $successHandlerId;
     }
 
     private function createTwoFactorFirewallConfig(ContainerBuilder $container, string $firewallName, array $config): void

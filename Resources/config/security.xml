@@ -32,6 +32,7 @@
 			<argument type="string" /> <!-- Firewall name -->
 			<argument /> <!-- Success handler -->
 			<argument /> <!-- Failure handler -->
+			<argument /> <!-- Authentication required handler -->
 			<argument type="collection" /> <!-- Options -->
 			<argument type="service" id="scheb_two_factor.trusted_device_manager" />
 			<argument type="service" id="security.access_map" />
@@ -48,6 +49,12 @@
 
 		<service id="scheb_two_factor.security.authentication.failure_handler" class="Scheb\TwoFactorBundle\Security\Http\Authentication\DefaultAuthenticationFailureHandler" abstract="true">
 			<argument type="service" id="security.http_utils" />
+			<argument type="collection" /> <!-- Options -->
+		</service>
+
+		<service id="scheb_two_factor.security.authentication.authentication_required_handler" class="Scheb\TwoFactorBundle\Security\Http\Authentication\DefaultAuthenticationRequiredHandler" abstract="true">
+			<argument type="service" id="security.http_utils" />
+			<argument type="string" /> <!-- Firewall name -->
 			<argument type="collection" /> <!-- Options -->
 		</service>
 
