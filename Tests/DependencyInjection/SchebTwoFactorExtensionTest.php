@@ -46,6 +46,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertParameter(null, 'scheb_two_factor.google.server_name');
         $this->assertParameter(null, 'scheb_two_factor.google.issuer');
         $this->assertParameter('@SchebTwoFactor/Authentication/form.html.twig', 'scheb_two_factor.google.template');
+        $this->assertParameter(6, 'scheb_two_factor.google.digits');
         $this->assertParameter(false, 'scheb_two_factor.trusted_device.enabled');
         $this->assertParameter(5184000, 'scheb_two_factor.trusted_device.lifetime');
         $this->assertParameter(false, 'scheb_two_factor.trusted_device.extend_lifetime');
@@ -72,6 +73,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertParameter('Server Name', 'scheb_two_factor.google.server_name');
         $this->assertParameter('Issuer', 'scheb_two_factor.google.issuer');
         $this->assertParameter('AcmeTestBundle:Authentication:googleForm.html.twig', 'scheb_two_factor.google.template');
+        $this->assertParameter(8, 'scheb_two_factor.google.digits');
         $this->assertParameter(true, 'scheb_two_factor.trusted_device.enabled');
         $this->assertParameter(2592000, 'scheb_two_factor.trusted_device.lifetime');
         $this->assertParameter(true, 'scheb_two_factor.trusted_device.extend_lifetime');
@@ -308,6 +310,7 @@ google:
     issuer: Issuer
     server_name: Server Name
     template: AcmeTestBundle:Authentication:googleForm.html.twig
+    digits: 8
 EOF;
         $parser = new Parser();
 

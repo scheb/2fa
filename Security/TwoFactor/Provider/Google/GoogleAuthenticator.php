@@ -2,8 +2,8 @@
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google;
 
-use Google\Authenticator\GoogleAuthenticator as BaseGoogleAuthenticator;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+use Sonata\GoogleAuthenticator\GoogleAuthenticatorInterface as SonataGoogleAuthenticatorInterface;
 
 class GoogleAuthenticator implements GoogleAuthenticatorInterface
 {
@@ -13,7 +13,7 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
     private $server;
 
     /**
-     * @var BaseGoogleAuthenticator
+     * @var SonataGoogleAuthenticatorInterface
      */
     private $authenticator;
 
@@ -22,7 +22,7 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
      */
     private $issuer;
 
-    public function __construct(BaseGoogleAuthenticator $authenticator, $server, $issuer)
+    public function __construct(SonataGoogleAuthenticatorInterface $authenticator, $server, $issuer)
     {
         $this->authenticator = $authenticator;
         $this->server = $server;

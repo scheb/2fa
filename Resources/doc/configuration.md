@@ -37,6 +37,7 @@ scheb_two_factor:
         enabled: true                  # If Google Authenticator should be enabled, default false
         server_name: Server Name       # Server name used in QR code
         issuer: Issuer Name            # Issuer name used in QR code
+        digits: 6                      # Number of digits in authentication code
         template: security/2fa_form.html.twig   # Template used to render the authentication form
 
     # The service which is used to persist data in the user object. By default Doctrine is used. If your entity is

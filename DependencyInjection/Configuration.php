@@ -60,6 +60,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('issuer')->defaultNull()->end()
                         ->scalarNode('server_name')->defaultNull()->end()
                         ->scalarNode('template')->defaultValue('@SchebTwoFactor/Authentication/form.html.twig')->end()
+                        ->integerNode('digits')->defaultValue(6)->min(1)->end()
                     ->end()
                 ->end()
                 ->arrayNode('security_tokens')

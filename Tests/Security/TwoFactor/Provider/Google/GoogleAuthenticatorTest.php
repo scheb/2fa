@@ -2,22 +2,22 @@
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Google;
 
-use Google\Authenticator\GoogleAuthenticator as BasicGoogleAuthenticator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use Sonata\GoogleAuthenticator\GoogleAuthenticatorInterface;
 
 class GoogleAuthenticatorTest extends TestCase
 {
     /**
-     * @var MockObject|BasicGoogleAuthenticator
+     * @var MockObject|GoogleAuthenticatorInterface
      */
     private $google;
 
     protected function setUp()
     {
-        $this->google = $this->createMock(BasicGoogleAuthenticator::class);
+        $this->google = $this->createMock(GoogleAuthenticatorInterface::class);
     }
 
     /**
