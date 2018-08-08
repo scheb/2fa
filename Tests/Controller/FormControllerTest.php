@@ -25,7 +25,7 @@ class FormControllerTest extends TestCase
     private const AUTH_CODE_PARAM_NAME = 'auth_code_param_name';
     private const TRUSTED_PARAM_NAME = 'trusted_param_name';
     private const FIREWALL_NAME = 'firewallName';
-    private const CSRF_PARAMETER_NAME = 'csrf_parameter_name';
+    private const CSRF_PARAMETER = 'csrf_parameter';
     private const CSRF_TOKEN_ID = 'csrf_token_id';
 
     /**
@@ -110,7 +110,7 @@ class FormControllerTest extends TestCase
         $this->firewallConfig
             ->expects($this->any())
             ->method('getCsrfParameterName')
-            ->willReturn(self::CSRF_PARAMETER_NAME);
+            ->willReturn(self::CSRF_PARAMETER);
         $this->firewallConfig
             ->expects($this->any())
             ->method('getCsrfTokenId')
@@ -409,7 +409,7 @@ class FormControllerTest extends TestCase
             $this->assertEquals(self::AUTH_CODE_PARAM_NAME, $templateVars['authCodeParameterName']);
             $this->assertEquals(self::TRUSTED_PARAM_NAME, $templateVars['trustedParameterName']);
             $this->assertFalse($templateVars['isCsrfProtectionEnabled']);
-            $this->assertEquals(self::CSRF_PARAMETER_NAME, $templateVars['csrfParameterName']);
+            $this->assertEquals(self::CSRF_PARAMETER, $templateVars['csrfParameterName']);
             $this->assertEquals(self::CSRF_TOKEN_ID, $templateVars['csrfTokenId']);
 
             return true;

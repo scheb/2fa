@@ -26,7 +26,7 @@ class CsrfTokenValidator
 
     public function hasValidCsrfToken(Request $request): bool
     {
-        $tokenValue = $request->request->get($this->options['csrf_parameter_name'], '');
+        $tokenValue = $request->request->get($this->options['csrf_parameter'], '');
         $token = new CsrfToken($this->options['csrf_token_id'], $tokenValue);
         if (!$this->csrfTokenGenerator->isTokenValid($token)) {
             return false;

@@ -83,7 +83,7 @@ security:
                 authentication_required_handler: acme.custom_auth_reqired_handler
 
                 csrf_token_generator: security.csrf.token_manager # CSRF protection will be enabled if a service id of CsrfTokenManagerInterface is given. Default: null
-                csrf_parameter_name: _csrf_token                  # The default CSRF parameter name
+                csrf_parameter: _csrf_token                       # The default CSRF parameter name
                 csrf_token_id: two_factor                         # The default CSRF token id, used for generating the token value. It is advised to use a different id per form
 ```
 

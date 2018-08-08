@@ -11,7 +11,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class CsrfTokenValidatorTest extends TestCase
 {
-    private const CSRF_PARAMETER_NAME = 'parameter_name';
+    private const CSRF_PARAMETER = 'parameter_name';
     private const CSRF_TOKEN_ID = 'token_id';
 
     /**
@@ -48,7 +48,7 @@ class CsrfTokenValidatorTest extends TestCase
         $this->csrfTokenGenerator = $this->createMock(CsrfTokenManagerInterface::class);
 
         $options = [
-            'csrf_parameter_name' => self::CSRF_PARAMETER_NAME,
+            'csrf_parameter' => self::CSRF_PARAMETER,
             'csrf_token_id' => self::CSRF_TOKEN_ID,
         ];
 

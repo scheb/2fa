@@ -58,7 +58,7 @@ two_factor:
     trusted_parameter_name: trusted_param_name
     multi_factor: true
     csrf_token_generator: security.csrf.token_manager
-    csrf_parameter_name: _custom_csrf_token
+    csrf_parameter: _custom_csrf_token
     csrf_token_id: custom_two_factor
 EOF;
         $parser = new Parser();
@@ -103,7 +103,7 @@ EOF;
         $this->assertEquals(TwoFactorFactory::DEFAULT_TRUSTED_PARAMETER_NAME, $processedConfiguration['trusted_parameter_name']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_MULTI_FACTOR, $processedConfiguration['multi_factor']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_TOKEN_GENERATOR, $processedConfiguration['csrf_token_generator']);
-        $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_PARAMETER_NAME, $processedConfiguration['csrf_parameter_name']);
+        $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_PARAMETER, $processedConfiguration['csrf_parameter']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_TOKEN_ID, $processedConfiguration['csrf_token_id']);
     }
 
@@ -126,7 +126,7 @@ EOF;
         $this->assertEquals('trusted_param_name', $processedConfiguration['trusted_parameter_name']);
         $this->assertTrue($processedConfiguration['multi_factor']);
         $this->assertEquals('security.csrf.token_manager', $processedConfiguration['csrf_token_generator']);
-        $this->assertEquals('_custom_csrf_token', $processedConfiguration['csrf_parameter_name']);
+        $this->assertEquals('_custom_csrf_token', $processedConfiguration['csrf_parameter']);
         $this->assertEquals('custom_two_factor', $processedConfiguration['csrf_token_id']);
     }
 

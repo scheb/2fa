@@ -21,7 +21,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
     public const DEFAULT_TRUSTED_PARAMETER_NAME = '_trusted';
     public const DEFAULT_MULTI_FACTOR = false;
     public const DEFAULT_CSRF_TOKEN_GENERATOR = null;
-    public const DEFAULT_CSRF_PARAMETER_NAME = '_csrf_token';
+    public const DEFAULT_CSRF_PARAMETER = '_csrf_token';
     public const DEFAULT_CSRF_TOKEN_ID = 'two_factor';
 
     public const PROVIDER_ID_PREFIX = 'security.authentication.provider.two_factor.';
@@ -56,7 +56,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
             ->scalarNode('trusted_parameter_name')->defaultValue(self::DEFAULT_TRUSTED_PARAMETER_NAME)->end()
             ->booleanNode('multi_factor')->defaultValue(self::DEFAULT_MULTI_FACTOR)->end()
             ->scalarNode('csrf_token_generator')->defaultValue(self::DEFAULT_CSRF_TOKEN_GENERATOR)->end()
-            ->scalarNode('csrf_parameter_name')->defaultValue(self::DEFAULT_CSRF_PARAMETER_NAME)->end()
+            ->scalarNode('csrf_parameter')->defaultValue(self::DEFAULT_CSRF_PARAMETER)->end()
             ->scalarNode('csrf_token_id')->defaultValue(self::DEFAULT_CSRF_TOKEN_ID)->end()
         ;
     }

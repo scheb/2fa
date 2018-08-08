@@ -18,7 +18,7 @@ class TwoFactorFirewallConfigTest extends TestCase
             'multi_factor' => true,
             'auth_code_parameter_name' => 'auth_code_param',
             'trusted_parameter_name' => 'trusted_param',
-            'csrf_parameter_name' => 'parameter_name',
+            'csrf_parameter' => 'parameter_name',
             'csrf_token_id' => 'token_id',
         ]);
     }

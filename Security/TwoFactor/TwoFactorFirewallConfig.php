@@ -38,7 +38,7 @@ class TwoFactorFirewallConfig
 
     public function getCsrfParameterName(): string
     {
-        return $this->options['csrf_parameter_name'] ?? TwoFactorFactory::DEFAULT_CSRF_PARAMETER_NAME;
+        return $this->options['csrf_parameter'] ?? TwoFactorFactory::DEFAULT_CSRF_PARAMETER;
     }
 
     public function getCsrfTokenId(): string
