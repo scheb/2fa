@@ -14,6 +14,7 @@ class EmailTwoFactorProviderTest extends TestCase
 {
     private const VALID_AUTH_CODE = 'validCode';
     private const INVALID_AUTH_CODE = 'invalidCode';
+    private const VALID_AUTH_CODE_WITH_SPACES = ' valid Code ';
 
     /**
      * @var MockObject|CodeGeneratorInterface
@@ -128,6 +129,16 @@ class EmailTwoFactorProviderTest extends TestCase
     {
         $user = $this->createUser();
         $returnValue = $this->provider->validateAuthenticationCode($user, self::VALID_AUTH_CODE);
+        $this->assertTrue($returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function validateAuthenticationCode_validCodeWithSpaces_returnTrue()
+    {
+        $user = $this->createUser();
+        $returnValue = $this->provider->validateAuthenticationCode($user, self::VALID_AUTH_CODE_WITH_SPACES);
         $this->assertTrue($returnValue);
     }
 

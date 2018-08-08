@@ -46,6 +46,9 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
             return false;
         }
 
+        // Strip any user added spaces
+        $authenticationCode = str_replace(' ', '', $authenticationCode);
+
         return $user->getEmailAuthCode() === $authenticationCode;
     }
 
