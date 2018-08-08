@@ -31,6 +31,8 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
 
     public function checkCode(TwoFactorInterface $user, string $code): bool
     {
+        // Strip any user added spaces
+        $code = str_replace(' ', '', $code);
         return $this->authenticator->checkCode($user->getGoogleAuthenticatorSecret(), $code);
     }
 
