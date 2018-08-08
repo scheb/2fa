@@ -8,6 +8,7 @@ process.
 Enable the feature in the configuration:
 
 ```yaml
+# config/packages/scheb_two_factor.yaml
 scheb_two_factor:
     backup_codes:
         enabled: false  # If the backup code feature should be enabled
@@ -69,6 +70,7 @@ implementing `Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerI
 configuration:
 
 ```yaml
+# config/packages/scheb_two_factor.yaml
 scheb_two_factor:
     backup_codes:
         manager: acme.custom_backup_code_manager  # Use a custom backup code manager

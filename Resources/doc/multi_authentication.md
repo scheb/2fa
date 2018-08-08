@@ -8,6 +8,7 @@ A user can have multiple authentication methods enabled at the same time. You ca
 You can set the in the firewall configuration:
 
 ```yaml
+# config/packages/security.yaml
 security:
     firewalls:
         yourFirewallName:

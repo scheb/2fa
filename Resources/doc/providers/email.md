@@ -17,6 +17,7 @@ user via email. Then the user must enter the right number to gain access.
 The number of digits can be configured:
 
 ```yaml
+# config/packages/scheb_two_factor.yaml
 scheb_two_factor:
     email:
         digits: 6
@@ -27,6 +28,7 @@ scheb_two_factor:
 To enable this authentication method add this to your configuration:
 
 ```yaml
+# config/packages/scheb_two_factor.yaml
 scheb_two_factor:
     email:
         enabled: true
@@ -107,6 +109,7 @@ class MyAuthCodeMailer implements AuthCodeMailerInterface
 Then register it as a service and update your configuration:
 
 ```yaml
+# config/packages/scheb_two_factor.yaml
 scheb_two_factor:
     email:
         mailer: acme.custom_mailer_service
@@ -119,6 +122,7 @@ If you want to have the code generated differently, you can have your own code g
 configuration:
 
 ```yaml
+# config/packages/scheb_two_factor.yaml
 scheb_two_factor:
     email:
         code_generator: acme.custom_code_generator_service  # Use alternative service to generate authentication code
@@ -130,6 +134,7 @@ The bundle uses `Resources/views/Authentication/form.html.twig` to render the au
 different template you can simply register it in configuration:
 
 ```yaml
+# config/packages/scheb_two_factor.yaml
 scheb_two_factor:
     email:
         template: security/2fa_form.html.twig

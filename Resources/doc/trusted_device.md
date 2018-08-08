@@ -7,6 +7,7 @@ passing it once on that device.
 You have to enable this feature in your configuration:
 
 ```yaml
+# config/packages/scheb_two_factor.yaml
 scheb_two_factor:
     trusted_device:
         enabled: false                 # If the trusted device feature should be enabled
@@ -52,6 +53,7 @@ implementing `Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceMana
 configuration:
 
 ```yaml
+# config/packages/scheb_two_factor.yaml
 scheb_two_factor:
     trusted_device:
         manager: acme.custom_trusted_device_manager  # Use a custom trusted device manager

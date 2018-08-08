@@ -33,6 +33,7 @@ In `config/routes.yaml` add a route for the two-factor authentication form and a
 authentication code.
 
 ```yaml
+# config/routes.yaml
 2fa_login:
     path: /2fa
     defaults:
@@ -47,6 +48,7 @@ authentication code.
 Enable two-factor authentication **per firewall** and configure `access_control` for the 2fa routes:
 
 ```yaml
+# config/packages/security.yaml
 security:
     firewalls:
         main:
@@ -69,6 +71,7 @@ If you want to support two-factor authentication with another login method, you 
 `scheb_two_factor.security_tokens` configuration option.
 
 ```yaml
+# config/packages/scheb_two_factor.yaml
 scheb_two_factor:
     security_tokens:
         - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken

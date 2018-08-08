@@ -19,6 +19,7 @@ For more information see the [Google Authenticator website](http://code.google.c
 To enable this authentication method add this to your configuration:
 
 ```yaml
+# config/packages/scheb_two_factor.yaml
 scheb_two_factor:
     google:
         enabled: true
@@ -70,6 +71,7 @@ The bundle uses `Resources/views/Authentication/form.html.twig` to render the au
 different template you can simply register it in configuration:
 
 ```yaml
+# config/packages/scheb_two_factor.yaml
 scheb_two_factor:
     google:
         template: security/2fa_form.html.twig

@@ -11,6 +11,7 @@ As an example see the `Scheb\TwoFactorBundle\Model\Persister\DoctrinePersister`,
 Register it as a service and configure the service name:
 
 ```yaml
+# config/packages/scheb_two_factor.yaml
 scheb_two_factor:
     persister: acme.custom_persister
 ```
