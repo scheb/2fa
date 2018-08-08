@@ -71,6 +71,22 @@ class GoogleAuthenticatorTest extends TestCase
 
     /**
      * @test
+     */
+    public function checkCode_codeWithSpaces_stripSpacesBeforeCheck()
+    {
+        $this->google
+            ->expects($this->once())
+            ->method('checkCode')
+            ->with($this->anything(), '123456')
+            ->willReturn(true);
+
+        $user = $this->createMock(TwoFactorInterface::class);
+        $authenticator = $this->createAuthenticator();
+        $authenticator->checkCode($user, ' 123 456 ');
+    }
+
+    /**
+     * @test
      * @dataProvider getHostnameAndIssuerToTest
      */
     public function getUrl_createQrCodeUrl_returnUrl($hostname, $issuer, $expectedUrl)
