@@ -6,6 +6,7 @@ use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\CsrfTokenValidator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
@@ -18,6 +19,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Http\AccessMapInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
@@ -69,6 +71,11 @@ class TwoFactorListener implements ListenerInterface
     private $authenticationRequiredHandler;
 
     /**
+     * @var CsrfTokenValidator
+     */
+    private $csrfTokenValidator;
+
+    /**
      * @var string[]
      */
     private $options;
@@ -106,6 +113,7 @@ class TwoFactorListener implements ListenerInterface
         AuthenticationSuccessHandlerInterface $successHandler,
         AuthenticationFailureHandlerInterface $failureHandler,
         AuthenticationRequiredHandlerInterface $authenticationRequiredHandler,
+        CsrfTokenValidator $csrfTokenValidator,
         array $options,
         TrustedDeviceManagerInterface $trustedDeviceManager,
         AccessMapInterface $accessMap,
@@ -124,6 +132,7 @@ class TwoFactorListener implements ListenerInterface
         $this->successHandler = $successHandler;
         $this->failureHandler = $failureHandler;
         $this->authenticationRequiredHandler = $authenticationRequiredHandler;
+        $this->csrfTokenValidator = $csrfTokenValidator;
         $this->options = array_merge(self::DEFAULT_OPTIONS, $options);
         $this->dispatcher = $dispatcher;
         $this->logger = $logger;
@@ -175,6 +184,10 @@ class TwoFactorListener implements ListenerInterface
     {
         $authCode = $request->get($this->options['auth_code_parameter_name'], '');
         try {
+            if (!$this->csrfTokenValidator->hasValidCsrfToken($request)) {
+                throw new InvalidCsrfTokenException('Invalid CSRF token.');
+            }
+
             $token = new TwoFactorToken($currentToken->getAuthenticatedToken(), $authCode, $this->firewallName, $currentToken->getTwoFactorProviders());
             $this->dispatchLoginEvent(TwoFactorAuthenticationEvents::ATTEMPT, $request, $token);
             $resultToken = $this->authenticationManager->authenticate($token);

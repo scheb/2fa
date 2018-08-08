@@ -23,6 +23,9 @@ especially when you're using different route names than the ones used here.
     {% if displayTrustedOption %}
         <p class="widget"><label for="_trusted"><input id="_trusted" type="checkbox" name="{{ trustedParameterName }}" /> {{ "scheb_two_factor.trusted"|trans }}</label></p>
     {% endif %}
+    {% if isCsrfProtectionEnabled %}
+        <input type="hidden" name="{{ csrfParameterName }}" value="{{ csrf_token(csrfTokenId) }}">
+    {% endif %}
     <p class="submit"><input type="submit" value="{{ "scheb_two_factor.login"|trans }}" /></p>
 </form>
 

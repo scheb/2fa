@@ -30,4 +30,19 @@ class TwoFactorFirewallConfig
     {
         return $this->options['trusted_parameter_name'] ?? TwoFactorFactory::DEFAULT_TRUSTED_PARAMETER_NAME;
     }
+
+    public function isCsrfProtectionEnabled(): bool
+    {
+        return $this->options['csrf_token_generator'] !== TwoFactorFactory::DEFAULT_CSRF_TOKEN_GENERATOR;
+    }
+
+    public function getCsrfParameterName(): string
+    {
+        return $this->options['csrf_parameter_name'] ?? TwoFactorFactory::DEFAULT_CSRF_PARAMETER_NAME;
+    }
+
+    public function getCsrfTokenId(): string
+    {
+        return $this->options['csrf_token_id'] ?? TwoFactorFactory::DEFAULT_CSRF_TOKEN_ID;
+    }
 }

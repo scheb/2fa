@@ -57,6 +57,9 @@ two_factor:
     auth_code_parameter_name: auth_code_param_name
     trusted_parameter_name: trusted_param_name
     multi_factor: true
+    csrf_token_generator: security.csrf.token_manager
+    csrf_parameter_name: _custom_csrf_token
+    csrf_token_id: custom_two_factor
 EOF;
         $parser = new Parser();
 
@@ -89,16 +92,19 @@ EOF;
         $config = $this->getEmptyConfig();
         $processedConfiguration = $this->processConfiguration($config);
 
-        $this->assertEquals('/2fa_check', $processedConfiguration['check_path']);
-        $this->assertEquals('/2fa', $processedConfiguration['auth_form_path']);
-        $this->assertFalse($processedConfiguration['always_use_default_target_path']);
-        $this->assertEquals('/', $processedConfiguration['default_target_path']);
+        $this->assertEquals(TwoFactorFactory::DEFAULT_CHECK_PATH, $processedConfiguration['check_path']);
+        $this->assertEquals(TwoFactorFactory::DEFAULT_AUTH_FORM_PATH, $processedConfiguration['auth_form_path']);
+        $this->assertEquals(TwoFactorFactory::DEFAULT_ALWAYS_USE_DEFAULT_TARGET_PATH, $processedConfiguration['always_use_default_target_path']);
+        $this->assertEquals(TwoFactorFactory::DEFAULT_TARGET_PATH, $processedConfiguration['default_target_path']);
         $this->assertNull($processedConfiguration['success_handler']);
         $this->assertNull($processedConfiguration['failure_handler']);
         $this->assertNull($processedConfiguration['authentication_required_handler']);
-        $this->assertEquals('_auth_code', $processedConfiguration['auth_code_parameter_name']);
-        $this->assertEquals('_trusted', $processedConfiguration['trusted_parameter_name']);
-        $this->assertFalse($processedConfiguration['multi_factor']);
+        $this->assertEquals(TwoFactorFactory::DEFAULT_AUTH_CODE_PARAMETER_NAME, $processedConfiguration['auth_code_parameter_name']);
+        $this->assertEquals(TwoFactorFactory::DEFAULT_TRUSTED_PARAMETER_NAME, $processedConfiguration['trusted_parameter_name']);
+        $this->assertEquals(TwoFactorFactory::DEFAULT_MULTI_FACTOR, $processedConfiguration['multi_factor']);
+        $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_TOKEN_GENERATOR, $processedConfiguration['csrf_token_generator']);
+        $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_PARAMETER_NAME, $processedConfiguration['csrf_parameter_name']);
+        $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_TOKEN_ID, $processedConfiguration['csrf_token_id']);
     }
 
     /**
@@ -119,6 +125,9 @@ EOF;
         $this->assertEquals('auth_code_param_name', $processedConfiguration['auth_code_parameter_name']);
         $this->assertEquals('trusted_param_name', $processedConfiguration['trusted_parameter_name']);
         $this->assertTrue($processedConfiguration['multi_factor']);
+        $this->assertEquals('security.csrf.token_manager', $processedConfiguration['csrf_token_generator']);
+        $this->assertEquals('_custom_csrf_token', $processedConfiguration['csrf_parameter_name']);
+        $this->assertEquals('custom_two_factor', $processedConfiguration['csrf_token_id']);
     }
 
     /**
@@ -159,7 +168,8 @@ EOF;
         $this->assertEquals('security.authentication.success_handler.two_factor.firewallName', (string) $definition->getArgument(4));
         $this->assertEquals('security.authentication.failure_handler.two_factor.firewallName', (string) $definition->getArgument(5));
         $this->assertEquals('security.authentication.authentication_required_handler.two_factor.firewallName', (string) $definition->getArgument(6));
-        $this->assertEquals(self::DEFAULT_CONFIG, $definition->getArgument(7));
+        $this->assertEquals('security.authentication.csrf_token_validator.two_factor.firewallName', (string) $definition->getArgument(7));
+        $this->assertEquals(self::DEFAULT_CONFIG, $definition->getArgument(8));
     }
 
     /**
@@ -240,6 +250,33 @@ EOF;
         $this->assertFalse($this->container->hasDefinition('security.authentication.authentication_required_handler.two_factor.firewallName'));
         $definition = $this->container->getDefinition('security.authentication.listener.two_factor.firewallName');
         $this->assertEquals(new Reference('my_authentication_required_handler'), $definition->getArgument(6));
+    }
+
+    /**
+     * @test
+     */
+    public function create_createForFirewall_createCsrfTokenValidatorDefinition()
+    {
+        $this->callCreateFirewall();
+
+        $this->assertTrue($this->container->hasDefinition('security.authentication.csrf_token_validator.two_factor.firewallName'));
+        $definition = $this->container->getDefinition('security.authentication.csrf_token_validator.two_factor.firewallName');
+        $this->assertEquals(new Reference('scheb_two_factor.null_csrf_token_manager'), $definition->getArgument(0));
+        $this->assertEquals(self::DEFAULT_CONFIG, $definition->getArgument(1));
+    }
+
+    /**
+     * @test
+     */
+    public function create_createForFirewall_useCustomCsrfTokenGenerator()
+    {
+        $csrfTokenGeneratorDefinitionId = 'security.csrf.token_manager';
+        $this->callCreateFirewall(['csrf_token_generator' => $csrfTokenGeneratorDefinitionId]);
+
+        $this->assertTrue($this->container->hasDefinition('security.authentication.csrf_token_validator.two_factor.firewallName'));
+        $definition = $this->container->getDefinition('security.authentication.csrf_token_validator.two_factor.firewallName');
+        $this->assertEquals(new Reference($csrfTokenGeneratorDefinitionId), $definition->getArgument(0));
+        $this->assertEquals(array_merge(self::DEFAULT_CONFIG, ['csrf_token_generator' => $csrfTokenGeneratorDefinitionId]), $definition->getArgument(1));
     }
 
     /**

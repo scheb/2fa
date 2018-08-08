@@ -97,6 +97,9 @@ class FormController
             'displayTrustedOption' => $displayTrustedOption,
             'authCodeParameterName' => $config->getAuthCodeParameterName(),
             'trustedParameterName' => $config->getTrustedParameterName(),
+            'isCsrfProtectionEnabled' => $config->isCsrfProtectionEnabled(),
+            'csrfParameterName' => $config->getCsrfParameterName(),
+            'csrfTokenId' => $config->getCsrfTokenId(),
         ];
     }
 

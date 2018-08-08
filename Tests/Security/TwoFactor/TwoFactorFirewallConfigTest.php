@@ -18,6 +18,8 @@ class TwoFactorFirewallConfigTest extends TestCase
             'multi_factor' => true,
             'auth_code_parameter_name' => 'auth_code_param',
             'trusted_parameter_name' => 'trusted_param',
+            'csrf_parameter_name' => 'parameter_name',
+            'csrf_token_id' => 'token_id',
         ]);
     }
 
@@ -46,5 +48,23 @@ class TwoFactorFirewallConfigTest extends TestCase
     {
         $returnValue = $this->config->getTrustedParameterName();
         $this->assertEquals('trusted_param', $returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function getCsrfParameterName_optionSet_returnThatValue()
+    {
+        $returnValue = $this->config->getCsrfParameterName();
+        $this->assertEquals('parameter_name', $returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function getCsrfTokenId_optionSet_returnThatValue()
+    {
+        $returnValue = $this->config->getCsrfTokenId();
+        $this->assertEquals('token_id', $returnValue);
     }
 }
