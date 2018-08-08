@@ -76,7 +76,7 @@ security:
                 multi_factor: false                   # If ALL active two-factor methods need to be fulfilled (multi-factor authentication)
                 success_handler: acme.custom_success_handler # Use a custom success handler instead of the default one 
                 failure_handler: acme.custom_failure_handler # Use a custom failure handler instead of the default one
-                
+
                 # Use a custom authentication required handler instead of the default one
                 # This can be used to modify the default behavior of the bundle, which is always redirecting to the
                 # two-factor authentication form, when two-factor authentication is required.
