@@ -19,6 +19,9 @@ Additional features you will like:
 - Trusted devices (once passed, no more two-factor authentication on that device)
 - Single-use backup codes for when you don't have access to the second factor device
 - Multi-factor authentication
+- CSRF protection
+- Whitelisted routes (accessible during two-factor authentication)
+
 
 Installation
 -------------
