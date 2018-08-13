@@ -354,6 +354,22 @@ class TwoFactorListenerTest extends TestCase
     /**
      * @test
      */
+    public function handle_neitherFormNorCheckPath_dispatchRequireEvent()
+    {
+        $this->stubTokenManagerHasToken($this->createTwoFactorToken());
+        $this->stubCurrentPath('/some_other_path');
+        $this->stubPathAccessGranted(false);
+
+        $this->assertEventsDispatched([
+            TwoFactorAuthenticationEvents::REQUIRE,
+        ]);
+
+        $this->listener->handle($this->getResponseEvent);
+    }
+
+    /**
+     * @test
+     */
     public function handle_pathAccessibleDuringTwoFactorAuthentication_notRedirectToForm()
     {
         $this->stubTokenManagerHasToken($this->createTwoFactorToken());
@@ -476,6 +492,7 @@ class TwoFactorListenerTest extends TestCase
         $this->assertEventsDispatched([
             TwoFactorAuthenticationEvents::ATTEMPT,
             TwoFactorAuthenticationEvents::SUCCESS,
+            $this->anything(),
         ]);
 
         $this->listener->handle($this->getResponseEvent);
@@ -484,7 +501,7 @@ class TwoFactorListenerTest extends TestCase
     /**
      * @test
      */
-    public function handle_authenticationStepSuccessful_redirectToAuthenticationForm()
+    public function handle_authenticationStepSuccessfulButNotCompleted_redirectToAuthenticationForm()
     {
         $twoFactorToken = $this->createTwoFactorToken();
         $this->stubTokenManagerHasToken($twoFactorToken);
@@ -498,6 +515,26 @@ class TwoFactorListenerTest extends TestCase
             ->willReturn($this->authFormRedirectResponse);
 
         $this->assertRedirectToAuthForm();
+
+        $this->listener->handle($this->getResponseEvent);
+    }
+
+    /**
+     * @test
+     */
+    public function handle_authenticationStepSuccessfulButNotCompleted_dispatchRequireEvent()
+    {
+        $twoFactorToken = $this->createTwoFactorToken();
+        $this->stubTokenManagerHasToken($twoFactorToken);
+        $this->stubCurrentPath(self::CHECK_PATH);
+        $this->stubCsrfTokenValidatorHasValidCsrfTokenReturnsTrue();
+        $this->stubAuthenticationManagerReturnsToken($twoFactorToken); // Must be TwoFactorToken
+
+        $this->assertEventsDispatched([
+            TwoFactorAuthenticationEvents::ATTEMPT,
+            TwoFactorAuthenticationEvents::SUCCESS,
+            TwoFactorAuthenticationEvents::REQUIRE,
+        ]);
 
         $this->listener->handle($this->getResponseEvent);
     }

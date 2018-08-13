@@ -5,6 +5,11 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Event;
 class TwoFactorAuthenticationEvents
 {
     /**
+     * When two-factor authentication is required from the user (the form is shown).
+     */
+    const REQUIRE = 'scheb_two_factor.authentication.require';
+
+    /**
      * When two-factor authentication is attempted, dispatched before the code is checked.
      */
     const ATTEMPT = 'scheb_two_factor.authentication.attempt';
