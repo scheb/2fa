@@ -6,8 +6,18 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class InvalidTwoFactorCodeException extends AuthenticationException
 {
+    /**
+     * @var string
+     */
+    private $messageKey = 'Invalid two-factor authentication code.';
+
     public function getMessageKey()
     {
-        return 'Invalid two-factor authentication code.';
+        return $this->messageKey;
+    }
+
+    public function setMessageKey(string $messageKey): void
+    {
+        $this->messageKey = $messageKey;
     }
 }
