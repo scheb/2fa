@@ -465,25 +465,6 @@ class TwoFactorListenerTest extends TestCase
     /**
      * @test
      */
-    public function handle_csrfTokenValid_dispatchSuccessEvent()
-    {
-        $twoFactorToken = $this->createTwoFactorToken();
-        $this->stubTokenManagerHasToken($twoFactorToken);
-        $this->stubCurrentPath(self::CHECK_PATH);
-        $this->stubCsrfTokenValidatorHasValidCsrfTokenReturnsTrue();
-        $this->stubAuthenticationManagerReturnsToken($twoFactorToken); // Must be TwoFactorToken
-
-        $this->assertEventsDispatched([
-            TwoFactorAuthenticationEvents::ATTEMPT,
-            TwoFactorAuthenticationEvents::SUCCESS,
-        ]);
-
-        $this->listener->handle($this->getResponseEvent);
-    }
-
-    /**
-     * @test
-     */
     public function handle_authenticationStepSuccessful_dispatchSuccessEvent()
     {
         $twoFactorToken = $this->createTwoFactorToken();
