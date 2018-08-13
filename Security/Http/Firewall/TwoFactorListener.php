@@ -189,7 +189,7 @@ class TwoFactorListener implements ListenerInterface
             }
 
             $token = new TwoFactorToken($currentToken->getAuthenticatedToken(), $authCode, $this->firewallName, $currentToken->getTwoFactorProviders());
-            $this->dispatchLoginEvent(TwoFactorAuthenticationEvents::ATTEMPT, $request, $token);
+            $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::ATTEMPT, $request, $token);
             $resultToken = $this->authenticationManager->authenticate($token);
 
             return $this->onSuccess($request, $resultToken);
@@ -203,7 +203,7 @@ class TwoFactorListener implements ListenerInterface
         if ($this->logger) {
             $this->logger->info('Two-factor authentication request failed.', ['exception' => $failed]);
         }
-        $this->dispatchLoginEvent(TwoFactorAuthenticationEvents::FAILURE, $request, $this->tokenStorage->getToken());
+        $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::FAILURE, $request, $this->tokenStorage->getToken());
 
         $response = $this->failureHandler->onAuthenticationFailure($request, $failed);
 
@@ -216,14 +216,14 @@ class TwoFactorListener implements ListenerInterface
             $this->logger->info('User has been two-factor authenticated successfully.', ['username' => $token->getUsername()]);
         }
         $this->tokenStorage->setToken($token);
-        $this->dispatchLoginEvent(TwoFactorAuthenticationEvents::SUCCESS, $request, $token);
+        $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::SUCCESS, $request, $token);
 
         // When it's still a TwoFactorToken, keep showing the auth form
         if ($token instanceof TwoFactorToken) {
             return $this->authenticationRequiredHandler->onAuthenticationRequired($request, $token);
         }
 
-        $this->dispatchLoginEvent(TwoFactorAuthenticationEvents::COMPLETE, $request, $token);
+        $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::COMPLETE, $request, $token);
 
         if ($this->hasTrustedDeviceParameter($request)) {
             $this->trustedDeviceManager->addTrustedDevice($token->getUser(), $this->firewallName);
@@ -239,7 +239,7 @@ class TwoFactorListener implements ListenerInterface
         return (bool) $request->get($this->options['trusted_parameter_name'], false);
     }
 
-    private function dispatchLoginEvent(string $eventType, Request $request, TokenInterface $token): void
+    private function dispatchTwoFactorAuthenticationEvent(string $eventType, Request $request, TokenInterface $token): void
     {
         $event = new TwoFactorAuthenticationEvent($request, $token);
         $this->dispatcher->dispatch($eventType, $event);
