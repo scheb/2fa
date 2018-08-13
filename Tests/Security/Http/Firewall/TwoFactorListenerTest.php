@@ -79,7 +79,7 @@ class TwoFactorListenerTest extends TestCase
     /**
      * @var MockObject|EventDispatcherInterface
      */
-    private $dispatcher;
+    private $eventDispatcher;
 
     /**
      * @var MockObject|AccessMapInterface
@@ -131,7 +131,7 @@ class TwoFactorListenerTest extends TestCase
         $this->trustedDeviceManager = $this->createMock(TrustedDeviceManagerInterface::class);
         $this->accessMap = $this->createMock(AccessMapInterface::class);
         $this->accessDecisionManager = $this->createMock(AccessDecisionManagerInterface::class);
-        $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
 
         $this->request = $this->createMock(Request::class);
         $this->request
@@ -169,7 +169,7 @@ class TwoFactorListenerTest extends TestCase
             $this->trustedDeviceManager,
             $this->accessMap,
             $this->accessDecisionManager,
-            $this->dispatcher,
+            $this->eventDispatcher,
             $this->createMock(LoggerInterface::class)
         );
     }
@@ -300,7 +300,7 @@ class TwoFactorListenerTest extends TestCase
         foreach ($eventTypes as $eventType) {
             $consecutiveParams[] = [$eventType, $this->isInstanceOf(TwoFactorAuthenticationEvent::class)];
         }
-        $this->dispatcher
+        $this->eventDispatcher
             ->expects($this->exactly($numEvents))
             ->method('dispatch')
             ->withConsecutive(...$consecutiveParams);

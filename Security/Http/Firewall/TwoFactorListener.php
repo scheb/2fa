@@ -98,7 +98,7 @@ class TwoFactorListener implements ListenerInterface
     /**
      * @var EventDispatcherInterface
      */
-    private $dispatcher;
+    private $eventDispatcher;
 
     /**
      * @var LoggerInterface
@@ -118,7 +118,7 @@ class TwoFactorListener implements ListenerInterface
         TrustedDeviceManagerInterface $trustedDeviceManager,
         AccessMapInterface $accessMap,
         AccessDecisionManagerInterface $accessDecisionManager,
-        EventDispatcherInterface $dispatcher,
+        EventDispatcherInterface $eventDispatcher,
         ?LoggerInterface $logger = null
     ) {
         if (empty($firewallName)) {
@@ -134,7 +134,7 @@ class TwoFactorListener implements ListenerInterface
         $this->authenticationRequiredHandler = $authenticationRequiredHandler;
         $this->csrfTokenValidator = $csrfTokenValidator;
         $this->options = array_merge(self::DEFAULT_OPTIONS, $options);
-        $this->dispatcher = $dispatcher;
+        $this->eventDispatcher = $eventDispatcher;
         $this->logger = $logger;
         $this->trustedDeviceManager = $trustedDeviceManager;
         $this->accessMap = $accessMap;
@@ -242,6 +242,6 @@ class TwoFactorListener implements ListenerInterface
     private function dispatchTwoFactorAuthenticationEvent(string $eventType, Request $request, TokenInterface $token): void
     {
         $event = new TwoFactorAuthenticationEvent($request, $token);
-        $this->dispatcher->dispatch($eventType, $event);
+        $this->eventDispatcher->dispatch($eventType, $event);
     }
 }
