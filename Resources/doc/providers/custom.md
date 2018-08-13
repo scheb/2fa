@@ -29,7 +29,11 @@ authentication token, the user entity and other information.
 The method has to decide if the user should be asked for two-factor authentication from that provider. In that case
 return `true`, otherwise `false`.
 
-You should also do the preparation work for the two-factor process in this method. E.g. the email authenticator is
+```php
+public function prepareAuthentication($user): void;
+```
+
+This method is where you should to the preparation work for your two-factor provider. E.g. the email authenticator is
 generating a code and sending it to the user.
 
 ### validateAuthenticationCode
