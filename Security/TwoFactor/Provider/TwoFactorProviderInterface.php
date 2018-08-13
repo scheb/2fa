@@ -16,6 +16,13 @@ interface TwoFactorProviderInterface
     public function beginAuthentication(AuthenticationContextInterface $context): bool;
 
     /**
+     * Do all steps necessary to prepare authentication, e.g. generate & send a code.
+     *
+     * @param mixed $user
+     */
+    public function prepareAuthentication($user): void;
+
+    /**
      * Validate the two-factor authentication code.
      *
      * @param mixed  $user

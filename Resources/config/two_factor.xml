@@ -44,6 +44,11 @@
 			<argument type="collection" /> <!-- Firewall configs -->
 		</service>
 
+		<service id="scheb_two_factor.provider_preparation_listener" class="\Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationListener">
+			<argument type="service" id="scheb_two_factor.provider_registry" />
+			<tag name="kernel.event_listener" event="scheb_two_factor.authentication.require" method="onTwoFactorAuthenticationRequest" />
+		</service>
+
 		<!-- Alias for auto-wiring -->
 		<service id="Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallContext" alias="scheb_two_factor.firewall_context" public="true" />
 

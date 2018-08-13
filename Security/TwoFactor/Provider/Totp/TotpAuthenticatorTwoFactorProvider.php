@@ -38,6 +38,10 @@ class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
             && $user->getTotpAuthenticationProvisioningUri();
     }
 
+    public function prepareAuthentication($user): void
+    {
+    }
+
     public function validateAuthenticationCode($user, string $authenticationCode): bool
     {
         if (!($user instanceof TwoFactorInterface)) {

@@ -26,7 +26,7 @@ class EmailTwoFactorProviderTest extends TestCase
      */
     private $provider;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->generator = $this->createMock(CodeGeneratorInterface::class);
         $formRenderer = $this->createMock(TwoFactorFormRendererInterface::class);
@@ -62,24 +62,7 @@ class EmailTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function beginAuthentication_twoFactorPossible_codeGenerated(): void
-    {
-        $user = $this->createUser(true);
-        $context = $this->createAuthenticationContext($user);
-
-        //Mock the CodeGenerator
-        $this->generator
-            ->expects($this->once())
-            ->method('generateAndSend')
-            ->with($user);
-
-        $this->provider->beginAuthentication($context);
-    }
-
-    /**
-     * @test
-     */
-    public function beginAuthentication_twoFactorPossible_returnTrue(): void
+    public function beginAuthentication_twoFactorPossible_returnTrue()
     {
         $user = $this->createUser(true);
         $context = $this->createAuthenticationContext($user);
@@ -91,7 +74,7 @@ class EmailTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function beginAuthentication_twoFactorDisabled_returnFalse(): void
+    public function beginAuthentication_twoFactorDisabled_returnFalse()
     {
         $user = $this->createUser(false);
         $context = $this->createAuthenticationContext($user);
@@ -103,7 +86,7 @@ class EmailTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function beginAuthentication_interfaceNotImplemented_returnFalse(): void
+    public function beginAuthentication_interfaceNotImplemented_returnFalse()
     {
         $user = new \stdClass(); //Any class without TwoFactorInterface
         $context = $this->createAuthenticationContext($user);
@@ -115,7 +98,38 @@ class EmailTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function validateAuthenticationCode_noTwoFactorUser_returnFalse(): void
+    public function prepareAuthentication_interfaceNotImplemented_doNothing()
+    {
+        $user = new \stdClass();
+
+        //Mock the CodeGenerator
+        $this->generator
+            ->expects($this->never())
+            ->method('generateAndSend');
+
+        $this->provider->prepareAuthentication($user);
+    }
+
+    /**
+     * @test
+     */
+    public function prepareAuthentication_interfaceImplemented_codeGenerated()
+    {
+        $user = $this->createUser(true);
+
+        //Mock the CodeGenerator
+        $this->generator
+            ->expects($this->once())
+            ->method('generateAndSend')
+            ->with($user);
+
+        $this->provider->prepareAuthentication($user);
+    }
+
+    /**
+     * @test
+     */
+    public function validateAuthenticationCode_noTwoFactorUser_returnFalse()
     {
         $user = new \stdClass();
         $returnValue = $this->provider->validateAuthenticationCode($user, 'code');
@@ -125,7 +139,7 @@ class EmailTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function validateAuthenticationCode_validCodeGiven_returnTrue(): void
+    public function validateAuthenticationCode_validCodeGiven_returnTrue()
     {
         $user = $this->createUser();
         $returnValue = $this->provider->validateAuthenticationCode($user, self::VALID_AUTH_CODE);
@@ -135,7 +149,7 @@ class EmailTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function validateAuthenticationCode_validCodeWithSpaces_returnTrue(): void
+    public function validateAuthenticationCode_validCodeWithSpaces_returnTrue()
     {
         $user = $this->createUser();
         $returnValue = $this->provider->validateAuthenticationCode($user, self::VALID_AUTH_CODE_WITH_SPACES);
@@ -145,7 +159,7 @@ class EmailTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function validateAuthenticationCode_validCodeGiven_returnFalse(): void
+    public function validateAuthenticationCode_validCodeGiven_returnFalse()
     {
         $user = $this->createUser();
         $returnValue = $this->provider->validateAuthenticationCode($user, self::INVALID_AUTH_CODE);
