@@ -4,6 +4,7 @@ namespace Scheb\TwoFactorBundle\Tests\DependencyInjection\Factory\Security;
 
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use Symfony\Component\Config\Definition\BaseNode;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
@@ -69,6 +70,9 @@ EOF;
     private function processConfiguration(array $config): array
     {
         $firewallConfiguration = new TestableFactoryConfiguration($this->factory);
+
+        // This is to avoid deprecation errors in PHP7.3
+        BaseNode::setPlaceholderUniquePrefix('placeholder_prefix');
 
         return (new Processor())->processConfiguration($firewallConfiguration, $config);
     }
