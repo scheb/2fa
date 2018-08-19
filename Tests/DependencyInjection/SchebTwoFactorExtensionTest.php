@@ -3,6 +3,7 @@
 namespace Scheb\TwoFactorBundle\Tests\DependencyInjection;
 
 use Scheb\TwoFactorBundle\DependencyInjection\SchebTwoFactorExtension;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpFactory;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -20,7 +21,7 @@ class SchebTwoFactorExtensionTest extends TestCase
      */
     private $extension;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->container = new ContainerBuilder();
         $this->extension = new SchebTwoFactorExtension();
@@ -33,7 +34,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_emptyConfig_setDefaultValues(): void
+    public function load_emptyConfig_setDefaultValues()
     {
         $config = $this->getEmptyConfig();
         $this->extension->load([$config], $this->container);
@@ -47,6 +48,14 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertParameter(null, 'scheb_two_factor.google.issuer');
         $this->assertParameter('@SchebTwoFactor/Authentication/form.html.twig', 'scheb_two_factor.google.template');
         $this->assertParameter(6, 'scheb_two_factor.google.digits');
+        $this->assertParameter(null, 'scheb_two_factor.totp.issuer');
+        $this->assertParameter(6, 'scheb_two_factor.totp.digits');
+        $this->assertParameter('sha1', 'scheb_two_factor.totp.digest');
+        $this->assertParameter(30, 'scheb_two_factor.totp.period');
+        $this->assertParameter([], 'scheb_two_factor.totp.parameters');
+        $this->assertParameter('https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl={PROVISIONING_URI}', 'scheb_two_factor.totp.qr_code_generator');
+        $this->assertParameter('{PROVISIONING_URI}', 'scheb_two_factor.totp.qr_code_data_placeholder');
+        $this->assertParameter('@SchebTwoFactor/Authentication/form.html.twig', 'scheb_two_factor.totp.template');
         $this->assertParameter(false, 'scheb_two_factor.trusted_device.enabled');
         $this->assertParameter(5184000, 'scheb_two_factor.trusted_device.lifetime');
         $this->assertParameter(false, 'scheb_two_factor.trusted_device.extend_lifetime');
@@ -61,7 +70,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_fullConfig_setConfigValues(): void
+    public function load_fullConfig_setConfigValues()
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
@@ -75,6 +84,14 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertParameter('Issuer', 'scheb_two_factor.google.issuer');
         $this->assertParameter('AcmeTestBundle:Authentication:googleForm.html.twig', 'scheb_two_factor.google.template');
         $this->assertParameter(8, 'scheb_two_factor.google.digits');
+        $this->assertParameter('Issuer', 'scheb_two_factor.totp.issuer');
+        $this->assertParameter(8, 'scheb_two_factor.totp.digits');
+        $this->assertParameter('sha256', 'scheb_two_factor.totp.digest');
+        $this->assertParameter(20, 'scheb_two_factor.totp.period');
+        $this->assertParameter(['image' => 'http://foo/bar.png'], 'scheb_two_factor.totp.parameters');
+        $this->assertParameter('http://api.qrserver.com/v1/create-qr-code/?color=5330FF&bgcolor=70FF7E&data=[DATA]&qzone=2&margin=0&size=300x300&ecc=H', 'scheb_two_factor.totp.qr_code_generator');
+        $this->assertParameter('[DATA]', 'scheb_two_factor.totp.qr_code_data_placeholder');
+        $this->assertParameter('AcmeTestBundle:Authentication:totpForm.html.twig', 'scheb_two_factor.totp.template');
         $this->assertParameter(true, 'scheb_two_factor.trusted_device.enabled');
         $this->assertParameter(2592000, 'scheb_two_factor.trusted_device.lifetime');
         $this->assertParameter(true, 'scheb_two_factor.trusted_device.extend_lifetime');
@@ -89,7 +106,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_noAuthEnabled_notLoadServices(): void
+    public function load_noAuthEnabled_notLoadServices()
     {
         $config = $this->getEmptyConfig();
         $this->extension->load([$config], $this->container);
@@ -98,6 +115,11 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertNotHasDefinition('scheb_two_factor.security.google');
         $this->assertNotHasDefinition('scheb_two_factor.security.google_authenticator');
         $this->assertNotHasDefinition('scheb_two_factor.security.google.provider');
+
+        //TOTP
+        $this->assertNotHasDefinition('scheb_two_factor.security.totp');
+        $this->assertNotHasDefinition('scheb_two_factor.security.totp_authenticator');
+        $this->assertNotHasDefinition('scheb_two_factor.security.totp.provider');
 
         //Email
         $this->assertNotHasDefinition('scheb_two_factor.security.email.default_auth_code_mailer');
@@ -108,12 +130,11 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_googleAuthEnabled_loadGoogleServices(): void
+    public function load_googleAuthEnabled_loadGoogleServices()
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
 
-        $this->assertHasDefinition('scheb_two_factor.security.google');
         $this->assertHasDefinition('scheb_two_factor.security.google_authenticator');
         $this->assertHasDefinition('scheb_two_factor.security.google.provider');
     }
@@ -121,7 +142,24 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_emailAuthEnabled_loadEmailServices(): void
+    public function load_totpAuthEnabled_loadTotpFactoryServices()
+    {
+        $config = $this->getFullConfig();
+        $this->extension->load([$config], $this->container);
+
+        $this->assertHasDefinition('scheb_two_factor.security.totp_factory');
+
+        /** @var TotpFactory $service */
+        $service = $this->container->get('scheb_two_factor.security.totp_factory');
+        $totp = $service->generateNewTotp();
+        $totp->setLabel('Alice');
+        $this->assertContains('otpauth://totp/Issuer%3AAlice?algorithm=sha256&digits=8&image=http%3A%2F%2Ffoo%2Fbar.png&issuer=Issuer&period=20&secret=', $totp->getProvisioningUri());
+    }
+
+    /**
+     * @test
+     */
+    public function load_emailAuthEnabled_loadEmailServices()
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
@@ -134,7 +172,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_defaultMailer_defaultAlias(): void
+    public function load_defaultMailer_defaultAlias()
     {
         $config = $this->getEmptyConfig();
         $config['email']['enabled'] = true; // Enable email provider
@@ -146,7 +184,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_alternativeMailer_replaceAlias(): void
+    public function load_alternativeMailer_replaceAlias()
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
@@ -157,7 +195,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_defaultCodeGenerator_defaultAlias(): void
+    public function load_defaultCodeGenerator_defaultAlias()
     {
         $config = $this->getEmptyConfig();
         $config['email']['enabled'] = true; // Enable email provider
@@ -169,7 +207,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_alternativeCodeGenerator_replaceAlias(): void
+    public function load_alternativeCodeGenerator_replaceAlias()
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
@@ -180,7 +218,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_defaultPersister_defaultAlias(): void
+    public function load_defaultPersister_defaultAlias()
     {
         $config = $this->getEmptyConfig();
         $this->extension->load([$config], $this->container);
@@ -191,7 +229,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_alternativePersister_replaceAlias(): void
+    public function load_alternativePersister_replaceAlias()
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
@@ -202,7 +240,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_disabledTrustedDeviceManager_nullAlias(): void
+    public function load_disabledTrustedDeviceManager_nullAlias()
     {
         $config = $this->getEmptyConfig();
         $config['trusted_device']['enabled'] = false;
@@ -214,7 +252,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_enabledTrustedDeviceManager_defaultAlias(): void
+    public function load_enabledTrustedDeviceManager_defaultAlias()
     {
         $config = $this->getEmptyConfig();
         $config['trusted_device']['enabled'] = true;
@@ -226,7 +264,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_alternativeTrustedDeviceManager_replaceAlias(): void
+    public function load_alternativeTrustedDeviceManager_replaceAlias()
     {
         $config = $this->getFullConfig();
         $config['trusted_device']['enabled'] = true;
@@ -238,7 +276,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_disabledBackupCodeManager_nullAlias(): void
+    public function load_disabledBackupCodeManager_nullAlias()
     {
         $config = $this->getEmptyConfig();
         $config['backup_codes']['enabled'] = false;
@@ -250,7 +288,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_enabledBackupCodeManager_defaultAlias(): void
+    public function load_enabledBackupCodeManager_defaultAlias()
     {
         $config = $this->getEmptyConfig();
         $config['backup_codes']['enabled'] = true;
@@ -262,7 +300,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_alternativeBackupCodeManager_replaceAlias(): void
+    public function load_alternativeBackupCodeManager_replaceAlias()
     {
         $config = $this->getFullConfig();
         $config['backup_codes']['enabled'] = true;
@@ -274,7 +312,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_defaultIpWhitelistProvider_defaultAlias(): void
+    public function load_defaultIpWhitelistProvider_defaultAlias()
     {
         $config = $this->getEmptyConfig();
         $this->extension->load([$config], $this->container);
@@ -285,7 +323,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_alternativeIpWhitelistProvider_replaceAlias(): void
+    public function load_alternativeIpWhitelistProvider_replaceAlias()
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
@@ -296,7 +334,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_defaultTokenFactory_defaultAlias(): void
+    public function load_defaultTokenFactory_defaultAlias()
     {
         $config = $this->getEmptyConfig();
         $this->extension->load([$config], $this->container);
@@ -307,7 +345,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_alternativeTokenFactory_replaceAlias(): void
+    public function load_alternativeTokenFactory_replaceAlias()
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
@@ -315,7 +353,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertAlias('scheb_two_factor.token_factory', 'acme_test.two_factor_token_factory');
     }
 
-    private function getEmptyConfig(): ?array
+    private function getEmptyConfig()
     {
         $yaml = '';
         $parser = new Parser();
@@ -323,7 +361,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         return $parser->parse($yaml);
     }
 
-    private function getFullConfig(): array
+    private function getFullConfig()
     {
         $yaml = <<<EOF
 persister: acme_test.persister
@@ -360,28 +398,39 @@ google:
     server_name: Server Name
     template: AcmeTestBundle:Authentication:googleForm.html.twig
     digits: 8
+totp:
+    enabled: true
+    issuer: Issuer
+    digits: 8
+    digest: 'sha256'
+    period: 20
+    parameters:
+        image: 'http://foo/bar.png'
+    qr_code_generator: 'http://api.qrserver.com/v1/create-qr-code/?color=5330FF&bgcolor=70FF7E&data=[DATA]&qzone=2&margin=0&size=300x300&ecc=H'
+    qr_code_data_placeholder: '[DATA]'
+    template: AcmeTestBundle:Authentication:totpForm.html.twig
 EOF;
         $parser = new Parser();
 
         return $parser->parse($yaml);
     }
 
-    private function assertParameter($value, $key): void
+    private function assertParameter($value, $key)
     {
         $this->assertEquals($value, $this->container->getParameter($key), sprintf('%s parameter is correct', $key));
     }
 
-    private function assertHasDefinition($id): void
+    private function assertHasDefinition($id)
     {
         $this->assertTrue($this->container->hasDefinition($id), 'Service "'.$id.'" must be defined.');
     }
 
-    private function assertNotHasDefinition($id): void
+    private function assertNotHasDefinition($id)
     {
         $this->assertFalse($this->container->hasDefinition($id), 'Service "'.$id.'" must NOT be defined.');
     }
 
-    private function assertAlias($id, $aliasId): void
+    private function assertAlias($id, $aliasId)
     {
         $this->assertTrue($this->container->hasAlias($id), 'Alias "'.$id.'" must be defined.');
         $alias = $this->container->getAlias($id);

@@ -26,6 +26,14 @@ class SchebTwoFactorExtension extends Extension
         $container->setParameter('scheb_two_factor.google.issuer', $config['google']['issuer']);
         $container->setParameter('scheb_two_factor.google.template', $config['google']['template']);
         $container->setParameter('scheb_two_factor.google.digits', $config['google']['digits']);
+        $container->setParameter('scheb_two_factor.totp.issuer', $config['totp']['issuer']);
+        $container->setParameter('scheb_two_factor.totp.period', $config['totp']['period']);
+        $container->setParameter('scheb_two_factor.totp.digits', $config['totp']['digits']);
+        $container->setParameter('scheb_two_factor.totp.digest', $config['totp']['digest']);
+        $container->setParameter('scheb_two_factor.totp.parameters', $config['totp']['parameters']);
+        $container->setParameter('scheb_two_factor.totp.qr_code_generator', $config['totp']['qr_code_generator']);
+        $container->setParameter('scheb_two_factor.totp.qr_code_data_placeholder', $config['totp']['qr_code_data_placeholder']);
+        $container->setParameter('scheb_two_factor.totp.template', $config['totp']['template']);
         $container->setParameter('scheb_two_factor.trusted_device.enabled', $config['trusted_device']['enabled']);
         $container->setParameter('scheb_two_factor.trusted_device.cookie_name', $config['trusted_device']['cookie_name']);
         $container->setParameter('scheb_two_factor.trusted_device.lifetime', $config['trusted_device']['lifetime']);
@@ -49,6 +57,9 @@ class SchebTwoFactorExtension extends Extension
         }
         if (true === $config['google']['enabled']) {
             $this->configureGoogleAuthenticationProvider($container);
+        }
+        if ($config['totp']['enabled'] === true) {
+            $this->configureTotpAuthenticationProvider($container);
         }
 
         // Configure custom services
@@ -132,5 +143,11 @@ class SchebTwoFactorExtension extends Extension
     {
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('two_factor_provider_google.xml');
+    }
+
+    private function configureTotpAuthenticationProvider(ContainerBuilder $container): void
+    {
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('two_factor_provider_totp.xml');
     }
 }

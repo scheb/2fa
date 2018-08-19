@@ -21,6 +21,7 @@ This bundle provides **two-factor authentication for your Symfony application**.
 The bundle supports the following authentication methods out of the box:
 
   - [Google Authenticator](providers/google.md)
+  - [TOTP Authenticator](providers/totp.md)
   - [Email authentication code](providers/email.md)
 
 See [Providers](providers/index.md) for more information about custom or third-party provider.
