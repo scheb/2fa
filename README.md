@@ -5,6 +5,7 @@ scheb/two-factor-bundle
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/scheb/two-factor-bundle/v/stable.svg)](https://packagist.org/packages/scheb/two-factor-bundle)
+[![Total Downloads](https://poser.pugx.org/scheb/two-factor-bundle/downloads)](https://packagist.org/packages/scheb/two-factor-bundle)
 [![License](https://poser.pugx.org/scheb/two-factor-bundle/license.svg)](https://packagist.org/packages/scheb/two-factor-bundle)
 
 This bundle provides **two-factor authentication for your Symfony application**. It comes with the following two-factor
