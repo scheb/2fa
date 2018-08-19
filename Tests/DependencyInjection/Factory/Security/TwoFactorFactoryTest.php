@@ -72,7 +72,9 @@ EOF;
         $firewallConfiguration = new TestableFactoryConfiguration($this->factory);
 
         // This is to avoid deprecation errors in PHP7.3
-        BaseNode::setPlaceholderUniquePrefix('placeholder_prefix');
+        if (method_exists(BaseNode::class, 'setPlaceholderUniquePrefix')) {
+            BaseNode::setPlaceholderUniquePrefix('placeholder_prefix');
+        }
 
         return (new Processor())->processConfiguration($firewallConfiguration, $config);
     }
