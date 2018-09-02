@@ -51,7 +51,7 @@ class TrustedCookieResponseListener
         if ($this->trustedTokenStorage->hasUpdatedCookie()) {
             $domain = null;
             $requestHost = $event->getRequest()->getHost();
-            if ('localhost' !== $requestHost) {
+            if ($this->shouldSetDomain($requestHost)) {
                 $domain = '.'.$requestHost;
             }
 
@@ -71,6 +71,15 @@ class TrustedCookieResponseListener
             $response = $event->getResponse();
             $response->headers->setCookie($cookie);
         }
+    }
+
+    private function shouldSetDomain(string $requestHost): bool
+    {
+        return !(
+            'localhost' === $requestHost
+            || preg_match('#^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$#', $requestHost) // IPv4
+            || substr_count($requestHost, ':') > 1 // IPv6
+        );
     }
 
     private function getValidUntil(): \DateTime

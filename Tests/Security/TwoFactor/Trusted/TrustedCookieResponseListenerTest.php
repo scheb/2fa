@@ -24,11 +24,6 @@ class TrustedCookieResponseListenerTest extends TestCase
     private $cookieResponseListener;
 
     /**
-     * @var MockObject|FilterResponseEvent
-     */
-    private $event;
-
-    /**
      * @var Response
      */
     private $response;
@@ -39,43 +34,74 @@ class TrustedCookieResponseListenerTest extends TestCase
         $this->cookieResponseListener = new TestableTrustedCookieResponseListener($this->trustedTokenStorage,
             3600, 'cookieName', true, Cookie::SAMESITE_LAX);
         $this->cookieResponseListener->now = new \DateTime('2018-01-01 00:00:00');
+        $this->response = new Response();
+    }
 
-        // Create a testable FilterResponseEvent
+    /**
+     * @param string $host
+     *
+     * @return MockObject|Request
+     */
+    private function createRequestWithHost(string $host = 'example.org'): MockObject
+    {
         $request = $this->createMock(Request::class);
         $request
             ->expects($this->any())
             ->method('getHost')
-            ->willReturn('example.org');
-        $this->response = new Response();
-        $this->event = $this->createMock(FilterResponseEvent::class);
-        $this->event
+            ->willReturn($host);
+
+        return $request;
+    }
+
+    /**
+     * @param MockObject $request
+     *
+     * @return MockObject|FilterResponseEvent
+     */
+    private function createEventWithRequest(MockObject $request)
+    {
+        $event = $this->createMock(FilterResponseEvent::class);
+        $event
             ->expects($this->any())
             ->method('getRequest')
             ->willReturn($request);
-        $this->event
+        $event
             ->expects($this->any())
             ->method('getResponse')
             ->willReturn($this->response);
+
+        return $event;
+    }
+
+    /**
+     * @return MockObject|FilterResponseEvent
+     */
+    private function createEvent(): MockObject
+    {
+        $request = $this->createRequestWithHost();
+
+        return $this->createEventWithRequest($request);
     }
 
     /**
      * @test
      */
-    public function onKernelResponse_noUpdatedCookie_noCookieHeader()
+    public function onKernelResponse_noUpdatedCookie_noCookieHeader(): void
     {
         $this->trustedTokenStorage
             ->expects($this->once())
             ->method('hasUpdatedCookie')
             ->willReturn(false);
 
-        $this->cookieResponseListener->onKernelResponse($this->event);
+        $event = $this->createEvent();
+        $this->cookieResponseListener->onKernelResponse($event);
         $this->assertCount(0, $this->response->headers->getCookies(), 'Response must have no cookie set.');
     }
 
     /**
      * @test
      */
-    public function onKernelResponse_hasUpdatedCookie_addCookieHeader()
+    public function onKernelResponse_hasUpdatedCookie_addCookieHeader(): void
     {
         $this->trustedTokenStorage
             ->expects($this->once())
@@ -87,7 +113,8 @@ class TrustedCookieResponseListenerTest extends TestCase
             ->method('getCookieValue')
             ->willReturn('cookieValue');
 
-        $this->cookieResponseListener->onKernelResponse($this->event);
+        $event = $this->createEvent();
+        $this->cookieResponseListener->onKernelResponse($event);
         $cookies = $this->response->headers->getCookies();
         $this->assertCount(1, $cookies, 'Response must have a cookie set.');
 
@@ -103,6 +130,39 @@ class TrustedCookieResponseListenerTest extends TestCase
             Cookie::SAMESITE_LAX
         );
         $this->assertEquals($expectedCookie, $cookies[0]);
+    }
+
+    /**
+     * @test
+     * @dataProvider provideRequestHostName
+     */
+    public function onKernelResponse_excludedHostNames_notSetDomain(string $requestHostName): void
+    {
+        $this->trustedTokenStorage
+            ->expects($this->any())
+            ->method('hasUpdatedCookie')
+            ->willReturn(true);
+
+        $this->trustedTokenStorage
+            ->expects($this->any())
+            ->method('getCookieValue')
+            ->willReturn('cookieValue');
+
+        $request = $this->createRequestWithHost($requestHostName);
+        $event = $this->createEventWithRequest($request);
+        $this->cookieResponseListener->onKernelResponse($event);
+        $cookies = $this->response->headers->getCookies();
+        $this->assertCount(1, $cookies, 'Response must have a cookie set.');
+        $this->assertNull($cookies[0]->getDomain());
+    }
+
+    public function provideRequestHostName(): array
+    {
+        return [
+            ['localhost'],
+            ['123.0.0.1'],
+            ['2001:0db8:85a3:0000:0000:8a2e:0370:7334'],
+        ];
     }
 }
 
