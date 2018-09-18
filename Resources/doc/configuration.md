@@ -63,7 +63,7 @@ scheb_two_factor:
         - 2001:db8:abcd:0012::0/64 # IPv6 subnet        
 
     # If you want to have your own implementation to retrieve the whitelisted IPs.
-    # The configuration option "ip_whitelist" becomes meaningless in such a cache.
+    # The configuration option "ip_whitelist" becomes meaningless in such a case.
     ip_whitelist_provider: acme.custom_ip_whitelist_provider
 ```
 
