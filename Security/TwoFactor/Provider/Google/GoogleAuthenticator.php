@@ -33,6 +33,7 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
     {
         // Strip any user added spaces
         $code = str_replace(' ', '', $code);
+
         return $this->authenticator->checkCode($user->getGoogleAuthenticatorSecret(), $code);
     }
 

@@ -88,7 +88,6 @@ class DefaultAuthenticationRequiredHandlerTest extends TestCase
         $this->stubRequestToSaveTargetUrl($session);
     }
 
-
     private function assertNotSaveTargetUrl(): void
     {
         $session = $this->createMock(SessionInterface::class);

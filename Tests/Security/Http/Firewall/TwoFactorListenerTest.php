@@ -69,8 +69,8 @@ class TwoFactorListenerTest extends TestCase
     /**
      * @var MockObject|CsrfTokenValidator
      */
-
     private $csrfTokenValidator;
+
     /**
      * @var MockObject|TrustedDeviceManagerInterface
      */

@@ -33,7 +33,7 @@ class TwoFactorFirewallConfig
 
     public function isCsrfProtectionEnabled(): bool
     {
-        return $this->options['csrf_token_generator'] !== TwoFactorFactory::DEFAULT_CSRF_TOKEN_GENERATOR;
+        return TwoFactorFactory::DEFAULT_CSRF_TOKEN_GENERATOR !== $this->options['csrf_token_generator'];
     }
 
     public function getCsrfParameterName(): string
