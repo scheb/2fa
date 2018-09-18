@@ -5,6 +5,7 @@ namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Handler;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\IpWhitelistHandler;
+use Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist\IpWhitelistProviderInterface;
 
 class IpWhitelistHandlerTest extends AuthenticationHandlerTestCase
 {
@@ -20,14 +21,21 @@ class IpWhitelistHandlerTest extends AuthenticationHandlerTestCase
 
     protected function setUp()
     {
-        $this->innerAuthenticationHandler = $this->getAuthenticationHandlerMock();
         $ipWhitelist = [
             '127.0.0.1',
             '192.168.0.0/16',
             '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
             '2001:db8:abcd:0012::0/64',
         ];
-        $this->ipWhitelistHandler = new IpWhitelistHandler($this->innerAuthenticationHandler, $ipWhitelist);
+
+        $this->innerAuthenticationHandler = $this->getAuthenticationHandlerMock();
+        $ipWhitelistProvider = $this->createMock(IpWhitelistProviderInterface::class);
+        $ipWhitelistProvider
+            ->expects($this->any())
+            ->method('getWhitelistedIps')
+            ->willReturn($ipWhitelist);
+
+        $this->ipWhitelistHandler = new IpWhitelistHandler($this->innerAuthenticationHandler, $ipWhitelistProvider);
     }
 
     private function createRequestWithIp($ip)

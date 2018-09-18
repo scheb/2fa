@@ -19,6 +19,17 @@
 			<argument>%scheb_two_factor.ip_whitelist%</argument>
 		</service>
 
+		<service id="scheb_two_factor.ip_whitelist_handler" class="Scheb\TwoFactorBundle\Security\TwoFactor\Handler\IpWhitelistHandler" lazy="true">
+			<argument type="service" id="scheb_two_factor.trusted_device_handler" />
+			<argument type="service" id="scheb_two_factor.ip_whitelist_provider" />
+		</service>
+
+		<service id="scheb_two_factor.default_ip_whitelist_provider" class="\Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist\DefaultIpWhitelistProvider">
+			<argument>%scheb_two_factor.ip_whitelist%</argument>
+		</service>
+
+		<service id="scheb_two_factor.ip_whitelist_provider" alias="scheb_two_factor.default_ip_whitelist_provider" />
+
 		<service id="scheb_two_factor.trusted_device_handler" class="Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TrustedDeviceHandler" lazy="true">
 			<argument type="service" id="scheb_two_factor.provider_handler" />
 			<argument type="service" id="scheb_two_factor.trusted_device_manager" />

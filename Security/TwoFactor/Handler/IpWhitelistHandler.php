@@ -3,6 +3,7 @@
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Handler;
 
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist\IpWhitelistProviderInterface;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
@@ -14,14 +15,14 @@ class IpWhitelistHandler implements AuthenticationHandlerInterface
     private $authenticationHandler;
 
     /**
-     * @var string[]
+     * @var IpWhitelistProviderInterface
      */
-    private $ipWhitelist;
+    private $ipWhitelistProvider;
 
-    public function __construct(AuthenticationHandlerInterface $authenticationHandler, array $ipWhitelist)
+    public function __construct(AuthenticationHandlerInterface $authenticationHandler, IpWhitelistProviderInterface $ipWhitelistProvider)
     {
         $this->authenticationHandler = $authenticationHandler;
-        $this->ipWhitelist = $ipWhitelist;
+        $this->ipWhitelistProvider = $ipWhitelistProvider;
     }
 
     public function beginTwoFactorAuthentication(AuthenticationContextInterface $context): TokenInterface
@@ -29,7 +30,7 @@ class IpWhitelistHandler implements AuthenticationHandlerInterface
         $request = $context->getRequest();
 
         // Skip two-factor authentication for whitelisted IPs
-        if (IpUtils::checkIp($request->getClientIp(), $this->ipWhitelist)) {
+        if (IpUtils::checkIp($request->getClientIp(), $this->ipWhitelistProvider->getWhitelistedIps())) {
             return $context->getToken();
         }
 

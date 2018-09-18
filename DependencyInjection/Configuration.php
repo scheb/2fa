@@ -71,6 +71,7 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue([])
                     ->prototype('scalar')->end()
                 ->end()
+            ->scalarNode('ip_whitelist_provider')->defaultNull()->end()
             ->end()
         ;
 

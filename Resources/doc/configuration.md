@@ -54,10 +54,17 @@ scheb_two_factor:
     security_tokens:
         - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
 
-    # A list of IP addresses or netmasks, which will not trigger two-factor authentication
+    # A list of IP addresses or netmasks, which will not trigger two-factor authentication.
+    # Supports IPv4, IPv6 and IP subnet masks.
     ip_whitelist:
-        - 127.0.0.1
-        - 192.168.0.0/16
+        - 127.0.0.1 # One IPv4
+        - 192.168.0.0/16 # IPv4 subnet
+        - 2001:0db8:85a3:0000:0000:8a2e:0370:7334 # One IPv6
+        - 2001:db8:abcd:0012::0/64 # IPv6 subnet        
+
+    # If you want to have your own implementation to retrieve the whitelisted IPs.
+    # The configuration option "ip_whitelist" becomes meaningless in such a cache.
+    ip_whitelist_provider: acme.custom_ip_whitelist_provider
 ```
 
 ```yaml

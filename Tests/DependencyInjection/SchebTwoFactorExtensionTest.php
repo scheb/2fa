@@ -269,6 +269,28 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertAlias('scheb_two_factor.backup_code_manager', 'acme_test.backup_code_manager');
     }
 
+    /**
+     * @test
+     */
+    public function load_defaultIpWhitelistProvider_defaultAlias()
+    {
+        $config = $this->getEmptyConfig();
+        $this->extension->load([$config], $this->container);
+
+        $this->assertAlias('scheb_two_factor.ip_whitelist_provider', 'scheb_two_factor.default_ip_whitelist_provider');
+    }
+
+    /**
+     * @test
+     */
+    public function load_alternativeIpWhitelistProvider_replaceAlias()
+    {
+        $config = $this->getFullConfig();
+        $this->extension->load([$config], $this->container);
+
+        $this->assertAlias('scheb_two_factor.ip_whitelist_provider', 'acme_test.ip_whitelist_provider');
+    }
+
     private function getEmptyConfig()
     {
         $yaml = '';
@@ -286,6 +308,7 @@ security_tokens:
     - Symfony\Component\Security\Core\Authentication\Token\SomeToken
 ip_whitelist:
     - 127.0.0.1
+ip_whitelist_provider: acme_test.ip_whitelist_provider
 trusted_device:
     enabled: true
     manager: acme_test.trusted_device_manager

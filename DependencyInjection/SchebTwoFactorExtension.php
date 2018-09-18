@@ -52,6 +52,7 @@ class SchebTwoFactorExtension extends Extension
 
         // Configure custom services
         $this->configurePersister($container, $config);
+        $this->configureIpWhitelistProvider($container, $config);
         if (true === $config['trusted_device']['enabled']) {
             $this->configureTrustedDeviceManager($container, $config);
         }
@@ -83,6 +84,17 @@ class SchebTwoFactorExtension extends Extension
         $backupCodeManager = $config['backup_codes']['manager'] ?? self::DEFAULT_BACKUP_CODE_MANAGER;
         $container->removeAlias($container->getAlias('scheb_two_factor.backup_code_manager'));
         $container->setAlias('scheb_two_factor.backup_code_manager', $backupCodeManager);
+    }
+
+    private function configureIpWhitelistProvider(ContainerBuilder $container, array $config): void
+    {
+        // No custom persister configured
+        if (!$config['ip_whitelist_provider']) {
+            return;
+        }
+
+        $container->removeAlias($container->getAlias('scheb_two_factor.ip_whitelist_provider'));
+        $container->setAlias('scheb_two_factor.ip_whitelist_provider', $config['ip_whitelist_provider']);
     }
 
     private function configureEmailAuthenticationProvider(ContainerBuilder $container, array $config): void
