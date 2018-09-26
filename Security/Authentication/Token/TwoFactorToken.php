@@ -57,7 +57,7 @@ class TwoFactorToken implements TokenInterface
 
     public function getRoles()
     {
-        return [];
+        return $this->authenticatedToken->getRoles();
     }
 
     public function getCredentials()
