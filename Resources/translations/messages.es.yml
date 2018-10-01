@@ -1,5 +1,6 @@
 scheb_two_factor:
-    auth_code: Código de autorización
+    auth_code: Código de autenticación
+    choose_provider: Cambiar el método de autenticación
     login: Ingresar
     code_invalid: El código es inválido.
     trusted: Estoy en un ordenador de confianza
