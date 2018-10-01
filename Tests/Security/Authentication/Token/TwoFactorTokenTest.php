@@ -34,6 +34,15 @@ class TwoFactorTokenTest extends TestCase
     /**
      * @test
      */
+    public function preferTwoFactorProvider_preferOtherProvider_returnsPreferredProviderFirst()
+    {
+        $this->twoFactorToken->preferTwoFactorProvider('provider2');
+        $this->assertEquals(['provider2', 'provider1'], $this->twoFactorToken->getTwoFactorProviders());
+    }
+
+    /**
+     * @test
+     */
     public function getCurrentTwoFactorProvider_defaultOrderGiven_returnFirstProvider()
     {
         $this->assertEquals('provider1', $this->twoFactorToken->getCurrentTwoFactorProvider());

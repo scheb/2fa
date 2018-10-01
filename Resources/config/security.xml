@@ -39,6 +39,7 @@
 			<argument type="service" id="security.access_map" />
 			<argument type="service" id="security.access.decision_manager" />
 			<argument type="service" id="event_dispatcher" on-invalid="null"/>
+			<argument type="service" id="scheb_two_factor.token_factory" />
 			<argument type="service" id="logger" on-invalid="null" />
 		</service>
 

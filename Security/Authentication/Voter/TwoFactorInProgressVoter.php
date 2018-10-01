@@ -2,7 +2,7 @@
 
 namespace Scheb\TwoFactorBundle\Security\Authentication\Voter;
 
-use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
@@ -13,7 +13,7 @@ class TwoFactorInProgressVoter implements VoterInterface
 
     public function vote(TokenInterface $token, $subject, array $attributes)
     {
-        if (!($token instanceof TwoFactorToken)) {
+        if (!($token instanceof TwoFactorTokenInterface)) {
             return VoterInterface::ACCESS_ABSTAIN;
         }
 

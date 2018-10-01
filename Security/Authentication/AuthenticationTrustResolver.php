@@ -2,7 +2,7 @@
 
 namespace Scheb\TwoFactorBundle\Security\Authentication;
 
-use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
@@ -35,6 +35,6 @@ class AuthenticationTrustResolver implements AuthenticationTrustResolverInterfac
 
     private function isTwoFactorToken(?TokenInterface $token): bool
     {
-        return $token instanceof TwoFactorToken;
+        return $token instanceof TwoFactorTokenInterface;
     }
 }

@@ -5,6 +5,8 @@ namespace Scheb\TwoFactorBundle\Tests\Security\Http\Firewall;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactory;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Voter\TwoFactorInProgressVoter;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\Http\Firewall\TwoFactorListener;
@@ -82,6 +84,11 @@ class TwoFactorListenerTest extends TestCase
     private $eventDispatcher;
 
     /**
+     * @var MockObject|TwoFactorTokenFactoryInterface
+     */
+    private $twoFactorTokenFactory;
+
+    /**
      * @var MockObject|AccessMapInterface
      */
     private $accessMap;
@@ -132,6 +139,7 @@ class TwoFactorListenerTest extends TestCase
         $this->accessMap = $this->createMock(AccessMapInterface::class);
         $this->accessDecisionManager = $this->createMock(AccessDecisionManagerInterface::class);
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->twoFactorTokenFactory = $this->createMock(TwoFactorTokenFactory::class);
 
         $this->request = $this->createMock(Request::class);
         $this->request
@@ -170,6 +178,7 @@ class TwoFactorListenerTest extends TestCase
             $this->accessMap,
             $this->accessDecisionManager,
             $this->eventDispatcher,
+            $this->twoFactorTokenFactory,
             $this->createMock(LoggerInterface::class)
         );
     }
@@ -181,6 +190,11 @@ class TwoFactorListenerTest extends TestCase
             ->expects($this->any())
             ->method('getProviderKey')
             ->willReturn($firewallName);
+
+        $this->twoFactorTokenFactory
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn($twoFactorToken);
 
         return $twoFactorToken;
     }
@@ -407,10 +421,13 @@ class TwoFactorListenerTest extends TestCase
         $tokenAssert = function ($token): bool {
             /* @var TwoFactorToken $token */
             $this->assertInstanceOf(TwoFactorToken::class, $token);
-            $this->assertEquals('authCode', $token->getCredentials());
 
             return true;
         };
+
+        $method = new \ReflectionMethod(TwoFactorListener::class, 'getAuthCodeFromRequest');
+        $method->setAccessible(true);
+        $this->assertEquals('authCode', $method->invokeArgs($this->listener, [$this->request]));
 
         $this->authenticationManager
             ->expects($this->once())

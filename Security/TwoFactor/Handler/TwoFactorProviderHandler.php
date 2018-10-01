@@ -3,7 +3,8 @@
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Handler;
 
 use Scheb\TwoFactorBundle\Model\PreferredProviderInterface;
-use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
@@ -16,12 +17,18 @@ class TwoFactorProviderHandler implements AuthenticationHandlerInterface
      */
     private $providerRegistry;
 
-    public function __construct(TwoFactorProviderRegistry $providerRegistry)
+    /**
+     * @var TwoFactorTokenFactoryInterface
+     */
+    private $twoFactorTokenFactory;
+
+    public function __construct(TwoFactorProviderRegistry $providerRegistry, TwoFactorTokenFactoryInterface $twoFactorTokenFactory)
     {
         $this->providerRegistry = $providerRegistry;
+        $this->twoFactorTokenFactory = $twoFactorTokenFactory;
     }
 
-    public function beginTwoFactorAuthentication(AuthenticationContextInterface $context): TokenInterface
+    private function getActiveTwoFactorProviders(AuthenticationContextInterface $context): array
     {
         $activeTwoFactorProviders = [];
 
@@ -32,9 +39,16 @@ class TwoFactorProviderHandler implements AuthenticationHandlerInterface
             }
         }
 
+        return $activeTwoFactorProviders;
+    }
+
+    public function beginTwoFactorAuthentication(AuthenticationContextInterface $context): TokenInterface
+    {
+        $activeTwoFactorProviders = $this->getActiveTwoFactorProviders($context);
+
         $authenticatedToken = $context->getToken();
         if ($activeTwoFactorProviders) {
-            $twoFactorToken = new TwoFactorToken($authenticatedToken, null, $context->getFirewallName(), $activeTwoFactorProviders);
+            $twoFactorToken = $this->twoFactorTokenFactory->create($authenticatedToken, null, $context->getFirewallName(), $activeTwoFactorProviders);
             $this->setPreferredProvider($twoFactorToken, $context->getUser()); // Prioritize the user's preferred provider
             return $twoFactorToken;
         } else {
@@ -42,7 +56,7 @@ class TwoFactorProviderHandler implements AuthenticationHandlerInterface
         }
     }
 
-    private function setPreferredProvider(TwoFactorToken $token, $user): void
+    private function setPreferredProvider(TwoFactorTokenInterface $token, $user): void
     {
         if ($user instanceof PreferredProviderInterface) {
             if ($preferredProvider = $user->getPreferredTwoFactorProvider()) {

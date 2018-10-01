@@ -5,7 +5,7 @@ namespace Scheb\TwoFactorBundle\Security\Authentication\Provider;
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\InvalidTwoFactorCodeException;
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\TwoFactorProviderNotFoundException;
-use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
@@ -47,12 +47,12 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
 
     public function supports(TokenInterface $token)
     {
-        return $token instanceof TwoFactorToken && $this->firewallName === $token->getProviderKey();
+        return $token instanceof TwoFactorTokenInterface && $this->firewallName === $token->getProviderKey();
     }
 
     public function authenticate(TokenInterface $token)
     {
-        /** @var TwoFactorToken $token */
+        /** @var TwoFactorTokenInterface $token */
         if (!$this->supports($token)) {
             return null;
         }
@@ -77,7 +77,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
         }
     }
 
-    private function isValidAuthenticationCode(string $providerName, TwoFactorToken $token): bool
+    private function isValidAuthenticationCode(string $providerName, TwoFactorTokenInterface $token): bool
     {
         $user = $token->getUser();
         $authenticationCode = $token->getCredentials();
@@ -116,7 +116,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
         return false;
     }
 
-    private function isAuthenticationComplete(TwoFactorToken $token): bool
+    private function isAuthenticationComplete(TwoFactorTokenInterface $token): bool
     {
         return !$this->options['multi_factor'] || $token->allTwoFactorProvidersAuthenticated();
     }

@@ -3,7 +3,7 @@
 namespace Scheb\TwoFactorBundle\Security\Authentication\Provider;
 
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
-use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextFactoryInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterface;
 use Symfony\Bundle\SecurityBundle\Security\FirewallMap;
@@ -64,7 +64,7 @@ class AuthenticationProviderDecorator implements AuthenticationProviderInterface
 
         // AnonymousToken and TwoFactorToken can be ignored
         // in case of Guard, it can return null due to having multiple guard authenticators
-        if ($token instanceof AnonymousToken || $token instanceof TwoFactorToken || null === $token) {
+        if ($token instanceof AnonymousToken || $token instanceof TwoFactorTokenInterface || null === $token) {
             return $token;
         }
 

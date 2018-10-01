@@ -5,6 +5,8 @@ namespace Scheb\TwoFactorBundle\Security\Http\Firewall;
 use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\CsrfTokenValidator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
@@ -101,6 +103,11 @@ class TwoFactorListener implements ListenerInterface
     private $eventDispatcher;
 
     /**
+     * @var TwoFactorTokenFactoryInterface
+     */
+    private $twoFactorTokenFactory;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -119,6 +126,7 @@ class TwoFactorListener implements ListenerInterface
         AccessMapInterface $accessMap,
         AccessDecisionManagerInterface $accessDecisionManager,
         EventDispatcherInterface $eventDispatcher,
+        TwoFactorTokenFactoryInterface $twoFactorTokenFactory,
         ?LoggerInterface $logger = null
     ) {
         if (empty($firewallName)) {
@@ -135,6 +143,7 @@ class TwoFactorListener implements ListenerInterface
         $this->csrfTokenValidator = $csrfTokenValidator;
         $this->options = array_merge(self::DEFAULT_OPTIONS, $options);
         $this->eventDispatcher = $eventDispatcher;
+        $this->twoFactorTokenFactory = $twoFactorTokenFactory;
         $this->logger = $logger;
         $this->trustedDeviceManager = $trustedDeviceManager;
         $this->accessMap = $accessMap;
@@ -144,7 +153,7 @@ class TwoFactorListener implements ListenerInterface
     public function handle(GetResponseEvent $event)
     {
         $currentToken = $this->tokenStorage->getToken();
-        if (!($currentToken instanceof TwoFactorToken && $currentToken->getProviderKey() === $this->firewallName)) {
+        if (!($currentToken instanceof TwoFactorTokenInterface && $currentToken->getProviderKey() === $this->firewallName)) {
             return;
         }
 
@@ -181,15 +190,20 @@ class TwoFactorListener implements ListenerInterface
         return $this->httpUtils->checkRequestPath($request, $this->options['auth_form_path']);
     }
 
-    private function attemptAuthentication(Request $request, TwoFactorToken $currentToken): Response
+    private function getAuthCodeFromRequest(Request $request): string
     {
-        $authCode = $request->get($this->options['auth_code_parameter_name'], '');
+        return $request->get($this->options['auth_code_parameter_name'], '');
+    }
+
+    private function attemptAuthentication(Request $request, TwoFactorTokenInterface $currentToken): Response
+    {
+        $authCode = $this->getAuthCodeFromRequest($request);
         try {
             if (!$this->csrfTokenValidator->hasValidCsrfToken($request)) {
                 throw new InvalidCsrfTokenException('Invalid CSRF token.');
             }
 
-            $token = new TwoFactorToken($currentToken->getAuthenticatedToken(), $authCode, $this->firewallName, $currentToken->getTwoFactorProviders());
+            $token = $this->twoFactorTokenFactory->create($currentToken->getAuthenticatedToken(), $authCode, $this->firewallName, $currentToken->getTwoFactorProviders());
             $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::ATTEMPT, $request, $token);
             $resultToken = $this->authenticationManager->authenticate($token);
 
@@ -220,7 +234,7 @@ class TwoFactorListener implements ListenerInterface
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::SUCCESS, $request, $token);
 
         // When it's still a TwoFactorToken, keep showing the auth form
-        if ($token instanceof TwoFactorToken) {
+        if ($token instanceof TwoFactorTokenInterface) {
             $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::REQUIRE, $request, $token);
 
             return $this->authenticationRequiredHandler->onAuthenticationRequired($request, $token);

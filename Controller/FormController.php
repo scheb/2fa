@@ -2,7 +2,7 @@
 
 namespace Scheb\TwoFactorBundle\Controller;
 
-use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallContext;
@@ -60,17 +60,17 @@ class FormController
         return $renderer->renderForm($request, $templateVars);
     }
 
-    protected function getTwoFactorToken(): TwoFactorToken
+    protected function getTwoFactorToken(): TwoFactorTokenInterface
     {
         $token = $this->tokenStorage->getToken();
-        if (!($token instanceof TwoFactorToken)) {
+        if (!($token instanceof TwoFactorTokenInterface)) {
             throw new AccessDeniedException('User is not in a two-factor authentication process.');
         }
 
         return $token;
     }
 
-    protected function setPreferredProvider(Request $request, TwoFactorToken $token): void
+    protected function setPreferredProvider(Request $request, TwoFactorTokenInterface $token): void
     {
         $preferredProvider = $request->get('preferProvider');
         if ($preferredProvider) {
@@ -82,7 +82,7 @@ class FormController
         }
     }
 
-    protected function getTemplateVars(Request $request, TwoFactorToken $token): array
+    protected function getTemplateVars(Request $request, TwoFactorTokenInterface $token): array
     {
         $config = $this->twoFactorFirewallContext->getFirewallConfig($token->getProviderKey());
         $pendingTwoFactorProviders = $token->getTwoFactorProviders();
