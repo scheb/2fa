@@ -25,10 +25,6 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
     private $twoFactorTokenFactory;
 
     /**
-     * @var MockObject|TwoFactorTokenInterface
-     */
-    private $twoFactorToken;
-    /**
      * @var MockObject|TwoFactorProviderInterface
      */
     private $provider1;
@@ -57,12 +53,7 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
                 'test2' => $this->provider2,
             ]);
 
-        $this->twoFactorToken = $this->createMock(TwoFactorToken::class);
-        $this->twoFactorTokenFactory = $this->createMock(TwoFactorTokenFactory::class);
-        $this->twoFactorTokenFactory
-            ->expects($this->any())
-            ->method('create')
-            ->willReturn($this->twoFactorToken);
+        $this->twoFactorTokenFactory = new TwoFactorTokenFactory(TwoFactorToken::class);
 
         $this->handler = new TwoFactorProviderHandler($this->providerRegistry, $this->twoFactorTokenFactory);
     }
@@ -74,11 +65,6 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
             ->expects($this->any())
             ->method('getPreferredTwoFactorProvider')
             ->willReturn($preferredProvider);
-
-        $this->twoFactorToken
-            ->expects($this->once())
-            ->method('preferTwoFactorProvider')
-            ->with($preferredProvider);
 
         return $user;
     }
@@ -128,10 +114,9 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
         /** @var TwoFactorToken $returnValue */
         $returnValue = $this->handler->beginTwoFactorAuthentication($context);
         $this->assertInstanceOf(TwoFactorToken::class, $returnValue);
-
-        $method = new \ReflectionMethod(TwoFactorProviderHandler::class, 'getActiveTwoFactorProviders');
-        $method->setAccessible(true);
-        $this->assertEquals(['test2'], $method->invokeArgs($this->handler, [$context]));
+        $this->assertSame($originalToken, $returnValue->getAuthenticatedToken());
+        $this->assertEquals('firewallName', $returnValue->getProviderKey());
+        $this->assertEquals(['test2'], $returnValue->getTwoFactorProviders());
     }
 
     /**
@@ -156,9 +141,11 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
         $originalToken = $this->createToken();
         $context = $this->createAuthenticationContext(null, $originalToken, $user);
         $this->stubProvidersReturn(true, true);
+
         /** @var TwoFactorToken $returnValue */
         $returnValue = $this->handler->beginTwoFactorAuthentication($context);
         $this->assertInstanceOf(TwoFactorToken::class, $returnValue);
+        $this->assertEquals(['test2', 'test1'], $returnValue->getTwoFactorProviders());
     }
 
     /**
@@ -174,9 +161,6 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
         /** @var TwoFactorToken $returnValue */
         $returnValue = $this->handler->beginTwoFactorAuthentication($context);
         $this->assertInstanceOf(TwoFactorToken::class, $returnValue);
-
-        $method = new \ReflectionMethod(TwoFactorProviderHandler::class, 'getActiveTwoFactorProviders');
-        $method->setAccessible(true);
-        $this->assertEquals(['test1', 'test2'], $method->invokeArgs($this->handler, [$context]));
+        $this->assertEquals(['test1', 'test2'], $returnValue->getTwoFactorProviders());
     }
 }

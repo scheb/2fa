@@ -139,7 +139,7 @@ class TwoFactorListenerTest extends TestCase
         $this->accessMap = $this->createMock(AccessMapInterface::class);
         $this->accessDecisionManager = $this->createMock(AccessDecisionManagerInterface::class);
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
-        $this->twoFactorTokenFactory = $this->createMock(TwoFactorTokenFactory::class);
+        $this->twoFactorTokenFactory = new TwoFactorTokenFactory(TwoFactorToken::class);
 
         $this->request = $this->createMock(Request::class);
         $this->request
@@ -190,11 +190,6 @@ class TwoFactorListenerTest extends TestCase
             ->expects($this->any())
             ->method('getProviderKey')
             ->willReturn($firewallName);
-
-        $this->twoFactorTokenFactory
-            ->expects($this->any())
-            ->method('create')
-            ->willReturn($twoFactorToken);
 
         return $twoFactorToken;
     }
@@ -421,13 +416,10 @@ class TwoFactorListenerTest extends TestCase
         $tokenAssert = function ($token): bool {
             /* @var TwoFactorToken $token */
             $this->assertInstanceOf(TwoFactorToken::class, $token);
+            $this->assertEquals('authCode', $token->getCredentials());
 
             return true;
         };
-
-        $method = new \ReflectionMethod(TwoFactorListener::class, 'getAuthCodeFromRequest');
-        $method->setAccessible(true);
-        $this->assertEquals('authCode', $method->invokeArgs($this->listener, [$this->request]));
 
         $this->authenticationManager
             ->expects($this->once())
