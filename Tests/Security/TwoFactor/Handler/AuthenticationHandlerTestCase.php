@@ -13,6 +13,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 abstract class AuthenticationHandlerTestCase extends TestCase
 {
+    protected const FIREWALL_NAME = 'firewallName';
+
     protected function getAuthenticationHandlerMock()
     {
         return $this->createMock(AuthenticationHandlerInterface::class);
@@ -39,7 +41,7 @@ abstract class AuthenticationHandlerTestCase extends TestCase
         $context
             ->expects($this->any())
             ->method('getFirewallName')
-            ->willReturn('firewallName');
+            ->willReturn(self::FIREWALL_NAME);
 
         return $context;
     }

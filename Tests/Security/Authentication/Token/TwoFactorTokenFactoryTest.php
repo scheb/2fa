@@ -15,7 +15,7 @@ class TwoFactorTokenFactoryTest extends TestCase
     public function create_onCreate_returnTwoFactorToken()
     {
         $authenticatedToken = $this->createMock(TokenInterface::class);
-        $twoFactorTokenFactory = new TwoFactorTokenFactory(TwoFactorToken::class);
+        $twoFactorTokenFactory = new TwoFactorTokenFactory();
 
         $twoFactorToken = $twoFactorTokenFactory->create($authenticatedToken, 'credentials', 'firewallName', ['test1', 'test2']);
 

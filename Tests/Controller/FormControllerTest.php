@@ -5,7 +5,7 @@ namespace Scheb\TwoFactorBundle\Tests\Controller;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Controller\FormController;
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\TwoFactorProviderNotFoundException;
-use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
@@ -54,7 +54,7 @@ class FormControllerTest extends TestCase
     private $formRenderer;
 
     /**
-     * @var MockObject|TwoFactorToken
+     * @var MockObject|TwoFactorTokenInterface
      */
     private $twoFactorToken;
 
@@ -149,7 +149,7 @@ class FormControllerTest extends TestCase
 
     private function stubTokenStorageHasTwoFactorToken(array $providers = ['provider1', 'provider2']): void
     {
-        $this->twoFactorToken = $this->createMock(TwoFactorToken::class);
+        $this->twoFactorToken = $this->createMock(TwoFactorTokenInterface::class);
         $this->twoFactorToken
             ->expects($this->any())
             ->method('getCurrentTwoFactorProvider')

@@ -4,7 +4,7 @@ namespace Scheb\TwoFactorBundle\Tests\Security\Authentication;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\AuthenticationTrustResolver;
-use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -74,7 +74,7 @@ class AuthenticationTrustResolverTest extends TestCase
             ->expects($this->never())
             ->method($this->anything());
 
-        $returnValue = $this->trustResolver->isFullFledged($this->createMock(TwoFactorToken::class));
+        $returnValue = $this->trustResolver->isFullFledged($this->createMock(TwoFactorTokenInterface::class));
         $this->assertFalse($returnValue);
     }
 

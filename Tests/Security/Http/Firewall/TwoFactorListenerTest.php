@@ -4,9 +4,9 @@ namespace Scheb\TwoFactorBundle\Tests\Security\Http\Firewall;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
-use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Voter\TwoFactorInProgressVoter;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\Http\Firewall\TwoFactorListener;
@@ -37,6 +37,7 @@ class TwoFactorListenerTest extends TestCase
     private const AUTH_CODE_PARAM = 'auth_code_param';
     private const TRUSTED_PARAM = 'trusted_param';
     private const FIREWALL_NAME = 'firewallName';
+    private const TWO_FACTOR_PROVIDERS = ['provider1', 'provider2'];
 
     /**
      * @var MockObject|TokenStorageInterface
@@ -139,7 +140,7 @@ class TwoFactorListenerTest extends TestCase
         $this->accessMap = $this->createMock(AccessMapInterface::class);
         $this->accessDecisionManager = $this->createMock(AccessDecisionManagerInterface::class);
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
-        $this->twoFactorTokenFactory = new TwoFactorTokenFactory(TwoFactorToken::class);
+        $this->twoFactorTokenFactory = $this->createMock(TwoFactorTokenFactory::class);
 
         $this->request = $this->createMock(Request::class);
         $this->request
@@ -183,13 +184,21 @@ class TwoFactorListenerTest extends TestCase
         );
     }
 
-    private function createTwoFactorToken($firewallName = self::FIREWALL_NAME): MockObject
+    private function createTwoFactorToken($firewallName = self::FIREWALL_NAME, $authenticatedToken = null): MockObject
     {
-        $twoFactorToken = $this->createMock(TwoFactorToken::class);
+        $twoFactorToken = $this->createMock(TwoFactorTokenInterface::class);
         $twoFactorToken
             ->expects($this->any())
             ->method('getProviderKey')
             ->willReturn($firewallName);
+        $twoFactorToken
+            ->expects($this->any())
+            ->method('getTwoFactorProviders')
+            ->willReturn(self::TWO_FACTOR_PROVIDERS);
+        $twoFactorToken
+            ->expects($this->any())
+            ->method('getAuthenticatedToken')
+            ->willReturn($authenticatedToken ?? $this->createMock(TokenInterface::class));
 
         return $twoFactorToken;
     }
@@ -276,7 +285,7 @@ class TwoFactorListenerTest extends TestCase
         $this->accessDecisionManager
             ->expects($this->any())
             ->method('decide')
-            ->with($this->isInstanceOf(TwoFactorToken::class), [TwoFactorInProgressVoter::IS_AUTHENTICATED_2FA_IN_PROGRESS], $this->request)
+            ->with($this->isInstanceOf(TwoFactorTokenInterface::class), [TwoFactorInProgressVoter::IS_AUTHENTICATED_2FA_IN_PROGRESS], $this->request)
             ->willReturn($accessGranted);
     }
 
@@ -408,23 +417,24 @@ class TwoFactorListenerTest extends TestCase
      */
     public function handle_isCheckPath_authenticateWithAuthenticationManager()
     {
-        $this->stubTokenManagerHasToken($this->createTwoFactorToken());
+        $authenticatedToken = $this->createMock(TokenInterface::class);
+        $twoFactorToken = $this->createTwoFactorToken(self::FIREWALL_NAME, $authenticatedToken);
+        $this->stubTokenManagerHasToken($twoFactorToken);
         $this->stubCurrentPath(self::CHECK_PATH);
         $this->stubCsrfTokenValidatorHasValidCsrfTokenReturnsTrue();
         $this->stubHandlersReturnResponse();
 
-        $tokenAssert = function ($token): bool {
-            /* @var TwoFactorToken $token */
-            $this->assertInstanceOf(TwoFactorToken::class, $token);
-            $this->assertEquals('authCode', $token->getCredentials());
-
-            return true;
-        };
+        $credentialToken = $this->createTwoFactorToken();
+        $this->twoFactorTokenFactory
+            ->expects($this->once())
+            ->method('create')
+            ->with($authenticatedToken, 'authCode', 'firewallName', self::TWO_FACTOR_PROVIDERS)
+            ->willReturn($credentialToken);
 
         $this->authenticationManager
             ->expects($this->once())
             ->method('authenticate')
-            ->with($this->callback($tokenAssert))
+            ->with($this->identicalTo($credentialToken))
             ->willReturn($this->createMock(TokenInterface::class));
 
         $this->listener->handle($this->getResponseEvent);

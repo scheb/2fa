@@ -4,7 +4,7 @@ namespace Scheb\TwoFactorBundle\Tests\Security\Authentication\Provider;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Provider\AuthenticationProviderDecorator;
-use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextFactoryInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterface;
@@ -152,7 +152,7 @@ class AuthenticationProviderDecoratorTest extends TestCase
     {
         return [
             [$this->createMock(AnonymousToken::class)],
-            [$this->createMock(TwoFactorToken::class)],
+            [$this->createMock(TwoFactorTokenInterface::class)],
             [null],
         ];
     }
@@ -196,7 +196,7 @@ class AuthenticationProviderDecoratorTest extends TestCase
         $this->stubDecoratedProviderReturnsToken($authenticatedToken);
         $this->stubFirewallHasListenersRegistered(['form_login', 'anonymous', 'two_factor']);
 
-        $twoFactorToken = $this->createMock(TwoFactorToken::class);
+        $twoFactorToken = $this->createMock(TwoFactorTokenInterface::class);
         $this->twoFactorAuthenticationHandler
             ->expects($this->once())
             ->method('beginTwoFactorAuthentication')

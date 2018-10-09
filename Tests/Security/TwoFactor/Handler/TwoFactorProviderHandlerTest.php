@@ -4,7 +4,6 @@ namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Handler;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\PreferredProviderInterface;
-use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
@@ -24,6 +23,10 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
      */
     private $twoFactorTokenFactory;
 
+    /**
+     * @var MockObject|TwoFactorTokenInterface
+     */
+    private $twoFactorToken;
     /**
      * @var MockObject|TwoFactorProviderInterface
      */
@@ -53,9 +56,15 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
                 'test2' => $this->provider2,
             ]);
 
-        $this->twoFactorTokenFactory = new TwoFactorTokenFactory(TwoFactorToken::class);
+        $this->twoFactorToken = $this->createMock(TwoFactorTokenInterface::class);
+        $this->twoFactorTokenFactory = $this->createMock(TwoFactorTokenFactory::class);
 
         $this->handler = new TwoFactorProviderHandler($this->providerRegistry, $this->twoFactorTokenFactory);
+    }
+
+    private function createTwoFactorToken(): MockObject
+    {
+        return $this->createMock(TwoFactorTokenInterface::class);
     }
 
     private function createUserWithPreferredProvider(string $preferredProvider): MockObject
@@ -80,6 +89,14 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
             ->expects($this->any())
             ->method('beginAuthentication')
             ->willReturn($provider2Returns);
+    }
+
+    private function stubTwoFactorTokenFactoryReturns(MockObject $token): void
+    {
+        $this->twoFactorTokenFactory
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn($token);
     }
 
     /**
@@ -111,12 +128,16 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
         $context = $this->createAuthenticationContext(null, $originalToken);
         $this->stubProvidersReturn(false, true);
 
-        /** @var TwoFactorToken $returnValue */
+        $twoFactorToken = $this->createMock(TwoFactorTokenInterface::class);
+        $this->twoFactorTokenFactory
+            ->expects($this->once())
+            ->method('create')
+            ->with($originalToken, null, self::FIREWALL_NAME, ['test2'])
+            ->willReturn($twoFactorToken);
+
+        /** @var TwoFactorTokenInterface $returnValue */
         $returnValue = $this->handler->beginTwoFactorAuthentication($context);
-        $this->assertInstanceOf(TwoFactorToken::class, $returnValue);
-        $this->assertSame($originalToken, $returnValue->getAuthenticatedToken());
-        $this->assertEquals('firewallName', $returnValue->getProviderKey());
-        $this->assertEquals(['test2'], $returnValue->getTwoFactorProviders());
+        $this->assertSame($twoFactorToken, $returnValue);
     }
 
     /**
@@ -135,32 +156,21 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
     /**
      * @test
      */
-    public function beginAuthentication_hasPreferredProvider_setThatProviderFirst()
+    public function beginAuthentication_hasPreferredProvider_setThatProviderPreferred()
     {
-        $user = $this->createUserWithPreferredProvider('test2');
+        $user = $this->createUserWithPreferredProvider('preferredProvider');
         $originalToken = $this->createToken();
+        $twoFactorToken = $this->createTwoFactorToken();
+
         $context = $this->createAuthenticationContext(null, $originalToken, $user);
         $this->stubProvidersReturn(true, true);
+        $this->stubTwoFactorTokenFactoryReturns($twoFactorToken);
 
-        /** @var TwoFactorToken $returnValue */
-        $returnValue = $this->handler->beginTwoFactorAuthentication($context);
-        $this->assertInstanceOf(TwoFactorToken::class, $returnValue);
-        $this->assertEquals(['test2', 'test1'], $returnValue->getTwoFactorProviders());
-    }
+        $twoFactorToken
+            ->expects($this->once())
+            ->method('preferTwoFactorProvider')
+            ->with('preferredProvider');
 
-    /**
-     * @test
-     */
-    public function beginAuthentication_invalidPreferredProvider_changeNothing()
-    {
-        $user = $this->createUserWithPreferredProvider('invalid');
-        $originalToken = $this->createToken();
-        $context = $this->createAuthenticationContext(null, $originalToken, $user);
-        $this->stubProvidersReturn(true, true);
-
-        /** @var TwoFactorToken $returnValue */
-        $returnValue = $this->handler->beginTwoFactorAuthentication($context);
-        $this->assertInstanceOf(TwoFactorToken::class, $returnValue);
-        $this->assertEquals(['test1', 'test2'], $returnValue->getTwoFactorProviders());
+        $this->handler->beginTwoFactorAuthentication($context);
     }
 }

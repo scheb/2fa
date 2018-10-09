@@ -2,7 +2,7 @@
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Authentication\Voter;
 
-use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Voter\TwoFactorInProgressVoter;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -37,7 +37,7 @@ class TwoFactorInProgressVoterTest extends TestCase
      */
     public function vote_isTwoFactorToken_returnAbstain($checkAttribute, $expectedResult)
     {
-        $token = $this->createMock(TwoFactorToken::class);
+        $token = $this->createMock(TwoFactorTokenInterface::class);
         $returnValue = $this->voter->vote($token, null, [$checkAttribute]);
         $this->assertEquals($expectedResult, $returnValue);
     }
