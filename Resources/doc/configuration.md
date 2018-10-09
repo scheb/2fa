@@ -65,6 +65,10 @@ scheb_two_factor:
     # If you want to have your own implementation to retrieve the whitelisted IPs.
     # The configuration option "ip_whitelist" becomes meaningless in such a case.
     ip_whitelist_provider: acme.custom_ip_whitelist_provider
+    
+    # If you want to exchange/extend the TwoFactorToken class, which is used by the bundle, you can have a factory
+    # service providing your own implementation.
+    two_factor_token_factory: acme.custom_two_factor_token_factory
 ```
 
 ```yaml

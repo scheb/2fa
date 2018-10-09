@@ -291,6 +291,28 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertAlias('scheb_two_factor.ip_whitelist_provider', 'acme_test.ip_whitelist_provider');
     }
 
+    /**
+     * @test
+     */
+    public function load_defaultTokenFactory_defaultAlias()
+    {
+        $config = $this->getEmptyConfig();
+        $this->extension->load([$config], $this->container);
+
+        $this->assertAlias('scheb_two_factor.token_factory', 'scheb_two_factor.default_token_factory');
+    }
+
+    /**
+     * @test
+     */
+    public function load_alternativeTokenFactory_replaceAlias()
+    {
+        $config = $this->getFullConfig();
+        $this->extension->load([$config], $this->container);
+
+        $this->assertAlias('scheb_two_factor.token_factory', 'acme_test.two_factor_token_factory');
+    }
+
     private function getEmptyConfig()
     {
         $yaml = '';
@@ -309,6 +331,7 @@ security_tokens:
 ip_whitelist:
     - 127.0.0.1
 ip_whitelist_provider: acme_test.ip_whitelist_provider
+two_factor_token_factory: acme_test.two_factor_token_factory
 trusted_device:
     enabled: true
     manager: acme_test.trusted_device_manager

@@ -72,6 +72,7 @@ class Configuration implements ConfigurationInterface
                     ->prototype('scalar')->end()
                 ->end()
             ->scalarNode('ip_whitelist_provider')->defaultNull()->end()
+            ->scalarNode('two_factor_token_factory')->defaultNull()->end()
             ->end()
         ;
 
