@@ -108,7 +108,7 @@ EOF;
         $this->assertEquals(TwoFactorFactory::DEFAULT_AUTH_CODE_PARAMETER_NAME, $processedConfiguration['auth_code_parameter_name']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_TRUSTED_PARAMETER_NAME, $processedConfiguration['trusted_parameter_name']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_MULTI_FACTOR, $processedConfiguration['multi_factor']);
-        $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_TOKEN_GENERATOR, $processedConfiguration['csrf_token_generator']);
+        $this->assertNull($processedConfiguration['csrf_token_generator']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_PARAMETER, $processedConfiguration['csrf_parameter']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_TOKEN_ID, $processedConfiguration['csrf_token_id']);
     }

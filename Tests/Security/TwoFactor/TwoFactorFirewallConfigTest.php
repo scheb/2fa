@@ -7,20 +7,18 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TwoFactorFirewallConfigTest extends TestCase
 {
-    /**
-     * @var TwoFactorFirewallConfig
-     */
-    private $config;
+    private const FULL_OPTIONS = [
+        'multi_factor' => true,
+        'auth_code_parameter_name' => 'auth_code_param',
+        'trusted_parameter_name' => 'trusted_param',
+        'csrf_parameter' => 'parameter_name',
+        'csrf_token_id' => 'token_id',
+        'csrf_token_generator' => 'csrf_token_generator',
+    ];
 
-    protected function setUp()
+    private function createConfig($options = self::FULL_OPTIONS): TwoFactorFirewallConfig
     {
-        $this->config = new TwoFactorFirewallConfig([
-            'multi_factor' => true,
-            'auth_code_parameter_name' => 'auth_code_param',
-            'trusted_parameter_name' => 'trusted_param',
-            'csrf_parameter' => 'parameter_name',
-            'csrf_token_id' => 'token_id',
-        ]);
+        return new TwoFactorFirewallConfig($options);
     }
 
     /**
@@ -28,7 +26,7 @@ class TwoFactorFirewallConfigTest extends TestCase
      */
     public function isMultiFactor_optionSet_returnThatValue()
     {
-        $returnValue = $this->config->isMultiFactor();
+        $returnValue = $this->createConfig()->isMultiFactor();
         $this->assertTrue($returnValue);
     }
 
@@ -37,7 +35,7 @@ class TwoFactorFirewallConfigTest extends TestCase
      */
     public function getAuthCodeParameterName_optionSet_returnThatValue()
     {
-        $returnValue = $this->config->getAuthCodeParameterName();
+        $returnValue = $this->createConfig()->getAuthCodeParameterName();
         $this->assertEquals('auth_code_param', $returnValue);
     }
 
@@ -46,7 +44,7 @@ class TwoFactorFirewallConfigTest extends TestCase
      */
     public function getTrustedParameterName_optionSet_returnThatValue()
     {
-        $returnValue = $this->config->getTrustedParameterName();
+        $returnValue = $this->createConfig()->getTrustedParameterName();
         $this->assertEquals('trusted_param', $returnValue);
     }
 
@@ -55,7 +53,7 @@ class TwoFactorFirewallConfigTest extends TestCase
      */
     public function getCsrfParameterName_optionSet_returnThatValue()
     {
-        $returnValue = $this->config->getCsrfParameterName();
+        $returnValue = $this->createConfig()->getCsrfParameterName();
         $this->assertEquals('parameter_name', $returnValue);
     }
 
@@ -64,7 +62,25 @@ class TwoFactorFirewallConfigTest extends TestCase
      */
     public function getCsrfTokenId_optionSet_returnThatValue()
     {
-        $returnValue = $this->config->getCsrfTokenId();
+        $returnValue = $this->createConfig()->getCsrfTokenId();
         $this->assertEquals('token_id', $returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function isCsrfProtectionEnabled_configuredCsrfTokenGeneratorIsNull_returnFalse()
+    {
+        $returnValue = $this->createConfig([])->isCsrfProtectionEnabled();
+        $this->assertFalse($returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function isCsrfProtectionEnabled_configuredCsrfTokenGeneratorIsString_returnTrue()
+    {
+        $returnValue = $this->createConfig(self::FULL_OPTIONS)->isCsrfProtectionEnabled();
+        $this->assertTrue($returnValue);
     }
 }
