@@ -3,6 +3,7 @@
 namespace Scheb\TwoFactorBundle\Tests\Security\Authentication\Token;
 
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
@@ -43,6 +44,15 @@ class TwoFactorTokenTest extends TestCase
     /**
      * @test
      */
+    public function preferTwoFactorProvider_unknownProvider_throwUnknownTwoFactorProviderException()
+    {
+        $this->expectException(UnknownTwoFactorProviderException::class);
+        $this->twoFactorToken->preferTwoFactorProvider('unknownProvider');
+    }
+
+    /**
+     * @test
+     */
     public function getCurrentTwoFactorProvider_defaultOrderGiven_returnFirstProvider()
     {
         $this->assertEquals('provider1', $this->twoFactorToken->getCurrentTwoFactorProvider());
@@ -55,6 +65,15 @@ class TwoFactorTokenTest extends TestCase
     {
         $this->twoFactorToken->setTwoFactorProviderComplete('provider1');
         $this->assertEquals('provider2', $this->twoFactorToken->getCurrentTwoFactorProvider());
+    }
+
+    /**
+     * @test
+     */
+    public function setTwoFactorProviderComplete_unknownProvider_throwUnknownTwoFactorProviderException()
+    {
+        $this->expectException(UnknownTwoFactorProviderException::class);
+        $this->twoFactorToken->setTwoFactorProviderComplete('unknownProvider');
     }
 
     /**
