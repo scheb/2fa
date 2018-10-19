@@ -20,4 +20,18 @@ class InvalidTwoFactorCodeException extends AuthenticationException
     {
         $this->messageKey = $messageKey;
     }
+
+    public function serialize()
+    {
+        return serialize(array(
+            $this->messageKey,
+            parent::serialize(),
+        ));
+    }
+
+    public function unserialize($str)
+    {
+        list($this->messageKey, $parentData) = unserialize($str);
+        parent::unserialize($parentData);
+    }
 }
