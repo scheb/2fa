@@ -8,6 +8,7 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInt
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\CsrfTokenValidator;
+use Scheb\TwoFactorBundle\Security\Http\ParameterBagUtils;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
@@ -191,7 +192,7 @@ class TwoFactorListener implements ListenerInterface
 
     private function getAuthCodeFromRequest(Request $request): string
     {
-        return $request->get($this->options['auth_code_parameter_name'], '');
+        return ParameterBagUtils::getRequestParameterValue($request, $this->options['auth_code_parameter_name']) ?? '';
     }
 
     private function attemptAuthentication(Request $request, TwoFactorTokenInterface $currentToken): Response
