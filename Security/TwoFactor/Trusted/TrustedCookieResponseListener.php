@@ -28,7 +28,7 @@ class TrustedCookieResponseListener
     private $cookieSecure;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $cookieSameSite;
 
@@ -37,7 +37,7 @@ class TrustedCookieResponseListener
         int $trustedTokenLifetime,
         string $cookieName,
         bool $cookieSecure,
-        string $cookieSameSite
+        ?string $cookieSameSite
     ) {
         $this->trustedTokenStorage = $trustedTokenStorage;
         $this->trustedTokenLifetime = $trustedTokenLifetime;
