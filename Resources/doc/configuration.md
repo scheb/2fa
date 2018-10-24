@@ -15,7 +15,7 @@ scheb_two_factor:
         extend_lifetime: false         # Automatically extend lifetime of the trusted cookie on re-login
         cookie_name: trusted_device    # Name of the trusted device cookie
         cookie_secure: false           # Set the 'Secure' (HTTPS Only) flag on the trusted device cookie
-        cookie_same_site: "lax"        # The same-site option of the cookie, can be "lax" or "strict"
+        cookie_same_site: "lax"        # The same-site option of the cookie, can be "lax", "strict" or null
 
     # Backup codes feature
     backup_codes:
