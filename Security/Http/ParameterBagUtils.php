@@ -24,7 +24,7 @@ class ParameterBagUtils
      *
      * @throws \InvalidArgumentException when the given path is malformed
      */
-    public static function getRequestParameterValue(Request $request, $path)
+    public static function getRequestParameterValue(Request $request, string $path): ?string
     {
         if (false === $pos = strpos($path, '[')) {
             return $request->get($path);
@@ -33,7 +33,7 @@ class ParameterBagUtils
         $root = substr($path, 0, $pos);
 
         if (null === $value = $request->get($root)) {
-            return;
+            return null;
         }
 
         if (null === self::$propertyAccessor) {
@@ -43,7 +43,7 @@ class ParameterBagUtils
         try {
             return self::$propertyAccessor->getValue($value, substr($path, $pos));
         } catch (AccessException $e) {
-            return;
+            return null;
         }
     }
 }
