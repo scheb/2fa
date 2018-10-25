@@ -79,7 +79,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertParameter(true, 'scheb_two_factor.trusted_device.extend_lifetime');
         $this->assertParameter('trusted_cookie', 'scheb_two_factor.trusted_device.cookie_name');
         $this->assertParameter(true, 'scheb_two_factor.trusted_device.cookie_secure');
-        $this->assertParameter('strict', 'scheb_two_factor.trusted_device.cookie_same_site');
+        $this->assertParameter(null, 'scheb_two_factor.trusted_device.cookie_same_site');
         $this->assertParameter(['Symfony\Component\Security\Core\Authentication\Token\SomeToken'], 'scheb_two_factor.security_tokens');
         $this->assertParameter(['127.0.0.1'], 'scheb_two_factor.ip_whitelist');
     }
@@ -339,7 +339,7 @@ trusted_device:
     extend_lifetime: true
     cookie_name: trusted_cookie
     cookie_secure: true
-    cookie_same_site: strict
+    cookie_same_site: null
 backup_codes:
     enabled: true
     manager: acme_test.backup_code_manager
