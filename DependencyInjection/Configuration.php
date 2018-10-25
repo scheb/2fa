@@ -29,7 +29,7 @@ class Configuration implements ConfigurationInterface
                             ->defaultValue('lax')
                             ->validate()
                             ->ifNotInArray(['lax', 'strict', null])
-                                ->thenInvalid('Invalid cookie same-site value %s, must be "lax" or "strict"')
+                                ->thenInvalid('Invalid cookie same-site value %s, must be "lax", "strict" or null')
                             ->end()
                         ->end()
                     ->end()
