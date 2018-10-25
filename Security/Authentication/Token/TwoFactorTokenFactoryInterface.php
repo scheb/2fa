@@ -7,12 +7,12 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 interface TwoFactorTokenFactoryInterface
 {
     /**
-     * Create a new TwoFactorToken
+     * Create a new TwoFactorToken.
      *
      * @param TokenInterface $authenticatedToken
-     * @param null|string $credentials The two-factor authentication code or null
-     * @param string $providerKey The firewall name
-     * @param string[] $twoFactorProviders The two-factor provider aliases, which are currently available
+     * @param null|string    $credentials        The two-factor authentication code or null
+     * @param string         $providerKey        The firewall name
+     * @param string[]       $twoFactorProviders The two-factor provider aliases, which are currently available
      *
      * @return TwoFactorTokenInterface
      */
