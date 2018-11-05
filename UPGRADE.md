@@ -10,8 +10,8 @@ return a nullable string: `?string`.
 
 `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface` was extended with a new method
 `prepareAuthentication($user): void` which should contain all kinds of preparations that need to be done before the user
-authenticates with that provider. This where authentication codes should be generated and sent. If you have such an
-implementation in the `beginAuthentication` method, consider migrating it. The advantage would be that codes would only
+authenticates with that provider. This is where authentication codes should be generated and sent. If you have such an
+implementation in the `beginAuthentication` method, consider migrating it. The advantage is, that codes would only
 be sent, if that provider is actually used.
 
 
