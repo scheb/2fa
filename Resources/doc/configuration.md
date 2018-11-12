@@ -96,6 +96,11 @@ security:
                 csrf_token_generator: security.csrf.token_manager # CSRF protection will be enabled if a service id of CsrfTokenManagerInterface is given. Default: null
                 csrf_parameter: _csrf_token                       # The default CSRF parameter name
                 csrf_token_id: two_factor                         # The default CSRF token id, used for generating the token value. It is advised to use a different id per form
+
+                # If you have multiple user providers registered, Symfony's security extension requires you to configure
+                # a user provider. You're forced to configure this node, although it doesn't have any effect on the
+                # TwoFactorBundle. So set this to any of you user providers, it doesn't matter which one.
+                provider: any_user_provider
 ```
 
 For detailed information on the authentication methods see the individual documentation:

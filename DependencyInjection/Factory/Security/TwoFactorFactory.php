@@ -57,6 +57,8 @@ class TwoFactorFactory implements SecurityFactoryInterface
             ->scalarNode('csrf_token_generator')->defaultNull()->end()
             ->scalarNode('csrf_parameter')->defaultValue(self::DEFAULT_CSRF_PARAMETER)->end()
             ->scalarNode('csrf_token_id')->defaultValue(self::DEFAULT_CSRF_TOKEN_ID)->end()
+            // Fake node for SecurityExtension, which requires a provider to be set when multiple user providers are registered
+            ->scalarNode('provider')->defaultNull()->end()
         ;
     }
 
