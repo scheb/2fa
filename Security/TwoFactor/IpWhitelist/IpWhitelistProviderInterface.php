@@ -2,6 +2,9 @@
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist;
 
+
+use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
+
 interface IpWhitelistProviderInterface
 {
     /**
@@ -9,5 +12,5 @@ interface IpWhitelistProviderInterface
      *
      * @return string[]
      */
-    public function getWhitelistedIps(): array;
+    public function getWhitelistedIps(AuthenticationContextInterface $context): array;
 }
