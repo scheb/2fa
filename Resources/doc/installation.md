@@ -78,7 +78,8 @@ scheb_two_factor:
         - Acme\AuthenticationBundle\Token\CustomAuthenticationToken
 ```
 
-For a guard based authentication method it would be needed to support `Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken` token class.
+For a guard-based authentication method, you have to configure the
+`Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken` token class.
 
 ### Step 6: Enable two-factor authentication methods
 
