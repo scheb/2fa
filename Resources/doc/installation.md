@@ -30,7 +30,8 @@ return [
 ### Step 3: Define routes
 
 In `config/routes.yaml` add a route for the two-factor authentication form and another one for checking the
-authentication code.
+authentication code. *Please note:* The routes must be located within the path of the firewall, which should use
+two-factor authentication.
 
 ```yaml
 # config/routes.yaml
