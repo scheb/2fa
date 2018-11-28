@@ -1,0 +1,6 @@
+auth_code: Authentikációs kód
+choose_provider: Authentikációs mód váltása
+login: Belépés
+code_invalid: A megerősítő kód helytelen.
+trusted: Ez egy megbízható számítógép
+cancel: Mégsem

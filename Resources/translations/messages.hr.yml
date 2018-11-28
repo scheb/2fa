@@ -1,0 +1,5 @@
+auth_code: Kôd za provjeru autentičnosti
+login: Prijava
+code_invalid: Kontrolni kôd nije važeći.
+trusted: Ja sam na pouzdanom računalu
+cancel: Otkazati
