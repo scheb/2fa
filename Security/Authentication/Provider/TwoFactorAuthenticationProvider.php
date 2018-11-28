@@ -74,7 +74,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
             return $token;
         } else {
             $exception = new InvalidTwoFactorCodeException('Invalid two-factor authentication code.');
-            $exception->setMessageKey('scheb_two_factor.code_invalid');
+            $exception->setMessageKey('code_invalid');
             throw $exception;
         }
     }

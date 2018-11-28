@@ -1,7 +1,6 @@
-scheb_two_factor:
-    auth_code: Inloggningskod
-    choose_provider: Växla inloggningsmetod
-    login: Logga in
-    code_invalid: Inloggningskoden är felaktig
-    trusted: Jag använder en pålitlig dator
-    cancel: Avbryt
+auth_code: Inloggningskod
+choose_provider: Växla inloggningsmetod
+login: Logga in
+code_invalid: Inloggningskoden är felaktig
+trusted: Jag använder en pålitlig dator
+cancel: Avbryt

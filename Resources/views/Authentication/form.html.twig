@@ -9,25 +9,25 @@ especially when you're using different route names than the ones used here.
 {% endif %}
 
 {# Let the user select the authentication method #}
-<p>{{ "scheb_two_factor.choose_provider"|trans }}:
+<p>{{ "choose_provider"|trans({}, 'SchebTwoFactorBundle') }}:
     {% for provider in availableTwoFactorProviders %}
         <a href="{{ path("2fa_login", {"preferProvider": provider}) }}">{{ provider }}</a>
     {% endfor %}
 </p>
 
 {# Display current two-factor provider #}
-<p class="label"><label for="_auth_code">{{ "scheb_two_factor.auth_code"|trans }} {{ twoFactorProvider }}:</label></p>
+<p class="label"><label for="_auth_code">{{ "auth_code"|trans({}, 'SchebTwoFactorBundle') }} {{ twoFactorProvider }}:</label></p>
 
 <form class="form" action="{{ path("2fa_login_check") }}" method="post">
     <p class="widget"><input id="_auth_code" type="text" autocomplete="off" name="{{ authCodeParameterName }}" /></p>
     {% if displayTrustedOption %}
-        <p class="widget"><label for="_trusted"><input id="_trusted" type="checkbox" name="{{ trustedParameterName }}" /> {{ "scheb_two_factor.trusted"|trans }}</label></p>
+        <p class="widget"><label for="_trusted"><input id="_trusted" type="checkbox" name="{{ trustedParameterName }}" /> {{ "trusted"|trans({}, 'SchebTwoFactorBundle') }}</label></p>
     {% endif %}
     {% if isCsrfProtectionEnabled %}
         <input type="hidden" name="{{ csrfParameterName }}" value="{{ csrf_token(csrfTokenId) }}">
     {% endif %}
-    <p class="submit"><input type="submit" value="{{ "scheb_two_factor.login"|trans }}" /></p>
+    <p class="submit"><input type="submit" value="{{ "login"|trans({}, 'SchebTwoFactorBundle') }}" /></p>
 </form>
 
 {# The logout link gives the user a way out if they can't complete two-factor authentication #}
-<p class="cancel"><a href="{{ logoutPath }}">{{ "scheb_two_factor.cancel"|trans }}</a></p>
+<p class="cancel"><a href="{{ logoutPath }}">{{ "cancel"|trans({}, 'SchebTwoFactorBundle') }}</a></p>
