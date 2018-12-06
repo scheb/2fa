@@ -147,7 +147,7 @@ mobile application.
 
 ```php
 $totp = $container->get("scheb_two_factor.security.totp_authenticator")->getTotpForUser($user);
-$url = $container->get("scheb_two_factor.security.totp_authenticator")->getUrl(TOTP $totp);
+$url = $container->get("scheb_two_factor.security.totp_authenticator")->getUrl($totp);
 echo '<img src="'.$url.'" />';
 ```
 
