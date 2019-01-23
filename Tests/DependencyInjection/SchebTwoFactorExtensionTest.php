@@ -53,6 +53,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertParameter('trusted_device', 'scheb_two_factor.trusted_device.cookie_name');
         $this->assertParameter(false, 'scheb_two_factor.trusted_device.cookie_secure');
         $this->assertParameter('lax', 'scheb_two_factor.trusted_device.cookie_same_site');
+        $this->assertParameter(null, 'scheb_two_factor.trusted_device.cookie_domain');
         $this->assertParameter(['Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken'], 'scheb_two_factor.security_tokens');
         $this->assertParameter([], 'scheb_two_factor.ip_whitelist');
     }
@@ -80,6 +81,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertParameter('trusted_cookie', 'scheb_two_factor.trusted_device.cookie_name');
         $this->assertParameter(true, 'scheb_two_factor.trusted_device.cookie_secure');
         $this->assertParameter(null, 'scheb_two_factor.trusted_device.cookie_same_site');
+        $this->assertParameter('cookie.example.org', 'scheb_two_factor.trusted_device.cookie_domain');
         $this->assertParameter(['Symfony\Component\Security\Core\Authentication\Token\SomeToken'], 'scheb_two_factor.security_tokens');
         $this->assertParameter(['127.0.0.1'], 'scheb_two_factor.ip_whitelist');
     }
@@ -340,6 +342,7 @@ trusted_device:
     cookie_name: trusted_cookie
     cookie_secure: true
     cookie_same_site: null
+    cookie_domain: cookie.example.org
 backup_codes:
     enabled: true
     manager: acme_test.backup_code_manager
