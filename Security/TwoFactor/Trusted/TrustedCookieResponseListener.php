@@ -32,27 +32,39 @@ class TrustedCookieResponseListener
      */
     private $cookieSameSite;
 
+    /**
+     * @var string|null
+     */
+    private $cookieDomain;
+
     public function __construct(
         TrustedDeviceTokenStorage $trustedTokenStorage,
         int $trustedTokenLifetime,
         string $cookieName,
         bool $cookieSecure,
-        ?string $cookieSameSite
+        ?string $cookieSameSite,
+        ?string $cookieDomain
     ) {
         $this->trustedTokenStorage = $trustedTokenStorage;
         $this->trustedTokenLifetime = $trustedTokenLifetime;
         $this->cookieName = $cookieName;
         $this->cookieSecure = $cookieSecure;
         $this->cookieSameSite = $cookieSameSite;
+        $this->cookieDomain = $cookieDomain;
     }
 
     public function onKernelResponse(FilterResponseEvent $event): void
     {
         if ($this->trustedTokenStorage->hasUpdatedCookie()) {
             $domain = null;
-            $requestHost = $event->getRequest()->getHost();
-            if ($this->shouldSetDomain($requestHost)) {
-                $domain = '.'.$requestHost;
+
+            if ($this->cookieDomain !== null) {
+                $domain = $this->cookieDomain;
+            } else {
+                $requestHost = $event->getRequest()->getHost();
+                if ($this->shouldSetDomain($requestHost)) {
+                    $domain = '.'.$requestHost;
+                }
             }
 
             // Set the cookie
