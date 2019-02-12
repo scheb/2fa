@@ -4,7 +4,7 @@ php:
   - 7.1
   - 7.2
   - 7.3
-  - nightly
+  - 7.4snapshot
 
 sudo: false
 
@@ -18,14 +18,13 @@ matrix:
     - php: 7.3
       env: SYMFONY_VERSION=^4.0
   allow_failures:
-    - php: nightly
+    - php: 7.4snapshot
 
 cache:
   directories:
     - $HOME/.composer/cache
 
 before_install:
-  - composer selfupdate
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
 
 install:
