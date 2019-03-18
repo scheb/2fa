@@ -23,7 +23,6 @@ Additional features you will like:
 - CSRF protection
 - Whitelisted routes (accessible during two-factor authentication)
 
-
 Installation
 -------------
 
@@ -39,7 +38,7 @@ Detailed documentation of all features can be found in the [Resources/doc](Resou
 
 Compatibility
 -------------
-- **Recommended version**: Bundle version 3.x is compatible with Symfony 3.4 and 4.x
+- Use bundle version 3.x for Symfony 3.4 and 4.x (**Recommended version**)
 - Use bundle version 2.x for Symfony < 3.4
 - Use bundle version 1.x for Symfony < 2.6
 
