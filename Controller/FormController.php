@@ -13,6 +13,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
 
 class FormController
 {
@@ -32,6 +33,11 @@ class FormController
     private $twoFactorFirewallContext;
 
     /**
+     * @var LogoutUrlGenerator
+     */
+    private $logoutUrlGenerator;
+
+    /**
      * @var bool
      */
     private $trustedFeatureEnabled;
@@ -40,12 +46,14 @@ class FormController
         TokenStorageInterface $tokenStorage,
         TwoFactorProviderRegistry $providerRegistry,
         TwoFactorFirewallContext $twoFactorFirewallContext,
+        LogoutUrlGenerator $logoutUrlGenerator,
         bool $trustedFeatureEnabled
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->providerRegistry = $providerRegistry;
         $this->twoFactorFirewallContext = $twoFactorFirewallContext;
         $this->trustedFeatureEnabled = $trustedFeatureEnabled;
+        $this->logoutUrlGenerator = $logoutUrlGenerator;
     }
 
     public function form(Request $request): Response
@@ -100,6 +108,7 @@ class FormController
             'isCsrfProtectionEnabled' => $config->isCsrfProtectionEnabled(),
             'csrfParameterName' => $config->getCsrfParameterName(),
             'csrfTokenId' => $config->getCsrfTokenId(),
+            'logoutPath' => $this->logoutUrlGenerator->getLogoutPath(),
         ];
     }
 

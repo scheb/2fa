@@ -18,6 +18,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
 
 class FormControllerTest extends TestCase
 {
@@ -27,6 +28,7 @@ class FormControllerTest extends TestCase
     private const FIREWALL_NAME = 'firewallName';
     private const CSRF_PARAMETER = 'csrf_parameter';
     private const CSRF_TOKEN_ID = 'csrf_token_id';
+    private const LOGOUT_PATH = '/logout';
 
     /**
      * @var MockObject|TokenStorageInterface
@@ -64,14 +66,19 @@ class FormControllerTest extends TestCase
     private $firewallConfig;
 
     /**
-     * @var FormController
-     */
-    private $controller;
-
-    /**
      * @var MockObject|TwoFactorFirewallContext
      */
     private $twoFactorFirewallContext;
+
+    /**
+     * @var MockObject|LogoutUrlGenerator
+     */
+    private $logoutUrlGenerator;
+
+    /**
+     * @var FormController
+     */
+    private $controller;
 
     protected function setUp(): void
     {
@@ -123,12 +130,18 @@ class FormControllerTest extends TestCase
             ->with(self::FIREWALL_NAME)
             ->willReturn($this->firewallConfig);
 
+        $this->logoutUrlGenerator = $this->createMock(LogoutUrlGenerator::class);
+        $this->logoutUrlGenerator
+            ->expects($this->any())
+            ->method('getLogoutPath')
+            ->willReturn(self::LOGOUT_PATH);
+
         $this->initControllerWithTrustedFeature(true);
     }
 
     private function initControllerWithTrustedFeature(bool $trustedFeature): void
     {
-        $this->controller = new FormController($this->tokenStorage, $this->providerRegistry, $this->twoFactorFirewallContext, $trustedFeature);
+        $this->controller = new FormController($this->tokenStorage, $this->providerRegistry, $this->twoFactorFirewallContext, $this->logoutUrlGenerator, $trustedFeature);
     }
 
     private function stubFirewallIsMultiFactor(bool $isMultiFactor): void
@@ -403,6 +416,7 @@ class FormControllerTest extends TestCase
             $this->assertArrayHasKey('isCsrfProtectionEnabled', $templateVars);
             $this->assertArrayHasKey('csrfParameterName', $templateVars);
             $this->assertArrayHasKey('csrfTokenId', $templateVars);
+            $this->assertArrayHasKey('logoutPath', $templateVars);
 
             $this->assertEquals(self::CURRENT_TWO_FACTOR_PROVIDER, $templateVars['twoFactorProvider']);
             $this->assertEquals(['provider1', 'provider2'], $templateVars['availableTwoFactorProviders']);
@@ -411,6 +425,7 @@ class FormControllerTest extends TestCase
             $this->assertFalse($templateVars['isCsrfProtectionEnabled']);
             $this->assertEquals(self::CSRF_PARAMETER, $templateVars['csrfParameterName']);
             $this->assertEquals(self::CSRF_TOKEN_ID, $templateVars['csrfTokenId']);
+            $this->assertEquals(self::LOGOUT_PATH, $templateVars['logoutPath']);
 
             return true;
         });
