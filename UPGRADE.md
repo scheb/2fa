@@ -18,6 +18,10 @@ Signature of `Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist\IpWhitelistPr
 has changed to take and instance of  `Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface` as an
 argument.
 
+`Scheb\TwoFactorBundle\Controller\FormController` now takes an instance of
+`Symfony\Component\Security\Http\Logout\LogoutUrlGenerator` as the forth argument. If you have extended the controller
+please update your service definition accordingly.
+
 ## 2.x to 3.x
 
 Dropped support for Symfony < 3.4.
