@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scheb\TwoFactorBundle\Tests\Security\Authentication;
 
 use PHPUnit\Framework\MockObject\MockObject;

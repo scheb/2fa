@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scheb\TwoFactorBundle\Security\Authentication\Exception;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException;

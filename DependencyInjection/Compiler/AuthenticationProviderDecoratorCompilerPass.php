@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scheb\TwoFactorBundle\DependencyInjection\Compiler;
 
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
@@ -17,8 +19,10 @@ class AuthenticationProviderDecoratorCompilerPass implements CompilerPassInterfa
     {
         $authenticationManager = $container->getDefinition('security.authentication.manager');
         $authenticationProviderIds = $authenticationManager->getArgument(0)->getValues();
-        foreach ($authenticationProviderIds as $authenticationProviderId) {
+        /** @var Reference $authenticationProvider */
+        foreach ($authenticationProviderIds as $authenticationProvider) {
             // Ensure not to decorate the two-factor authentication provider, otherwise we'll get an endless loop
+            $authenticationProviderId = (string) $authenticationProvider;
             if (!$this->isTwoFactorProvider($authenticationProviderId)) {
                 $this->decorateAuthenticationProvider($container, $authenticationProviderId);
             }
@@ -34,7 +38,7 @@ class AuthenticationProviderDecoratorCompilerPass implements CompilerPassInterfa
             ->replaceArgument(0, new Reference($decoratedServiceId.'.inner'));
     }
 
-    private function isTwoFactorProvider($authenticationProviderId): bool
+    private function isTwoFactorProvider(string $authenticationProviderId): bool
     {
         return false !== strpos($authenticationProviderId, TwoFactorFactory::PROVIDER_ID_PREFIX);
     }

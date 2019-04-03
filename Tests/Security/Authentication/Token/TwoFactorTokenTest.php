@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scheb\TwoFactorBundle\Tests\Security\Authentication\Token;
 
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;

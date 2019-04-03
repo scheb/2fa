@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scheb\TwoFactorBundle\Tests\Mailer;
 
 use PHPUnit\Framework\MockObject\MockObject;

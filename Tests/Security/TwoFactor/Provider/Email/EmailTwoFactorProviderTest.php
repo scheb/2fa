@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Email;
 
 use PHPUnit\Framework\MockObject\MockObject;

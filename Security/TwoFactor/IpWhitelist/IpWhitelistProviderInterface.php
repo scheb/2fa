@@ -2,7 +2,6 @@
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist;
 
-
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 
 interface IpWhitelistProviderInterface

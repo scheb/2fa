@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Csrf;
 
 use Symfony\Component\Security\Csrf\CsrfToken;

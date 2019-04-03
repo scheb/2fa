@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator;
 
 use Scheb\TwoFactorBundle\Mailer\AuthCodeMailerInterface;
@@ -35,7 +37,7 @@ class CodeGenerator implements CodeGeneratorInterface
         $min = pow(10, $this->digits - 1);
         $max = pow(10, $this->digits) - 1;
         $code = $this->generateCode($min, $max);
-        $user->setEmailAuthCode($code);
+        $user->setEmailAuthCode((string) $code);
         $this->persister->persist($user);
         $this->mailer->sendAuthCode($user);
     }

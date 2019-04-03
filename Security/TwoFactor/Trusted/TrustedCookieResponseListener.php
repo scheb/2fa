@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
 use Symfony\Component\HttpFoundation\Cookie;
