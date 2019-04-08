@@ -27,7 +27,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
      */
     private $tokenStorage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->jwtEncoder = $this->createMock(JwtTokenEncoder::class);
         $this->request = new Request();
@@ -41,12 +41,12 @@ class TrustedDeviceTokenStorageTest extends TestCase
         $this->tokenStorage->now = new \DateTime('2018-01-01 00:00:00');
     }
 
-    public function stubCookieHasToken(string $serializedTokenList)
+    public function stubCookieHasToken(string $serializedTokenList): void
     {
         $this->request->cookies->set('cookieName', $serializedTokenList);
     }
 
-    private function stubGenerateNewToken(MockObject $newToken)
+    private function stubGenerateNewToken(MockObject $newToken): void
     {
         $this->jwtEncoder
             ->expects($this->any())
@@ -54,7 +54,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
             ->willReturn($newToken);
     }
 
-    private function stubDecodeToken(...$serializedValues)
+    private function stubDecodeToken(...$serializedValues): void
     {
         $this->jwtEncoder
             ->expects($this->any())
@@ -84,7 +84,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function testHasTrustedToken_differentRealm_returnFalse()
+    public function testHasTrustedToken_differentRealm_returnFalse(): void
     {
         $this->stubCookieHasToken('validToken1;validToken2');
         $this->stubDecodeToken(
@@ -99,7 +99,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function testHasTrustedToken_sameRealDifferentVersion_returnFalse()
+    public function testHasTrustedToken_sameRealDifferentVersion_returnFalse(): void
     {
         $this->stubCookieHasToken('validToken1;validToken2');
         $this->stubDecodeToken(
@@ -114,7 +114,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function testHasTrustedToken_sameRealmSameVersion_returnTrue()
+    public function testHasTrustedToken_sameRealmSameVersion_returnTrue(): void
     {
         $this->stubCookieHasToken('validToken1;validToken2');
         $this->stubDecodeToken(
@@ -129,7 +129,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function testAddTrustedToken_addNewToken_generateToken()
+    public function testAddTrustedToken_addNewToken_generateToken(): void
     {
         $this->jwtEncoder
             ->expects($this->once())
@@ -142,7 +142,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function hasUpdatedCookie_noTokenCookie_returnFalse()
+    public function hasUpdatedCookie_noTokenCookie_returnFalse(): void
     {
         $returnValue = $this->tokenStorage->hasUpdatedCookie();
         $this->assertFalse($returnValue);
@@ -151,7 +151,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function hasUpdatedCookie_hasInvalidToken_returnTrue()
+    public function hasUpdatedCookie_hasInvalidToken_returnTrue(): void
     {
         $this->stubCookieHasToken('validToken;invalidToken');
         $this->stubDecodeToken(
@@ -166,7 +166,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function hasUpdatedCookie_allValidToken_returnFalse()
+    public function hasUpdatedCookie_allValidToken_returnFalse(): void
     {
         $this->stubCookieHasToken('validToken1;validToken2');
         $this->stubDecodeToken(
@@ -181,7 +181,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function hasUpdatedCookie_tokenAdded_returnTrue()
+    public function hasUpdatedCookie_tokenAdded_returnTrue(): void
     {
         $this->tokenStorage->addTrustedToken('username', 'firewallName', 1);
         $returnValue = $this->tokenStorage->hasUpdatedCookie();
@@ -191,7 +191,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function hasUpdatedCookie_hasTokenCalledWithAllValidToken_returnFalse()
+    public function hasUpdatedCookie_hasTokenCalledWithAllValidToken_returnFalse(): void
     {
         $this->stubCookieHasToken('validToken');
         $this->stubDecodeToken(
@@ -206,7 +206,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function hasUpdatedCookie_hasTokenCalledWithInvalidToken_returnTrue()
+    public function hasUpdatedCookie_hasTokenCalledWithInvalidToken_returnTrue(): void
     {
         $this->stubCookieHasToken('differentVersionToken');
         $this->stubDecodeToken(
@@ -221,7 +221,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function getCookieValue_hasMultipleToken_returnSerializedToken()
+    public function getCookieValue_hasMultipleToken_returnSerializedToken(): void
     {
         $this->stubCookieHasToken('validToken1;validToken2');
         $this->stubDecodeToken(
@@ -236,7 +236,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function getCookieValue_hasInvalidToken_returnSerializedWithoutInvalidToken()
+    public function getCookieValue_hasInvalidToken_returnSerializedWithoutInvalidToken(): void
     {
         $this->stubCookieHasToken('validToken;invalidToken');
         $this->stubDecodeToken(
@@ -251,7 +251,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function getCookieValue_addToken_returnSerializedWithNewToken()
+    public function getCookieValue_addToken_returnSerializedWithNewToken(): void
     {
         $this->stubCookieHasToken('validToken1;validToken2');
         $this->stubDecodeToken(
@@ -268,7 +268,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function getCookieValue_refreshExistingToken_returnSerializedWithReplacedToken()
+    public function getCookieValue_refreshExistingToken_returnSerializedWithReplacedToken(): void
     {
         $this->stubCookieHasToken('validToken1;validToken2');
         $this->stubDecodeToken(
@@ -285,7 +285,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function getCookieValue_hasTokenCalledWithInvalidToken_returnSerializedWithoutInvalidToken()
+    public function getCookieValue_hasTokenCalledWithInvalidToken_returnSerializedWithoutInvalidToken(): void
     {
         $this->stubCookieHasToken('differentVersionToken;validToken');
         $this->stubDecodeToken(

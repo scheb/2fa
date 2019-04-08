@@ -24,7 +24,7 @@ class TwoFactorFirewallConfigTest extends TestCase
     /**
      * @test
      */
-    public function isMultiFactor_optionSet_returnThatValue()
+    public function isMultiFactor_optionSet_returnThatValue(): void
     {
         $returnValue = $this->createConfig()->isMultiFactor();
         $this->assertTrue($returnValue);
@@ -33,7 +33,7 @@ class TwoFactorFirewallConfigTest extends TestCase
     /**
      * @test
      */
-    public function getAuthCodeParameterName_optionSet_returnThatValue()
+    public function getAuthCodeParameterName_optionSet_returnThatValue(): void
     {
         $returnValue = $this->createConfig()->getAuthCodeParameterName();
         $this->assertEquals('auth_code_param', $returnValue);
@@ -42,7 +42,7 @@ class TwoFactorFirewallConfigTest extends TestCase
     /**
      * @test
      */
-    public function getTrustedParameterName_optionSet_returnThatValue()
+    public function getTrustedParameterName_optionSet_returnThatValue(): void
     {
         $returnValue = $this->createConfig()->getTrustedParameterName();
         $this->assertEquals('trusted_param', $returnValue);
@@ -51,7 +51,7 @@ class TwoFactorFirewallConfigTest extends TestCase
     /**
      * @test
      */
-    public function getCsrfParameterName_optionSet_returnThatValue()
+    public function getCsrfParameterName_optionSet_returnThatValue(): void
     {
         $returnValue = $this->createConfig()->getCsrfParameterName();
         $this->assertEquals('parameter_name', $returnValue);
@@ -60,7 +60,7 @@ class TwoFactorFirewallConfigTest extends TestCase
     /**
      * @test
      */
-    public function getCsrfTokenId_optionSet_returnThatValue()
+    public function getCsrfTokenId_optionSet_returnThatValue(): void
     {
         $returnValue = $this->createConfig()->getCsrfTokenId();
         $this->assertEquals('token_id', $returnValue);
@@ -69,7 +69,7 @@ class TwoFactorFirewallConfigTest extends TestCase
     /**
      * @test
      */
-    public function isCsrfProtectionEnabled_configuredCsrfTokenGeneratorIsNull_returnFalse()
+    public function isCsrfProtectionEnabled_configuredCsrfTokenGeneratorIsNull_returnFalse(): void
     {
         $returnValue = $this->createConfig([])->isCsrfProtectionEnabled();
         $this->assertFalse($returnValue);
@@ -78,7 +78,7 @@ class TwoFactorFirewallConfigTest extends TestCase
     /**
      * @test
      */
-    public function isCsrfProtectionEnabled_configuredCsrfTokenGeneratorIsString_returnTrue()
+    public function isCsrfProtectionEnabled_configuredCsrfTokenGeneratorIsString_returnTrue(): void
     {
         $returnValue = $this->createConfig(self::FULL_OPTIONS)->isCsrfProtectionEnabled();
         $this->assertTrue($returnValue);

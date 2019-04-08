@@ -13,7 +13,7 @@ class DoctrinePersisterFactoryTest extends TestCase
     /**
      * @test
      */
-    public function construct_noManagerRegistry_throwInvalidArgumentException()
+    public function construct_noManagerRegistry_throwInvalidArgumentException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         new DoctrinePersisterFactory(null, 'managerName');
@@ -22,7 +22,7 @@ class DoctrinePersisterFactoryTest extends TestCase
     /**
      * @test
      */
-    public function getPersister_managerExists_returnDoctrinePersister()
+    public function getPersister_managerExists_returnDoctrinePersister(): void
     {
         $managerRegister = $this->createMock(ManagerRegistry::class);
         $managerRegister

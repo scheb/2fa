@@ -21,7 +21,7 @@ class BackupCodeManagerTest extends TestCase
      */
     private $backupCodeManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->persister = $this->createMock(PersisterInterface::class);
         $this->backupCodeManager = new BackupCodeManager($this->persister);
@@ -30,7 +30,7 @@ class BackupCodeManagerTest extends TestCase
     /**
      * @return MockObject|BackupCodeInterface
      */
-    private function createUserWithBackupCodeInterface()
+    private function createUserWithBackupCodeInterface(): MockObject
     {
         return $this->createMock(BackupCodeInterface::class);
     }
@@ -38,7 +38,7 @@ class BackupCodeManagerTest extends TestCase
     /**
      * @test
      */
-    public function isBackupCode_userNotImplementsInterface_returnFalse()
+    public function isBackupCode_userNotImplementsInterface_returnFalse(): void
     {
         $user = new \stdClass();
         $returnValue = $this->backupCodeManager->isBackupCode($user, 'c0de');
@@ -49,7 +49,7 @@ class BackupCodeManagerTest extends TestCase
      * @test
      * @dataProvider provideCheckCodeResults
      */
-    public function isBackupCode_userAndCodeGiven_returnValidationResultFromUser(bool $result)
+    public function isBackupCode_userAndCodeGiven_returnValidationResultFromUser(bool $result): void
     {
         $user = $this->createUserWithBackupCodeInterface();
         $user
@@ -73,7 +73,7 @@ class BackupCodeManagerTest extends TestCase
     /**
      * @test
      */
-    public function invalidateBackupCode_interfaceNotImplemented_doNothing()
+    public function invalidateBackupCode_interfaceNotImplemented_doNothing(): void
     {
         $user = $this->createMock(UserInterface::class);
         $user
@@ -90,7 +90,7 @@ class BackupCodeManagerTest extends TestCase
     /**
      * @test
      */
-    public function invalidateBackupCode_userAndCodeGiven_invalidateCodeOnUser()
+    public function invalidateBackupCode_userAndCodeGiven_invalidateCodeOnUser(): void
     {
         $user = $this->createUserWithBackupCodeInterface();
         $user

@@ -28,7 +28,7 @@ class TwoFactorProviderCompilerPassTest extends TestCase
      */
     private $providerRegistryDefinition;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->container = new ContainerBuilder();
         $this->compilerPass = new TwoFactorProviderCompilerPass();
@@ -38,7 +38,7 @@ class TwoFactorProviderCompilerPassTest extends TestCase
         $this->container->setDefinition('scheb_two_factor.provider_registry', $this->providerRegistryDefinition);
     }
 
-    private function stubTaggedContainerService(array $taggedServices)
+    private function stubTaggedContainerService(array $taggedServices): void
     {
         foreach ($taggedServices as $id => $tags) {
             $definition = $this->container->register($id);
@@ -49,7 +49,7 @@ class TwoFactorProviderCompilerPassTest extends TestCase
         }
     }
 
-    private function assertProviderRegistryArgument(array $providers)
+    private function assertProviderRegistryArgument(array $providers): void
     {
         $providersArgument = $this->container->getDefinition('scheb_two_factor.provider_registry')->getArgument(0);
         $this->assertInstanceOf(IteratorArgument::class, $providersArgument);
@@ -59,7 +59,7 @@ class TwoFactorProviderCompilerPassTest extends TestCase
     /**
      * @test
      */
-    public function process_noTaggedServices_replaceArgumentWithEmptyArray()
+    public function process_noTaggedServices_replaceArgumentWithEmptyArray(): void
     {
         $taggedServices = [];
         $this->stubTaggedContainerService($taggedServices);
@@ -72,7 +72,7 @@ class TwoFactorProviderCompilerPassTest extends TestCase
     /**
      * @test
      */
-    public function process_taggedServices_replaceArgumentWithServiceList()
+    public function process_taggedServices_replaceArgumentWithServiceList(): void
     {
         $taggedServices = ['serviceId' => [
             0 => ['alias' => 'providerAlias'],
@@ -88,7 +88,7 @@ class TwoFactorProviderCompilerPassTest extends TestCase
     /**
      * @test
      */
-    public function process_missingAlias_throwException()
+    public function process_missingAlias_throwException(): void
     {
         $taggedServices = ['serviceId' => [
             0 => [],

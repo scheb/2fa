@@ -42,7 +42,7 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
      */
     private $handler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->provider1 = $this->createMock(TwoFactorProviderInterface::class);
         $this->provider2 = $this->createMock(TwoFactorProviderInterface::class);
@@ -78,7 +78,7 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
         return $user;
     }
 
-    private function stubProvidersReturn(bool $provider1Returns, bool $provider2Returns)
+    private function stubProvidersReturn(bool $provider1Returns, bool $provider2Returns): void
     {
         $this->provider1
             ->expects($this->any())
@@ -102,7 +102,7 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
     /**
      * @test
      */
-    public function beginAuthentication_multipleProviders_beginAuthenticationOnEachTwoFactorProvider()
+    public function beginAuthentication_multipleProviders_beginAuthenticationOnEachTwoFactorProvider(): void
     {
         $context = $this->createAuthenticationContext();
 
@@ -122,7 +122,7 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
     /**
      * @test
      */
-    public function beginAuthentication_oneProviderStarts_returnTwoFactorToken()
+    public function beginAuthentication_oneProviderStarts_returnTwoFactorToken(): void
     {
         $originalToken = $this->createToken();
         $context = $this->createAuthenticationContext(null, $originalToken);
@@ -143,7 +143,7 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
     /**
      * @test
      */
-    public function beginAuthentication_noProviderStarts_returnOriginalToken()
+    public function beginAuthentication_noProviderStarts_returnOriginalToken(): void
     {
         $originalToken = $this->createToken();
         $context = $this->createAuthenticationContext(null, $originalToken);
@@ -156,7 +156,7 @@ class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
     /**
      * @test
      */
-    public function beginAuthentication_hasPreferredProvider_setThatProviderPreferred()
+    public function beginAuthentication_hasPreferredProvider_setThatProviderPreferred(): void
     {
         $user = $this->createUserWithPreferredProvider('preferredProvider');
         $originalToken = $this->createToken();

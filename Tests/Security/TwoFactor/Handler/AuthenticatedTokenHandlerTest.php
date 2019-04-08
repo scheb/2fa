@@ -20,13 +20,13 @@ class AuthenticatedTokenHandlerTest extends AuthenticationHandlerTestCase
      */
     private $authenticatedTokenHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->innerAuthenticationHandler = $this->getAuthenticationHandlerMock();
         $this->authenticatedTokenHandler = new AuthenticatedTokenHandler($this->innerAuthenticationHandler, [UsernamePasswordToken::class]);
     }
 
-    private function createSupportedSecurityToken()
+    private function createSupportedSecurityToken(): UsernamePasswordToken
     {
         return new UsernamePasswordToken('user', [], 'firewallName');
     }
@@ -34,7 +34,7 @@ class AuthenticatedTokenHandlerTest extends AuthenticationHandlerTestCase
     /**
      * @test
      */
-    public function beginTwoFactorAuthentication_tokenIsEnabled_returnTokenFromInnerAuthenticationHandler()
+    public function beginTwoFactorAuthentication_tokenIsEnabled_returnTokenFromInnerAuthenticationHandler(): void
     {
         $supportedToken = $this->createSupportedSecurityToken();
         $authenticationContext = $this->createAuthenticationContext(null, $supportedToken);
@@ -53,7 +53,7 @@ class AuthenticatedTokenHandlerTest extends AuthenticationHandlerTestCase
     /**
      * @test
      */
-    public function beginTwoFactorAuthentication_tokenIsNotEnabled_returnSameToken()
+    public function beginTwoFactorAuthentication_tokenIsNotEnabled_returnSameToken(): void
     {
         $unsupportedToken = $this->createMock(TokenInterface::class);
         $authenticationContext = $this->createAuthenticationContext(null, $unsupportedToken);

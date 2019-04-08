@@ -25,7 +25,7 @@ class TwoFactorProviderRegistryTest extends TestCase
      */
     private $providerRegistry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->twoFactorProvider1 = $this->createMock(TwoFactorProviderInterface::class);
         $this->twoFactorProvider2 = $this->createMock(TwoFactorProviderInterface::class);
@@ -39,7 +39,7 @@ class TwoFactorProviderRegistryTest extends TestCase
     /**
      * @test
      */
-    public function getProvider_exists_returnTwoFactorProvider()
+    public function getProvider_exists_returnTwoFactorProvider(): void
     {
         $returnValue = $this->providerRegistry->getProvider('provider2');
         $this->assertSame($this->twoFactorProvider2, $returnValue);
@@ -48,7 +48,7 @@ class TwoFactorProviderRegistryTest extends TestCase
     /**
      * @test
      */
-    public function getProvider_notExists_throwUnknownTwoFactorProviderException()
+    public function getProvider_notExists_throwUnknownTwoFactorProviderException(): void
     {
         $this->expectException(UnknownTwoFactorProviderException::class);
         $this->providerRegistry->getProvider('unknownProvider');
@@ -57,7 +57,7 @@ class TwoFactorProviderRegistryTest extends TestCase
     /**
      * @test
      */
-    public function getAllProviders_hasRegisteredProviders_returnAllTwoFactorProviders()
+    public function getAllProviders_hasRegisteredProviders_returnAllTwoFactorProviders(): void
     {
         $returnValue = $this->providerRegistry->getAllProviders();
 

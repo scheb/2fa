@@ -27,7 +27,7 @@ class AuthenticationContextTest extends TestCase
      */
     private $authContext;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->createMock(Request::class);
         $this->token = $this->createMock(TokenInterface::class);
@@ -37,7 +37,7 @@ class AuthenticationContextTest extends TestCase
     /**
      * @test
      */
-    public function getToken_objectInitialized_returnToken()
+    public function getToken_objectInitialized_returnToken(): void
     {
         $returnValue = $this->authContext->getToken();
         $this->assertEquals($this->token, $returnValue);
@@ -46,7 +46,7 @@ class AuthenticationContextTest extends TestCase
     /**
      * @test
      */
-    public function getRequest_objectInitialized_returnRequest()
+    public function getRequest_objectInitialized_returnRequest(): void
     {
         $returnValue = $this->authContext->getRequest();
         $this->assertEquals($this->request, $returnValue);
@@ -55,7 +55,7 @@ class AuthenticationContextTest extends TestCase
     /**
      * @test
      */
-    public function getSession_objectInitialized_returnSession()
+    public function getSession_objectInitialized_returnSession(): void
     {
         //Mock the Request object
         $session = $this->createMock(SessionInterface::class);
@@ -72,7 +72,7 @@ class AuthenticationContextTest extends TestCase
      * @test
      * @dataProvider dataProvider_getToken
      */
-    public function getUser_objectInitialized_returnValid($userObject, $expectedReturnValue)
+    public function getUser_objectInitialized_returnValid($userObject, $expectedReturnValue): void
     {
         //Mock the TokenInterface
         $this->token
@@ -84,7 +84,7 @@ class AuthenticationContextTest extends TestCase
         $this->assertEquals($expectedReturnValue, $returnValue);
     }
 
-    public function dataProvider_getToken()
+    public function dataProvider_getToken(): array
     {
         $user = $this->createMock(UserInterface::class);
 
@@ -98,7 +98,7 @@ class AuthenticationContextTest extends TestCase
     /**
      * @test
      */
-    public function getFirewallName_hasValue_returnFirewallName()
+    public function getFirewallName_hasValue_returnFirewallName(): void
     {
         $returnValue = $this->authContext->getFirewallName();
         $this->assertEquals('firewallName', $returnValue);

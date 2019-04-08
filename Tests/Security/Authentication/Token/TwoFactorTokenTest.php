@@ -14,7 +14,7 @@ class TwoFactorTokenTest extends TestCase
      */
     private $twoFactorToken;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $twoFactorProviders = [
             'provider1',
@@ -26,7 +26,7 @@ class TwoFactorTokenTest extends TestCase
     /**
      * @test
      */
-    public function preferTwoFactorProvider_preferOtherProvider_becomesCurrentProvider()
+    public function preferTwoFactorProvider_preferOtherProvider_becomesCurrentProvider(): void
     {
         $this->twoFactorToken->preferTwoFactorProvider('provider2');
         $this->assertEquals('provider2', $this->twoFactorToken->getCurrentTwoFactorProvider());
@@ -35,7 +35,7 @@ class TwoFactorTokenTest extends TestCase
     /**
      * @test
      */
-    public function preferTwoFactorProvider_preferOtherProvider_returnsPreferredProviderFirst()
+    public function preferTwoFactorProvider_preferOtherProvider_returnsPreferredProviderFirst(): void
     {
         $this->twoFactorToken->preferTwoFactorProvider('provider2');
         $this->assertEquals(['provider2', 'provider1'], $this->twoFactorToken->getTwoFactorProviders());
@@ -44,7 +44,7 @@ class TwoFactorTokenTest extends TestCase
     /**
      * @test
      */
-    public function preferTwoFactorProvider_unknownProvider_throwUnknownTwoFactorProviderException()
+    public function preferTwoFactorProvider_unknownProvider_throwUnknownTwoFactorProviderException(): void
     {
         $this->expectException(UnknownTwoFactorProviderException::class);
         $this->twoFactorToken->preferTwoFactorProvider('unknownProvider');
@@ -53,7 +53,7 @@ class TwoFactorTokenTest extends TestCase
     /**
      * @test
      */
-    public function getCurrentTwoFactorProvider_defaultOrderGiven_returnFirstProvider()
+    public function getCurrentTwoFactorProvider_defaultOrderGiven_returnFirstProvider(): void
     {
         $this->assertEquals('provider1', $this->twoFactorToken->getCurrentTwoFactorProvider());
     }
@@ -61,7 +61,7 @@ class TwoFactorTokenTest extends TestCase
     /**
      * @test
      */
-    public function setTwoFactorProviderComplete_completeProvider_continueWithNextProvider()
+    public function setTwoFactorProviderComplete_completeProvider_continueWithNextProvider(): void
     {
         $this->twoFactorToken->setTwoFactorProviderComplete('provider1');
         $this->assertEquals('provider2', $this->twoFactorToken->getCurrentTwoFactorProvider());
@@ -70,7 +70,7 @@ class TwoFactorTokenTest extends TestCase
     /**
      * @test
      */
-    public function setTwoFactorProviderComplete_unknownProvider_throwUnknownTwoFactorProviderException()
+    public function setTwoFactorProviderComplete_unknownProvider_throwUnknownTwoFactorProviderException(): void
     {
         $this->expectException(UnknownTwoFactorProviderException::class);
         $this->twoFactorToken->setTwoFactorProviderComplete('unknownProvider');
@@ -79,7 +79,7 @@ class TwoFactorTokenTest extends TestCase
     /**
      * @test
      */
-    public function allTwoFactorProvidersAuthenticated_notComplete_returnFalse()
+    public function allTwoFactorProvidersAuthenticated_notComplete_returnFalse(): void
     {
         $this->twoFactorToken->setTwoFactorProviderComplete('provider1');
         $this->assertFalse($this->twoFactorToken->allTwoFactorProvidersAuthenticated());
@@ -88,7 +88,7 @@ class TwoFactorTokenTest extends TestCase
     /**
      * @test
      */
-    public function allTwoFactorProvidersAuthenticated_allComplete_returnTrue()
+    public function allTwoFactorProvidersAuthenticated_allComplete_returnTrue(): void
     {
         $this->twoFactorToken->setTwoFactorProviderComplete('provider1');
         $this->twoFactorToken->setTwoFactorProviderComplete('provider2');

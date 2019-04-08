@@ -73,7 +73,7 @@ class FormControllerTest extends TestCase
      */
     private $twoFactorFirewallContext;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->session = $this->createMock(SessionInterface::class);
         $this->request = $this->createMock(Request::class);
@@ -187,7 +187,7 @@ class FormControllerTest extends TestCase
             ->willReturn($exception);
     }
 
-    private function stubFirewallIsCsrfProtected()
+    private function stubFirewallIsCsrfProtected(): void
     {
         $this->firewallConfig
             ->expects($this->any())
@@ -219,7 +219,7 @@ class FormControllerTest extends TestCase
     /**
      * @test
      */
-    public function form_noTwoFactorToken_throwAccessDeniedException()
+    public function form_noTwoFactorToken_throwAccessDeniedException(): void
     {
         $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
 
@@ -230,7 +230,7 @@ class FormControllerTest extends TestCase
     /**
      * @test
      */
-    public function form_setPreferredProvider_switchCurrentProvider()
+    public function form_setPreferredProvider_switchCurrentProvider(): void
     {
         $this->stubTokenStorageHasTwoFactorToken();
         $this->stubRequestParameters(['preferProvider' => 'provider2']);
@@ -246,7 +246,7 @@ class FormControllerTest extends TestCase
     /**
      * @test
      */
-    public function form_hasAuthenticationError_passErrorToRenderer()
+    public function form_hasAuthenticationError_passErrorToRenderer(): void
     {
         $exception = new TwoFactorProviderNotFoundException('Authentication exception message');
         $exception->setProvider('unknownProvider');
@@ -265,7 +265,7 @@ class FormControllerTest extends TestCase
     /**
      * @test
      */
-    public function form_hasOtherError_notPassErrorToRenderer()
+    public function form_hasOtherError_notPassErrorToRenderer(): void
     {
         $this->stubTokenStorageHasTwoFactorToken();
         $this->stubSessionHasException(new \Exception('Exception message'));
@@ -278,7 +278,7 @@ class FormControllerTest extends TestCase
     /**
      * @test
      */
-    public function form_multiFactorFirewallTwoProviders_displayTrustedOptionFalse()
+    public function form_multiFactorFirewallTwoProviders_displayTrustedOptionFalse(): void
     {
         $this->stubFirewallIsMultiFactor(true);
         $this->stubTokenStorageHasTwoFactorToken(['provider1', 'provider2']);
@@ -296,7 +296,7 @@ class FormControllerTest extends TestCase
     /**
      * @test
      */
-    public function form_multiFactorFirewallOneProviderLeft_displayTrustedOptionTrue()
+    public function form_multiFactorFirewallOneProviderLeft_displayTrustedOptionTrue(): void
     {
         $this->stubFirewallIsMultiFactor(true);
         $this->stubTokenStorageHasTwoFactorToken(['provider1']);
@@ -314,7 +314,7 @@ class FormControllerTest extends TestCase
     /**
      * @test
      */
-    public function form_notMultiFactorFirewallTwoProviders_displayTrustedOptionTrue()
+    public function form_notMultiFactorFirewallTwoProviders_displayTrustedOptionTrue(): void
     {
         $this->stubFirewallIsMultiFactor(false);
         $this->stubTokenStorageHasTwoFactorToken(['provider1', 'provider2']);
@@ -332,7 +332,7 @@ class FormControllerTest extends TestCase
     /**
      * @test
      */
-    public function form_trustedDisabledMultiFactorFirewallOneProviderLeft_displayTrustedOptionFalse()
+    public function form_trustedDisabledMultiFactorFirewallOneProviderLeft_displayTrustedOptionFalse(): void
     {
         $this->initControllerWithTrustedFeature(false);
         $this->stubFirewallIsMultiFactor(true);
@@ -351,7 +351,7 @@ class FormControllerTest extends TestCase
     /**
      * @test
      */
-    public function form_trustedDisabledNotMultiFactorFirewallTwoProviders_displayTrustedOptionFalse()
+    public function form_trustedDisabledNotMultiFactorFirewallTwoProviders_displayTrustedOptionFalse(): void
     {
         $this->initControllerWithTrustedFeature(false);
         $this->stubFirewallIsMultiFactor(false);
@@ -370,7 +370,7 @@ class FormControllerTest extends TestCase
     /**
      * @test
      */
-    public function form_csrfTokenGeneratorInstanceOfCsrfTokenManagerInterface_isCsrfProtectionEnabledTrue()
+    public function form_csrfTokenGeneratorInstanceOfCsrfTokenManagerInterface_isCsrfProtectionEnabledTrue(): void
     {
         $this->stubTokenStorageHasTwoFactorToken();
         $this->stubFirewallIsCsrfProtected();
@@ -388,7 +388,7 @@ class FormControllerTest extends TestCase
     /**
      * @test
      */
-    public function form_renderForm_renderTemplateWithTemplateVars()
+    public function form_renderForm_renderTemplateWithTemplateVars(): void
     {
         $this->stubTokenStorageHasTwoFactorToken();
 

@@ -24,7 +24,7 @@ class JwtTokenEncoderTest extends TestCase
      */
     private $encoder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->signer = new Sha256();
         $this->encoder = new JwtTokenEncoder(self::APPLICATION_SECRET);
@@ -42,7 +42,7 @@ class JwtTokenEncoderTest extends TestCase
     /**
      * @test
      */
-    public function generateToken_withClaims_returnEncodedToken()
+    public function generateToken_withClaims_returnEncodedToken(): void
     {
         $jwtToken = $this->encoder->generateToken('username', 'firewallName', 1, new \DateTime());
         $this->assertInstanceOf(Token::class, $jwtToken);
@@ -56,7 +56,7 @@ class JwtTokenEncoderTest extends TestCase
     /**
      * @test
      */
-    public function decodeToken_invalidToken_returnNull()
+    public function decodeToken_invalidToken_returnNull(): void
     {
         $decodedToken = $this->encoder->decodeToken('invalidToken');
         $this->assertNull($decodedToken);
@@ -65,7 +65,7 @@ class JwtTokenEncoderTest extends TestCase
     /**
      * @test
      */
-    public function decodeToken_expiredToken_returnNull()
+    public function decodeToken_expiredToken_returnNull(): void
     {
         $encodedToken = $this->createToken(time() - 1000);
         $decodedToken = $this->encoder->decodeToken($encodedToken);
@@ -75,7 +75,7 @@ class JwtTokenEncoderTest extends TestCase
     /**
      * @test
      */
-    public function decodeToken_validToken_returnDecodedToken()
+    public function decodeToken_validToken_returnDecodedToken(): void
     {
         $encodedToken = $this->createToken(time() + 1000);
         $decodedToken = $this->encoder->decodeToken($encodedToken);
@@ -86,7 +86,7 @@ class JwtTokenEncoderTest extends TestCase
     /**
      * @test
      */
-    public function decodeToken_validAlgAndSignature_returnDecodedToken()
+    public function decodeToken_validAlgAndSignature_returnDecodedToken(): void
     {
         $encodedToken = sprintf(
             '%s.%s.%s',
@@ -101,7 +101,7 @@ class JwtTokenEncoderTest extends TestCase
     /**
      * @test
      */
-    public function decodeToken_ignoredAlgNone_returnNull()
+    public function decodeToken_ignoredAlgNone_returnNull(): void
     {
         $encodedNoneAlgToken = sprintf(
             '%s.%s.%s',
@@ -116,7 +116,7 @@ class JwtTokenEncoderTest extends TestCase
     /**
      * @test
      */
-    public function decodeToken_ignoredAlgTest_returnNull()
+    public function decodeToken_ignoredAlgTest_returnNull(): void
     {
         $encodedTestAlgToken = sprintf(
             '%s.%s.%s',
@@ -131,7 +131,7 @@ class JwtTokenEncoderTest extends TestCase
     /**
      * @test
      */
-    public function decodeToken_validAlgWrongSignature_returnNull()
+    public function decodeToken_validAlgWrongSignature_returnNull(): void
     {
         $encodedInvalidSignatureToken = sprintf(
             '%s.%s.%s',

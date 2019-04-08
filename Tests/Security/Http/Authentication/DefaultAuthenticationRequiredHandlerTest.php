@@ -37,7 +37,7 @@ class DefaultAuthenticationRequiredHandlerTest extends TestCase
      */
     private $authFormRedirectResponse;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->httpUtils = $this->createMock(HttpUtils::class);
         $this->request = $this->createMock(Request::class);
@@ -123,7 +123,7 @@ class DefaultAuthenticationRequiredHandlerTest extends TestCase
     /**
      * @test
      */
-    public function onAuthenticationRequired_redirectToForm_returnsRedirect()
+    public function onAuthenticationRequired_redirectToForm_returnsRedirect(): void
     {
         $token = $this->createMock(TokenInterface::class);
         $this->stubCurrentPath('/somePath');
@@ -141,7 +141,7 @@ class DefaultAuthenticationRequiredHandlerTest extends TestCase
     /**
      * @test
      */
-    public function onAuthenticationRequired_isNotCheckPath_saveRedirectUrl()
+    public function onAuthenticationRequired_isNotCheckPath_saveRedirectUrl(): void
     {
         $token = $this->createMock(TokenInterface::class);
         $this->stubCurrentPath('/somePath');
@@ -153,7 +153,7 @@ class DefaultAuthenticationRequiredHandlerTest extends TestCase
     /**
      * @test
      */
-    public function onAuthenticationRequired_isCheckPath_notSaveRedirectUrl()
+    public function onAuthenticationRequired_isCheckPath_notSaveRedirectUrl(): void
     {
         $token = $this->createMock(TokenInterface::class);
         $this->stubCurrentPath(self::CHECK_PATH);

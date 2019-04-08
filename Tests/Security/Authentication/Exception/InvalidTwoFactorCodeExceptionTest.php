@@ -12,7 +12,7 @@ class InvalidTwoFactorCodeExceptionTest extends TestCase
     /**
      * @test
      */
-    public function unserialize_customMessageKey_isUnserialized()
+    public function unserialize_customMessageKey_isUnserialized(): void
     {
         $exception = new InvalidTwoFactorCodeException();
         $exception->setMessageKey(self::CUSTOM_MESSAGE_KEY);

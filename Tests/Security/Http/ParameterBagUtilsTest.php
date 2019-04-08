@@ -14,7 +14,7 @@ class ParameterBagUtilsTest extends TestCase
      */
     private $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = new Request([
             'topLevelField' => 'topLevelValue',

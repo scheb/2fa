@@ -19,7 +19,7 @@ class IpWhitelistHandlerTest extends AuthenticationHandlerTestCase
      */
     private $ipWhitelistHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $ipWhitelist = [
             '127.0.0.1',
@@ -38,7 +38,7 @@ class IpWhitelistHandlerTest extends AuthenticationHandlerTestCase
         $this->ipWhitelistHandler = new IpWhitelistHandler($this->innerAuthenticationHandler, $ipWhitelistProvider);
     }
 
-    private function createRequestWithIp($ip)
+    private function createRequestWithIp($ip): MockObject
     {
         $request = $this->createRequest();
         $request
@@ -53,7 +53,7 @@ class IpWhitelistHandlerTest extends AuthenticationHandlerTestCase
      * @test
      * @dataProvider getWhitelistedIps
      */
-    public function beginTwoFactorAuthentication_ipIsWhitelisted_returnSameToken(string $ip)
+    public function beginTwoFactorAuthentication_ipIsWhitelisted_returnSameToken(string $ip): void
     {
         $request = $this->createRequestWithIp($ip);
         $originalToken = $this->createToken();
@@ -80,7 +80,7 @@ class IpWhitelistHandlerTest extends AuthenticationHandlerTestCase
     /**
      * @test
      */
-    public function beginTwoFactorAuthentication_ipNotWhitelisted_returnTokenFromInnerAuthenticationHandler()
+    public function beginTwoFactorAuthentication_ipNotWhitelisted_returnTokenFromInnerAuthenticationHandler(): void
     {
         $request = $this->createRequestWithIp('1.1.1.1');
         $transformedToken = $this->createToken();

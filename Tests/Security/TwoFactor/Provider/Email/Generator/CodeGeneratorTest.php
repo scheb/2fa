@@ -26,7 +26,7 @@ class CodeGeneratorTest extends TestCase
      */
     private $authCodeManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->persister = $this->createMock(PersisterInterface::class);
 
@@ -39,7 +39,7 @@ class CodeGeneratorTest extends TestCase
     /**
      * @test
      */
-    public function generateAndSend_useOriginalCodeGenerator_codeBetweenRange()
+    public function generateAndSend_useOriginalCodeGenerator_codeBetweenRange(): void
     {
         //Mock the user object
         $user = $this->createMock(TwoFactorInterface::class);
@@ -59,7 +59,7 @@ class CodeGeneratorTest extends TestCase
     /**
      * @test
      */
-    public function generateAndSend_checkCodeRange_validMinAndMax()
+    public function generateAndSend_checkCodeRange_validMinAndMax(): void
     {
         //Stub the user object
         $user = $this->createMock(TwoFactorInterface::class);
@@ -74,7 +74,7 @@ class CodeGeneratorTest extends TestCase
     /**
      * @test
      */
-    public function generateAndSend_generateNewCode_persistsCode()
+    public function generateAndSend_generateNewCode_persistsCode(): void
     {
         //Mock the user object
         $user = $this->createMock(TwoFactorInterface::class);
@@ -95,7 +95,7 @@ class CodeGeneratorTest extends TestCase
     /**
      * @test
      */
-    public function generateAndSend_generateNewCode_sendMail()
+    public function generateAndSend_generateNewCode_sendMail(): void
     {
         //Stub the user object
         $user = $this->createMock(TwoFactorInterface::class);

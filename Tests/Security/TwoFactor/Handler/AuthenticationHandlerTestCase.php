@@ -2,6 +2,7 @@
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Handler;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -15,12 +16,12 @@ abstract class AuthenticationHandlerTestCase extends TestCase
 {
     protected const FIREWALL_NAME = 'firewallName';
 
-    protected function getAuthenticationHandlerMock()
+    protected function getAuthenticationHandlerMock(): MockObject
     {
         return $this->createMock(AuthenticationHandlerInterface::class);
     }
 
-    protected function createAuthenticationContext($request = null, $token = null, $user = null)
+    protected function createAuthenticationContext($request = null, $token = null, $user = null): MockObject
     {
         $context = $this->createMock(AuthenticationContextInterface::class);
         $context
@@ -46,24 +47,24 @@ abstract class AuthenticationHandlerTestCase extends TestCase
         return $context;
     }
 
-    protected function createRequest()
+    protected function createRequest(): MockObject
     {
         $request = $this->createMock(Request::class);
 
         return $request;
     }
 
-    protected function createToken()
+    protected function createToken(): MockObject
     {
         return $this->createMock(TokenInterface::class);
     }
 
-    protected function createUser()
+    protected function createUser(): MockObject
     {
         return $this->createMock(UserInterface::class);
     }
 
-    protected function createResponse()
+    protected function createResponse(): Response
     {
         $response = new Response();
         $response->headers = new ResponseHeaderBag();

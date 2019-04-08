@@ -34,7 +34,7 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
      */
     private $session;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->httpUtils = $this->createMock(HttpUtils::class);
         $this->session = $this->createMock(SessionInterface::class);
@@ -45,7 +45,7 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
             ->willReturn($this->session);
     }
 
-    private function setUpSuccessHandlerWithOptions(bool $alwaysUseDefaultTargetPath)
+    private function setUpSuccessHandlerWithOptions(bool $alwaysUseDefaultTargetPath): void
     {
         $options = [
             'always_use_default_target_path' => $alwaysUseDefaultTargetPath,
@@ -78,7 +78,7 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
     /**
      * @test
      */
-    public function onAuthenticationSuccess_hasAuthenticationException_removeAuthenticationException()
+    public function onAuthenticationSuccess_hasAuthenticationException_removeAuthenticationException(): void
     {
         $this->setUpSuccessHandlerWithOptions(false);
 
@@ -94,7 +94,7 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
     /**
      * @test
      */
-    public function onAuthenticationSuccess_alwaysUseDefaultTargetPath_redirectToDefaultTargetPath()
+    public function onAuthenticationSuccess_alwaysUseDefaultTargetPath_redirectToDefaultTargetPath(): void
     {
         $this->setUpSuccessHandlerWithOptions(true);
         $this->stubSessionHasTargetPath('/sessionTargetPath');
@@ -108,7 +108,7 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
     /**
      * @test
      */
-    public function onAuthenticationSuccess_hasTargetPathInSession_redirectToSessionTargetPath()
+    public function onAuthenticationSuccess_hasTargetPathInSession_redirectToSessionTargetPath(): void
     {
         $this->setUpSuccessHandlerWithOptions(false);
         $this->stubSessionHasTargetPath('/sessionTargetPath');
@@ -122,7 +122,7 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
     /**
      * @test
      */
-    public function onAuthenticationSuccess_noTargetPathInSession_redirectToDefaultTargetPath()
+    public function onAuthenticationSuccess_noTargetPathInSession_redirectToDefaultTargetPath(): void
     {
         $this->setUpSuccessHandlerWithOptions(false);
 

@@ -14,7 +14,7 @@ class TrustedDeviceTokenTest extends TestCase
      */
     private $trustedToken;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $jwtToken = $this->createMock(Token::class);
         $jwtToken
@@ -36,7 +36,7 @@ class TrustedDeviceTokenTest extends TestCase
     /**
      * @test
      */
-    public function authenticatesRealm_usernameAndFirewallNameMatches_returnTrue()
+    public function authenticatesRealm_usernameAndFirewallNameMatches_returnTrue(): void
     {
         $returnValue = $this->trustedToken->authenticatesRealm('username', 'firewallName');
         $this->assertTrue($returnValue);
@@ -46,7 +46,7 @@ class TrustedDeviceTokenTest extends TestCase
      * @test
      * @dataProvider provideWrongUsernameFirewallNameCombination
      */
-    public function authenticatesRealm_usernameAndFirewallNameDiffernt_returnFalse(string $username, string $firewallName)
+    public function authenticatesRealm_usernameAndFirewallNameDiffernt_returnFalse(string $username, string $firewallName): void
     {
         $returnValue = $this->trustedToken->authenticatesRealm($username, $firewallName);
         $this->assertFalse($returnValue);
@@ -63,7 +63,7 @@ class TrustedDeviceTokenTest extends TestCase
     /**
      * @test
      */
-    public function versionMatches_sameVersion_returnTrue()
+    public function versionMatches_sameVersion_returnTrue(): void
     {
         $returnValue = $this->trustedToken->versionMatches(1);
         $this->assertTrue($returnValue);
@@ -72,7 +72,7 @@ class TrustedDeviceTokenTest extends TestCase
     /**
      * @test
      */
-    public function versionMatches_differentVersion_returnFalse()
+    public function versionMatches_differentVersion_returnFalse(): void
     {
         $returnValue = $this->trustedToken->versionMatches(2);
         $this->assertFalse($returnValue);
@@ -81,7 +81,7 @@ class TrustedDeviceTokenTest extends TestCase
     /**
      * @test
      */
-    public function serialize_encodeToken_returnEncodedString()
+    public function serialize_encodeToken_returnEncodedString(): void
     {
         $returnValue = $this->trustedToken->serialize();
         $this->assertEquals('serializedToken', $returnValue);

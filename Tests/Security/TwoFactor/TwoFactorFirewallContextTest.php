@@ -13,7 +13,7 @@ class TwoFactorFirewallContextTest extends TestCase
      */
     private $firewallContext;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $firewallConfig = new TwoFactorFirewallConfig(['foo' => 'bar']);
         $this->firewallContext = new TwoFactorFirewallContext(['firewallName' => $firewallConfig]);
@@ -22,7 +22,7 @@ class TwoFactorFirewallContextTest extends TestCase
     /**
      * @test
      */
-    public function getFirewallConfig_isRegistered_returnFirewallConfig()
+    public function getFirewallConfig_isRegistered_returnFirewallConfig(): void
     {
         $returnValue = $this->firewallContext->getFirewallConfig('firewallName');
         $this->assertInstanceOf(TwoFactorFirewallConfig::class, $returnValue);
@@ -31,7 +31,7 @@ class TwoFactorFirewallContextTest extends TestCase
     /**
      * @test
      */
-    public function getFirewallConfig_unknownFirewall_throwInvalidArgumentException()
+    public function getFirewallConfig_unknownFirewall_throwInvalidArgumentException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->firewallContext->getFirewallConfig('unknownFirewallName');

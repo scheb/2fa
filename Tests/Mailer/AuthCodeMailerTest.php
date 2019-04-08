@@ -19,7 +19,7 @@ class AuthCodeMailerTest extends TestCase
      */
     private $mailer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->swiftMailer = $this->createMock(\Swift_Mailer::class);
         $this->mailer = new AuthCodeMailer($this->swiftMailer, 'sender@example.com', 'Sender Name');
@@ -28,7 +28,7 @@ class AuthCodeMailerTest extends TestCase
     /**
      * @test
      */
-    public function sendAuthCode_withUserObject_sendEmail()
+    public function sendAuthCode_withUserObject_sendEmail(): void
     {
         //Stub the user object
         $user = $this->createMock(TwoFactorInterface::class);

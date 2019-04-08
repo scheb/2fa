@@ -28,7 +28,7 @@ class TwoFactorFirewallConfigCompilerPassTest extends TestCase
      */
     private $firewallContextDefinition;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->container = new ContainerBuilder();
         $this->compilerPass = new TwoFactorFirewallConfigCompilerPass();
@@ -38,7 +38,7 @@ class TwoFactorFirewallConfigCompilerPassTest extends TestCase
         $this->container->setDefinition('scheb_two_factor.firewall_context', $this->firewallContextDefinition);
     }
 
-    private function stubTaggedContainerService(array $taggedServices)
+    private function stubTaggedContainerService(array $taggedServices): void
     {
         foreach ($taggedServices as $id => $tags) {
             $definition = $this->container->register($id);
@@ -49,7 +49,7 @@ class TwoFactorFirewallConfigCompilerPassTest extends TestCase
         }
     }
 
-    private function assertTwoFactorFirewallContextArgument(array $extepectedConfigs)
+    private function assertTwoFactorFirewallContextArgument(array $extepectedConfigs): void
     {
         $configsArgument = $this->container->getDefinition('scheb_two_factor.firewall_context')->getArgument(0);
         $this->assertEquals($extepectedConfigs, $configsArgument);
@@ -58,7 +58,7 @@ class TwoFactorFirewallConfigCompilerPassTest extends TestCase
     /**
      * @test
      */
-    public function process_noTaggedServices_replaceArgumentWithEmptyArray()
+    public function process_noTaggedServices_replaceArgumentWithEmptyArray(): void
     {
         $taggedServices = [];
         $this->stubTaggedContainerService($taggedServices);
@@ -71,7 +71,7 @@ class TwoFactorFirewallConfigCompilerPassTest extends TestCase
     /**
      * @test
      */
-    public function process_taggedServices_replaceArgumentWithServiceList()
+    public function process_taggedServices_replaceArgumentWithServiceList(): void
     {
         $taggedServices = ['serviceId' => [
             0 => ['firewall' => 'firewallName'],
@@ -87,7 +87,7 @@ class TwoFactorFirewallConfigCompilerPassTest extends TestCase
     /**
      * @test
      */
-    public function process_missingAlias_throwException()
+    public function process_missingAlias_throwException(): void
     {
         $taggedServices = ['serviceId' => [
             0 => [],

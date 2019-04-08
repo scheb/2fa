@@ -20,7 +20,7 @@ class SchebTwoFactorExtensionTest extends TestCase
      */
     private $extension;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->container = new ContainerBuilder();
         $this->extension = new SchebTwoFactorExtension();
@@ -33,7 +33,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_emptyConfig_setDefaultValues()
+    public function load_emptyConfig_setDefaultValues(): void
     {
         $config = $this->getEmptyConfig();
         $this->extension->load([$config], $this->container);
@@ -61,7 +61,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_fullConfig_setConfigValues()
+    public function load_fullConfig_setConfigValues(): void
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
@@ -89,7 +89,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_noAuthEnabled_notLoadServices()
+    public function load_noAuthEnabled_notLoadServices(): void
     {
         $config = $this->getEmptyConfig();
         $this->extension->load([$config], $this->container);
@@ -108,7 +108,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_googleAuthEnabled_loadGoogleServices()
+    public function load_googleAuthEnabled_loadGoogleServices(): void
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
@@ -121,7 +121,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_emailAuthEnabled_loadEmailServices()
+    public function load_emailAuthEnabled_loadEmailServices(): void
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
@@ -134,7 +134,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_defaultMailer_defaultAlias()
+    public function load_defaultMailer_defaultAlias(): void
     {
         $config = $this->getEmptyConfig();
         $config['email']['enabled'] = true; // Enable email provider
@@ -146,7 +146,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_alternativeMailer_replaceAlias()
+    public function load_alternativeMailer_replaceAlias(): void
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
@@ -157,7 +157,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_defaultCodeGenerator_defaultAlias()
+    public function load_defaultCodeGenerator_defaultAlias(): void
     {
         $config = $this->getEmptyConfig();
         $config['email']['enabled'] = true; // Enable email provider
@@ -169,7 +169,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_alternativeCodeGenerator_replaceAlias()
+    public function load_alternativeCodeGenerator_replaceAlias(): void
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
@@ -180,7 +180,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_defaultPersister_defaultAlias()
+    public function load_defaultPersister_defaultAlias(): void
     {
         $config = $this->getEmptyConfig();
         $this->extension->load([$config], $this->container);
@@ -191,7 +191,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_alternativePersister_replaceAlias()
+    public function load_alternativePersister_replaceAlias(): void
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
@@ -202,7 +202,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_disabledTrustedDeviceManager_nullAlias()
+    public function load_disabledTrustedDeviceManager_nullAlias(): void
     {
         $config = $this->getEmptyConfig();
         $config['trusted_device']['enabled'] = false;
@@ -214,7 +214,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_enabledTrustedDeviceManager_defaultAlias()
+    public function load_enabledTrustedDeviceManager_defaultAlias(): void
     {
         $config = $this->getEmptyConfig();
         $config['trusted_device']['enabled'] = true;
@@ -226,7 +226,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_alternativeTrustedDeviceManager_replaceAlias()
+    public function load_alternativeTrustedDeviceManager_replaceAlias(): void
     {
         $config = $this->getFullConfig();
         $config['trusted_device']['enabled'] = true;
@@ -238,7 +238,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_disabledBackupCodeManager_nullAlias()
+    public function load_disabledBackupCodeManager_nullAlias(): void
     {
         $config = $this->getEmptyConfig();
         $config['backup_codes']['enabled'] = false;
@@ -250,7 +250,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_enabledBackupCodeManager_defaultAlias()
+    public function load_enabledBackupCodeManager_defaultAlias(): void
     {
         $config = $this->getEmptyConfig();
         $config['backup_codes']['enabled'] = true;
@@ -262,7 +262,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_alternativeBackupCodeManager_replaceAlias()
+    public function load_alternativeBackupCodeManager_replaceAlias(): void
     {
         $config = $this->getFullConfig();
         $config['backup_codes']['enabled'] = true;
@@ -274,7 +274,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_defaultIpWhitelistProvider_defaultAlias()
+    public function load_defaultIpWhitelistProvider_defaultAlias(): void
     {
         $config = $this->getEmptyConfig();
         $this->extension->load([$config], $this->container);
@@ -285,7 +285,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_alternativeIpWhitelistProvider_replaceAlias()
+    public function load_alternativeIpWhitelistProvider_replaceAlias(): void
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
@@ -296,7 +296,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_defaultTokenFactory_defaultAlias()
+    public function load_defaultTokenFactory_defaultAlias(): void
     {
         $config = $this->getEmptyConfig();
         $this->extension->load([$config], $this->container);
@@ -307,7 +307,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_alternativeTokenFactory_replaceAlias()
+    public function load_alternativeTokenFactory_replaceAlias(): void
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
@@ -315,7 +315,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertAlias('scheb_two_factor.token_factory', 'acme_test.two_factor_token_factory');
     }
 
-    private function getEmptyConfig()
+    private function getEmptyConfig(): ?array
     {
         $yaml = '';
         $parser = new Parser();
@@ -323,7 +323,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         return $parser->parse($yaml);
     }
 
-    private function getFullConfig()
+    private function getFullConfig(): array
     {
         $yaml = <<<EOF
 persister: acme_test.persister
@@ -366,22 +366,22 @@ EOF;
         return $parser->parse($yaml);
     }
 
-    private function assertParameter($value, $key)
+    private function assertParameter($value, $key): void
     {
         $this->assertEquals($value, $this->container->getParameter($key), sprintf('%s parameter is correct', $key));
     }
 
-    private function assertHasDefinition($id)
+    private function assertHasDefinition($id): void
     {
         $this->assertTrue($this->container->hasDefinition($id), 'Service "'.$id.'" must be defined.');
     }
 
-    private function assertNotHasDefinition($id)
+    private function assertNotHasDefinition($id): void
     {
         $this->assertFalse($this->container->hasDefinition($id), 'Service "'.$id.'" must NOT be defined.');
     }
 
-    private function assertAlias($id, $aliasId)
+    private function assertAlias($id, $aliasId): void
     {
         $this->assertTrue($this->container->hasAlias($id), 'Alias "'.$id.'" must be defined.');
         $alias = $this->container->getAlias($id);

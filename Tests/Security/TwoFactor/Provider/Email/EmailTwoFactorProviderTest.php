@@ -26,7 +26,7 @@ class EmailTwoFactorProviderTest extends TestCase
      */
     private $provider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->generator = $this->createMock(CodeGeneratorInterface::class);
         $formRenderer = $this->createMock(TwoFactorFormRendererInterface::class);
@@ -62,7 +62,7 @@ class EmailTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function beginAuthentication_twoFactorPossible_codeGenerated()
+    public function beginAuthentication_twoFactorPossible_codeGenerated(): void
     {
         $user = $this->createUser(true);
         $context = $this->createAuthenticationContext($user);
@@ -79,7 +79,7 @@ class EmailTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function beginAuthentication_twoFactorPossible_returnTrue()
+    public function beginAuthentication_twoFactorPossible_returnTrue(): void
     {
         $user = $this->createUser(true);
         $context = $this->createAuthenticationContext($user);
@@ -91,7 +91,7 @@ class EmailTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function beginAuthentication_twoFactorDisabled_returnFalse()
+    public function beginAuthentication_twoFactorDisabled_returnFalse(): void
     {
         $user = $this->createUser(false);
         $context = $this->createAuthenticationContext($user);
@@ -103,7 +103,7 @@ class EmailTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function beginAuthentication_interfaceNotImplemented_returnFalse()
+    public function beginAuthentication_interfaceNotImplemented_returnFalse(): void
     {
         $user = new \stdClass(); //Any class without TwoFactorInterface
         $context = $this->createAuthenticationContext($user);
@@ -115,7 +115,7 @@ class EmailTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function validateAuthenticationCode_noTwoFactorUser_returnFalse()
+    public function validateAuthenticationCode_noTwoFactorUser_returnFalse(): void
     {
         $user = new \stdClass();
         $returnValue = $this->provider->validateAuthenticationCode($user, 'code');
@@ -125,7 +125,7 @@ class EmailTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function validateAuthenticationCode_validCodeGiven_returnTrue()
+    public function validateAuthenticationCode_validCodeGiven_returnTrue(): void
     {
         $user = $this->createUser();
         $returnValue = $this->provider->validateAuthenticationCode($user, self::VALID_AUTH_CODE);
@@ -135,7 +135,7 @@ class EmailTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function validateAuthenticationCode_validCodeWithSpaces_returnTrue()
+    public function validateAuthenticationCode_validCodeWithSpaces_returnTrue(): void
     {
         $user = $this->createUser();
         $returnValue = $this->provider->validateAuthenticationCode($user, self::VALID_AUTH_CODE_WITH_SPACES);
@@ -145,7 +145,7 @@ class EmailTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function validateAuthenticationCode_validCodeGiven_returnFalse()
+    public function validateAuthenticationCode_validCodeGiven_returnFalse(): void
     {
         $user = $this->createUser();
         $returnValue = $this->provider->validateAuthenticationCode($user, self::INVALID_AUTH_CODE);

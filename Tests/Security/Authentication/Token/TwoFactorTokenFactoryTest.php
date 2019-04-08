@@ -12,7 +12,7 @@ class TwoFactorTokenFactoryTest extends TestCase
     /**
      * @test
      */
-    public function create_onCreate_returnTwoFactorToken()
+    public function create_onCreate_returnTwoFactorToken(): void
     {
         $authenticatedToken = $this->createMock(TokenInterface::class);
         $twoFactorTokenFactory = new TwoFactorTokenFactory();

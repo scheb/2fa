@@ -29,7 +29,7 @@ class TwoFactorFactoryTest extends TestCase
      */
     private $container;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->factory = new TwoFactorFactory();
         $this->container = new ContainerBuilder();
@@ -93,7 +93,7 @@ EOF;
     /**
      * @test
      */
-    public function addConfiguration_emptyConfig_setDefaultValues()
+    public function addConfiguration_emptyConfig_setDefaultValues(): void
     {
         $config = $this->getEmptyConfig();
         $processedConfiguration = $this->processConfiguration($config);
@@ -116,7 +116,7 @@ EOF;
     /**
      * @test
      */
-    public function addConfiguration_fullConfig_setConfigValues()
+    public function addConfiguration_fullConfig_setConfigValues(): void
     {
         $config = $this->getFullConfig();
         $processedConfiguration = $this->processConfiguration($config);
@@ -139,7 +139,7 @@ EOF;
     /**
      * @test
      */
-    public function create_createForFirewall_returnServiceIds()
+    public function create_createForFirewall_returnServiceIds(): void
     {
         $returnValue = $this->callCreateFirewall();
 
@@ -151,7 +151,7 @@ EOF;
     /**
      * @test
      */
-    public function create_createForFirewall_createAuthenticationProviderDefinition()
+    public function create_createForFirewall_createAuthenticationProviderDefinition(): void
     {
         $this->callCreateFirewall();
 
@@ -164,7 +164,7 @@ EOF;
     /**
      * @test
      */
-    public function create_createForFirewall_createAuthenticationListenerDefinition()
+    public function create_createForFirewall_createAuthenticationListenerDefinition(): void
     {
         $this->callCreateFirewall();
 
@@ -181,7 +181,7 @@ EOF;
     /**
      * @test
      */
-    public function create_createForFirewall_createSuccessHandlerDefinition()
+    public function create_createForFirewall_createSuccessHandlerDefinition(): void
     {
         $this->callCreateFirewall();
 
@@ -194,7 +194,7 @@ EOF;
     /**
      * @test
      */
-    public function create_customSuccessHandler_useCustomSuccessHandlerDefinition()
+    public function create_customSuccessHandler_useCustomSuccessHandlerDefinition(): void
     {
         $this->callCreateFirewall([
             'success_handler' => 'my_success_handler',
@@ -208,7 +208,7 @@ EOF;
     /**
      * @test
      */
-    public function create_createForFirewall_createFailureHandlerDefinition()
+    public function create_createForFirewall_createFailureHandlerDefinition(): void
     {
         $this->callCreateFirewall();
 
@@ -220,7 +220,7 @@ EOF;
     /**
      * @test
      */
-    public function create_customFailureHandler_useCustomFailureHandlerDefinition()
+    public function create_customFailureHandler_useCustomFailureHandlerDefinition(): void
     {
         $this->callCreateFirewall([
             'failure_handler' => 'my_failure_handler',
@@ -234,7 +234,7 @@ EOF;
     /**
      * @test
      */
-    public function create_createForFirewall_createAuthenticationRequiredHandlerDefinition()
+    public function create_createForFirewall_createAuthenticationRequiredHandlerDefinition(): void
     {
         $this->callCreateFirewall();
 
@@ -247,7 +247,7 @@ EOF;
     /**
      * @test
      */
-    public function create_customAuthenticationRequired_useCustomAuthenticationRequiredHandlerDefinition()
+    public function create_customAuthenticationRequired_useCustomAuthenticationRequiredHandlerDefinition(): void
     {
         $this->callCreateFirewall([
             'authentication_required_handler' => 'my_authentication_required_handler',
@@ -261,7 +261,7 @@ EOF;
     /**
      * @test
      */
-    public function create_createForFirewall_createCsrfTokenValidatorDefinition()
+    public function create_createForFirewall_createCsrfTokenValidatorDefinition(): void
     {
         $this->callCreateFirewall();
 
@@ -274,7 +274,7 @@ EOF;
     /**
      * @test
      */
-    public function create_createForFirewall_useCustomCsrfTokenGenerator()
+    public function create_createForFirewall_useCustomCsrfTokenGenerator(): void
     {
         $csrfTokenGeneratorDefinitionId = 'security.csrf.token_manager';
         $this->callCreateFirewall(['csrf_token_generator' => $csrfTokenGeneratorDefinitionId]);
@@ -288,7 +288,7 @@ EOF;
     /**
      * @test
      */
-    public function create_createForFirewall_createFirewallConfigDefinition()
+    public function create_createForFirewall_createFirewallConfigDefinition(): void
     {
         $this->callCreateFirewall();
 

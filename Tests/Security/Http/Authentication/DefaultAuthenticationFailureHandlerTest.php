@@ -34,7 +34,7 @@ class DefaultAuthenticationFailureHandlerTest extends TestCase
      */
     private $session;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $options = ['auth_form_path' => '/authFormPath'];
         $this->httpUtils = $this->createMock(HttpUtils::class);
@@ -51,7 +51,7 @@ class DefaultAuthenticationFailureHandlerTest extends TestCase
     /**
      * @test
      */
-    public function onAuthenticationFailure_authenticationExceptionGiven_setExceptionMessageInSession()
+    public function onAuthenticationFailure_authenticationExceptionGiven_setExceptionMessageInSession(): void
     {
         $authenticationException = new AuthenticationException('Exception message');
 
@@ -66,7 +66,7 @@ class DefaultAuthenticationFailureHandlerTest extends TestCase
     /**
      * @test
      */
-    public function onAuthenticationFailure_failedAuthentication_redirectToAuthenticationForm()
+    public function onAuthenticationFailure_failedAuthentication_redirectToAuthenticationForm(): void
     {
         $redirectResponse = $this->createMock(RedirectResponse::class);
         $this->httpUtils

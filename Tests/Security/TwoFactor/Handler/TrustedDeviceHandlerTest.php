@@ -24,7 +24,7 @@ class TrustedDeviceHandlerTest extends AuthenticationHandlerTestCase
      */
     private $trustedHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->innerAuthenticationHandler = $this->createMock(AuthenticationHandlerInterface::class);
         $this->trustedDeviceManager = $this->createMock(TrustedDeviceManager::class);
@@ -47,7 +47,7 @@ class TrustedDeviceHandlerTest extends AuthenticationHandlerTestCase
     /**
      * @test
      */
-    public function beginAuthentication_trustedOptionEnabled_checkTrustedToken()
+    public function beginAuthentication_trustedOptionEnabled_checkTrustedToken(): void
     {
         $user = $this->createUser();
         $context = $this->createAuthenticationContext(null, null, $user);
@@ -63,7 +63,7 @@ class TrustedDeviceHandlerTest extends AuthenticationHandlerTestCase
     /**
      * @test
      */
-    public function beginAuthentication_isTrustedDevice_returnOriginalToken()
+    public function beginAuthentication_isTrustedDevice_returnOriginalToken(): void
     {
         $originalToken = $this->createToken();
         $context = $this->createAuthenticationContext(null, $originalToken);
@@ -80,7 +80,7 @@ class TrustedDeviceHandlerTest extends AuthenticationHandlerTestCase
     /**
      * @test
      */
-    public function beginAuthentication_isTrustedDeviceAndExtendTrustedToken_addNewTrustedToken()
+    public function beginAuthentication_isTrustedDeviceAndExtendTrustedToken_addNewTrustedToken(): void
     {
         $trustedHandler = $this->createTrustedHandler(true);
         $user = $this->createUser();
@@ -98,7 +98,7 @@ class TrustedDeviceHandlerTest extends AuthenticationHandlerTestCase
     /**
      * @test
      */
-    public function beginAuthentication_isTrustedDeviceAndNotExtendTrustedToken_notAddNewTrustedToken()
+    public function beginAuthentication_isTrustedDeviceAndNotExtendTrustedToken_notAddNewTrustedToken(): void
     {
         $trustedHandler = $this->createTrustedHandler(false);
         $user = $this->createUser();
@@ -115,7 +115,7 @@ class TrustedDeviceHandlerTest extends AuthenticationHandlerTestCase
     /**
      * @test
      */
-    public function beginAuthentication_notTrustedDevice_returnTokenFromInnerAuthenticationHandler()
+    public function beginAuthentication_notTrustedDevice_returnTokenFromInnerAuthenticationHandler(): void
     {
         $context = $this->createAuthenticationContext();
         $transformedToken = $this->createToken();

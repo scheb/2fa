@@ -24,7 +24,7 @@ class AuthenticationProviderDecoratorCompilerPassTest extends TestCase
      */
     private $compilerPass;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->container = new ContainerBuilder();
         $this->compilerPass = new AuthenticationProviderDecoratorCompilerPass();
@@ -65,7 +65,7 @@ class AuthenticationProviderDecoratorCompilerPassTest extends TestCase
     /**
      * @test
      */
-    public function process_hasMultipleAuthenticationProviders_decorateAll()
+    public function process_hasMultipleAuthenticationProviders_decorateAll(): void
     {
         $this->stubAuthenticationManagerWithProviders([
             'security.provider.foo',

@@ -21,7 +21,7 @@ class AuthenticationTrustResolverTest extends TestCase
      */
     private $trustResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->decoratedTrustResolver = $this->createMock(AuthenticationTrustResolverInterface::class);
         $this->trustResolver = new AuthenticationTrustResolver($this->decoratedTrustResolver);
@@ -39,7 +39,7 @@ class AuthenticationTrustResolverTest extends TestCase
      * @test
      * @dataProvider provideReturnedResult
      */
-    public function isAnonymous_tokenGiven_returnResultFromDecoratedTrustResolver($returnedResult)
+    public function isAnonymous_tokenGiven_returnResultFromDecoratedTrustResolver($returnedResult): void
     {
         $this->decoratedTrustResolver
             ->expects($this->once())
@@ -54,7 +54,7 @@ class AuthenticationTrustResolverTest extends TestCase
      * @test
      * @dataProvider provideReturnedResult
      */
-    public function isRememberMe_tokenGiven_returnResultFromDecoratedTrustResolver($returnedResult)
+    public function isRememberMe_tokenGiven_returnResultFromDecoratedTrustResolver($returnedResult): void
     {
         $this->decoratedTrustResolver
             ->expects($this->once())
@@ -68,7 +68,7 @@ class AuthenticationTrustResolverTest extends TestCase
     /**
      * @test
      */
-    public function isFullFledged_twoFactorToken_returnFalse()
+    public function isFullFledged_twoFactorToken_returnFalse(): void
     {
         $this->decoratedTrustResolver
             ->expects($this->never())
@@ -82,7 +82,7 @@ class AuthenticationTrustResolverTest extends TestCase
      * @test
      * @dataProvider provideReturnedResult
      */
-    public function isFullFledged_notTwoFactorToken_returnResultFromDecoratedTrustResolver($returnedResult)
+    public function isFullFledged_notTwoFactorToken_returnResultFromDecoratedTrustResolver($returnedResult): void
     {
         $this->decoratedTrustResolver
             ->expects($this->once())

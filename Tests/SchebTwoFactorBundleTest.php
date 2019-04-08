@@ -15,7 +15,7 @@ class SchebTwoFactorBundleTest extends TestCase
     /**
      * @test
      */
-    public function build_initializeBundle_addCompilerPass()
+    public function build_initializeBundle_addCompilerPass(): void
     {
         $containerBuilder = $this->createMock(ContainerBuilder::class);
 

@@ -16,7 +16,7 @@ class TwoFactorInProgressVoterTest extends TestCase
      */
     private $voter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->voter = new TwoFactorInProgressVoter();
     }
@@ -24,7 +24,7 @@ class TwoFactorInProgressVoterTest extends TestCase
     /**
      * @test
      */
-    public function vote_isNotTwoFactorToken_returnAbstain()
+    public function vote_isNotTwoFactorToken_returnAbstain(): void
     {
         $token = $this->createMock(TokenInterface::class);
         $returnValue = $this->voter->vote($token, null, [AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY]);
@@ -35,7 +35,7 @@ class TwoFactorInProgressVoterTest extends TestCase
      * @test
      * @dataProvider provideAttributeAndExpectedResult
      */
-    public function vote_isTwoFactorToken_returnAbstain($checkAttribute, $expectedResult)
+    public function vote_isTwoFactorToken_returnAbstain($checkAttribute, $expectedResult): void
     {
         $token = $this->createMock(TwoFactorTokenInterface::class);
         $returnValue = $this->voter->vote($token, null, [$checkAttribute]);

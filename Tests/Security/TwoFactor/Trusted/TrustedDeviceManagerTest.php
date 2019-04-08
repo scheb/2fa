@@ -20,13 +20,13 @@ class TrustedDeviceManagerTest extends TestCase
      */
     private $trustedDeviceManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->trustedTokenStorage = $this->createMock(TrustedDeviceTokenStorage::class);
         $this->trustedDeviceManager = new TrustedDeviceManager($this->trustedTokenStorage);
     }
 
-    private function stubUsername(MockObject $userMock, string $username)
+    private function stubUsername(MockObject $userMock, string $username): void
     {
         $userMock
             ->expects($this->any())
@@ -34,7 +34,7 @@ class TrustedDeviceManagerTest extends TestCase
             ->willReturn($username);
     }
 
-    private function stubTrustedTokenVersion(MockObject $user, int $version)
+    private function stubTrustedTokenVersion(MockObject $user, int $version): void
     {
         $user
             ->expects($this->any())
@@ -45,7 +45,7 @@ class TrustedDeviceManagerTest extends TestCase
     /**
      * @test
      */
-    public function addTrustedDevice_notUserInterface_doNothing()
+    public function addTrustedDevice_notUserInterface_doNothing(): void
     {
         $this->trustedTokenStorage
             ->expects($this->never())
@@ -58,7 +58,7 @@ class TrustedDeviceManagerTest extends TestCase
     /**
      * @test
      */
-    public function addTrustedDevice_supportsTrustedDeviceInterface_addTrustedTokenWithVersion()
+    public function addTrustedDevice_supportsTrustedDeviceInterface_addTrustedTokenWithVersion(): void
     {
         $user = $this->createMock(UserInterfaceWithTrustedDeviceInterface::class);
         $this->stubUsername($user, 'username');
@@ -75,7 +75,7 @@ class TrustedDeviceManagerTest extends TestCase
     /**
      * @test
      */
-    public function addTrustedDevice_notSupportsTrustedDeviceInterface_addTrustedTokenWithDefaultVersion()
+    public function addTrustedDevice_notSupportsTrustedDeviceInterface_addTrustedTokenWithDefaultVersion(): void
     {
         $user = $this->createMock(UserInterface::class);
         $this->stubUsername($user, 'username');
@@ -91,7 +91,7 @@ class TrustedDeviceManagerTest extends TestCase
     /**
      * @test
      */
-    public function isTrustedDevice_notUserInterface_doNothing()
+    public function isTrustedDevice_notUserInterface_doNothing(): void
     {
         $this->trustedTokenStorage
             ->expects($this->never())
@@ -104,7 +104,7 @@ class TrustedDeviceManagerTest extends TestCase
     /**
      * @test
      */
-    public function isTrustedDevice_supportsTrustedDeviceInterface_checkHasTrustedTokenWithVersion()
+    public function isTrustedDevice_supportsTrustedDeviceInterface_checkHasTrustedTokenWithVersion(): void
     {
         $user = $this->createMock(UserInterfaceWithTrustedDeviceInterface::class);
         $this->stubUsername($user, 'username');
@@ -121,7 +121,7 @@ class TrustedDeviceManagerTest extends TestCase
     /**
      * @test
      */
-    public function addTrustedDevice_notSupportsTrustedDeviceInterface_checkHasTrustedTokenWithDefaultVersion()
+    public function addTrustedDevice_notSupportsTrustedDeviceInterface_checkHasTrustedTokenWithDefaultVersion(): void
     {
         $user = $this->createMock(UserInterface::class);
         $this->stubUsername($user, 'username');
@@ -138,7 +138,7 @@ class TrustedDeviceManagerTest extends TestCase
      * @test
      * @dataProvider provideIsTrustedDeviceReturnValues
      */
-    public function addTrustedDevice_notSupportsTrustedDeviceInterface_returnResult(bool $result)
+    public function addTrustedDevice_notSupportsTrustedDeviceInterface_returnResult(bool $result): void
     {
         $user = $this->createMock(UserInterface::class);
         $this->stubUsername($user, 'username');

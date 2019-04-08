@@ -34,7 +34,7 @@ class CsrfTokenValidatorTest extends TestCase
      */
     private $csrfTokenValidator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->parameterBag = $this->createMock(ParameterBagInterface::class);
         $this->parameterBag
@@ -74,7 +74,7 @@ class CsrfTokenValidatorTest extends TestCase
     /**
      * @test
      */
-    public function hasValidCsrfToken_tokenIsInvalid_returnFalse()
+    public function hasValidCsrfToken_tokenIsInvalid_returnFalse(): void
     {
         $this->stubTokenIsInvalid();
 
@@ -84,7 +84,7 @@ class CsrfTokenValidatorTest extends TestCase
     /**
      * @test
      */
-    public function hasValidCsrfToken_tokenIsValid_returnTrue()
+    public function hasValidCsrfToken_tokenIsValid_returnTrue(): void
     {
         $this->stubTokenIsValid();
 

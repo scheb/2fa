@@ -56,7 +56,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
      */
     private $authenticationProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
         $this->backupCodeManager = $this->createMock(BackupCodeManagerInterface::class);
@@ -71,7 +71,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
         $this->twoFactorProvider2 = $this->createMock(TwoFactorProviderInterface::class);
     }
 
-    private function createAuthenticationProviderWithMultiFactor(bool $multiFactor)
+    private function createAuthenticationProviderWithMultiFactor(bool $multiFactor): void
     {
         $this->providerRegistry
             ->expects($this->any())
@@ -98,7 +98,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
         return $this->twoFactorToken;
     }
 
-    public function createSupportedTwoFactorTokenWithProviders(array $twoFactorProviders)
+    public function createSupportedTwoFactorTokenWithProviders(array $twoFactorProviders): TwoFactorToken
     {
         return $this->createTwoFactorToken('firewallName', 'credentials', $twoFactorProviders);
     }
@@ -114,7 +114,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
     /**
      * @test
      */
-    public function authenticate_noTwoFactorToken_returnNull()
+    public function authenticate_noTwoFactorToken_returnNull(): void
     {
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createMock(TokenInterface::class);
@@ -126,7 +126,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
     /**
      * @test
      */
-    public function authenticate_differentFirewallName_returnNull()
+    public function authenticate_differentFirewallName_returnNull(): void
     {
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createTwoFactorToken('otherFirewallName', 'credentials');
@@ -138,7 +138,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
     /**
      * @test
      */
-    public function authenticate_noCredentials_returnSameToken()
+    public function authenticate_noCredentials_returnSameToken(): void
     {
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createTwoFactorToken('firewallName', null);
@@ -150,7 +150,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
     /**
      * @test
      */
-    public function authenticate_twoFactorProviderMissing_throwTwoFactorProviderNotFoundException()
+    public function authenticate_twoFactorProviderMissing_throwTwoFactorProviderNotFoundException(): void
     {
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createSupportedTwoFactorTokenWithProviders(['unknownProvider']);
@@ -163,7 +163,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
     /**
      * @test
      */
-    public function authenticate_twoFactorProviderExists_checkCode()
+    public function authenticate_twoFactorProviderExists_checkCode(): void
     {
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createSupportedTwoFactorTokenWithProviders(['provider1']);
@@ -179,7 +179,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
     /**
      * @test
      */
-    public function authenticate_backupCodeValid_invalidateBackupCode()
+    public function authenticate_backupCodeValid_invalidateBackupCode(): void
     {
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createSupportedTwoFactorTokenWithProviders(['provider1']);
@@ -202,7 +202,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
     /**
      * @test
      */
-    public function authenticate_backupCodeInvalid_throwInvalidTwoFactorCodeException()
+    public function authenticate_backupCodeInvalid_throwInvalidTwoFactorCodeException(): void
     {
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createSupportedTwoFactorTokenWithProviders(['provider1']);
@@ -221,7 +221,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
     /**
      * @test
      */
-    public function authenticate_noMultiFactorAuthentication_returnAuthenticatedToken()
+    public function authenticate_noMultiFactorAuthentication_returnAuthenticatedToken(): void
     {
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createSupportedTwoFactorTokenWithProviders(['provider1', 'provider2']);
@@ -234,7 +234,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
     /**
      * @test
      */
-    public function authenticate_multiFactorAuthenticationNotComplete_returnTwoFactorToken()
+    public function authenticate_multiFactorAuthenticationNotComplete_returnTwoFactorToken(): void
     {
         $this->createAuthenticationProviderWithMultiFactor(true);
         $token = $this->createSupportedTwoFactorTokenWithProviders(['provider1', 'provider2']);
@@ -249,7 +249,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
     /**
      * @test
      */
-    public function authenticate_multiFactorAuthenticationIsComplete_returnAuthenticatedToken()
+    public function authenticate_multiFactorAuthenticationIsComplete_returnAuthenticatedToken(): void
     {
         $this->createAuthenticationProviderWithMultiFactor(true);
         $token = $this->createSupportedTwoFactorTokenWithProviders(['provider1', 'provider2']);

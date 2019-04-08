@@ -19,7 +19,7 @@ class DoctrinePersisterTest extends TestCase
      */
     private $persister;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // Although we use Doctrine's generic ObjectManager as an interface, for testing we will use Doctrine2 ORM's EntityManager
         $this->em = $this->getMockBuilder(EntityManager::class)
@@ -33,7 +33,7 @@ class DoctrinePersisterTest extends TestCase
     /**
      * @test
      */
-    public function persist_persistObject_callPersistAndFlush()
+    public function persist_persistObject_callPersistAndFlush(): void
     {
         $user = new \stdClass(); //Some user object
 

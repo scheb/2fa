@@ -22,7 +22,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
      */
     private $provider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->authenticator = $this->createMock(GoogleAuthenticatorInterface::class);
         $formRenderer = $this->createMock(TwoFactorFormRendererInterface::class);
@@ -58,7 +58,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function beginAuthentication_twoFactorEnabledHasSecret_returnTrue()
+    public function beginAuthentication_twoFactorEnabledHasSecret_returnTrue(): void
     {
         $user = $this->createUser(true, 'SECRET');
         $context = $this->createAuthenticationContext($user);
@@ -70,7 +70,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function beginAuthentication_twoFactorEnabledNoSecret_returnFalse()
+    public function beginAuthentication_twoFactorEnabledNoSecret_returnFalse(): void
     {
         $user = $this->createUser(true, '');
         $context = $this->createAuthenticationContext($user);
@@ -82,7 +82,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function beginAuthentication_twoFactorDisabledHasSecret_returnFalse()
+    public function beginAuthentication_twoFactorDisabledHasSecret_returnFalse(): void
     {
         $user = $this->createUser(false, 'SECRET');
         $context = $this->createAuthenticationContext($user);
@@ -94,7 +94,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function beginAuthentication_interfaceNotImplemented_returnFalse()
+    public function beginAuthentication_interfaceNotImplemented_returnFalse(): void
     {
         $user = new \stdClass(); //Any class without TwoFactorInterface
         $context = $this->createAuthenticationContext($user);
@@ -106,7 +106,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function validateAuthenticationCode_noTwoFactorUser_returnFalse()
+    public function validateAuthenticationCode_noTwoFactorUser_returnFalse(): void
     {
         $user = new \stdClass();
 
@@ -122,7 +122,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
      * @test
      * @dataProvider provideValidationResult
      */
-    public function validateAuthenticationCode_codeGiven_returnValidationResult($validationResult)
+    public function validateAuthenticationCode_codeGiven_returnValidationResult($validationResult): void
     {
         $user = $this->createUser();
 

@@ -49,7 +49,7 @@ class AuthenticationProviderDecoratorTest extends TestCase
      */
     private $decorator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->decoratedAuthenticationProvider = $this->createMock(AuthenticationProviderInterface::class);
         $this->twoFactorAuthenticationHandler = $this->createMock(AuthenticationHandlerInterface::class);
@@ -109,7 +109,7 @@ class AuthenticationProviderDecoratorTest extends TestCase
      * @test
      * @dataProvider provideSupportsResult
      */
-    public function supports_anyToken_returnResultFromDecoratedProvider(bool $result)
+    public function supports_anyToken_returnResultFromDecoratedProvider(bool $result): void
     {
         $token = $this->createMock(TokenInterface::class);
         $this->stubDecoratedProviderReturnsToken($token);
@@ -136,7 +136,7 @@ class AuthenticationProviderDecoratorTest extends TestCase
      * @test
      * @dataProvider provideIgnoredToken
      */
-    public function authenticate_ignoredToken_returnThatToken($ignoredToken)
+    public function authenticate_ignoredToken_returnThatToken($ignoredToken): void
     {
         $this->stubDecoratedProviderReturnsToken($ignoredToken);
 
@@ -160,7 +160,7 @@ class AuthenticationProviderDecoratorTest extends TestCase
     /**
      * @test
      */
-    public function authenticate_firewallNotSupportsTwoFactorAuthentication_returnThatToken()
+    public function authenticate_firewallNotSupportsTwoFactorAuthentication_returnThatToken(): void
     {
         $authenticatedToken = $this->createMock(TokenInterface::class);
         $this->stubDecoratedProviderReturnsToken($authenticatedToken);
@@ -173,7 +173,7 @@ class AuthenticationProviderDecoratorTest extends TestCase
     /**
      * @test
      */
-    public function authenticate_firewallSupportsTwoFactorAuthentication_createAuthenticationContext()
+    public function authenticate_firewallSupportsTwoFactorAuthentication_createAuthenticationContext(): void
     {
         $authenticatedToken = $this->createMock(TokenInterface::class);
         $this->stubDecoratedProviderReturnsToken($authenticatedToken);
@@ -190,7 +190,7 @@ class AuthenticationProviderDecoratorTest extends TestCase
     /**
      * @test
      */
-    public function authenticate_authenticatedToken_returnTokenFromTwoFactorAuthenticationHandler()
+    public function authenticate_authenticatedToken_returnTokenFromTwoFactorAuthenticationHandler(): void
     {
         $authenticatedToken = $this->createMock(TokenInterface::class);
         $this->stubDecoratedProviderReturnsToken($authenticatedToken);

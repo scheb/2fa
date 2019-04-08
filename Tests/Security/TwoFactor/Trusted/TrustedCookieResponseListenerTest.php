@@ -28,7 +28,7 @@ class TrustedCookieResponseListenerTest extends TestCase
      */
     private $response;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->trustedTokenStorage = $this->createMock(TrustedDeviceTokenStorage::class);
         $this->cookieResponseListener = new TestableTrustedCookieResponseListener($this->trustedTokenStorage,
@@ -58,7 +58,7 @@ class TrustedCookieResponseListenerTest extends TestCase
      *
      * @return MockObject|FilterResponseEvent
      */
-    private function createEventWithRequest(MockObject $request)
+    private function createEventWithRequest(MockObject $request): FilterResponseEvent
     {
         $event = $this->createMock(FilterResponseEvent::class);
         $event

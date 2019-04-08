@@ -26,7 +26,7 @@ class AuthenticationContextFactoryTest extends TestCase
      */
     private $authenticationContextFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->createMock(Request::class);
         $this->token = $this->createMock(TokenInterface::class);
@@ -36,7 +36,7 @@ class AuthenticationContextFactoryTest extends TestCase
     /**
      * @test
      */
-    public function create_onCreate_returnAuthenticationContext()
+    public function create_onCreate_returnAuthenticationContext(): void
     {
         $this->assertInstanceOf(
             AuthenticationContext::class,
