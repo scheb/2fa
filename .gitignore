@@ -9,3 +9,5 @@ vendor/
 composer.lock
 # PHPCS Fixer
 .php_cs.cache
+# PHPUnit
+.phpunit.result.cache

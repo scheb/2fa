@@ -28,7 +28,7 @@
     "require-dev": {
         "doctrine/lexer": "^1.0.1",
         "doctrine/orm": "^2.6",
-        "phpunit/phpunit": "^7.0",
+        "phpunit/phpunit": "^7.0|^8.0",
         "swiftmailer/swiftmailer": "^6.0",
         "symfony/yaml": "^3.4|^4.0"
     },
