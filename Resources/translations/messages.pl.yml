@@ -1,0 +1,7 @@
+scheb_two_factor:
+    auth_code: Kod uwierzytelnienia
+    choose_provider: Przełącz metodę uwierzytelniania
+    login: Zaloguj
+    code_invalid: Kod weryfikacyjny jest niepoprawny.
+    trusted: Jestem na zaufanym komputerze
+    cancel: Anuluj
