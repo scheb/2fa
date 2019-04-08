@@ -16,7 +16,7 @@ class GoogleAuthenticatorTest extends TestCase
      *
      * @return GoogleAuthenticator
      */
-    private function createAuthenticator(?string $hostname = null, ?string $issuer = null)
+    private function createAuthenticator(?string $hostname = null, ?string $issuer = null): GoogleAuthenticator
     {
         return new GoogleAuthenticator($hostname, $issuer);
     }
@@ -25,7 +25,7 @@ class GoogleAuthenticatorTest extends TestCase
      * @test
      * @dataProvider getHostnameAndIssuerToTest
      */
-    public function getUrl_createQrCodeUrl_returnUrl(?string $hostname, ?string $issuer, string $expectedUrl)
+    public function getUrl_createQrCodeUrl_returnUrl(?string $hostname, ?string $issuer, string $expectedUrl): void
     {
         //Mock the user object
         $user = $this->createMock(TwoFactorInterface::class);
@@ -43,7 +43,7 @@ class GoogleAuthenticatorTest extends TestCase
         $this->assertEquals($expectedUrl, $returnValue);
     }
 
-    public function getHostnameAndIssuerToTest()
+    public function getHostnameAndIssuerToTest(): array
     {
         return [
             [null, null, 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth%3A%2F%2Ftotp%2FUser%2520name%3Fsecret%3DSECRET'],

@@ -35,7 +35,7 @@ class TotpAuthenticatorTest extends TestCase
      * @test
      * @dataProvider getHostnameAndIssuerToTest
      */
-    public function getUrl_createQrCodeUrl_returnUrl(?string $issuer, string $provisioningUri, string $expectedUrl)
+    public function getUrl_createQrCodeUrl_returnUrl(?string $issuer, string $provisioningUri, string $expectedUrl): void
     {
         //Mock the user object
         $user = $this->createMock(TwoFactorInterface::class);
@@ -54,7 +54,7 @@ class TotpAuthenticatorTest extends TestCase
         $this->assertEquals($provisioningUri, $totp->getProvisioningUri());
     }
 
-    public function getHostnameAndIssuerToTest()
+    public function getHostnameAndIssuerToTest(): array
     {
         return [
             [null, 'otpauth://totp/User%20name?secret=SECRET', 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth%3A%2F%2Ftotp%2FUser%2520name%3Fsecret%3DSECRET'],

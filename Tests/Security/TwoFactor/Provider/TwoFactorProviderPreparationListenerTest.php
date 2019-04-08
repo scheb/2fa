@@ -43,7 +43,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
      */
     private $listener;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->createMock(Request::class);
         $this->user = new \stdClass();

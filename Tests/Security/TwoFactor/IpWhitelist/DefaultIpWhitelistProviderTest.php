@@ -23,7 +23,7 @@ class DefaultIpWhitelistProviderTest extends TestCase
      */
     private $token;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->createMock(Request::class);
         $this->token = $this->createMock(TokenInterface::class);

@@ -38,7 +38,7 @@ class TwoFactorFactoryTest extends TestCase
         $this->container->setDefinition('scheb_two_factor.firewall_context', new Definition());
     }
 
-    private function getEmptyConfig(): array
+    private function getEmptyConfig(): ?array
     {
         $yaml = 'two_factor: ~';
         $parser = new Parser();
@@ -316,7 +316,7 @@ class TestableFactoryConfiguration implements ConfigurationInterface
         $this->factory = $factory;
     }
 
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root(TwoFactorFactory::AUTHENTICATION_PROVIDER_KEY);
