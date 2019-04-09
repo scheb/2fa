@@ -17,17 +17,7 @@ interface GoogleAuthenticatorInterface
     public function checkCode(TwoFactorInterface $user, string $code): bool;
 
     /**
-     * Generate the URL of a QR code, which can be scanned by Google Authenticator app.
-     *
-     * @param TwoFactorInterface $user
-     *
-     * @return string
-     */
-    public function getUrl(TwoFactorInterface $user): string;
-
-    /**
-     * Generate the content for a QR-Code to be scanned by Google Authenticator
-     * Use this method if you don't want to use google charts to display the qr-code.
+     * Generate the content for a QR-Code to be scanned by Google Authenticator.
      *
      * @param TwoFactorInterface $user
      *

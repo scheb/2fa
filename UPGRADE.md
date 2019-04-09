@@ -5,6 +5,13 @@ Here's an overview if you have to do any work when upgrading.
 
 ## 3.x to 4.x
 
+### Dependencies
+
+The library `sonata-project/google-authenticator`, which is used to support Google Authenticator, has been replaced with
+the more flexible `spomky-labs/otphp`. The way the Google Authenticator integration works does not change.
+
+### Interface Changes
+
 `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface` was extended with a new method
 `prepareAuthentication($user): void` which should contain all kinds of preparations that need to be done before the user
 authenticates with that provider. This is where authentication codes should be generated and sent. If you have such an
@@ -18,11 +25,24 @@ Signature of `Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist\IpWhitelistPr
 has changed to take and instance of  `Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface` as an
 argument.
 
-`Scheb\TwoFactorBundle\Controller\FormController` now takes an instance of
-`Symfony\Component\Security\Http\Logout\LogoutUrlGenerator` as the forth argument. If you have extended the controller
+### Service Changes
+
+The constructor of `Scheb\TwoFactorBundle\Controller\FormController` now takes an instance of
+`Symfony\Component\Security\Http\Logout\LogoutUrlGenerator` as the forth argument. If you have extended the controller,
 please update your service definition accordingly.
 
+### QR Codes
+
+Google has deprecated the Charts API, which was used to generate QR code images. Since generating the QR code with an
+external service is considered a bad security practise, the method
+`Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator::getUrl()` has been removed.
+
+Use the method `getQRContent()` on that same class to retrieve the content for the QR code and use a solutions like
+[endroid/qr-code-bundle](https://github.com/endroid/qr-code-bundle) to generate the QR code image yourself.
+
 ## 2.x to 3.x
+
+### Dependencies
 
 Dropped support for Symfony < 3.4.
 

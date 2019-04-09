@@ -87,48 +87,28 @@ Authenticator.
 $secret = $container->get("scheb_two_factor.security.google_authenticator")->generateSecret();
 ```
 
-With Symfony 4 you use the dependency injection to get the services:
+With Symfony 4, you can use auto-wiring dependency injection to get the services:
 
 ```php
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
 
-public function index(GoogleAuthenticatorInterface $twoFactor)
+public function generateSecret(GoogleAuthenticatorInterface $googleAuthenticatorService)
 {
-    // ...
-    $secret = $twoFactor->generateSecret();
+    $secret = $googleAuthenticatorService->generateSecret();
 }
 ```
 
 ## QR Codes
 
-**Warning** To generate the QR-code an external service from Google is used. That means the user's personal secure code
-is transmitted to that service. This is considered a bad security practice. If you don't like this solution, you should
-generate the QR-code locally, for example with [endroid/qr-code-bundle](https://github.com/endroid/qr-code-bundle).
-
-If a user entity has a secret code stored, you can generate a nice-looking QR code from it, which can be scanned by the
-Google Authenticator app.
+To generate a QR code that can be scanned by the Google Authenticator app, retrieve the QR code's content from Google
+Authenticator service:
 
 ```php
-$url = $container->get("scheb_two_factor.security.google_authenticator")->getUrl($user);
-echo '<img src="'.$url.'" />';
+$qrCodeContent = $container->get("scheb_two_factor.security.google_authenticator")->getQRContent($user);
 ```
 
-If you can't or don't want to use Google charts to render the QR code you can also get the contents which need to be
-encoded in the QR code:
+Use a library such as [endroid/qr-code-bundle](https://github.com/endroid/qr-code-bundle) or one of the many JavaScript
+libraries to render the QR code image.
 
-```php
-$qrContent = $container->get("scheb_two_factor.security.google_authenticator")->getQRContent($user);
-```
-
-You can then encode `$qrContent` in a QR code the way you like (e.g. by using one of the many js-libraries).
- 
-```php
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
-
-public function index(GoogleAuthenticatorInterface $twoFactor)
-{
-    // ...
-    $url = $twoFactor->getUrl();
-    $qrContent = $twoFactor->getQRContent()
-}
-```
+**Security note:** Keep the QR code content within your application. Render the image yourself. Do not pass the content
+to an external service, because this is exposing the secret code to that service.

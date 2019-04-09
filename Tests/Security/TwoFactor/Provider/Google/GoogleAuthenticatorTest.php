@@ -4,52 +4,100 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Google;
 
+use OTPHP\TOTP;
+use OTPHP\TOTPInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleTotpFactory;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class GoogleAuthenticatorTest extends TestCase
 {
     /**
-     * @param string|null $hostname
-     * @param string|null $issuer
-     *
-     * @return GoogleAuthenticator
+     * @var MockObject|TwoFactorInterface
      */
-    private function createAuthenticator(?string $hostname = null, ?string $issuer = null): GoogleAuthenticator
+    private $user;
+
+    /**
+     * @var MockObject|GoogleTotpFactory
+     */
+    private $totpFactory;
+
+    /**
+     * @var MockObject|TOTP
+     */
+    private $totp;
+
+    /**
+     * @var GoogleAuthenticator
+     */
+    private $authenticator;
+
+    protected function setUp(): void
     {
-        return new GoogleAuthenticator($hostname, $issuer);
+        $this->user = $this->createMock(TwoFactorInterface::class);
+        $this->totp = $this->createMock(TOTPInterface::class);
+
+        $this->totpFactory = $this->createMock(GoogleTotpFactory::class);
+        $this->totpFactory
+            ->expects($this->any())
+            ->method('createTotp')
+            ->with($this->user)
+            ->willReturn($this->totp);
+
+        $this->authenticator = new GoogleAuthenticator($this->totpFactory);
     }
 
     /**
      * @test
-     * @dataProvider getHostnameAndIssuerToTest
+     * @dataProvider getCheckCodeData
      */
-    public function getUrl_createQrCodeUrl_returnUrl(?string $hostname, ?string $issuer, string $expectedUrl): void
+    public function checkCode_validateCode_returnBoolean($code, $expectedReturnValue): void
     {
-        //Mock the user object
-        $user = $this->createMock(TwoFactorInterface::class);
-        $user
+        $this->totp
             ->expects($this->once())
-            ->method('getGoogleAuthenticatorUsername')
-            ->willReturn('User name');
-        $user
-            ->expects($this->once())
-            ->method('getGoogleAuthenticatorSecret')
-            ->willReturn('SECRET');
+            ->method('verify')
+            ->with($code)
+            ->willReturn($expectedReturnValue);
 
-        $authenticator = $this->createAuthenticator($hostname, $issuer);
-        $returnValue = $authenticator->getUrl($user);
-        $this->assertEquals($expectedUrl, $returnValue);
+        $returnValue = $this->authenticator->checkCode($this->user, $code);
+        $this->assertEquals($expectedReturnValue, $returnValue);
     }
 
-    public function getHostnameAndIssuerToTest(): array
+    public function getCheckCodeData(): array
     {
         return [
-            [null, null, 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth%3A%2F%2Ftotp%2FUser%2520name%3Fsecret%3DSECRET'],
-            ['Hostname', null, 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth%3A%2F%2Ftotp%2FUser%2520name%2540Hostname%3Fsecret%3DSECRET'],
-            [null, 'Issuer Name', 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth%3A%2F%2Ftotp%2FIssuer%2520Name%253AUser%2520name%3Fissuer%3DIssuer%2520Name%26secret%3DSECRET'],
-            ['Hostname', 'Issuer Name', 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth%3A%2F%2Ftotp%2FIssuer%2520Name%253AUser%2520name%2540Hostname%3Fissuer%3DIssuer%2520Name%26secret%3DSECRET'],
+            ['validCode', true],
+            ['invalidCode', false],
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function checkCode_codeWithSpaces_stripSpacesBeforeCheck(): void
+    {
+        $this->totp
+            ->expects($this->once())
+            ->method('verify')
+            ->with('123456')
+            ->willReturn(true);
+
+        $this->authenticator->checkCode($this->user, ' 123 456 ');
+    }
+
+    /**
+     * @test
+     */
+    public function getQRContent_getContentForQrCode_returnUri(): void
+    {
+        $this->totp
+            ->expects($this->once())
+            ->method('getProvisioningUri')
+            ->willReturn('QRCodeContent');
+
+        $returnValue = $this->authenticator->getQRContent($this->user);
+        $this->assertEquals('QRCodeContent', $returnValue);
     }
 }
