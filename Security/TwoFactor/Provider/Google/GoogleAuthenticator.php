@@ -24,7 +24,7 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
         // Strip any user added spaces
         $code = str_replace(' ', '', $code);
 
-        return $this->totpFactory->createTotp($user)->verify($code);
+        return $this->totpFactory->createTotp($user)->verify($code, null, 1);
     }
 
     public function getQRContent(TwoFactorInterface $user): string

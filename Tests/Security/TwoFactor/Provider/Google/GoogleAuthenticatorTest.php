@@ -81,7 +81,7 @@ class GoogleAuthenticatorTest extends TestCase
         $this->totp
             ->expects($this->once())
             ->method('verify')
-            ->with('123456')
+            ->with('123456', null, 1)
             ->willReturn(true);
 
         $this->authenticator->checkCode($this->user, ' 123 456 ');
