@@ -42,7 +42,7 @@ class GoogleAuthenticatorTest extends TestCase
         $this->totpFactory = $this->createMock(GoogleTotpFactory::class);
         $this->totpFactory
             ->expects($this->any())
-            ->method('createTotp')
+            ->method('createTotpForUser')
             ->with($this->user)
             ->willReturn($this->totp);
 

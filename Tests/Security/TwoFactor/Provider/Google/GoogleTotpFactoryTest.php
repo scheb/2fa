@@ -40,10 +40,10 @@ class GoogleTotpFactoryTest extends TestCase
     /**
      * @test
      */
-    public function createTotp_factoryCalled_returnTotpObject(): void
+    public function createTotpForUser_factoryCalled_returnTotpObject(): void
     {
         $user = $this->createUserMock();
-        $returnValue = (new GoogleTotpFactory(self::SERVER, self::ISSUER, self::CUSTOM_DIGITS))->createTotp($user);
+        $returnValue = (new GoogleTotpFactory(self::SERVER, self::ISSUER, self::CUSTOM_DIGITS))->createTotpForUser($user);
 
         $this->assertInstanceOf(TOTP::class, $returnValue);
         $this->assertEquals(self::CUSTOM_DIGITS, $returnValue->getDigits());
@@ -59,7 +59,7 @@ class GoogleTotpFactoryTest extends TestCase
     public function getProvisioningUri_hostnameAndIssuerGiven_returnProvisioningUri(?string $hostname, ?string $issuer, int $digits, string $expectedUrl): void
     {
         $user = $this->createUserMock();
-        $totp = (new GoogleTotpFactory($hostname, $issuer, $digits))->createTotp($user);
+        $totp = (new GoogleTotpFactory($hostname, $issuer, $digits))->createTotpForUser($user);
 
         $returnValue = $totp->getProvisioningUri();
         $this->assertEquals($expectedUrl, $returnValue);

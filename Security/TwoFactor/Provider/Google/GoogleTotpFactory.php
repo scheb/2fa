@@ -32,7 +32,7 @@ class GoogleTotpFactory
         $this->digits = $digits;
     }
 
-    public function createTotp(TwoFactorInterface $user): TOTPInterface
+    public function createTotpForUser(TwoFactorInterface $user): TOTPInterface
     {
         $totp = TOTP::create($user->getGoogleAuthenticatorSecret(), 30, 'sha1', $this->digits);
 

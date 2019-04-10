@@ -24,12 +24,12 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
         // Strip any user added spaces
         $code = str_replace(' ', '', $code);
 
-        return $this->totpFactory->createTotp($user)->verify($code, null, 1);
+        return $this->totpFactory->createTotpForUser($user)->verify($code, null, 1);
     }
 
     public function getQRContent(TwoFactorInterface $user): string
     {
-        return $this->totpFactory->createTotp($user)->getProvisioningUri();
+        return $this->totpFactory->createTotpForUser($user)->getProvisioningUri();
     }
 
     public function generateSecret(): string
