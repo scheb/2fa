@@ -28,6 +28,7 @@ class SchebTwoFactorExtension extends Extension
         $container->setParameter('scheb_two_factor.google.issuer', $config['google']['issuer']);
         $container->setParameter('scheb_two_factor.google.template', $config['google']['template']);
         $container->setParameter('scheb_two_factor.google.digits', $config['google']['digits']);
+        $container->setParameter('scheb_two_factor.google.window', $config['google']['window']);
         $container->setParameter('scheb_two_factor.totp.issuer', $config['totp']['issuer']);
         $container->setParameter('scheb_two_factor.totp.period', $config['totp']['period']);
         $container->setParameter('scheb_two_factor.totp.digits', $config['totp']['digits']);

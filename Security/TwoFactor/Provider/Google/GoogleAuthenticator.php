@@ -14,9 +14,15 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
      */
     private $totpFactory;
 
-    public function __construct(GoogleTotpFactory $totpFactory)
+    /**
+     * @var int
+     */
+    private $window;
+
+    public function __construct(GoogleTotpFactory $totpFactory, int $window)
     {
         $this->totpFactory = $totpFactory;
+        $this->window = $window;
     }
 
     public function checkCode(TwoFactorInterface $user, string $code): bool
@@ -24,7 +30,7 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
         // Strip any user added spaces
         $code = str_replace(' ', '', $code);
 
-        return $this->totpFactory->createTotpForUser($user)->verify($code, null, 1);
+        return $this->totpFactory->createTotpForUser($user)->verify($code, null, $this->window);
     }
 
     public function getQRContent(TwoFactorInterface $user): string

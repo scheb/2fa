@@ -46,7 +46,7 @@ class GoogleAuthenticatorTest extends TestCase
             ->with($this->user)
             ->willReturn($this->totp);
 
-        $this->authenticator = new GoogleAuthenticator($this->totpFactory);
+        $this->authenticator = new GoogleAuthenticator($this->totpFactory, 123);
     }
 
     /**
@@ -81,7 +81,7 @@ class GoogleAuthenticatorTest extends TestCase
         $this->totp
             ->expects($this->once())
             ->method('verify')
-            ->with('123456', null, 1)
+            ->with('123456', null, 123)
             ->willReturn(true);
 
         $this->authenticator->checkCode($this->user, ' 123 456 ');

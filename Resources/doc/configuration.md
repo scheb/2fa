@@ -39,6 +39,7 @@ scheb_two_factor:
         server_name: Server Name       # Server name used in QR code
         issuer: Issuer Name            # Issuer name used in QR code
         digits: 6                      # Number of digits in authentication code
+        window: 1                      # How many codes before/after the current one would be accepted as valid
         template: security/2fa_form.html.twig   # Template used to render the authentication form
 
     # The service which is used to persist data in the user object. By default Doctrine is used. If your entity is

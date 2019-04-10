@@ -50,6 +50,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertParameter(null, 'scheb_two_factor.google.issuer');
         $this->assertParameter('@SchebTwoFactor/Authentication/form.html.twig', 'scheb_two_factor.google.template');
         $this->assertParameter(6, 'scheb_two_factor.google.digits');
+        $this->assertParameter(1, 'scheb_two_factor.google.window');
         $this->assertParameter(null, 'scheb_two_factor.totp.issuer');
         $this->assertParameter(6, 'scheb_two_factor.totp.digits');
         $this->assertParameter('sha1', 'scheb_two_factor.totp.digest');
@@ -86,6 +87,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertParameter('Issuer', 'scheb_two_factor.google.issuer');
         $this->assertParameter('AcmeTestBundle:Authentication:googleForm.html.twig', 'scheb_two_factor.google.template');
         $this->assertParameter(8, 'scheb_two_factor.google.digits');
+        $this->assertParameter(2, 'scheb_two_factor.google.window');
         $this->assertParameter('Issuer', 'scheb_two_factor.totp.issuer');
         $this->assertParameter(8, 'scheb_two_factor.totp.digits');
         $this->assertParameter('sha256', 'scheb_two_factor.totp.digest');
@@ -400,6 +402,7 @@ google:
     server_name: Server Name
     template: AcmeTestBundle:Authentication:googleForm.html.twig
     digits: 8
+    window: 2
 totp:
     enabled: true
     issuer: Issuer

@@ -9,6 +9,7 @@
 
 		<service id="scheb_two_factor.security.google_authenticator" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator" public="true">
 			<argument type="service" id="scheb_two_factor.security.google_totp_factory" />
+			<argument>%scheb_two_factor.google.window%</argument>
 		</service>
 
 		<service id="scheb_two_factor.security.google.form_renderer" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer" lazy="true">
