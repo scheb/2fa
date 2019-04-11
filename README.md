@@ -38,7 +38,7 @@ Detailed documentation of all features can be found in the [Resources/doc](Resou
 
 Compatibility
 -------------
-- Use bundle version 3.x for Symfony 3.4 and 4.x (**Recommended version**)
+- Use bundle version 4.x for Symfony 3.4 and 4.x (**Recommended version**)
 - Use bundle version 2.x for Symfony < 3.4
 - Use bundle version 1.x for Symfony < 2.6
 
