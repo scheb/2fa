@@ -66,6 +66,20 @@ class User implements UserInterface, TwoFactorInterface
 }
 ```
 
+## Configuration Reference
+
+```yaml
+# config/packages/scheb_two_factor.yaml
+scheb_two_factor:
+    google:
+        enabled: true                  # If Google Authenticator should be enabled, default false
+        server_name: Server Name       # Server name used in QR code
+        issuer: Issuer Name            # Issuer name used in QR code
+        digits: 6                      # Number of digits in authentication code
+        window: 1                      # How many codes before/after the current one would be accepted as valid
+        template: security/2fa_form.html.twig   # Template used to render the authentication form
+```
+
 ## Custom Authentication Form Template
 
 The bundle uses `Resources/views/Authentication/form.html.twig` to render the authentication form. If you want to use a
