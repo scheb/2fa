@@ -44,8 +44,9 @@ namespace Acme\DemoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-class User implements TwoFactorInterface
+class User implements UserInterface, TwoFactorInterface
 {
     /**
      * @ORM\Column(type="string")
