@@ -4,79 +4,56 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp;
 
-use OTPHP\Factory;
 use OTPHP\TOTP;
-use ParagonIE\ConstantTime\Base32;
+use OTPHP\TOTPInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 
-class TotpFactory implements TotpFactoryInterface
+class TotpFactory
 {
+    /**
+     * @var string|null
+     */
+    private $server;
+
     /**
      * @var null|string
      */
     private $issuer;
 
     /**
-     * @var int
-     */
-    private $period;
-
-    /**
-     * @var int
-     */
-    private $digits;
-
-    /**
-     * @var string
-     */
-    private $digest;
-
-    /**
-     * @var array
+     * @var string[]
      */
     private $customParameters;
 
-    /**
-     * @param null|string $issuer
-     * @param int         $period
-     * @param int         $digits
-     * @param string      $digest
-     * @param array       $customParameters
-     */
-    public function __construct(?string $issuer, int $period, int $digits, string $digest, array $customParameters)
+    public function __construct(?string $server, ?string $issuer, array $customParameters)
     {
+        $this->server = $server;
         $this->issuer = $issuer;
-        $this->digits = $digits;
-        $this->digest = $digest;
         $this->customParameters = $customParameters;
-        $this->period = $period;
     }
 
-    public function generateNewTotp(): TOTP
+    public function createTotpForUser(TwoFactorInterface $user): TOTPInterface
     {
+        $totpConfiguration = $user->getTotpAuthenticationConfiguration();
+
         $totp = TOTP::create(
-            trim(Base32::encodeUpper(random_bytes(32)), '='),
-            $this->period,
-            $this->digest,
-            $this->digits
+            $totpConfiguration->getSecret(),
+            $totpConfiguration->getPeriod(),
+            $totpConfiguration->getAlgorithm(),
+            $totpConfiguration->getDigits()
         );
+
+        $userAndHost = $user->getTotpAuthenticationUsername().($this->server ? '@'.$this->server : '');
+        $totp->setLabel($userAndHost);
+
         if ($this->issuer) {
             $totp->setIssuer($this->issuer);
         }
+
         foreach ($this->customParameters as $key => $value) {
             $totp->setParameter($key, $value);
         }
 
         return $totp;
-    }
-
-    public function getTotpForUser(TwoFactorInterface $user): TOTP
-    {
-        $provisioningUri = $user->getTotpAuthenticationProvisioningUri();
-        if ($provisioningUri === null) {
-            throw new \Exception('No provisioning URI for the given user.');
-        }
-
-        return Factory::loadFromProvisioningUri($provisioningUri);
     }
 }

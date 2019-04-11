@@ -2,17 +2,14 @@
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 	<services>
 		<service id="scheb_two_factor.security.totp_factory" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpFactory" public="true">
+			<argument>%scheb_two_factor.totp.server_name%</argument>
 			<argument>%scheb_two_factor.totp.issuer%</argument>
-			<argument>%scheb_two_factor.totp.period%</argument>
-			<argument>%scheb_two_factor.totp.digits%</argument>
-			<argument>%scheb_two_factor.totp.digest%</argument>
 			<argument>%scheb_two_factor.totp.parameters%</argument>
 		</service>
 
 		<service id="scheb_two_factor.security.totp_authenticator" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticator" public="true">
 			<argument type="service" id="scheb_two_factor.security.totp_factory" />
-			<argument>%scheb_two_factor.totp.qr_code_generator%</argument>
-			<argument>%scheb_two_factor.totp.qr_code_data_placeholder%</argument>
+			<argument>%scheb_two_factor.totp.window%</argument>
 		</service>
 
 		<service id="scheb_two_factor.security.totp.form_renderer" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer" lazy="true">

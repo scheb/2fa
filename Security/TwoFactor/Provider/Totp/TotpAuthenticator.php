@@ -4,47 +4,42 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp;
 
-use OTPHP\TOTP;
+use ParagonIE\ConstantTime\Base32;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 
 class TotpAuthenticator implements TotpAuthenticatorInterface
 {
     /**
-     * @var TotpFactoryInterface
+     * @var TotpFactory
      */
     private $totpFactory;
 
     /**
-     * @var string
+     * @var int
      */
-    private $qrCodeGenerator;
+    private $window;
 
-    /**
-     * @var string
-     */
-    private $qrCodeDataPlaceholder;
-
-    /**
-     * @param TotpFactoryInterface $totpFactory
-     * @param string               $qrCodeGenerator
-     * @param string               $qrCodeDataPlaceholder
-     */
-    public function __construct(TotpFactoryInterface $totpFactory, string $qrCodeGenerator, string $qrCodeDataPlaceholder)
+    public function __construct(TotpFactory $totpFactory, int $window)
     {
-        $this->qrCodeGenerator = $qrCodeGenerator;
-        $this->qrCodeDataPlaceholder = $qrCodeDataPlaceholder;
         $this->totpFactory = $totpFactory;
+        $this->window = $window;
     }
 
     public function checkCode(TwoFactorInterface $user, string $code): bool
     {
-        $totp = $this->totpFactory->getTotpForUser($user);
+        // Strip any user added spaces
+        $code = str_replace(' ', '', $code);
 
-        return $totp->verify($code);
+        return $this->totpFactory->createTotpForUser($user)->verify($code, null, $this->window);
     }
 
-    public function getUrl(TOTP $totp): string
+    public function getQRContent(TwoFactorInterface $user): string
     {
-        return $totp->getQrCodeUri($this->qrCodeGenerator, $this->qrCodeDataPlaceholder);
+        return $this->totpFactory->createTotpForUser($user)->getProvisioningUri();
+    }
+
+    public function generateSecret(): string
+    {
+        return trim(Base32::encodeUpper(random_bytes(32)), '=');
     }
 }

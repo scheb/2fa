@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Totp;
 
+use OTPHP\TOTP;
+use OTPHP\TOTPInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpFactory;
@@ -11,56 +14,90 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TotpAuthenticatorTest extends TestCase
 {
-    private function createFactory(?string $issuer = null, int $period = 30, int $digits = 6, string $digest = 'sha1', array $customParameters = []): TotpFactory
-    {
-        return new TotpFactory(
-            $issuer,
-            $period,
-            $digits,
-            $digest,
-            $customParameters
-        );
-    }
+    /**
+     * @var MockObject|TwoFactorInterface
+     */
+    private $user;
 
-    private function createAuthenticator(TotpFactory $totpFactory): TotpAuthenticator
+    /**
+     * @var MockObject|TotpFactory
+     */
+    private $totpFactory;
+
+    /**
+     * @var MockObject|TOTP
+     */
+    private $totp;
+
+    /**
+     * @var TotpAuthenticator
+     */
+    private $authenticator;
+
+    protected function setUp(): void
     {
-        return new TotpAuthenticator(
-            $totpFactory,
-            'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl={PROVISIONING_URI}',
-            '{PROVISIONING_URI}'
-        );
+        $this->user = $this->createMock(TwoFactorInterface::class);
+        $this->totp = $this->createMock(TOTPInterface::class);
+
+        $this->totpFactory = $this->createMock(TotpFactory::class);
+        $this->totpFactory
+            ->expects($this->any())
+            ->method('createTotpForUser')
+            ->with($this->user)
+            ->willReturn($this->totp);
+
+        $this->authenticator = new TotpAuthenticator($this->totpFactory, 123);
     }
 
     /**
      * @test
-     * @dataProvider getHostnameAndIssuerToTest
+     * @dataProvider getCheckCodeData
      */
-    public function getUrl_createQrCodeUrl_returnUrl(?string $issuer, string $provisioningUri, string $expectedUrl): void
+    public function checkCode_validateCode_returnBoolean($code, $expectedReturnValue): void
     {
-        //Mock the user object
-        $user = $this->createMock(TwoFactorInterface::class);
-        $user
+        $this->totp
             ->expects($this->once())
-            ->method('getTotpAuthenticationProvisioningUri')
-            ->willReturn($provisioningUri);
+            ->method('verify')
+            ->with($code)
+            ->willReturn($expectedReturnValue);
 
-        $factory = $this->createFactory($issuer);
-        $totp = $factory->getTotpForUser($user);
-
-        $authenticator = $this->createAuthenticator($factory);
-        $returnValue = $authenticator->getUrl($totp);
-        $this->assertEquals($expectedUrl, $returnValue);
-
-        $this->assertEquals($provisioningUri, $totp->getProvisioningUri());
+        $returnValue = $this->authenticator->checkCode($this->user, $code);
+        $this->assertEquals($expectedReturnValue, $returnValue);
     }
 
-    public function getHostnameAndIssuerToTest(): array
+    public function getCheckCodeData(): array
     {
         return [
-            [null, 'otpauth://totp/User%20name?secret=SECRET', 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth%3A%2F%2Ftotp%2FUser%2520name%3Fsecret%3DSECRET'],
-            [null, 'otpauth://totp/User%20name?secret=SECRET', 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth%3A%2F%2Ftotp%2FUser%2520name%3Fsecret%3DSECRET'],
-            ['Issuer Name', 'otpauth://totp/Issuer%20Name%3AUser%20name?issuer=Issuer%20Name&secret=SECRET', 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth%3A%2F%2Ftotp%2FIssuer%2520Name%253AUser%2520name%3Fissuer%3DIssuer%2520Name%26secret%3DSECRET'],
-            ['Issuer Name', 'otpauth://totp/Issuer%20Name%3AUser%20name?issuer=Issuer%20Name&secret=SECRET', 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth%3A%2F%2Ftotp%2FIssuer%2520Name%253AUser%2520name%3Fissuer%3DIssuer%2520Name%26secret%3DSECRET'],
+            ['validCode', true],
+            ['invalidCode', false],
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function checkCode_codeWithSpaces_stripSpacesBeforeCheck(): void
+    {
+        $this->totp
+            ->expects($this->once())
+            ->method('verify')
+            ->with('123456', null, 123)
+            ->willReturn(true);
+
+        $this->authenticator->checkCode($this->user, ' 123 456 ');
+    }
+
+    /**
+     * @test
+     */
+    public function getProvisioningUri_getContentForQrCode_returnUri(): void
+    {
+        $this->totp
+            ->expects($this->once())
+            ->method('getProvisioningUri')
+            ->willReturn('provisioningUri');
+
+        $returnValue = $this->authenticator->getQRContent($this->user);
+        $this->assertEquals('provisioningUri', $returnValue);
     }
 }

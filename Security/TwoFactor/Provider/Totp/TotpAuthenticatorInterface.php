@@ -2,7 +2,6 @@
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp;
 
-use OTPHP\TOTP;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 
 interface TotpAuthenticatorInterface
@@ -18,11 +17,18 @@ interface TotpAuthenticatorInterface
     public function checkCode(TwoFactorInterface $user, string $code): bool;
 
     /**
-     * Generate the URL of a QR code, which can be scanned by Google Authenticator app.
+     * Generate the content for a QR-Code to be scanned by the authenticator app.
      *
-     * @param TOTP $totp
+     * @param TwoFactorInterface $user
      *
      * @return string
      */
-    public function getUrl(TOTP $totp): string;
+    public function getQRContent(TwoFactorInterface $user): string;
+
+    /**
+     * Generate a new secret for TOTP authentication.
+     *
+     * @return string
+     */
+    public function generateSecret(): string;
 }

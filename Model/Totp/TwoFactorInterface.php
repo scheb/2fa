@@ -12,10 +12,16 @@ interface TwoFactorInterface
     public function isTotpAuthenticationEnabled(): bool;
 
     /**
-     * Return the Provisioning Uri
-     * When an empty string or null is returned, the method is disabled.
+     * Return the user name.
      *
      * @return string
      */
-    public function getTotpAuthenticationProvisioningUri(): ?string;
+    public function getTotpAuthenticationUsername(): string;
+
+    /**
+     * Return the configuration for TOTP authentication.
+     *
+     * @return TotpConfigurationInterface
+     */
+    public function getTotpAuthenticationConfiguration(): ?TotpConfigurationInterface;
 }

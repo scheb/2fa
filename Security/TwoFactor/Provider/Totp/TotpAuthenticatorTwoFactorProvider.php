@@ -21,10 +21,6 @@ class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
      */
     private $formRenderer;
 
-    /**
-     * @param TotpAuthenticatorInterface     $authenticator
-     * @param TwoFactorFormRendererInterface $formRenderer
-     */
     public function __construct(TotpAuthenticatorInterface $authenticator, TwoFactorFormRendererInterface $formRenderer)
     {
         $this->authenticator = $authenticator;
@@ -37,7 +33,7 @@ class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
 
         return $user instanceof TwoFactorInterface
             && $user->isTotpAuthenticationEnabled()
-            && $user->getTotpAuthenticationProvisioningUri();
+            && $user->getTotpAuthenticationConfiguration();
     }
 
     public function prepareAuthentication($user): void

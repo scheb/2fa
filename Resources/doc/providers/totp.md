@@ -3,10 +3,9 @@ TOTP Authentication
 
 ## How it works
 
-This authenticator is similar and compatible with [Google Authenticator](google.md).
-The configuration process is identical: a secret code and parameters are associated to the user.
-Users can add that code to the application on their mobile.
-The app will generate a numeric code from it that changes after a period of time.
+This authenticator is similar and compatible with [Google Authenticator](google.md). The configuration process is
+identical: a secret code and parameters are associated to the user. Users can add that code to the application on their
+mobile. The app will generate a numeric code from it that changes after a period of time.
 
 The main difference is that several parameters can be customized:
 
@@ -26,61 +25,68 @@ scheb_two_factor:
         enabled: true
 ```
 
-Your user entity has to implement `Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface`.
-To activate this method for a user, generate a provisioning URI and persist it with the user entity.
+Your user entity has to implement `Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface`. To activate this method for a
+user, generate a secret and define the TOTP configuration. TOTP let's you configure the number of digits, the algorithm
+and the period of the temporary codes.
+
+We warned, custom configurations will not be compatible with the defaults of Google Authenticator app any more. You will
+have to use another application (e.g. FreeOTP on Android).
 
 ```php
 namespace Acme\DemoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-class User implements TwoFactorInterface
+class User implements UserInterface, TwoFactorInterface
 {
     /**
-     * @ORM\Column(name="totpAuthenticatorProvisioningUri", type="string", nullable=true)
+     * @ORM\Column(name="totpSecret", type="string", nullable=true)
      */
-    private $totpAuthenticatorProvisioningUri;
+    private $totpSecret;
 
-    // [...]
-    
+    // [...]    
+
     public function isTotpAuthenticatorEnabled(): bool
     {
-        return $this->totpAuthenticatorProvisioningUri ? true : false;
+        return $this->totpSecret ? true : false;
     }
 
-    public function getTotpAuthenticatorProvisioningUri(): string
+    public function getTotpAuthenticationUsername(): string
     {
-        return $this->totpAuthenticatorProvisioningUri;
+        return $this->username;
     }
 
-    public function setTotpAuthenticatorProvisioningUri(?string $totpAuthenticatorProvisioningUri): void
+    public function getTotpAuthenticationConfiguration(): TotpConfigurationInterface
     {
-        $this->totpAuthenticatorProvisioningUri = $totpAuthenticatorProvisioningUri;
+        // You could persist the other configuration options in the user entity to make it individual per user.
+        return new TotpConfiguration($this->totpSecret, TotpConfiguration::ALGORITHM_SHA1, 20, 8);
     }
 }
 ```
 
-## Custom Parameters
-
-You can change the number of digits, the digest and the period of the temporary codes.
-
-Be warned that in case of modification, the generated provisioning Uri will not be compatible
-with Google Authenticator any more.
-You will have to use another application (e.g. FreeOTP on Android).
+## Configuration Options
 
 ```yaml
 scheb_two_factor:
     totp:
-        digits: 8
-        digest: 'sha256'
-        period: 20
+        enabled: true                  # If TOTP authentication should be enabled, default false
+        server_name: Server Name       # Server name used in QR code
+        issuer: Issuer Name            # Issuer name used in QR code
+        window: 1                      # How many codes before/after the current one would be accepted as valid
+        parameters:                    # Additional parameters added in the QR code
+            image: 'https://my-service/img/logo.png'
+        template: security/2fa_form.html.twig   # Template used to render the authentication form
 ```
 
-You can also set additional parameters that will be added to provisioning Uris. They will be common for all users.
-Custom parameters may not be supported by the applications, but can be very intersting to customize the QR Codes.
-In the example below, we add an `image` parameter with the Uri to the service logo. Some applications such as FreeOTP
-support this parameter and will associate the QR Code with that logo.
+## Additional parameter
+
+You can set additional parameters, that will be added to the provisioning URI, which is contained in the QR code.
+Parameters will be common for all users. Custom parameters may not be supported by all applications, but can be very
+interesting to customize the QR codes. In the example below, we add an `image` parameter with the URL to the service's
+logo. Some applications, such as FreeOTP, support this parameter and will associate the QR code with that logo.
 
 ```yaml
 scheb_two_factor:
@@ -100,66 +106,36 @@ scheb_two_factor:
         template: security/2fa_form.html.twig
 ```
 
-## Generating a Provisioning Uri
+## Generating a Secret Code
 
-The service `scheb_two_factor.security.totp_authenticator` provides a method to generate new Provisioning Uris for your users.
-In the example below, we use the e-mail as label, but you can use any other display name you want (e.g. the username).
+The service `scheb_two_factor.security.totp_authenticator` provides a method to generate new secret for TOTP
+authentication.
 
 ```php
-$totp = $container->get("scheb_two_factor.security.totp_authenticator")->generateNewTotp();
-$totp->setLabel(
-    $user->getEmail()
-);
-$provisioningUri = $totp->getProvisioningUri()
+$secret = $container->get("scheb_two_factor.security.totp_authenticator")->generateSecret();
 ```
 
-With Symfony 4 you use the dependency injection to get the services:
+With Symfony 4, you can use auto-wiring dependency injection to get the services:
 
 ```php
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInterface;
 
-public function index(TotpAuthenticatorInterface $twoFactor)
+public function generateSecret(TotpAuthenticatorInterface $totpAuthenticatorService)
 {
-    // ...
-    $totp = $twoFactor->generateNewTotp();
-    // ...
+    $secret = $totpAuthenticatorService->generateSecret();
 }
 ```
 
 ## QR Codes
 
-**Warning** To generate the QR-code an external service from Google is used. That means the user's personal secure code
-is transmitted to that service. This is considered a bad security practice. If you don't like this solution, you should
-generate the QR-code locally, for example with [endroid/qr-code-bundle](https://github.com/endroid/qr-code-bundle).
-
-In the configuration below, the Google QR Code generator service is replaced by our custom service. The data placeholder
-indicates that `[DATA]` in the Uri will be replaced by the data to be set in the QR Code.
-
-```yaml
-scheb_two_factor:
-    totp:
-        qr_code_generator: 'https://my-qr-code-generator/[DATA]'
-        qr_code_data_placeholder: '[DATA]'
-```
-
-If a user entity has a provisioning Uri stored, you can generate a nice-looking QR code from it, which can be scanned by the
-mobile application.
+To generate a QR code that can be scanned by the authenticator app, retrieve the QR code's content from TOTP service:
 
 ```php
-$totp = $container->get("scheb_two_factor.security.totp_authenticator")->getTotpForUser($user);
-$url = $container->get("scheb_two_factor.security.totp_authenticator")->getUrl($totp);
-echo '<img src="'.$url.'" />';
+$qrCodeContent = $container->get("scheb_two_factor.security.totp_authenticator")->getQRContent($user);
 ```
 
-You can then encode Provisioning Uri in a QR code the way you like (e.g. by using one of the many js-libraries).
- 
-```php
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInterface;
+Use a library such as [endroid/qr-code-bundle](https://github.com/endroid/qr-code-bundle) or one of the many JavaScript
+libraries to render the QR code image.
 
-public function index(TotpAuthenticatorInterface $twoFactor)
-{
-    // ...
-    $totp = $twoFactor->getTotpForUser($user);
-    $qrContent = $totp->getProvisioningUri()
-}
-```
+**Security note:** Keep the QR code content within your application. Render the image yourself. Do not pass the content
+to an external service, because this is exposing the secret code to that service.
