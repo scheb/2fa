@@ -40,6 +40,21 @@ external service is considered a bad security practise, the method
 Use the method `getQRContent()` on that same class to retrieve the content for the QR code and use a solutions like
 [endroid/qr-code-bundle](https://github.com/endroid/qr-code-bundle) to generate the QR code image yourself.
 
+### Translations
+
+The bundle's translations have been moved to its own domain `SchebTwoFactorBundle`. The prefix `scheb_two_factor.` has
+been removed on the translation keys. Please update in your templates: 
+
+Before:
+```twig
+{{ "scheb_two_factor.translation_key"|trans }}
+```
+
+After:
+```twig
+<p>{{ "translation_key"|trans({}, 'SchebTwoFactorBundle') }}
+```
+
 ## 2.x to 3.x
 
 ### Dependencies
