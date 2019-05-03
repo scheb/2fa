@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
+use Scheb\TwoFactorBundle\Security\Authorization\TwoFactorAccessDecider;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\Http\ParameterBagUtils;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\CsrfTokenValidator;
@@ -21,10 +22,8 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
-use Symfony\Component\Security\Http\AccessMapInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
@@ -90,16 +89,6 @@ class TwoFactorListener implements ListenerInterface
     private $trustedDeviceManager;
 
     /**
-     * @var AccessMapInterface
-     */
-    private $accessMap;
-
-    /**
-     * @var AccessDecisionManagerInterface
-     */
-    private $accessDecisionManager;
-
-    /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
@@ -113,6 +102,10 @@ class TwoFactorListener implements ListenerInterface
      * @var LoggerInterface
      */
     private $logger;
+    /**
+     * @var TwoFactorAccessDecider
+     */
+    private $twoFactorAccessDecider;
 
     public function __construct(
         TokenStorageInterface $tokenStorage,
@@ -125,8 +118,7 @@ class TwoFactorListener implements ListenerInterface
         CsrfTokenValidator $csrfTokenValidator,
         array $options,
         TrustedDeviceManagerInterface $trustedDeviceManager,
-        AccessMapInterface $accessMap,
-        AccessDecisionManagerInterface $accessDecisionManager,
+        TwoFactorAccessDecider $twoFactorAccessDecider,
         EventDispatcherInterface $eventDispatcher,
         TwoFactorTokenFactoryInterface $twoFactorTokenFactory,
         ?LoggerInterface $logger = null
@@ -144,12 +136,11 @@ class TwoFactorListener implements ListenerInterface
         $this->authenticationRequiredHandler = $authenticationRequiredHandler;
         $this->csrfTokenValidator = $csrfTokenValidator;
         $this->options = array_merge(self::DEFAULT_OPTIONS, $options);
+        $this->twoFactorAccessDecider = $twoFactorAccessDecider;
         $this->eventDispatcher = $eventDispatcher;
         $this->twoFactorTokenFactory = $twoFactorTokenFactory;
         $this->logger = $logger;
         $this->trustedDeviceManager = $trustedDeviceManager;
-        $this->accessMap = $accessMap;
-        $this->accessDecisionManager = $accessDecisionManager;
     }
 
     public function handle(GetResponseEvent $event)
@@ -168,8 +159,7 @@ class TwoFactorListener implements ListenerInterface
         }
 
         // Let routes pass, e.g. if a route needs to be callable during two-factor authentication
-        list($attributes) = $this->accessMap->getPatterns($request);
-        if (null !== $attributes && $this->accessDecisionManager->decide($currentToken, $attributes, $request)) {
+        if ($this->twoFactorAccessDecider->isAccessible($request, $currentToken)) {
             return;
         }
 

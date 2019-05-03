@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
-use Scheb\TwoFactorBundle\Security\Authorization\Voter\TwoFactorInProgressVoter;
+use Scheb\TwoFactorBundle\Security\Authorization\TwoFactorAccessDecider;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\Http\Firewall\TwoFactorListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\CsrfTokenValidator;
@@ -25,9 +25,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Http\AccessMapInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
@@ -92,14 +90,9 @@ class TwoFactorListenerTest extends TestCase
     private $twoFactorTokenFactory;
 
     /**
-     * @var MockObject|AccessMapInterface
+     * @var MockObject|TwoFactorAccessDecider
      */
-    private $accessMap;
-
-    /**
-     * @var MockObject|AccessDecisionManagerInterface
-     */
-    private $accessDecisionManager;
+    private $twoFactorAccessDecider;
 
     /**
      * @var MockObject|GetResponseEvent
@@ -139,8 +132,7 @@ class TwoFactorListenerTest extends TestCase
         $this->authenticationRequiredHandler = $this->createMock(AuthenticationRequiredHandlerInterface::class);
         $this->csrfTokenValidator = $this->createMock(CsrfTokenValidator::class);
         $this->trustedDeviceManager = $this->createMock(TrustedDeviceManagerInterface::class);
-        $this->accessMap = $this->createMock(AccessMapInterface::class);
-        $this->accessDecisionManager = $this->createMock(AccessDecisionManagerInterface::class);
+        $this->twoFactorAccessDecider = $this->createMock(TwoFactorAccessDecider::class);
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->twoFactorTokenFactory = $this->createMock(TwoFactorTokenFactory::class);
 
@@ -178,14 +170,16 @@ class TwoFactorListenerTest extends TestCase
             $this->csrfTokenValidator,
             $options,
             $this->trustedDeviceManager,
-            $this->accessMap,
-            $this->accessDecisionManager,
+            $this->twoFactorAccessDecider,
             $this->eventDispatcher,
             $this->twoFactorTokenFactory,
             $this->createMock(LoggerInterface::class)
         );
     }
 
+    /**
+     * @return MockObject|TokenInterface
+     */
     private function createTwoFactorToken($firewallName = self::FIREWALL_NAME, $authenticatedToken = null): MockObject
     {
         $twoFactorToken = $this->createMock(TwoFactorTokenInterface::class);
@@ -280,14 +274,9 @@ class TwoFactorListenerTest extends TestCase
 
     private function stubPathAccessGranted(bool $accessGranted): void
     {
-        $this->accessMap
+        $this->twoFactorAccessDecider
             ->expects($this->any())
-            ->method('getPatterns')
-            ->willReturn([[TwoFactorInProgressVoter::IS_AUTHENTICATED_2FA_IN_PROGRESS], 'https']);
-        $this->accessDecisionManager
-            ->expects($this->any())
-            ->method('decide')
-            ->with($this->isInstanceOf(TwoFactorTokenInterface::class), [TwoFactorInProgressVoter::IS_AUTHENTICATED_2FA_IN_PROGRESS], $this->request)
+            ->method('isAccessible')
             ->willReturn($accessGranted);
     }
 
