@@ -15,6 +15,7 @@ This bundle provides **two-factor authentication for your Symfony application**.
 - [How to create a custom two-factor authenticator](providers/custom.md)
 - [How to handle multiple activated authentication methods](multi_authentication.md)
 - [How to create a custom persister](persister.md)
+- [Troubleshooting (common issues)](troubleshooting.md)
 
 ## Two-Factor Authentication Methods
 
