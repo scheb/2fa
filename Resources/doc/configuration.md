@@ -111,7 +111,7 @@ security:
 
                 # If you have multiple user providers registered, Symfony's security extension requires you to configure
                 # a user provider. You're forced to configure this node, although it doesn't have any effect on the
-                # TwoFactorBundle. So set this to any of you user providers, it doesn't matter which one.
+                # TwoFactorBundle. So set this to any of your user providers, it doesn't matter which one.
                 provider: any_user_provider
 ```
 
