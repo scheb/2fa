@@ -27,6 +27,8 @@
         <service id="scheb_two_factor.security.access.access_decider" class="Scheb\TwoFactorBundle\Security\Authorization\TwoFactorAccessDecider">
             <argument type="service" id="security.access_map" />
             <argument type="service" id="security.access.decision_manager" />
+			<argument type="service" id="security.http_utils" />
+			<argument type="service" id="security.logout_url_generator" />
         </service>
 
 		<service id="scheb_two_factor.security.authentication.listener" class="Scheb\TwoFactorBundle\Security\Http\Firewall\TwoFactorListener" abstract="true">
