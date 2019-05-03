@@ -20,7 +20,7 @@
 			<argument type="service" id="scheb_two_factor.security.authentication.trust_resolver.inner" />
 		</service>
 
-		<service id="scheb_two_factor.security.access.authenticated_voter" class="Scheb\TwoFactorBundle\Security\Authentication\Voter\TwoFactorInProgressVoter">
+		<service id="scheb_two_factor.security.access.authenticated_voter" class="Scheb\TwoFactorBundle\Security\Authorization\Voter\TwoFactorInProgressVoter">
 			<tag name="security.voter" priority="249" />
 		</service>
 

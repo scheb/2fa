@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
-use Scheb\TwoFactorBundle\Security\Authentication\Voter\TwoFactorInProgressVoter;
+use Scheb\TwoFactorBundle\Security\Authorization\Voter\TwoFactorInProgressVoter;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\Http\Firewall\TwoFactorListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\CsrfTokenValidator;

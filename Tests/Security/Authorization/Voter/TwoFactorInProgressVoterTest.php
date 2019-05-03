@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Scheb\TwoFactorBundle\Tests\Security\Authentication\Voter;
+namespace Scheb\TwoFactorBundle\Tests\Security\Authorization\Voter;
 
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
-use Scheb\TwoFactorBundle\Security\Authentication\Voter\TwoFactorInProgressVoter;
+use Scheb\TwoFactorBundle\Security\Authorization\Voter\TwoFactorInProgressVoter;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
