@@ -22,7 +22,7 @@ class ParameterBagUtils
      * @param Request $request The request
      * @param string  $path    The key
      *
-     * @return mixed
+     * @return string|null
      *
      * @throws \InvalidArgumentException when the given path is malformed
      */

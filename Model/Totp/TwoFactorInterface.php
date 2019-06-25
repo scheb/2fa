@@ -21,7 +21,7 @@ interface TwoFactorInterface
     /**
      * Return the configuration for TOTP authentication.
      *
-     * @return TotpConfigurationInterface
+     * @return TotpConfigurationInterface|null
      */
     public function getTotpAuthenticationConfiguration(): ?TotpConfigurationInterface;
 }
