@@ -92,7 +92,7 @@ class TrustedDeviceHandlerTest extends AuthenticationHandlerTestCase
         $this->trustedDeviceManager
             ->expects($this->once())
             ->method('addTrustedDevice')
-            ->willReturn($user, 'firewallName');
+            ->with($user, 'firewallName');
 
         $trustedHandler->beginTwoFactorAuthentication($context);
     }
