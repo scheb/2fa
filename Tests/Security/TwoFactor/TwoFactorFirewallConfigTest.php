@@ -10,6 +10,8 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 class TwoFactorFirewallConfigTest extends TestCase
 {
     private const FULL_OPTIONS = [
+        'check_path' => 'check_path_route_name',
+        'auth_form_path' => 'auth_form_path_route_name',
         'multi_factor' => true,
         'auth_code_parameter_name' => 'auth_code_param',
         'trusted_parameter_name' => 'trusted_param',
@@ -84,5 +86,41 @@ class TwoFactorFirewallConfigTest extends TestCase
     {
         $returnValue = $this->createConfig(self::FULL_OPTIONS)->isCsrfProtectionEnabled();
         $this->assertTrue($returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function getAuthFormPath_optionSet_returnThatValue(): void
+    {
+        $returnValue = $this->createConfig()->getAuthFormPath();
+        $this->assertEquals('auth_form_path_route_name', $returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function getAuthFormPath_optionNotSet_returnDefault(): void
+    {
+        $returnValue = $this->createConfig([])->getAuthFormPath();
+        $this->assertEquals('/2fa', $returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function getCheckPath_optionSet_returnThatValue(): void
+    {
+        $returnValue = $this->createConfig()->getCheckPath();
+        $this->assertEquals('check_path_route_name', $returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function getCheckPath_optionNotSet_returnDefault(): void
+    {
+        $returnValue = $this->createConfig([])->getCheckPath();
+        $this->assertEquals('/2fa_check', $returnValue);
     }
 }

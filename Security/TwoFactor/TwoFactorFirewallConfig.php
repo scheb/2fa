@@ -47,4 +47,14 @@ class TwoFactorFirewallConfig
     {
         return $this->options['csrf_token_id'] ?? TwoFactorFactory::DEFAULT_CSRF_TOKEN_ID;
     }
+
+    public function getAuthFormPath(): string
+    {
+        return $this->options['auth_form_path'] ?? TwoFactorFactory::DEFAULT_AUTH_FORM_PATH;
+    }
+
+    public function getCheckPath(): string
+    {
+        return $this->options['check_path'] ?? TwoFactorFactory::DEFAULT_CHECK_PATH;
+    }
 }
