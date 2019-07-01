@@ -136,6 +136,28 @@ class AuthenticationProviderDecoratorTest extends TestCase
 
     /**
      * @test
+     */
+    public function authenticate_refreshAuthenticatedToken_dontStartTwoFactorAuthentication(): void
+    {
+        $originalAuthenticatedToken = $this->createMock(TokenInterface::class);
+        $originalAuthenticatedToken
+            ->expects($this->any())
+            ->method('isAuthenticated')
+            ->willReturn(true);
+
+        $refreshedAuthenticatedToken = $this->createMock(TokenInterface::class);
+        $this->stubDecoratedProviderReturnsToken($refreshedAuthenticatedToken);
+
+        $this->twoFactorAuthenticationHandler
+            ->expects($this->never())
+            ->method($this->anything());
+
+        $returnValue = $this->decorator->authenticate($originalAuthenticatedToken);
+        $this->assertSame($refreshedAuthenticatedToken, $returnValue);
+    }
+
+    /**
+     * @test
      * @dataProvider provideIgnoredToken
      */
     public function authenticate_ignoredToken_returnThatToken($ignoredToken): void

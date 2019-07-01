@@ -62,7 +62,15 @@ class AuthenticationProviderDecorator implements AuthenticationProviderInterface
 
     public function authenticate(TokenInterface $token)
     {
+        $wasAlreadyAuthenticated = $token->isAuthenticated();
         $token = $this->decoratedAuthenticationProvider->authenticate($token);
+
+        // Only trigger two-factor authentication when the provider was called with an unauthenticated token. When we
+        // get an authenticated token passed, we're not doing a login, but the system refreshes the token. Then we don't
+        // want to start two-factor authentication or we're ending in an endless loop.
+        if ($wasAlreadyAuthenticated) {
+            return $token;
+        }
 
         // AnonymousToken and TwoFactorToken can be ignored
         // in case of Guard, it can return null due to having multiple guard authenticators
