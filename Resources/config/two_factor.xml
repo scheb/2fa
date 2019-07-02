@@ -59,5 +59,13 @@
 			<argument type="service" id="security.logout_url_generator" />
 			<argument>%scheb_two_factor.trusted_device.enabled%</argument>
         </service>
+
+		<service id="scheb_two_factor.security.form_renderer" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer" lazy="true">
+			<argument type="service" id="twig" />
+			<argument>%scheb_two_factor.email.template%</argument>
+		</service>
+
+		<!-- Alias for auto-wiring -->
+		<service id="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface" alias="scheb_two_factor.security.form_renderer" public="true" />
 	</services>
 </container>

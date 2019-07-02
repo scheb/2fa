@@ -132,8 +132,8 @@ class SchebTwoFactorExtensionTest extends TestCase
 
         $this->assertHasDefinition('scheb_two_factor.security.google_totp_factory');
         $this->assertHasDefinition('scheb_two_factor.security.google_authenticator');
-        $this->assertHasDefinition('scheb_two_factor.security.google.form_renderer');
         $this->assertHasDefinition('scheb_two_factor.security.google.provider');
+        $this->assertAlias('scheb_two_factor.security.google.form_renderer', 'scheb_two_factor.security.form_renderer');
     }
 
     /**
@@ -146,8 +146,8 @@ class SchebTwoFactorExtensionTest extends TestCase
 
         $this->assertHasDefinition('scheb_two_factor.security.totp_factory');
         $this->assertHasDefinition('scheb_two_factor.security.totp_authenticator');
-        $this->assertHasDefinition('scheb_two_factor.security.totp.form_renderer');
         $this->assertHasDefinition('scheb_two_factor.security.totp.provider');
+        $this->assertAlias('scheb_two_factor.security.totp.form_renderer', 'scheb_two_factor.security.form_renderer');
     }
 
     /**
@@ -161,6 +161,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasDefinition('scheb_two_factor.security.email.default_auth_code_mailer');
         $this->assertHasDefinition('scheb_two_factor.security.email.default_code_generator');
         $this->assertHasDefinition('scheb_two_factor.security.email.provider');
+        $this->assertAlias('scheb_two_factor.security.email.form_renderer', 'scheb_two_factor.security.form_renderer');
     }
 
     /**

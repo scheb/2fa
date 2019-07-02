@@ -12,10 +12,7 @@
 			<argument>%scheb_two_factor.totp.window%</argument>
 		</service>
 
-		<service id="scheb_two_factor.security.totp.form_renderer" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer" lazy="true">
-			<argument type="service" id="twig" />
-			<argument>%scheb_two_factor.totp.template%</argument>
-		</service>
+		<service id="scheb_two_factor.security.totp.form_renderer" alias="scheb_two_factor.security.form_renderer" />
 
 		<service id="scheb_two_factor.security.totp.provider" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorTwoFactorProvider">
 			<tag name="scheb_two_factor.provider" alias="totp" />

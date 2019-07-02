@@ -12,10 +12,7 @@
 			<argument>%scheb_two_factor.google.window%</argument>
 		</service>
 
-		<service id="scheb_two_factor.security.google.form_renderer" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer" lazy="true">
-			<argument type="service" id="twig" />
-			<argument>%scheb_two_factor.google.template%</argument>
-		</service>
+		<service id="scheb_two_factor.security.google.form_renderer" alias="scheb_two_factor.security.form_renderer" />
 
 		<service id="scheb_two_factor.security.google.provider" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorTwoFactorProvider">
 			<tag name="scheb_two_factor.provider" alias="google" />
