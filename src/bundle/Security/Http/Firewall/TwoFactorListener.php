@@ -163,7 +163,8 @@ class TwoFactorListener
                 $beginToken->getAuthenticatedToken(),
                 $authCode,
                 $beginToken->getProviderKey(),
-                $beginToken->getTwoFactorProviders()
+                $beginToken->getTwoFactorProviders(),
+                $beginToken->getPreparedTwoFactorProviders()
             );
             $token->setAttributes($beginToken->getAttributes());
 

@@ -206,9 +206,9 @@ class TwoFactorFactory implements SecurityFactoryInterface
         $firewallConfigId = self::PROVIDER_PREPARATION_LISTENER_ID_PREFIX.$firewallName;
         $container
             ->setDefinition($firewallConfigId, new ChildDefinition(self::PROVIDER_PREPARATION_LISTENER_DEFINITION_ID))
-            ->replaceArgument(3, $firewallName)
-            ->replaceArgument(4, $config['prepare_on_login'] ?? self::DEFAULT_PREPARE_ON_LOGIN)
-            ->replaceArgument(5, $config['prepare_on_access_denied'] ?? self::DEFAULT_PREPARE_ON_ACCESS_DENIED)
+            ->replaceArgument(2, $firewallName)
+            ->replaceArgument(3, $config['prepare_on_login'] ?? self::DEFAULT_PREPARE_ON_LOGIN)
+            ->replaceArgument(4, $config['prepare_on_access_denied'] ?? self::DEFAULT_PREPARE_ON_ACCESS_DENIED)
             ->addTag('kernel.event_subscriber');
     }
 

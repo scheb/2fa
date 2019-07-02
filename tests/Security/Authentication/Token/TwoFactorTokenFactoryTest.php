@@ -19,12 +19,19 @@ class TwoFactorTokenFactoryTest extends TestCase
         $authenticatedToken = $this->createMock(TokenInterface::class);
         $twoFactorTokenFactory = new TwoFactorTokenFactory();
 
-        $twoFactorToken = $twoFactorTokenFactory->create($authenticatedToken, 'credentials', 'firewallName', ['test1', 'test2']);
+        $twoFactorToken = $twoFactorTokenFactory->create(
+            $authenticatedToken,
+            'credentials',
+            'firewallName',
+            ['test1', 'test2'],
+            ['test1']
+        );
 
         $this->assertInstanceOf(TwoFactorToken::class, $twoFactorToken);
         $this->assertSame($authenticatedToken, $twoFactorToken->getAuthenticatedToken());
         $this->assertEquals('credentials', $twoFactorToken->getCredentials());
         $this->assertEquals('firewallName', $twoFactorToken->getProviderKey());
         $this->assertEquals(['test1', 'test2'], $twoFactorToken->getTwoFactorProviders());
+        $this->assertEquals(['test1'], $twoFactorToken->getPreparedTwoFactorProviders());
     }
 }

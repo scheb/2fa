@@ -35,12 +35,23 @@ class TwoFactorToken implements TwoFactorTokenInterface
      */
     private $twoFactorProviders;
 
-    public function __construct(TokenInterface $authenticatedToken, ?string $credentials, string $providerKey, array $twoFactorProviders)
-    {
+    /**
+     * @var bool[]
+     */
+    private $preparedProviders = [];
+
+    public function __construct(
+        TokenInterface $authenticatedToken,
+        ?string $credentials,
+        string $providerKey,
+        array $twoFactorProviders,
+        array $preparedTwoFactorProviders
+    ) {
         $this->authenticatedToken = $authenticatedToken;
         $this->credentials = $credentials;
         $this->providerKey = $providerKey;
         $this->twoFactorProviders = $twoFactorProviders;
+        $this->preparedProviders = array_fill_keys($preparedTwoFactorProviders, true);
     }
 
     public function getUser()
@@ -106,8 +117,27 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return false !== $first ? $first : null;
     }
 
+    public function isTwoFactorProviderPrepared(string $providerName): bool
+    {
+        return $this->preparedProviders[$providerName] ?? false;
+    }
+
+    public function setTwoFactorProviderPrepared(string $providerName): void
+    {
+        $this->preparedProviders[$providerName] = true;
+    }
+
+    public function getPreparedTwoFactorProviders(): array
+    {
+        return array_keys($this->preparedProviders);
+    }
+
     public function setTwoFactorProviderComplete(string $providerName): void
     {
+        if (!$this->isTwoFactorProviderPrepared($providerName)) {
+            throw new \LogicException(sprintf('Two-factor provider "%s" cannot be completed because it was not prepared.', $providerName));
+        }
+
         $this->removeTwoFactorProvider($providerName);
     }
 
@@ -145,7 +175,14 @@ class TwoFactorToken implements TwoFactorTokenInterface
 
     public function __serialize(): array
     {
-        return [$this->authenticatedToken, $this->credentials, $this->providerKey, $this->attributes, $this->twoFactorProviders];
+        return [
+            $this->authenticatedToken,
+            $this->credentials,
+            $this->providerKey,
+            $this->attributes,
+            $this->twoFactorProviders,
+            $this->preparedProviders,
+        ];
     }
 
     // Compatibility for Symfony 4.4 & PHP < 7.4
@@ -156,7 +193,14 @@ class TwoFactorToken implements TwoFactorTokenInterface
 
     public function __unserialize(array $data): void
     {
-        [$this->authenticatedToken, $this->credentials, $this->providerKey, $this->attributes, $this->twoFactorProviders] = $data;
+        [
+            $this->authenticatedToken,
+            $this->credentials,
+            $this->providerKey,
+            $this->attributes,
+            $this->twoFactorProviders,
+            $this->preparedProviders,
+        ] = $data;
     }
 
     // Compatibility for Symfony 4.4 & PHP < 7.4

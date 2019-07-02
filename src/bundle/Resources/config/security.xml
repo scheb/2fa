@@ -13,7 +13,6 @@
 			<argument /> <!-- Two-factor firewall config -->
 			<argument type="service" id="scheb_two_factor.provider_registry" />
 			<argument type="service" id="scheb_two_factor.backup_code_manager" on-invalid="null" />
-			<argument type="service" id="scheb_two_factor.provider_preparation_recorder" />
 		</service>
 
 		<service id="scheb_two_factor.security.authentication.trust_resolver" class="Scheb\TwoFactorBundle\Security\Authentication\AuthenticationTrustResolver" decorates="security.authentication.trust_resolver">
@@ -53,7 +52,6 @@
 
 		<service id="scheb_two_factor.security.provider_preparation_listener" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationListener" abstract="true">
 			<argument type="service" id="scheb_two_factor.provider_registry" />
-			<argument type="service" id="scheb_two_factor.provider_preparation_recorder" />
 			<argument type="service" id="logger" on-invalid="null" />
 			<argument type="string" /> <!-- Firewall name -->
 			<argument /> <!-- prepareOnLogin -->

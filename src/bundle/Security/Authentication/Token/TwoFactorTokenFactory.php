@@ -8,8 +8,19 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class TwoFactorTokenFactory implements TwoFactorTokenFactoryInterface
 {
-    public function create(TokenInterface $authenticatedToken, ?string $credentials, string $providerKey, array $twoFactorProviders): TwoFactorTokenInterface
-    {
-        return new TwoFactorToken($authenticatedToken, $credentials, $providerKey, $twoFactorProviders);
+    public function create(
+        TokenInterface $authenticatedToken,
+        ?string $credentials,
+        string $providerKey,
+        array $twoFactorProviders,
+        array $preparedTwoFactorProviders = []
+    ): TwoFactorTokenInterface {
+        return new TwoFactorToken(
+            $authenticatedToken,
+            $credentials,
+            $providerKey,
+            $twoFactorProviders,
+            $preparedTwoFactorProviders
+        );
     }
 }

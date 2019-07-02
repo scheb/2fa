@@ -23,6 +23,9 @@ abstract class AbstractAuthenticationHandlerTestCase extends TestCase
         return $this->createMock(AuthenticationHandlerInterface::class);
     }
 
+    /**
+     * @return MockObject|AuthenticationContextInterface
+     */
     protected function createAuthenticationContext($request = null, $token = null, $user = null): MockObject
     {
         $context = $this->createMock(AuthenticationContextInterface::class);

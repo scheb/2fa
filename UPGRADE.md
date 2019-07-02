@@ -62,4 +62,17 @@ The constructor of `Scheb\TwoFactorBundle\Controller\FormController` now takes a
 `Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface` as the fifth argument. If you have
 extended the controller, please update your service definition accordingly.
 
+`Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface` was extended with new methods to store the
+preparation state of two-factor authentication providers. Methods `isTwoFactorProviderPrepared`,
+`setTwoFactorProviderPrepared` and `getPreparedTwoFactorProviders` have been added. As part of this change,
+`Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface::create()` was extended with another
+argument `array $preparedTwoFactorProviders`. If you're using your own implementation of `TwoFactorTokenInterface` or
+`TwoFactorTokenFactoryInterface`, please update your code. See
+`Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken` and
+`Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactory` for a reference implementation.
+
 `Scheb\TwoFactorBundle\Security\Authentication\Exception\InvalidTwoFactorCodeException::setMessageKey` has been removed.
+
+### Behavioural
+
+Two-factor providers are now prepared on the `kernel.response` event (was `kernel.finish_request` before).

@@ -34,10 +34,6 @@
 			<argument type="collection" /> <!-- Firewall configs -->
 		</service>
 
-		<service id="scheb_two_factor.provider_preparation_recorder" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationRecorder">
-			<argument type="service" id="session" />
-		</service>
-
 		<!-- Alias for auto-wiring -->
 		<service id="Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallContext" alias="scheb_two_factor.firewall_context" public="true" />
 

@@ -36,6 +36,7 @@ class TwoFactorListenerTest extends TestCase
 {
     private const FIREWALL_NAME = 'firewallName';
     private const TWO_FACTOR_PROVIDERS = ['provider1', 'provider2'];
+    private const PREPARED_TWO_FACTOR_PROVIDERS = ['provider1'];
 
     /**
      * @var MockObject|TokenStorageInterface
@@ -184,6 +185,10 @@ class TwoFactorListenerTest extends TestCase
             ->expects($this->any())
             ->method('getTwoFactorProviders')
             ->willReturn(self::TWO_FACTOR_PROVIDERS);
+        $twoFactorToken
+            ->expects($this->any())
+            ->method('getPreparedTwoFactorProviders')
+            ->willReturn(self::PREPARED_TWO_FACTOR_PROVIDERS);
         $twoFactorToken
             ->expects($this->any())
             ->method('getAuthenticatedToken')
@@ -437,7 +442,7 @@ class TwoFactorListenerTest extends TestCase
         $this->twoFactorTokenFactory
             ->expects($this->once())
             ->method('create')
-            ->with($authenticatedToken, 'authCode', 'firewallName', self::TWO_FACTOR_PROVIDERS)
+            ->with($authenticatedToken, 'authCode', 'firewallName', self::TWO_FACTOR_PROVIDERS, self::PREPARED_TWO_FACTOR_PROVIDERS)
             ->willReturn($credentialToken);
 
         $this->authenticationManager

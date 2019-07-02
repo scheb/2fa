@@ -313,9 +313,9 @@ EOF;
 
         $this->assertTrue($this->container->hasDefinition('security.authentication.provider_preparation_listener.two_factor.firewallName'));
         $definition = $this->container->getDefinition('security.authentication.provider_preparation_listener.two_factor.firewallName');
-        $this->assertEquals(self::FIREWALL_NAME, $definition->getArgument(3));
-        $this->assertTrue($definition->getArgument(4));
-        $this->assertFalse($definition->getArgument(5));
+        $this->assertEquals(self::FIREWALL_NAME, $definition->getArgument(2));
+        $this->assertTrue($definition->getArgument(3));
+        $this->assertFalse($definition->getArgument(4));
         $tag = $definition->getTag('kernel.event_subscriber');
         $this->assertCount(1, $tag, 'Must have the "kernel.event_subscriber" tag assigned');
     }
