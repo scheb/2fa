@@ -162,18 +162,19 @@ class TwoFactorListener
             return;
         }
 
+        if ($this->isAuthFormRequest($request)) {
+            $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::REQUIRE, $request, $currentToken);
+
+            return;
+        }
+
         // Let routes pass, e.g. if a route needs to be callable during two-factor authentication
         if ($this->twoFactorAccessDecider->isAccessible($request, $currentToken)) {
             return;
         }
 
-        if (!$this->isAuthFormRequest($request)) {
-            $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::REQUIRE, $request, $currentToken);
-            $response = $this->authenticationRequiredHandler->onAuthenticationRequired($request, $currentToken);
-            $event->setResponse($response);
-
-            return;
-        }
+        $response = $this->authenticationRequiredHandler->onAuthenticationRequired($request, $currentToken);
+        $event->setResponse($response);
     }
 
     private function isCheckAuthCodeRequest(Request $request): bool

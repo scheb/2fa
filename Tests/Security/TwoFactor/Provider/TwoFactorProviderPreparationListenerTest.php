@@ -12,6 +12,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparati
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class TwoFactorProviderPreparationListenerTest extends TestCase
 {
@@ -27,6 +30,11 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
      * @var MockObject|Request
      */
     private $request;
+
+    /**
+     * @var MockObject|SessionInterface
+     */
+    private $session;
 
     /**
      * @var MockObject|TwoFactorToken
@@ -61,8 +69,10 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
             ->method('getUser')
             ->willReturn($this->user);
 
+        $this->session = $this->createMock(SessionInterface::class);
+
         $this->providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
-        $this->listener = new TwoFactorProviderPreparationListener($this->providerRegistry);
+        $this->listener = new TwoFactorProviderPreparationListener($this->providerRegistry, $this->session);
     }
 
     private function createTwoFactorAuthenticationEvent(): TwoFactorAuthenticationEvent
@@ -78,11 +88,25 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $event = $this->createTwoFactorAuthenticationEvent();
         $twoFactorProvider = $this->createMock(TwoFactorProviderInterface::class);
 
+        $this->session
+            ->expects($this->once())
+            ->method('get')
+            ->with('2fa_called_providers')
+            ->willReturn([]);
+
         $this->providerRegistry
             ->expects($this->once())
             ->method('getProvider')
             ->with(self::CURRENT_PROVIDER_NAME)
             ->willReturn($twoFactorProvider);
+
+        $this->session
+            ->expects($this->once())
+            ->method('set')
+            ->with(
+                '2fa_called_providers',
+                [self::CURRENT_PROVIDER_NAME]
+            );
 
         $twoFactorProvider
             ->expects($this->once())
@@ -90,5 +114,28 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
             ->with($this->identicalTo($this->user));
 
         $this->listener->onTwoFactorAuthenticationRequest($event);
+        $this->listener->onKernelResponse($this->createMock(FilterResponseEvent::class));
+    }
+
+    /**
+     * @test
+     */
+    public function onTwoFactorAuthenticationRequest_authenticationRequired_alreadyPrepared_doNothing(): void
+    {
+        $event = $this->createTwoFactorAuthenticationEvent();
+        $twoFactorProvider = $this->createMock(TwoFactorProviderInterface::class);
+
+        $this->session
+            ->expects($this->once())
+            ->method('get')
+            ->with('2fa_called_providers')
+            ->willReturn([self::CURRENT_PROVIDER_NAME]);
+
+        $this->providerRegistry
+            ->expects($this->never())
+            ->method('getProvider');
+
+        $this->listener->onTwoFactorAuthenticationRequest($event);
+        $this->listener->onKernelResponse($this->createMock(FilterResponseEvent::class));
     }
 }
