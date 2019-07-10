@@ -62,7 +62,7 @@
 
 		<service id="scheb_two_factor.security.form_renderer" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer" lazy="true">
 			<argument type="service" id="twig" />
-			<argument>%scheb_two_factor.email.template%</argument>
+			<argument>@SchebTwoFactor/Authentication/form.html.twig</argument>
 		</service>
 
 		<!-- Alias for auto-wiring -->
