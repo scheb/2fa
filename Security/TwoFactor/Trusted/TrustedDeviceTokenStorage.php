@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class TrustedDeviceTokenStorage
 {
-    const TOKEN_DELIMITER = ';';
+    private const TOKEN_DELIMITER = ';';
 
     /**
      * @var RequestStack

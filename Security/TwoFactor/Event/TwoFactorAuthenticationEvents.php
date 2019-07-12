@@ -10,7 +10,7 @@ class TwoFactorAuthenticationEvents
      * When two-factor authentication is required from the user. This normally results in a redirect to the two-factor
      * authentication form.
      */
-    const REQUIRE = 'scheb_two_factor.authentication.require';
+    public const REQUIRE = 'scheb_two_factor.authentication.require';
 
     /**
      * When the two-factor authentication form is shown.
@@ -20,21 +20,21 @@ class TwoFactorAuthenticationEvents
     /**
      * When two-factor authentication is attempted, dispatched before the code is checked.
      */
-    const ATTEMPT = 'scheb_two_factor.authentication.attempt';
+    public const ATTEMPT = 'scheb_two_factor.authentication.attempt';
 
     /**
      * When two-factor authentication was successful (code was valid) for a single provider.
      */
-    const SUCCESS = 'scheb_two_factor.authentication.success';
+    public const SUCCESS = 'scheb_two_factor.authentication.success';
 
     /**
      * When two-factor authentication failed (code was invalid) for a single provider.
      */
-    const FAILURE = 'scheb_two_factor.authentication.failure';
+    public const FAILURE = 'scheb_two_factor.authentication.failure';
 
     /**
      * When the entire two-factor authentication process was completed successfully, that means two-factor authentication
      * was successful for all providers and the user is now fully authenticated.
      */
-    const COMPLETE = 'scheb_two_factor.authentication.complete';
+    public const COMPLETE = 'scheb_two_factor.authentication.complete';
 }

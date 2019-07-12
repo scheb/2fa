@@ -15,9 +15,9 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 class DefaultAuthenticationRequiredHandlerTest extends TestCase
 {
-    const FORM_PATH = '/form_path';
-    const CHECK_PATH = '/check_path';
-    const FIREWALL_NAME = 'firewallName';
+    private const FORM_PATH = '/form_path';
+    private const CHECK_PATH = '/check_path';
+    private const FIREWALL_NAME = 'firewallName';
 
     /**
      * @var MockObject|HttpUtils

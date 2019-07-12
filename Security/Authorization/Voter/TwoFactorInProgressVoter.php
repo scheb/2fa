@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 class TwoFactorInProgressVoter implements VoterInterface
 {
-    const IS_AUTHENTICATED_2FA_IN_PROGRESS = 'IS_AUTHENTICATED_2FA_IN_PROGRESS';
+    public const IS_AUTHENTICATED_2FA_IN_PROGRESS = 'IS_AUTHENTICATED_2FA_IN_PROGRESS';
 
     public function vote(TokenInterface $token, $subject, array $attributes)
     {

@@ -12,7 +12,7 @@ use Twig\Environment;
 
 class DefaultTwoFactorFormRendererTest extends TestCase
 {
-    const TEMPLATE = 'template.html.twig';
+    private const TEMPLATE = 'template.html.twig';
 
     /**
      * @var MockObject|Environment

@@ -18,10 +18,10 @@ use Symfony\Component\Yaml\Parser;
 
 class TwoFactorFactoryTest extends TestCase
 {
-    const FIREWALL_NAME = 'firewallName';
-    const DEFAULT_CONFIG = ['config' => 'value'];
-    const USER_PROVIDER = 'userProvider';
-    const DEFAULT_ENTRY_POINT = 'defaultEntryPoint';
+    private const FIREWALL_NAME = 'firewallName';
+    private const DEFAULT_CONFIG = ['config' => 'value'];
+    private const USER_PROVIDER = 'userProvider';
+    private const DEFAULT_ENTRY_POINT = 'defaultEntryPoint';
 
     /**
      * @var TwoFactorFactory
