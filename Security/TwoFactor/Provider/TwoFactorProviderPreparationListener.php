@@ -38,7 +38,7 @@ class TwoFactorProviderPreparationListener
         $this->twoFactorToken = $event->getToken();
     }
 
-    public function onKernelResponse(): void
+    public function onKernelTerminate(): void
     {
         if (!$this->twoFactorToken instanceof TwoFactorToken) {
             return;

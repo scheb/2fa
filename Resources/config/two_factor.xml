@@ -48,7 +48,7 @@
 			<argument type="service" id="scheb_two_factor.provider_registry" />
 			<argument type="service" id="session" />
 			<tag name="kernel.event_listener" event="scheb_two_factor.authentication.require" method="onTwoFactorAuthenticationRequest" />
-			<tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" />
+			<tag name="kernel.event_listener" event="kernel.terminate" method="onKernelTerminate" />
 		</service>
 
 		<!-- Alias for auto-wiring -->
