@@ -25,15 +25,31 @@ class InvalidTwoFactorCodeException extends AuthenticationException
 
     public function serialize()
     {
-        return serialize(array(
-            $this->messageKey,
-            parent::serialize(),
-        ));
+        return serialize($this->__serialize());
     }
 
-    public function unserialize($str)
+    // Symfony 4.3 / PHP 7.4
+    public function __serialize(): array
     {
-        list($this->messageKey, $parentData) = unserialize($str);
-        parent::unserialize($parentData);
+        $parentHasNewInterface = method_exists(get_parent_class($this), '__serialize');
+        $parentData = $parentHasNewInterface ? parent::__serialize() : parent::serialize();
+
+        return [$this->messageKey, $parentData];
+    }
+
+    public function unserialize($serialized)
+    {
+        $this->__unserialize(\is_array($serialized) ? $serialized : unserialize($serialized));
+    }
+
+    // Symfony 4.3 / PHP 7.4
+    public function __unserialize(array $data): void
+    {
+        [$this->messageKey, $parentData] = $data;
+        if (\is_array($parentData)) {
+            parent::__unserialize($parentData);
+        } else {
+            parent::unserialize($parentData);
+        }
     }
 }

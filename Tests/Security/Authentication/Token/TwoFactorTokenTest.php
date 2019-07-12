@@ -8,6 +8,7 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class TwoFactorTokenTest extends TestCase
 {
@@ -95,5 +96,18 @@ class TwoFactorTokenTest extends TestCase
         $this->twoFactorToken->setTwoFactorProviderComplete('provider1');
         $this->twoFactorToken->setTwoFactorProviderComplete('provider2');
         $this->assertTrue($this->twoFactorToken->allTwoFactorProvidersAuthenticated());
+    }
+
+    /**
+     * @test
+     */
+    public function serialize_tokenGiven_unserializeIdenticalToken(): void
+    {
+        $innerToken = new UsernamePasswordToken('username', 'credentials', 'firewallName', ['ROLE']);
+        $twoFactorToken = new TwoFactorToken($innerToken, 'twoFactorCode', 'firewallName', ['2faProvider']);
+
+        $unserializedToken = unserialize(serialize($twoFactorToken));
+
+        $this->assertEquals($twoFactorToken, $unserializedToken);
     }
 }

@@ -62,6 +62,12 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return [];
     }
 
+    // Symfony 4.3
+    public function getRoleNames(): array
+    {
+        return $this->getRoles();
+    }
+
     public function getCredentials()
     {
         return $this->credentials;
@@ -127,14 +133,26 @@ class TwoFactorToken implements TwoFactorTokenInterface
         throw new \RuntimeException('Cannot change authenticated once initialized.');
     }
 
+    // Symfony 4.3 / PHP 7.4
+    public function __serialize(): array
+    {
+        return [$this->authenticatedToken, $this->credentials, $this->providerKey, $this->attributes, $this->twoFactorProviders];
+    }
+
     public function serialize()
     {
-        return serialize([$this->authenticatedToken, $this->credentials, $this->providerKey, $this->attributes, $this->twoFactorProviders]);
+        return serialize($this->__serialize());
+    }
+
+    // Symfony 4.3 / PHP 7.4
+    public function __unserialize(array $data): void
+    {
+        [$this->authenticatedToken, $this->credentials, $this->providerKey, $this->attributes, $this->twoFactorProviders] = $data;
     }
 
     public function unserialize($serialized)
     {
-        list($this->authenticatedToken, $this->credentials, $this->providerKey, $this->attributes, $this->twoFactorProviders) = unserialize($serialized);
+        $this->__unserialize(\is_array($serialized) ? $serialized : unserialize($serialized));
     }
 
     public function getAttributes()
