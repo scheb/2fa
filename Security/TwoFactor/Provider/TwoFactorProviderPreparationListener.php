@@ -7,7 +7,6 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 class TwoFactorProviderPreparationListener
 {
@@ -34,12 +33,12 @@ class TwoFactorProviderPreparationListener
         $this->session = $session;
     }
 
-    public function onTwoFactorAuthenticationRequest(TwoFactorAuthenticationEvent $event)
+    public function onTwoFactorAuthenticationRequest(TwoFactorAuthenticationEvent $event): void
     {
         $this->twoFactorToken = $event->getToken();
     }
 
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(): void
     {
         if (!$this->twoFactorToken instanceof TwoFactorToken) {
             return;
@@ -47,12 +46,21 @@ class TwoFactorProviderPreparationListener
 
         $user = $this->twoFactorToken->getUser();
         $providerName = $this->twoFactorToken->getCurrentTwoFactorProvider();
+        $firewallName = $this->twoFactorToken->getProviderKey();
+
         $calledProviders = $this->session->get(self::CALLED_PROVIDERS_SESSION_KEY, []);
-        if (in_array($providerName, $calledProviders, true)) {
+        $firewallCalledProviders = $calledProviders[$firewallName] ?? [];
+
+        if (in_array($providerName, $firewallCalledProviders, true)) {
             return;
         }
-        $calledProviders[] = $providerName;
-        $this->session->set(self::CALLED_PROVIDERS_SESSION_KEY, $calledProviders);
+
+        if (!isset($calledProviders[$firewallName])) {
+            $calledProviders[$firewallName] = [];
+        }
+        $calledProviders[$firewallName][] = $providerName;
+
         $this->providerRegistry->getProvider($providerName)->prepareAuthentication($user);
+        $this->session->set(self::CALLED_PROVIDERS_SESSION_KEY, $calledProviders);
     }
 }

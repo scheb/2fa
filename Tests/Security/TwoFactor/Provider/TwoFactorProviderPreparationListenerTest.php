@@ -13,8 +13,6 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class TwoFactorProviderPreparationListenerTest extends TestCase
 {
@@ -92,7 +90,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
             ->expects($this->once())
             ->method('get')
             ->with('2fa_called_providers')
-            ->willReturn([]);
+            ->willReturn(['otherFirewallName' => [self::CURRENT_PROVIDER_NAME]]);
 
         $this->providerRegistry
             ->expects($this->once())
@@ -105,7 +103,10 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
             ->method('set')
             ->with(
                 '2fa_called_providers',
-                [self::CURRENT_PROVIDER_NAME]
+                [
+                    'otherFirewallName' => [self::CURRENT_PROVIDER_NAME],
+                    self::FIREWALL_NAME => [self::CURRENT_PROVIDER_NAME],
+                ]
             );
 
         $twoFactorProvider
@@ -114,7 +115,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
             ->with($this->identicalTo($this->user));
 
         $this->listener->onTwoFactorAuthenticationRequest($event);
-        $this->listener->onKernelResponse($this->createMock(FilterResponseEvent::class));
+        $this->listener->onKernelResponse();
     }
 
     /**
@@ -123,19 +124,18 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
     public function onTwoFactorAuthenticationRequest_authenticationRequired_alreadyPrepared_doNothing(): void
     {
         $event = $this->createTwoFactorAuthenticationEvent();
-        $twoFactorProvider = $this->createMock(TwoFactorProviderInterface::class);
 
         $this->session
             ->expects($this->once())
             ->method('get')
             ->with('2fa_called_providers')
-            ->willReturn([self::CURRENT_PROVIDER_NAME]);
+            ->willReturn([self::FIREWALL_NAME => [self::CURRENT_PROVIDER_NAME]]);
 
         $this->providerRegistry
             ->expects($this->never())
             ->method('getProvider');
 
         $this->listener->onTwoFactorAuthenticationRequest($event);
-        $this->listener->onKernelResponse($this->createMock(FilterResponseEvent::class));
+        $this->listener->onKernelResponse();
     }
 }
