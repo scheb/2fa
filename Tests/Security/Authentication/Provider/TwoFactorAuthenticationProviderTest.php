@@ -117,7 +117,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
     /**
      * @test
      */
-    public function authenticate_noTwoFactorToken_returnNull(): void
+    public function authenticate_noTwoFactorToken_throwAuthenticationException(): void
     {
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createMock(TokenInterface::class);
@@ -131,7 +131,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
     /**
      * @test
      */
-    public function authenticate_differentFirewallName_returnNull(): void
+    public function authenticate_differentFirewallName_throwAuthenticationException(): void
     {
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createTwoFactorToken('otherFirewallName', 'credentials');
