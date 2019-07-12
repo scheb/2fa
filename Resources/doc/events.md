@@ -3,6 +3,11 @@ Events
 
 The bundle dispatches the following events during the authentication process:
 
+`scheb_two_factor.authentication.require` is dispatched when two-factor authentication is required from the user. This
+normally results in a redirect to the two-factor authentication form.
+
+`scheb_two_factor.authentication.form` is dispatched when the two-factor authentication form is shown.                                                    
+
 `scheb_two_factor.authentication.require` is dispatched when two-factor authentication is required from the user (the
 form is shown).
 

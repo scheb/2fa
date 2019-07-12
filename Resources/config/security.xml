@@ -14,6 +14,7 @@
 			<argument type="collection" /> <!-- Options -->
 			<argument type="service" id="scheb_two_factor.provider_registry" />
 			<argument type="service" id="scheb_two_factor.backup_code_manager" />
+			<argument type="service" id="scheb_two_factor.provider_preparation_recorder" />
 		</service>
 
 		<service id="scheb_two_factor.security.authentication.trust_resolver" class="Scheb\TwoFactorBundle\Security\Authentication\AuthenticationTrustResolver" decorates="security.authentication.trust_resolver">

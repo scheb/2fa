@@ -7,9 +7,15 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Event;
 class TwoFactorAuthenticationEvents
 {
     /**
-     * When two-factor authentication is required from the user (the form is shown).
+     * When two-factor authentication is required from the user. This normally results in a redirect to the two-factor
+     * authentication form.
      */
     const REQUIRE = 'scheb_two_factor.authentication.require';
+
+    /**
+     * When the two-factor authentication form is shown.
+     */
+    const FORM = 'scheb_two_factor.authentication.form';
 
     /**
      * When two-factor authentication is attempted, dispatched before the code is checked.

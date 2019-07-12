@@ -44,11 +44,17 @@
 			<argument type="collection" /> <!-- Firewall configs -->
 		</service>
 
+		<service id="scheb_two_factor.provider_preparation_recorder" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationRecorder">
+			<argument type="service" id="session" />
+		</service>
+
 		<service id="scheb_two_factor.provider_preparation_listener" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationListener">
 			<argument type="service" id="scheb_two_factor.provider_registry" />
-			<argument type="service" id="session" />
-			<tag name="kernel.event_listener" event="scheb_two_factor.authentication.require" method="onTwoFactorAuthenticationRequest" />
-			<tag name="kernel.event_listener" event="kernel.terminate" method="onKernelTerminate" />
+			<argument type="service" id="scheb_two_factor.provider_preparation_recorder" />
+			<tag name="kernel.event_listener" event="scheb_two_factor.authentication.require" method="onTwoFactorAuthenticationRequiredEvent" />
+			<tag name="kernel.event_listener" event="scheb_two_factor.authentication.form" method="onTwoFactorAuthenticationFormEvent" />
+			<tag name="kernel.event_listener" event="security.authentication.success" method="onAuthenticationSuccess" />
+			<tag name="kernel.event_listener" event="kernel.finish_request" method="onKernelFinishRequest" />
 		</service>
 
 		<!-- Alias for auto-wiring -->

@@ -11,6 +11,7 @@ use Scheb\TwoFactorBundle\Security\Authentication\Provider\TwoFactorAuthenticati
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationRecorder;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -19,6 +20,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class TwoFactorAuthenticationProviderTest extends TestCase
 {
+    const FIREWALL_NAME = 'firewallName';
     /**
      * @var MockObject|TwoFactorProviderRegistry
      */
@@ -28,6 +30,11 @@ class TwoFactorAuthenticationProviderTest extends TestCase
      * @var MockObject|BackupCodeManagerInterface
      */
     private $backupCodeManager;
+
+    /**
+     * @var MockObject|TwoFactorProviderPreparationRecorder
+     */
+    private $preparationRecorder;
 
     /**
      * @var MockObject|UserInterface
@@ -63,6 +70,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
     {
         $this->providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
         $this->backupCodeManager = $this->createMock(BackupCodeManagerInterface::class);
+        $this->preparationRecorder = $this->createMock(TwoFactorProviderPreparationRecorder::class);
         $this->user = $this->createMock(UserInterface::class);
         $this->authenticatedToken = $this->createMock(TokenInterface::class);
         $this->authenticatedToken
@@ -91,7 +99,13 @@ class TwoFactorAuthenticationProviderTest extends TestCase
             });
 
         $options['multi_factor'] = $multiFactor;
-        $this->authenticationProvider = new TwoFactorAuthenticationProvider('firewallName', $options, $this->providerRegistry, $this->backupCodeManager);
+        $this->authenticationProvider = new TwoFactorAuthenticationProvider(
+            self::FIREWALL_NAME,
+            $options,
+            $this->providerRegistry,
+            $this->backupCodeManager,
+            $this->preparationRecorder
+        );
     }
 
     public function createTwoFactorToken(string $firewallName, ?string $credentials, array $twoFactorProviders = []): TwoFactorToken
@@ -103,7 +117,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
 
     public function createSupportedTwoFactorTokenWithProviders(array $twoFactorProviders): TwoFactorToken
     {
-        return $this->createTwoFactorToken('firewallName', 'credentials', $twoFactorProviders);
+        return $this->createTwoFactorToken(self::FIREWALL_NAME, 'credentials', $twoFactorProviders);
     }
 
     private function stubTwoFactorProviderCredentialsAreValid(MockObject $provider, bool $isValid): void
@@ -112,6 +126,14 @@ class TwoFactorAuthenticationProviderTest extends TestCase
             ->expects($this->any())
             ->method('validateAuthenticationCode')
             ->willReturn($isValid);
+    }
+
+    private function stubProviderPreparationComplete(): void
+    {
+        $this->preparationRecorder
+            ->expects($this->any())
+            ->method('isProviderPrepared')
+            ->willReturn(true);
     }
 
     /**
@@ -148,10 +170,29 @@ class TwoFactorAuthenticationProviderTest extends TestCase
     public function authenticate_noCredentials_returnSameToken(): void
     {
         $this->createAuthenticationProviderWithMultiFactor(false);
-        $token = $this->createTwoFactorToken('firewallName', null);
+        $token = $this->createTwoFactorToken(self::FIREWALL_NAME, null);
 
         $returnValue = $this->authenticationProvider->authenticate($token);
         $this->assertSame($token, $returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function authenticate_providerNotPrepared_throwAuthenticationException(): void
+    {
+        $this->createAuthenticationProviderWithMultiFactor(false);
+        $token = $this->createSupportedTwoFactorTokenWithProviders(['providerName']);
+        $this->preparationRecorder
+            ->expects($this->any())
+            ->method('isProviderPrepared')
+            ->with(self::FIREWALL_NAME, 'providerName')
+            ->willReturn(false);
+
+        $this->expectException(AuthenticationException::class);
+        $this->expectExceptionMessage('The two-factor provider "providerName" has not been prepared.');
+
+        $this->authenticationProvider->authenticate($token);
     }
 
     /**
@@ -161,6 +202,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
     {
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createSupportedTwoFactorTokenWithProviders(['unknownProvider']);
+        $this->stubProviderPreparationComplete();
 
         $this->expectException(TwoFactorProviderNotFoundException::class);
 
@@ -174,6 +216,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
     {
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createSupportedTwoFactorTokenWithProviders(['provider1']);
+        $this->stubProviderPreparationComplete();
 
         $this->twoFactorProvider1
             ->expects($this->once())
@@ -191,6 +234,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createSupportedTwoFactorTokenWithProviders(['provider1']);
         $this->stubTwoFactorProviderCredentialsAreValid($this->twoFactorProvider1, false);
+        $this->stubProviderPreparationComplete();
 
         $this->backupCodeManager
             ->expects($this->once())
@@ -214,6 +258,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createSupportedTwoFactorTokenWithProviders(['provider1']);
         $this->stubTwoFactorProviderCredentialsAreValid($this->twoFactorProvider1, false);
+        $this->stubProviderPreparationComplete();
 
         $this->backupCodeManager
             ->expects($this->once())
@@ -233,6 +278,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createSupportedTwoFactorTokenWithProviders(['provider1', 'provider2']);
         $this->stubTwoFactorProviderCredentialsAreValid($this->twoFactorProvider1, true);
+        $this->stubProviderPreparationComplete();
 
         $returnValue = $this->authenticationProvider->authenticate($token);
         $this->assertSame($this->authenticatedToken, $returnValue);
@@ -246,6 +292,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
         $this->createAuthenticationProviderWithMultiFactor(true);
         $token = $this->createSupportedTwoFactorTokenWithProviders(['provider1', 'provider2']);
         $this->stubTwoFactorProviderCredentialsAreValid($this->twoFactorProvider1, true);
+        $this->stubProviderPreparationComplete();
 
         $returnValue = $this->authenticationProvider->authenticate($token);
         $this->assertSame($token, $returnValue);
@@ -262,6 +309,7 @@ class TwoFactorAuthenticationProviderTest extends TestCase
         $token = $this->createSupportedTwoFactorTokenWithProviders(['provider1', 'provider2']);
         $this->stubTwoFactorProviderCredentialsAreValid($this->twoFactorProvider1, true);
         $this->stubTwoFactorProviderCredentialsAreValid($this->twoFactorProvider2, true);
+        $this->stubProviderPreparationComplete();
 
         $this->authenticationProvider->authenticate($token); // Two-factor provider 1 successful
         $returnValue = $this->authenticationProvider->authenticate($token); // Two-factor provider 2 successful
