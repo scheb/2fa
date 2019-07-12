@@ -12,6 +12,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
 {
@@ -56,7 +57,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
     {
         /** @var TwoFactorTokenInterface $token */
         if (!$this->supports($token)) {
-            return null;
+            throw new AuthenticationException('The token is not supported by this authentication provider.');
         }
 
         // Keep unauthenticated TwoFactorToken with no credentials given

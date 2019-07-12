@@ -14,6 +14,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class TwoFactorAuthenticationProviderTest extends TestCase
@@ -121,8 +122,10 @@ class TwoFactorAuthenticationProviderTest extends TestCase
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createMock(TokenInterface::class);
 
-        $returnValue = $this->authenticationProvider->authenticate($token);
-        $this->assertNull($returnValue);
+        $this->expectException(AuthenticationException::class);
+        $this->expectExceptionMessage('The token is not supported by this authentication provider');
+
+        $this->authenticationProvider->authenticate($token);
     }
 
     /**
@@ -133,8 +136,10 @@ class TwoFactorAuthenticationProviderTest extends TestCase
         $this->createAuthenticationProviderWithMultiFactor(false);
         $token = $this->createTwoFactorToken('otherFirewallName', 'credentials');
 
-        $returnValue = $this->authenticationProvider->authenticate($token);
-        $this->assertNull($returnValue);
+        $this->expectException(AuthenticationException::class);
+        $this->expectExceptionMessage('The token is not supported by this authentication provider');
+
+        $this->authenticationProvider->authenticate($token);
     }
 
     /**
