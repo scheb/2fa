@@ -17,7 +17,7 @@ class DoctrinePersisterTest extends TestCase
     private $em;
 
     /**
-     * @var \Scheb\TwoFactorBundle\Model\Persister\DoctrinePersister
+     * @var DoctrinePersister
      */
     private $persister;
 
