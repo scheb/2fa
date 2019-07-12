@@ -71,7 +71,11 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $this->preparationRecorder = $this->createMock(TwoFactorProviderPreparationRecorder::class);
 
         $this->providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
-        $this->listener = new TwoFactorProviderPreparationListener($this->providerRegistry, $this->preparationRecorder);
+        $this->listener = new TwoFactorProviderPreparationListener(
+            $this->providerRegistry,
+            $this->preparationRecorder,
+            $this->createMock(LoggerInterface::class)
+        );
     }
 
     private function createTwoFactorAuthenticationEvent(): TwoFactorAuthenticationEvent

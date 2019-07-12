@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider;
 
+use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
@@ -25,10 +26,20 @@ class TwoFactorProviderPreparationListener
      */
     private $twoFactorToken;
 
-    public function __construct(TwoFactorProviderRegistry $providerRegistry, TwoFactorProviderPreparationRecorder $preparationRecorder)
+    /**
+     * @var LoggerInterface|null
+     */
+    private $logger;
+
+    public function __construct(
+        TwoFactorProviderRegistry $providerRegistry,
+        TwoFactorProviderPreparationRecorder $preparationRecorder,
+        ?LoggerInterface $logger
+    )
     {
         $this->providerRegistry = $providerRegistry;
         $this->preparationRecorder = $preparationRecorder;
+        $this->logger = $logger;
     }
 
     public function onAuthenticationSuccess(AuthenticationEvent $event): void
@@ -62,11 +73,18 @@ class TwoFactorProviderPreparationListener
         $firewallName = $this->twoFactorToken->getProviderKey();
 
         if ($this->preparationRecorder->isProviderPrepared($firewallName, $providerName)) {
+            if ($this->logger) {
+                $this->logger->info(sprintf('Two-factor provider "%s" was already prepared.', $providerName));
+            }
             return;
         }
 
         $user = $this->twoFactorToken->getUser();
         $this->providerRegistry->getProvider($providerName)->prepareAuthentication($user);
         $this->preparationRecorder->recordProviderIsPrepared($firewallName, $providerName);
+
+        if ($this->logger) {
+            $this->logger->info(sprintf('Two-factor provider "%s" prepared.', $providerName));
+        }
     }
 }
