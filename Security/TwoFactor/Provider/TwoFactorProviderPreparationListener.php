@@ -7,6 +7,7 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider;
 use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
+use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
 class TwoFactorProviderPreparationListener
@@ -63,8 +64,11 @@ class TwoFactorProviderPreparationListener
         $this->twoFactorToken = $event->getToken();
     }
 
-    public function onKernelFinishRequest(): void
+    public function onKernelFinishRequest(FinishRequestEvent $event): void
     {
+        if (!$event->isMasterRequest()) {
+            return;
+        }
         if (!($this->twoFactorToken instanceof TwoFactorToken)) {
             return;
         }

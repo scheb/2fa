@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
@@ -14,6 +15,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
 
 class TwoFactorProviderPreparationListenerTest extends TestCase
 {
@@ -83,6 +85,17 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         return new TwoFactorAuthenticationEvent($this->request, $this->token);
     }
 
+    private function createFinishRequestEvent(): FinishRequestEvent
+    {
+        $event = $this->createMock(FinishRequestEvent::class);
+        $event
+            ->expects($this->any())
+            ->method('isMasterRequest')
+            ->willReturn(true);
+
+        return $event;
+    }
+
     /**
      * @test
      */
@@ -114,7 +127,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
             ->with($this->identicalTo($this->user));
 
         $this->listener->onTwoFactorAuthenticationRequiredEvent($event);
-        $this->listener->onKernelTerminate();
+        $this->listener->onKernelFinishRequest($this->createFinishRequestEvent());
     }
 
     /**
@@ -139,6 +152,6 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
             ->method('getProvider');
 
         $this->listener->onTwoFactorAuthenticationRequiredEvent($event);
-        $this->listener->onKernelTerminate();
+        $this->listener->onKernelFinishRequest($this->createFinishRequestEvent());
     }
 }
