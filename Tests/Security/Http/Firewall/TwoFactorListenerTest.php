@@ -18,6 +18,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -307,7 +308,12 @@ class TwoFactorListenerTest extends TestCase
         $numEvents = count($eventTypes);
         $consecutiveParams = [];
         foreach ($eventTypes as $eventType) {
-            $consecutiveParams[] = [$eventType, $this->isInstanceOf(TwoFactorAuthenticationEvent::class)];
+            // Symfony < 4.3
+            if (class_exists(LegacyEventDispatcherProxy::class)) {
+                $consecutiveParams[] = [$this->isInstanceOf(TwoFactorAuthenticationEvent::class), $eventType];
+            } else {
+                $consecutiveParams[] = [$eventType, $this->isInstanceOf(TwoFactorAuthenticationEvent::class)];
+            }
         }
         $this->eventDispatcher
             ->expects($this->exactly($numEvents))

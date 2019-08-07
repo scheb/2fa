@@ -16,6 +16,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -251,6 +252,12 @@ class TwoFactorListener implements ListenerInterface
     private function dispatchTwoFactorAuthenticationEvent(string $eventType, Request $request, TokenInterface $token): void
     {
         $event = new TwoFactorAuthenticationEvent($request, $token);
-        $this->eventDispatcher->dispatch($eventType, $event);
+
+        // Symfony < 4.3
+        if (class_exists(LegacyEventDispatcherProxy::class)) {
+            $this->eventDispatcher->dispatch($event, $eventType);
+        } else {
+            $this->eventDispatcher->dispatch($eventType, $event);
+        }
     }
 }
