@@ -13,6 +13,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Yaml\Parser;
 
 class TwoFactorFactoryTest extends TestCase
@@ -146,7 +147,7 @@ EOF;
         $returnValue = $this->callCreateFirewall();
 
         $this->assertEquals('security.authentication.provider.two_factor.firewallName', $returnValue[0]);
-        $this->assertEquals('security.authentication.listener.two_factor.firewallName', $returnValue[1]);
+        $this->assertEquals(sprintf('security.authentication.%slistener.two_factor.firewallName', !class_exists(RequestEvent::class) ? 'legacy_' : ''), $returnValue[1]);
         $this->assertEquals(self::DEFAULT_ENTRY_POINT, $returnValue[2]);
     }
 

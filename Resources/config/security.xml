@@ -49,6 +49,11 @@
 			<argument type="service" id="logger" on-invalid="null" />
 		</service>
 
+		<!-- For Symfony < 4.3 -->
+		<service id="scheb_two_factor.security.authentication.legacy_listener" class="Scheb\TwoFactorBundle\Security\Http\Firewall\LegacyTwoFactorListener" decorates="scheb_two_factor.security.authentication.listener" abstract="true">
+			<argument type="service" id="scheb_two_factor.security.authentication.legacy_listener.inner"/>
+		</service>
+
 		<service id="scheb_two_factor.security.authentication.success_handler" class="Scheb\TwoFactorBundle\Security\Http\Authentication\DefaultAuthenticationSuccessHandler" abstract="true">
 			<argument type="service" id="security.http_utils" />
 			<argument type="string" /> <!-- Firewall name -->

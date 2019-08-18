@@ -331,7 +331,7 @@ class TwoFactorListenerTest extends TestCase
         $this->assertPathNotChecked();
         $this->assertNoResponseSet();
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 
     /**
@@ -344,7 +344,7 @@ class TwoFactorListenerTest extends TestCase
         $this->assertPathNotChecked();
         $this->assertNoResponseSet();
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 
     /**
@@ -363,7 +363,7 @@ class TwoFactorListenerTest extends TestCase
 
         $this->assertRedirectToAuthForm();
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 
     /**
@@ -379,7 +379,7 @@ class TwoFactorListenerTest extends TestCase
             TwoFactorAuthenticationEvents::REQUIRE,
         ]);
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 
     /**
@@ -393,7 +393,7 @@ class TwoFactorListenerTest extends TestCase
 
         $this->assertNoResponseSet();
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 
     /**
@@ -406,7 +406,7 @@ class TwoFactorListenerTest extends TestCase
 
         $this->assertNoResponseSet();
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 
     /**
@@ -434,7 +434,7 @@ class TwoFactorListenerTest extends TestCase
             ->with($this->identicalTo($credentialToken))
             ->willReturn($this->createMock(TokenInterface::class));
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 
     /**
@@ -453,7 +453,7 @@ class TwoFactorListenerTest extends TestCase
             TwoFactorAuthenticationEvents::FAILURE,
         ]);
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 
     /**
@@ -476,7 +476,7 @@ class TwoFactorListenerTest extends TestCase
             ->method('setResponse')
             ->with($this->identicalTo($response));
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 
     /**
@@ -491,7 +491,7 @@ class TwoFactorListenerTest extends TestCase
 
         $this->assertEventsDispatched([TwoFactorAuthenticationEvents::FAILURE]);
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 
     /**
@@ -511,7 +511,7 @@ class TwoFactorListenerTest extends TestCase
             $this->anything(),
         ]);
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 
     /**
@@ -532,7 +532,7 @@ class TwoFactorListenerTest extends TestCase
 
         $this->assertRedirectToAuthForm();
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 
     /**
@@ -552,7 +552,7 @@ class TwoFactorListenerTest extends TestCase
             TwoFactorAuthenticationEvents::REQUIRE,
         ]);
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 
     /**
@@ -576,7 +576,7 @@ class TwoFactorListenerTest extends TestCase
             ->method('setResponse')
             ->with($this->identicalTo($response));
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 
     /**
@@ -596,7 +596,7 @@ class TwoFactorListenerTest extends TestCase
             TwoFactorAuthenticationEvents::COMPLETE,
         ]);
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 
     /**
@@ -622,7 +622,7 @@ class TwoFactorListenerTest extends TestCase
             ->method('addTrustedDevice')
             ->with('user', 'firewallName');
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 
     /**
@@ -641,6 +641,6 @@ class TwoFactorListenerTest extends TestCase
             ->expects($this->never())
             ->method($this->anything());
 
-        $this->listener->handle($this->getResponseEvent);
+        ($this->listener)($this->getResponseEvent);
     }
 }

@@ -20,6 +20,7 @@ use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -27,10 +28,9 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
-use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class TwoFactorListener implements ListenerInterface
+class TwoFactorListener
 {
     private const DEFAULT_OPTIONS = [
         'auth_form_path' => TwoFactorFactory::DEFAULT_AUTH_FORM_PATH,
@@ -144,7 +144,10 @@ class TwoFactorListener implements ListenerInterface
         $this->trustedDeviceManager = $trustedDeviceManager;
     }
 
-    public function handle(GetResponseEvent $event)
+    /**
+     * @param $event GetResponseEvent|RequestEvent
+     */
+    public function __invoke($event)
     {
         $currentToken = $this->tokenStorage->getToken();
         if (!($currentToken instanceof TwoFactorTokenInterface && $currentToken->getProviderKey() === $this->firewallName)) {
@@ -213,9 +216,7 @@ class TwoFactorListener implements ListenerInterface
         }
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::FAILURE, $request, $this->tokenStorage->getToken());
 
-        $response = $this->failureHandler->onAuthenticationFailure($request, $failed);
-
-        return $response;
+        return $this->failureHandler->onAuthenticationFailure($request, $failed);;
     }
 
     private function onSuccess(Request $request, TokenInterface $token): Response
@@ -239,9 +240,7 @@ class TwoFactorListener implements ListenerInterface
             $this->trustedDeviceManager->addTrustedDevice($token->getUser(), $this->firewallName);
         }
 
-        $response = $this->successHandler->onAuthenticationSuccess($request, $token);
-
-        return $response;
+        return $this->successHandler->onAuthenticationSuccess($request, $token);
     }
 
     private function hasTrustedDeviceParameter(Request $request): bool
