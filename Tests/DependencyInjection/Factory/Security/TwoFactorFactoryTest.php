@@ -22,6 +22,7 @@ class TwoFactorFactoryTest extends TestCase
     const DEFAULT_CONFIG = ['config' => 'value'];
     const USER_PROVIDER = 'userProvider';
     const DEFAULT_ENTRY_POINT = 'defaultEntryPoint';
+
     /**
      * @var TwoFactorFactory
      */
@@ -145,9 +146,15 @@ EOF;
     public function create_createForFirewall_returnServiceIds(): void
     {
         $returnValue = $this->callCreateFirewall();
+        $expectedListenerId = 'security.authentication.listener.two_factor.firewallName';
+
+        // Symfony < 4.3
+        if (!class_exists(RequestEvent::class)) {
+            $expectedListenerId = 'security.authentication.legacy_listener.two_factor.firewallName';
+        }
 
         $this->assertEquals('security.authentication.provider.two_factor.firewallName', $returnValue[0]);
-        $this->assertEquals(sprintf('security.authentication.%slistener.two_factor.firewallName', !class_exists(RequestEvent::class) ? 'legacy_' : ''), $returnValue[1]);
+        $this->assertEquals($expectedListenerId, $returnValue[1]);
         $this->assertEquals(self::DEFAULT_ENTRY_POINT, $returnValue[2]);
     }
 

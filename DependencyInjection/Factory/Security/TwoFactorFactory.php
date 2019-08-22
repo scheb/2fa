@@ -104,14 +104,15 @@ class TwoFactorFactory implements SecurityFactoryInterface
             ->replaceArgument(7, new Reference($csrfTokenValidatorId))
             ->replaceArgument(8, $config);
 
+        // Symfony < 4.3
         if (!class_exists(RequestEvent::class)) {
-            $legacyListenerID = self::LEGACY_LISTENER_ID_PREFIX.$firewallName;
+            $legacyListenerId = self::LEGACY_LISTENER_ID_PREFIX.$firewallName;
             $container
-                ->setDefinition($legacyListenerID, new ChildDefinition(self::LEGACY_LISTENER_DEFINITION_ID))
-                ->replaceArgument(0, new Reference($legacyListenerID.'.inner'))
+                ->setDefinition($legacyListenerId, new ChildDefinition(self::LEGACY_LISTENER_DEFINITION_ID))
+                ->replaceArgument(0, new Reference($legacyListenerId.'.inner'))
                 ->setDecoratedService($listenerId);
 
-            return $legacyListenerID;
+            return $legacyListenerId;
         }
 
         return $listenerId;

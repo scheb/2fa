@@ -50,8 +50,8 @@
 		</service>
 
 		<!-- For Symfony < 4.3 -->
-		<service id="scheb_two_factor.security.authentication.legacy_listener" class="Scheb\TwoFactorBundle\Security\Http\Firewall\LegacyTwoFactorListener" decorates="scheb_two_factor.security.authentication.listener" abstract="true">
-			<argument type="service" id="scheb_two_factor.security.authentication.legacy_listener.inner"/>
+		<service id="scheb_two_factor.security.authentication.legacy_listener" class="Scheb\TwoFactorBundle\Security\Http\Firewall\LegacyTwoFactorListener" abstract="true">
+			<argument /> <!-- Decorated listener -->
 		</service>
 
 		<service id="scheb_two_factor.security.authentication.success_handler" class="Scheb\TwoFactorBundle\Security\Http\Authentication\DefaultAuthenticationSuccessHandler" abstract="true">
