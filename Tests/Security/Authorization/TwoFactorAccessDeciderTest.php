@@ -17,7 +17,9 @@ use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
 
 class TwoFactorAccessDeciderTest extends TestCase
 {
+    private const BASE_URL = '/app_dev.php';
     private const LOGOUT_PATH = '/logout';
+    private const LOGOUT_PATH_WITH_BASE_URL = self::BASE_URL . self::LOGOUT_PATH;
 
     /**
      * @var MockObject|Request
@@ -70,13 +72,23 @@ class TwoFactorAccessDeciderTest extends TestCase
             ->with($this->request)
             ->willReturn([[TwoFactorInProgressVoter::IS_AUTHENTICATED_2FA_IN_PROGRESS], 'https']);
 
-        // Stub the logout path
+        $this->accessDecider = new TwoFactorAccessDecider($this->accessMap, $this->accessDecisionManager, $this->httpUtils, $this->logoutUrlGenerator);
+    }
+
+    private function whenGeneratedLogoutPath(string $generatedLogoutPath): void
+    {
         $this->logoutUrlGenerator
             ->expects($this->any())
             ->method('getLogoutPath')
-            ->willReturn(self::LOGOUT_PATH);
+            ->willReturn($generatedLogoutPath);
+    }
 
-        $this->accessDecider = new TwoFactorAccessDecider($this->accessMap, $this->accessDecisionManager, $this->httpUtils, $this->logoutUrlGenerator);
+    private function whenRequestBaseUrl(string $baseUrl): void
+    {
+        $this->request
+            ->expects($this->any())
+            ->method('getBaseUrl')
+            ->willReturn($baseUrl);
     }
 
     private function whenPathAccess(bool $accessGranted): void
@@ -112,8 +124,24 @@ class TwoFactorAccessDeciderTest extends TestCase
     /**
      * @test
      */
-    public function isAccessible_isLogoutPath_returnTrue(): void
+    public function isAccessible_isLogoutPathNoBasePath_returnTrue(): void
     {
+        $this->whenRequestBaseUrl('');
+        $this->whenGeneratedLogoutPath(self::LOGOUT_PATH);
+        $this->whenPathAccess(false);
+        $this->whenIsLogoutPath(true);
+
+        $returnValue = $this->accessDecider->isAccessible($this->request, $this->token);
+        $this->assertTrue($returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function isAccessible_isLogoutPathWithBasePath_returnTrue(): void
+    {
+        $this->whenRequestBaseUrl(self::BASE_URL);
+        $this->whenGeneratedLogoutPath(self::LOGOUT_PATH_WITH_BASE_URL);
         $this->whenPathAccess(false);
         $this->whenIsLogoutPath(true);
 
@@ -126,6 +154,7 @@ class TwoFactorAccessDeciderTest extends TestCase
      */
     public function isAccessible_isNotAccessible_returnFalse(): void
     {
+        $this->whenGeneratedLogoutPath(self::LOGOUT_PATH);
         $this->whenPathAccess(false);
         $this->whenIsLogoutPath(false);
 

@@ -54,11 +54,26 @@ class TwoFactorAccessDecider
         }
 
         // Let the logout route pass
-        $logoutPath = $this->logoutUrlGenerator->getLogoutPath();
+        $logoutPath = $this->makeRelativeToBaseUrl($this->logoutUrlGenerator->getLogoutPath(), $request);
         if ($this->httpUtils->checkRequestPath($request, $logoutPath)) {
             return true;
         }
 
         return false;
+    }
+
+    private function makeRelativeToBaseUrl(string $logoutPath, Request $request): string
+    {
+        $baseUrl = $request->getBaseUrl();
+        if (null === $baseUrl || strlen($baseUrl) === 0) {
+            return $logoutPath;
+        }
+
+        $pathInfo = substr($logoutPath, strlen($baseUrl));
+        if ($pathInfo === false || $pathInfo === '') {
+            return '/';
+        }
+
+        return (string) $pathInfo;
     }
 }
