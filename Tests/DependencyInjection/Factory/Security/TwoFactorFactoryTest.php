@@ -62,6 +62,8 @@ two_factor:
     auth_code_parameter_name: auth_code_param_name
     trusted_parameter_name: trusted_param_name
     multi_factor: true
+    prepare_on_login: true
+    prepare_on_access_denied: true
     csrf_token_generator: security.csrf.token_manager
     csrf_parameter: _custom_csrf_token
     csrf_token_id: custom_two_factor
@@ -112,6 +114,8 @@ EOF;
         $this->assertEquals(TwoFactorFactory::DEFAULT_AUTH_CODE_PARAMETER_NAME, $processedConfiguration['auth_code_parameter_name']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_TRUSTED_PARAMETER_NAME, $processedConfiguration['trusted_parameter_name']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_MULTI_FACTOR, $processedConfiguration['multi_factor']);
+        $this->assertEquals(TwoFactorFactory::DEFAULT_PREPARE_ON_LOGIN, $processedConfiguration['prepare_on_login']);
+        $this->assertEquals(TwoFactorFactory::DEFAULT_PREPARE_ON_ACCESS_DENIED, $processedConfiguration['prepare_on_access_denied']);
         $this->assertNull($processedConfiguration['csrf_token_generator']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_PARAMETER, $processedConfiguration['csrf_parameter']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_TOKEN_ID, $processedConfiguration['csrf_token_id']);
@@ -135,6 +139,8 @@ EOF;
         $this->assertEquals('auth_code_param_name', $processedConfiguration['auth_code_parameter_name']);
         $this->assertEquals('trusted_param_name', $processedConfiguration['trusted_parameter_name']);
         $this->assertTrue($processedConfiguration['multi_factor']);
+        $this->assertTrue($processedConfiguration['prepare_on_login']);
+        $this->assertTrue($processedConfiguration['prepare_on_access_denied']);
         $this->assertEquals('security.csrf.token_manager', $processedConfiguration['csrf_token_generator']);
         $this->assertEquals('_custom_csrf_token', $processedConfiguration['csrf_parameter']);
         $this->assertEquals('custom_two_factor', $processedConfiguration['csrf_token_id']);

@@ -96,7 +96,8 @@ security:
                 always_use_default_target_path: false # If it should always redirect to default_target_path
                 auth_code_parameter_name: _auth_code  # Name of the parameter for the two-factor authentication code
                 trusted_parameter_name: _trusted      # Name of the parameter for the trusted device option
-                multi_factor: false                   # If ALL active two-factor methods need to be fulfilled (multi-factor authentication)
+                multi_factor: false                   # If ALL active two-factor methods need to be fulfilled
+                                                      # (multi-factor authentication)
                 success_handler: acme.custom_success_handler # Use a custom success handler instead of the default one 
                 failure_handler: acme.custom_failure_handler # Use a custom failure handler instead of the default one
 
@@ -105,9 +106,19 @@ security:
                 # two-factor authentication form, when two-factor authentication is required.
                 authentication_required_handler: acme.custom_auth_reqired_handler
 
-                csrf_token_generator: security.csrf.token_manager # CSRF protection will be enabled if a service id of CsrfTokenManagerInterface is given. Default: null
+                # Some two-factor providers need to be "prepared", usually a code is generated and sent to the user. Per
+                # default, this happens when the two-factor form is shown. But you may want to execute preparation
+                # earlier in the user's journey.
+                prepare_on_login: false          # If the two-factor provider should be prepared right after login
+                prepare_on_access_denied: false  # The the two-factor provider should be prepared when the user has to
+                                                 # to complete two-factor authentication to view a page. This would
+                                                 # prepare right before redirecting to the two-factor form.
+
+                csrf_token_generator: security.csrf.token_manager # CSRF protection will be enabled if a service id of
+                                                                  # CsrfTokenManagerInterface is given. Default: null
                 csrf_parameter: _csrf_token                       # The default CSRF parameter name
-                csrf_token_id: two_factor                         # The default CSRF token id, used for generating the token value. It is advised to use a different id per form
+                csrf_token_id: two_factor                         # The default CSRF token id, for generating the token
+                                                                  # value. It is advised to use a different id per form.
 
                 # If you have multiple user providers registered, Symfony's security extension requires you to configure
                 # a user provider. You're forced to configure this node, although it doesn't have any effect on the
