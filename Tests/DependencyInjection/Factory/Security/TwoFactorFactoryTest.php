@@ -315,6 +315,29 @@ EOF;
         $tag = $definition->getTag('scheb_two_factor.firewall_config');
         $this->assertEquals(['firewall' => 'firewallName'], $tag[0]);
     }
+
+    /**
+     * @test
+     */
+    public function create_createForFirewall_createProviderPreparationListenerDefinition(): void
+    {
+        $this->callCreateFirewall([
+            'prepare_on_login' => true,
+            'prepare_on_access_denied' => false,
+        ]);
+
+        $this->assertTrue($this->container->hasDefinition('security.authentication.provider_preparation_listener.two_factor.firewallName'));
+        $definition = $this->container->getDefinition('security.authentication.provider_preparation_listener.two_factor.firewallName');
+        $this->assertEquals(self::FIREWALL_NAME, $definition->getArgument(3));
+        $this->assertTrue($definition->getArgument(4));
+        $this->assertFalse($definition->getArgument(5));
+        $tag = $definition->getTag('kernel.event_listener');
+        $this->assertCount(4, $tag, 'Must have 4 events subscribed');
+        $this->assertEquals(['event' => 'security.authentication.success', 'method' => 'onLogin'], $tag[0]);
+        $this->assertEquals(['event' => 'scheb_two_factor.authentication.require', 'method' => 'onAccessDenied'], $tag[1]);
+        $this->assertEquals(['event' => 'scheb_two_factor.authentication.form', 'method' => 'onTwoFactorForm'], $tag[2]);
+        $this->assertEquals(['event' => 'kernel.finish_request', 'method' => 'onKernelFinishRequest'], $tag[3]);
+    }
 }
 
 // Helper class to process config

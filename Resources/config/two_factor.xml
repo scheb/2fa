@@ -48,16 +48,6 @@
 			<argument type="service" id="session" />
 		</service>
 
-		<service id="scheb_two_factor.provider_preparation_listener" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationListener">
-			<argument type="service" id="scheb_two_factor.provider_registry" />
-			<argument type="service" id="scheb_two_factor.provider_preparation_recorder" />
-            <argument type="service" id="logger" on-invalid="null" />
-			<tag name="kernel.event_listener" event="scheb_two_factor.authentication.require" method="onTwoFactorAuthenticationRequiredEvent" />
-			<tag name="kernel.event_listener" event="scheb_two_factor.authentication.form" method="onTwoFactorAuthenticationFormEvent" />
-			<tag name="kernel.event_listener" event="security.authentication.success" method="onAuthenticationSuccess" />
-			<tag name="kernel.event_listener" event="kernel.finish_request" method="onKernelFinishRequest" />
-		</service>
-
 		<!-- Alias for auto-wiring -->
 		<service id="Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallContext" alias="scheb_two_factor.firewall_context" public="true" />
 

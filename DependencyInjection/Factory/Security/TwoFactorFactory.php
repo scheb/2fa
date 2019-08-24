@@ -36,6 +36,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
     public const AUTHENTICATION_REQUIRED_HANDLER_ID_PREFIX = 'security.authentication.authentication_required_handler.two_factor.';
     public const FIREWALL_CONFIG_ID_PREFIX = 'security.firewall_config.two_factor.';
     public const CSRF_TOKEN_VALIDATOR_ID_PREFIX = 'security.authentication.csrf_token_validator.two_factor.';
+    public const PROVIDER_PREPARATION_LISTENER_ID_PREFIX = 'security.authentication.provider_preparation_listener.two_factor.';
 
     public const PROVIDER_DEFINITION_ID = 'scheb_two_factor.security.authentication.provider';
     public const LISTENER_DEFINITION_ID = 'scheb_two_factor.security.authentication.listener';
@@ -45,6 +46,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
     public const AUTHENTICATION_REQUIRED_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.authentication_required_handler';
     public const FIREWALL_CONFIG_DEFINITION_ID = 'scheb_two_factor.security.firewall_config';
     public const CSRF_TOKEN_VALIDATOR_DEFINITION_ID = 'scheb_two_factor.security.authentication.csrf_token_validator';
+    public const PROVIDER_PREPARATION_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.provider_preparation_listener';
 
     public function addConfiguration(NodeDefinition $node)
     {
@@ -75,6 +77,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
     {
         $providerId = $this->createAuthenticationProvider($container, $firewallName, $config);
         $listenerId = $this->createAuthenticationListener($container, $firewallName, $config);
+        $this->createProviderPreparationListener($container, $firewallName, $config);
         $this->createTwoFactorFirewallConfig($container, $firewallName, $config);
 
         return [$providerId, $listenerId, $defaultEntryPoint];
@@ -191,6 +194,20 @@ class TwoFactorFactory implements SecurityFactoryInterface
 
         // The SecurityFactory doesn't have access to the service definitions of the bundle. Therefore we tag the
         // definition so we can find it in a compiler pass and add to the the TwoFactorFirewallContext service.
+    }
+
+    private function createProviderPreparationListener(ContainerBuilder $container, string $firewallName, array $config): void
+    {
+        $firewallConfigId = self::PROVIDER_PREPARATION_LISTENER_ID_PREFIX.$firewallName;
+        $container
+            ->setDefinition($firewallConfigId, new ChildDefinition(self::PROVIDER_PREPARATION_LISTENER_DEFINITION_ID))
+            ->replaceArgument(3, $firewallName)
+            ->replaceArgument(4, $config['prepare_on_login'] ?? self::DEFAULT_PREPARE_ON_LOGIN)
+            ->replaceArgument(5, $config['prepare_on_access_denied'] ?? self::DEFAULT_PREPARE_ON_ACCESS_DENIED)
+            ->addTag('kernel.event_listener', ['event' => 'security.authentication.success', 'method' => 'onLogin'])
+            ->addTag('kernel.event_listener', ['event' => 'scheb_two_factor.authentication.require', 'method' => 'onAccessDenied'])
+            ->addTag('kernel.event_listener', ['event' => 'scheb_two_factor.authentication.form', 'method' => 'onTwoFactorForm'])
+            ->addTag('kernel.event_listener', ['event' => 'kernel.finish_request', 'method' => 'onKernelFinishRequest']);
     }
 
     public function getPosition()
