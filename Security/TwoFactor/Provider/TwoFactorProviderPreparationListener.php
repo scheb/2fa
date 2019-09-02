@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider;
 
 use Psr\Log\LoggerInterface;
-use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -24,7 +24,7 @@ class TwoFactorProviderPreparationListener
     private $preparationRecorder;
 
     /**
-     * @var TwoFactorToken|null
+     * @var TwoFactorTokenInterface|null
      */
     private $twoFactorToken;
 
@@ -69,7 +69,7 @@ class TwoFactorProviderPreparationListener
     {
         $token = $event->getAuthenticationToken();
         if ($this->prepareOnLogin && $this->supports($token)) {
-            // After login, when the token is a TwoFactorToken, execute preparation
+            // After login, when the token is a TwoFactorTokenInterface, execute preparation
             $this->twoFactorToken = $token;
         }
     }
@@ -97,7 +97,7 @@ class TwoFactorProviderPreparationListener
         if (!$event->isMasterRequest()) {
             return;
         }
-        if (!($this->twoFactorToken instanceof TwoFactorToken)) {
+        if (!($this->twoFactorToken instanceof TwoFactorTokenInterface)) {
             return;
         }
 
@@ -122,6 +122,6 @@ class TwoFactorProviderPreparationListener
 
     private function supports(TokenInterface $token): bool
     {
-        return $token instanceof TwoFactorToken && $token->getProviderKey() === $this->firewallName;
+        return $token instanceof TwoFactorTokenInterface && $token->getProviderKey() === $this->firewallName;
     }
 }

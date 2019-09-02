@@ -229,7 +229,7 @@ class TwoFactorListener
         $this->tokenStorage->setToken($token);
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::SUCCESS, $request, $token);
 
-        // When it's still a TwoFactorToken, keep showing the auth form
+        // When it's still a TwoFactorTokenInterface, keep showing the auth form
         if ($token instanceof TwoFactorTokenInterface) {
             $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::REQUIRE, $request, $token);
 

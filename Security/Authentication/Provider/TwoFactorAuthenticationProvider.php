@@ -73,7 +73,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
             throw new AuthenticationException('The token is not supported by this authentication provider.');
         }
 
-        // Keep unauthenticated TwoFactorToken with no credentials given
+        // Keep unauthenticated TwoFactorTokenInterface with no credentials given
         if (null === $token->getCredentials()) {
             return $token;
         }
