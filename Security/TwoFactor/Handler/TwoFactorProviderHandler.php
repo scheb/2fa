@@ -52,10 +52,11 @@ class TwoFactorProviderHandler implements AuthenticationHandlerInterface
         if ($activeTwoFactorProviders) {
             $twoFactorToken = $this->twoFactorTokenFactory->create($authenticatedToken, null, $context->getFirewallName(), $activeTwoFactorProviders);
             $this->setPreferredProvider($twoFactorToken, $context->getUser()); // Prioritize the user's preferred provider
+
             return $twoFactorToken;
-        } else {
-            return $authenticatedToken;
         }
+
+        return $authenticatedToken;
     }
 
     private function setPreferredProvider(TwoFactorTokenInterface $token, $user): void

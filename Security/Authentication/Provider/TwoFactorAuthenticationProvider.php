@@ -52,8 +52,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
         TwoFactorProviderRegistry $providerRegistry,
         BackupCodeManagerInterface $backupCodeManager,
         TwoFactorProviderPreparationRecorder $preparationRecorder
-    )
-    {
+    ) {
         $this->firewallName = $firewallName;
         $this->options = array_merge(self::DEFAULT_OPTIONS, $options);
         $this->providerRegistry = $providerRegistry;
@@ -81,7 +80,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
         $providerName = $token->getCurrentTwoFactorProvider();
 
         if (!$this->preparationRecorder->isProviderPrepared($this->firewallName, $providerName)) {
-            throw new AuthenticationException('The two-factor provider "'.$providerName.'" has not been prepared.');
+            throw new AuthenticationException(sprintf('The two-factor provider "%s" has not been prepared.', $providerName));
         }
 
         if ($this->isValidAuthenticationCode($providerName, $token)) {

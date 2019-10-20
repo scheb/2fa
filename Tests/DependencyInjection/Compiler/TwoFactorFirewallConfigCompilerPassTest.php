@@ -75,9 +75,11 @@ class TwoFactorFirewallConfigCompilerPassTest extends TestCase
      */
     public function process_taggedServices_replaceArgumentWithServiceList(): void
     {
-        $taggedServices = ['serviceId' => [
-            0 => ['firewall' => 'firewallName'],
-        ]];
+        $taggedServices = [
+            'serviceId' => [
+                0 => ['firewall' => 'firewallName'],
+            ],
+        ];
         $this->stubTaggedContainerService($taggedServices);
 
         $this->compilerPass->process($this->container);
@@ -91,9 +93,11 @@ class TwoFactorFirewallConfigCompilerPassTest extends TestCase
      */
     public function process_missingAlias_throwException(): void
     {
-        $taggedServices = ['serviceId' => [
-            0 => [],
-        ]];
+        $taggedServices = [
+            'serviceId' => [
+                0 => [],
+            ],
+        ];
         $this->stubTaggedContainerService($taggedServices);
 
         $this->expectException(InvalidArgumentException::class);

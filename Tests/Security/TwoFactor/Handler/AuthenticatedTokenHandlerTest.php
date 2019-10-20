@@ -10,7 +10,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterf
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-class AuthenticatedTokenHandlerTest extends AuthenticationHandlerTestCase
+class AuthenticatedTokenHandlerTest extends AbstractAuthenticationHandlerTestCase
 {
     /**
      * @var MockObject|AuthenticationHandlerInterface

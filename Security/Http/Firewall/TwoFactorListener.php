@@ -218,7 +218,7 @@ class TwoFactorListener
         }
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::FAILURE, $request, $this->tokenStorage->getToken());
 
-        return $this->failureHandler->onAuthenticationFailure($request, $failed);;
+        return $this->failureHandler->onAuthenticationFailure($request, $failed);
     }
 
     private function onSuccess(Request $request, TokenInterface $token): Response

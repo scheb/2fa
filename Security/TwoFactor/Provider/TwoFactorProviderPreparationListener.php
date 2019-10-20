@@ -55,8 +55,7 @@ class TwoFactorProviderPreparationListener
         string $firewallName,
         bool $prepareOnLogin,
         bool $prepareOnAccessDenied
-    )
-    {
+    ) {
         $this->providerRegistry = $providerRegistry;
         $this->preparationRecorder = $preparationRecorder;
         $this->logger = $logger;
@@ -108,6 +107,7 @@ class TwoFactorProviderPreparationListener
             if ($this->logger) {
                 $this->logger->info(sprintf('Two-factor provider "%s" was already prepared.', $providerName));
             }
+
             return;
         }
 

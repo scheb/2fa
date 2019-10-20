@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-abstract class AuthenticationHandlerTestCase extends TestCase
+abstract class AbstractAuthenticationHandlerTestCase extends TestCase
 {
     protected const FIREWALL_NAME = 'firewallName';
 

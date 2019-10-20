@@ -19,7 +19,7 @@ class TwoFactorAccessDeciderTest extends TestCase
 {
     private const BASE_URL = '/app_dev.php';
     private const LOGOUT_PATH = '/logout';
-    private const LOGOUT_PATH_WITH_BASE_URL = self::BASE_URL . self::LOGOUT_PATH;
+    private const LOGOUT_PATH_WITH_BASE_URL = self::BASE_URL.self::LOGOUT_PATH;
 
     /**
      * @var MockObject|Request

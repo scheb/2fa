@@ -70,7 +70,7 @@ class TwoFactorAccessDecider
         }
 
         $pathInfo = substr($logoutPath, strlen($baseUrl));
-        if ($pathInfo === false || $pathInfo === '') {
+        if (false === $pathInfo || '' === $pathInfo) {
             return '/';
         }
 

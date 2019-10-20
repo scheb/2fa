@@ -34,6 +34,6 @@ class TwoFactorProviderRegistry
             }
         }
 
-        throw new UnknownTwoFactorProviderException('Two-factor provider "'.$providerName.'" does not exist.');
+        throw new UnknownTwoFactorProviderException(sprintf('Two-factor provider "%s" does not exist.', $providerName));
     }
 }

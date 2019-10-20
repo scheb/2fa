@@ -13,7 +13,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderHandler;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 
-class TwoFactorProviderHandlerTest extends AuthenticationHandlerTestCase
+class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
 {
     /**
      * @var MockObject|TwoFactorProviderRegistry

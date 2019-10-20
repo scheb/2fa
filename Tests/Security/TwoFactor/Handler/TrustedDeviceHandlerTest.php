@@ -9,7 +9,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterf
 use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TrustedDeviceHandler;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManager;
 
-class TrustedDeviceHandlerTest extends AuthenticationHandlerTestCase
+class TrustedDeviceHandlerTest extends AbstractAuthenticationHandlerTestCase
 {
     /**
      * @var MockObject|AuthenticationHandlerInterface

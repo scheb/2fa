@@ -108,7 +108,7 @@ class TwoFactorToken implements TwoFactorTokenInterface
     {
         $key = array_search($providerName, $this->twoFactorProviders);
         if (false === $key) {
-            throw new UnknownTwoFactorProviderException('Two-factor provider "'.$providerName.'" is not active.');
+            throw new UnknownTwoFactorProviderException(sprintf('Two-factor provider "%s" is not active.', $providerName));
         }
         unset($this->twoFactorProviders[$key]);
     }

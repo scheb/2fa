@@ -9,7 +9,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterf
 use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\IpWhitelistHandler;
 use Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist\IpWhitelistProviderInterface;
 
-class IpWhitelistHandlerTest extends AuthenticationHandlerTestCase
+class IpWhitelistHandlerTest extends AbstractAuthenticationHandlerTestCase
 {
     /**
      * @var MockObject|AuthenticationHandlerInterface

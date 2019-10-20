@@ -16,7 +16,7 @@ class TwoFactorFirewallContext
     public function getFirewallConfig(string $firewallName): TwoFactorFirewallConfig
     {
         if (!isset($this->firewallConfigs[$firewallName])) {
-            throw new \InvalidArgumentException('Firewall "'.$firewallName.'" has no two-factor config.');
+            throw new \InvalidArgumentException(sprintf('Firewall "%s" has no two-factor config.', $firewallName));
         }
 
         return $this->firewallConfigs[$firewallName];

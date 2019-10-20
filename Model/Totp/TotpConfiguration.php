@@ -40,7 +40,7 @@ class TotpConfiguration implements TotpConfigurationInterface
     public function __construct(string $secret, string $algorithm, int $period, int $digits)
     {
         if (!self::isValidAlgorithm($algorithm)) {
-            throw new \InvalidArgumentException('The algorithm "'.$algorithm.'" is not supported');
+            throw new \InvalidArgumentException(sprintf('The algorithm "%s" is not supported', $algorithm));
         }
 
         $this->secret = $secret;

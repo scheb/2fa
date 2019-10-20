@@ -66,11 +66,11 @@ class TrustedDeviceTokenStorage
             if ($token->authenticatesRealm($username, $firewall)) {
                 if ($token->versionMatches($version)) {
                     return true;
-                } else {
-                    // Remove the trusted token, because the version is outdated
-                    unset($this->trustedTokenList[$key]);
-                    $this->updateCookie = true;
                 }
+
+                // Remove the trusted token, because the version is outdated
+                unset($this->trustedTokenList[$key]);
+                $this->updateCookie = true;
             }
         }
 
