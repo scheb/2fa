@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Scheb\TwoFactorBundle\Test\Security\TwoFactor\Provider\Totp;
+namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Totp;
 
 use OTPHP\TOTP;
 use PHPUnit\Framework\MockObject\MockObject;
