@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Csrf;
+namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\CsrfProtection;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\CsrfTokenValidator;
