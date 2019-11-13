@@ -40,6 +40,6 @@ class TotpAuthenticator implements TotpAuthenticatorInterface
 
     public function generateSecret(): string
     {
-        return trim(Base32::encodeUpper(random_bytes(32)), '=');
+        return Base32::encodeUpperUnpadded(random_bytes(32));
     }
 }
