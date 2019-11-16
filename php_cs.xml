@@ -8,12 +8,14 @@
 	</rule>
 	<rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses">
 		<exclude-pattern>*/Tests/*</exclude-pattern>
+		<exclude-pattern>*/Security/TwoFactor/Event/Event.php</exclude-pattern>
 	</rule>
 	<rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
 		<exclude-pattern>*/Tests/*</exclude-pattern>
 	</rule>
 	<rule ref="Symfony.Classes.MultipleClassesOneFile.Invalid">
 		<exclude-pattern>*/Tests/*</exclude-pattern>
+		<exclude-pattern>*/Security/TwoFactor/Event/Event.php</exclude-pattern>
 	</rule>
 	<rule ref="Zend.NamingConventions.ValidVariableName.MemberVarContainsNumbers">
 		<exclude-pattern>*/Tests/*</exclude-pattern>
