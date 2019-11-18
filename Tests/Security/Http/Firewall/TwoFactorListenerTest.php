@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -145,7 +146,13 @@ class TwoFactorListenerTest extends TestCase
                 return $this->requestParams[$param];
             });
 
-        $this->getResponseEvent = $this->createMock(GetResponseEvent::class);
+        // Symfony < 4.3
+        if (!class_exists(RequestEvent::class)) {
+            $this->getResponseEvent = $this->createMock(GetResponseEvent::class);
+        } else {
+            $this->getResponseEvent = $this->createMock(RequestEvent::class);
+        }
+
         $this->getResponseEvent
             ->expects($this->any())
             ->method('getRequest')

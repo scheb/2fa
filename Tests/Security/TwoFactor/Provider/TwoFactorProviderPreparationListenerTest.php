@@ -16,6 +16,7 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
 class TwoFactorProviderPreparationListenerTest extends TestCase
@@ -100,13 +101,10 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
 
     private function createFinishRequestEvent(): FinishRequestEvent
     {
-        $event = $this->createMock(FinishRequestEvent::class);
-        $event
-            ->expects($this->any())
-            ->method('isMasterRequest')
-            ->willReturn(true);
+        $kernel = $this->createMock(HttpKernelInterface::class);
 
-        return $event;
+        // Class is final, have to use a real instance instead of a mock
+        return new FinishRequestEvent($kernel, $this->request, HttpKernelInterface::MASTER_REQUEST);
     }
 
     private function expectPrepareCurrentProvider(): void

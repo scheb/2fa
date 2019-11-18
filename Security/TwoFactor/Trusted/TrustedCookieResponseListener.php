@@ -6,6 +6,7 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class TrustedCookieResponseListener
 {
@@ -55,7 +56,10 @@ class TrustedCookieResponseListener
         $this->cookieDomain = $cookieDomain;
     }
 
-    public function onKernelResponse(FilterResponseEvent $event): void
+    /**
+     * @param $event FilterResponseEvent|ResponseEvent
+     */
+    public function onKernelResponse($event): void
     {
         if ($this->trustedTokenStorage->hasUpdatedCookie()) {
             $domain = null;

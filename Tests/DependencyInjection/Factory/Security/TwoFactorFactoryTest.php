@@ -355,8 +355,14 @@ class TestableFactoryConfiguration implements ConfigurationInterface
 
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root(TwoFactorFactory::AUTHENTICATION_PROVIDER_KEY);
+        $treeBuilder = new TreeBuilder(TwoFactorFactory::AUTHENTICATION_PROVIDER_KEY);
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $rootNode = $treeBuilder->root(TwoFactorFactory::AUTHENTICATION_PROVIDER_KEY);
+        }
+
         $this->factory->addConfiguration($rootNode);
 
         return $treeBuilder;
