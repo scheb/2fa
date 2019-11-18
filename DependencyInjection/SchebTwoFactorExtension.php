@@ -81,21 +81,21 @@ class SchebTwoFactorExtension extends Extension
             return;
         }
 
-        $container->removeAlias($container->getAlias('scheb_two_factor.persister'));
+        $container->removeAlias('scheb_two_factor.persister');
         $container->setAlias('scheb_two_factor.persister', $config['persister']);
     }
 
     private function configureTrustedDeviceManager(ContainerBuilder $container, array $config): void
     {
         $trustedDeviceManager = $config['trusted_device']['manager'] ?? self::DEFAULT_TRUSTED_DEVICE_MANAGER;
-        $container->removeAlias($container->getAlias('scheb_two_factor.trusted_device_manager'));
+        $container->removeAlias('scheb_two_factor.trusted_device_manager');
         $container->setAlias('scheb_two_factor.trusted_device_manager', $trustedDeviceManager);
     }
 
     private function configureBackupCodeManager(ContainerBuilder $container, array $config): void
     {
         $backupCodeManager = $config['backup_codes']['manager'] ?? self::DEFAULT_BACKUP_CODE_MANAGER;
-        $container->removeAlias($container->getAlias('scheb_two_factor.backup_code_manager'));
+        $container->removeAlias('scheb_two_factor.backup_code_manager');
         $container->setAlias('scheb_two_factor.backup_code_manager', $backupCodeManager);
     }
 
@@ -106,7 +106,7 @@ class SchebTwoFactorExtension extends Extension
             return;
         }
 
-        $container->removeAlias($container->getAlias('scheb_two_factor.ip_whitelist_provider'));
+        $container->removeAlias('scheb_two_factor.ip_whitelist_provider');
         $container->setAlias('scheb_two_factor.ip_whitelist_provider', $config['ip_whitelist_provider']);
     }
 
@@ -117,7 +117,7 @@ class SchebTwoFactorExtension extends Extension
             return;
         }
 
-        $container->removeAlias($container->getAlias('scheb_two_factor.token_factory'));
+        $container->removeAlias('scheb_two_factor.token_factory');
         $container->setAlias('scheb_two_factor.token_factory', $config['two_factor_token_factory']);
     }
 
