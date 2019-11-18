@@ -19,7 +19,7 @@ especially when you're using different route names than the ones used here.
 <p class="label"><label for="_auth_code">{{ "auth_code"|trans({}, 'SchebTwoFactorBundle') }} {{ twoFactorProvider }}:</label></p>
 
 <form class="form" action="{{ path("2fa_login_check") }}" method="post">
-    <p class="widget"><input id="_auth_code" type="text" autocomplete="off" name="{{ authCodeParameterName }}" /></p>
+    <p class="widget"><input id="_auth_code" type="text" autocomplete="off" name="{{ authCodeParameterName }}" autofocus /></p>
     {% if displayTrustedOption %}
         <p class="widget"><label for="_trusted"><input id="_trusted" type="checkbox" name="{{ trustedParameterName }}" /> {{ "trusted"|trans({}, 'SchebTwoFactorBundle') }}</label></p>
     {% endif %}
