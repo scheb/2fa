@@ -47,7 +47,10 @@ Security
 Before version 3.7 the bundle is vulnerable to a
 [security issue in JWT](https://auth0.com/blog/critical-vulnerabilities-in-json-web-token-libraries/), which can be
 exploited by an attacker to generate trusted device cookies on their own, effectively by-passing two-factor
-authentication.
+authentication. ([#143](https://github.com/scheb/two-factor-bundle/issues/143))
+
+Currently, in versions 3.x and 4.x, you can bypass two-factor authentication when the remember-me option is available
+on the login form. ([#253](https://github.com/scheb/two-factor-bundle/issues/253))
 
 Contribute
 ----------
