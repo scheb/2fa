@@ -207,7 +207,7 @@ class TwoFactorListener
             $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::ATTEMPT, $request, $token);
             $resultToken = $this->authenticationManager->authenticate($token);
 
-            return $this->onSuccess($request, $resultToken);
+            return $this->onSuccess($request, $resultToken, $currentToken);
         } catch (AuthenticationException $failed) {
             return $this->onFailure($request, $failed);
         }
@@ -223,7 +223,7 @@ class TwoFactorListener
         return $this->failureHandler->onAuthenticationFailure($request, $failed);
     }
 
-    private function onSuccess(Request $request, TokenInterface $token): Response
+    private function onSuccess(Request $request, TokenInterface $token, TwoFactorTokenInterface $previousTwoFactorToken): Response
     {
         if ($this->logger) {
             $this->logger->info('User has been two-factor authenticated successfully.', ['username' => $token->getUsername()]);
@@ -244,7 +244,10 @@ class TwoFactorListener
             $this->trustedDeviceManager->addTrustedDevice($token->getUser(), $this->firewallName);
         }
 
-        return $this->successHandler->onAuthenticationSuccess($request, $token);
+        $response = $this->successHandler->onAuthenticationSuccess($request, $token);
+        $this->addRememberMeCookies($previousTwoFactorToken, $response);
+
+        return $response;
     }
 
     private function hasTrustedDeviceParameter(Request $request): bool
@@ -261,6 +264,17 @@ class TwoFactorListener
             $this->eventDispatcher->dispatch($event, $eventType);
         } else {
             $this->eventDispatcher->dispatch($eventType, $event);
+        }
+    }
+
+    private function addRememberMeCookies(TwoFactorTokenInterface $twoFactorToken, Response $response): void
+    {
+        // Add the remember-me cookie that was previously suppressed by two-factor authentication
+        if ($twoFactorToken->hasAttribute(TwoFactorTokenInterface::ATTRIBUTE_NAME_REMEMBER_ME_COOKIE)) {
+            $rememberMeCookies = $twoFactorToken->getAttribute(TwoFactorTokenInterface::ATTRIBUTE_NAME_REMEMBER_ME_COOKIE);
+            foreach ($rememberMeCookies as $cookie) {
+                $response->headers->setCookie($cookie);
+            }
         }
     }
 }

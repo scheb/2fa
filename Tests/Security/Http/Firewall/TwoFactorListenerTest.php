@@ -18,6 +18,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -188,7 +189,7 @@ class TwoFactorListenerTest extends TestCase
     /**
      * @return MockObject|TokenInterface
      */
-    private function createTwoFactorToken($firewallName = self::FIREWALL_NAME, $authenticatedToken = null): MockObject
+    private function createTwoFactorToken($firewallName = self::FIREWALL_NAME, $authenticatedToken = null, array $attributes = []): MockObject
     {
         $twoFactorToken = $this->createMock(TwoFactorTokenInterface::class);
         $twoFactorToken
@@ -203,6 +204,22 @@ class TwoFactorListenerTest extends TestCase
             ->expects($this->any())
             ->method('getAuthenticatedToken')
             ->willReturn($authenticatedToken ?? $this->createMock(TokenInterface::class));
+        $twoFactorToken
+            ->expects($this->any())
+            ->method('getAttributes')
+            ->willReturn($attributes);
+        $twoFactorToken
+            ->expects($this->any())
+            ->method('hasAttribute')
+            ->willReturnCallback(function ($key) use ($attributes) {
+                return isset($attributes[$key]);
+            });
+        $twoFactorToken
+            ->expects($this->any())
+            ->method('getAttribute')
+            ->willReturnCallback(function ($key) use ($attributes) {
+                return $attributes[$key] ?? null;
+            });
 
         return $twoFactorToken;
     }
@@ -236,16 +253,19 @@ class TwoFactorListenerTest extends TestCase
         $this->requestParams[$parameterName] = $value;
     }
 
-    private function stubHandlersReturnResponse(): void
+    private function stubHandlersReturnResponse(): Response
     {
+        $response = new Response();
         $this->successHandler
             ->expects($this->any())
             ->method('onAuthenticationSuccess')
-            ->willReturn($this->createMock(Response::class));
+            ->willReturn($response);
         $this->failureHandler
             ->expects($this->any())
             ->method('onAuthenticationFailure')
-            ->willReturn($this->createMock(Response::class));
+            ->willReturn($response);
+
+        return $response;
     }
 
     private function stubAuthenticationManagerReturnsToken(MockObject $returnedToken): void
@@ -652,5 +672,31 @@ class TwoFactorListenerTest extends TestCase
             ->method($this->anything());
 
         ($this->listener)($this->getResponseEvent);
+    }
+
+    /**
+     * @test
+     */
+    public function handle_twoFactorProcessCompleteWithRememberMeEnabled_setRememberMeCookies(): void
+    {
+        $authenticatedToken = $this->createMock(TokenInterface::class);
+        $authenticatedToken
+            ->expects($this->any())
+            ->method('getUser')
+            ->willReturn('user');
+
+        $rememberMeCookie = new Cookie('remember_me', 'value');
+        $attributes = [TwoFactorTokenInterface::ATTRIBUTE_NAME_REMEMBER_ME_COOKIE => [$rememberMeCookie]];
+        $twoFactorToken = $this->createTwoFactorToken(self::FIREWALL_NAME, null, $attributes);
+
+        $this->stubTokenManagerHasToken($twoFactorToken);
+        $this->stubCurrentPath(self::CHECK_PATH);
+        $this->stubCsrfTokenValidatorHasValidCsrfTokenReturnsTrue();
+        $this->stubAuthenticationManagerReturnsToken($authenticatedToken); // Not a TwoFactorToken
+        $response = $this->stubHandlersReturnResponse();
+
+        ($this->listener)($this->getResponseEvent);
+
+        $this->assertContains($rememberMeCookie, $response->headers->getCookies());
     }
 }

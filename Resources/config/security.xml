@@ -55,6 +55,10 @@
 			<argument /> <!-- Decorated listener -->
 		</service>
 
+		<service id="scheb_two_factor.security.rememberme_services_decorator" class="\Scheb\TwoFactorBundle\Security\Authentication\RememberMe\RememberMeServicesDecorator" abstract="true">
+			<argument /> <!-- Decorated remember-me services instance -->
+		</service>
+
 		<service id="scheb_two_factor.security.provider_preparation_listener" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationListener" abstract="true">
 			<argument type="service" id="scheb_two_factor.provider_registry" />
 			<argument type="service" id="scheb_two_factor.provider_preparation_recorder" />
