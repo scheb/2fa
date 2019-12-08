@@ -89,4 +89,9 @@ class AuthenticationProviderDecorator implements AuthenticationProviderInterface
 
         return $this->twoFactorAuthenticationHandler->beginTwoFactorAuthentication($context);
     }
+
+    public function __call($method, $arguments)
+    {
+        return ($this->decoratedAuthenticationProvider)->{$method}(...$arguments);
+    }
 }
