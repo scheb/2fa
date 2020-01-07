@@ -49,7 +49,7 @@ class User implements UserInterface, TwoFactorInterface
 
     // [...]    
 
-    public function isTotpAuthenticatorEnabled(): bool
+    public function isTotpAuthenticationEnabled(): bool
     {
         return $this->totpSecret ? true : false;
     }
