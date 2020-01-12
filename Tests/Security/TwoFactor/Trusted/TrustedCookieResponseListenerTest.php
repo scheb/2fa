@@ -158,7 +158,7 @@ class TrustedCookieResponseListenerTest extends TestCase
     /**
      * @test
      */
-    public function onKernelResponse_setCookieDomain(): void
+    public function onKernelResponse_hasDomainConfigured_setCookieDomain(): void
     {
         $this->cookieResponseListener = $this->createTrustedCookieResponseListener('.different-domain.com');
 
