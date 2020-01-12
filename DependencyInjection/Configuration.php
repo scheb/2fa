@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('cookie_name')->defaultValue('trusted_device')->end()
                         ->booleanNode('cookie_secure')->defaultValue(false)->end()
                         ->scalarNode('cookie_domain')->defaultNull()->end()
+                        ->scalarNode('cookie_path')->defaultValue('/')->end()
                         ->scalarNode('cookie_same_site')
                             ->defaultValue('lax')
                             ->validate()

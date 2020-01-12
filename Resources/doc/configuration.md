@@ -17,6 +17,7 @@ scheb_two_factor:
         cookie_secure: false           # Set the 'Secure' (HTTPS Only) flag on the trusted device cookie
         cookie_same_site: "lax"        # The same-site option of the cookie, can be "lax", "strict" or null
         cookie_domain: ".example.com"  # Domain to use when setting the cookie, fallback to the request domain if not set
+        cookie_path: "/"               # Path to use when setting the cookie
 
     # Backup codes feature
     backup_codes:
@@ -41,7 +42,7 @@ scheb_two_factor:
         digits: 6                      # Number of digits in authentication code
         window: 1                      # How many codes before/after the current one would be accepted as valid
         template: security/2fa_form.html.twig   # Template used to render the authentication form
-    
+
     # TOTP authentication config
     totp:
         enabled: true                  # If TOTP authentication should be enabled, default false
@@ -72,12 +73,12 @@ scheb_two_factor:
         - 127.0.0.1 # One IPv4
         - 192.168.0.0/16 # IPv4 subnet
         - 2001:0db8:85a3:0000:0000:8a2e:0370:7334 # One IPv6
-        - 2001:db8:abcd:0012::0/64 # IPv6 subnet        
+        - 2001:db8:abcd:0012::0/64 # IPv6 subnet
 
     # If you want to have your own implementation to retrieve the whitelisted IPs.
     # The configuration option "ip_whitelist" becomes meaningless in such a case.
     ip_whitelist_provider: acme.custom_ip_whitelist_provider
-    
+
     # If you want to exchange/extend the TwoFactorToken class, which is used by the bundle, you can have a factory
     # service providing your own implementation.
     two_factor_token_factory: acme.custom_two_factor_token_factory
@@ -98,7 +99,7 @@ security:
                 trusted_parameter_name: _trusted      # Name of the parameter for the trusted device option
                 multi_factor: false                   # If ALL active two-factor methods need to be fulfilled
                                                       # (multi-factor authentication)
-                success_handler: acme.custom_success_handler # Use a custom success handler instead of the default one 
+                success_handler: acme.custom_success_handler # Use a custom success handler instead of the default one
                 failure_handler: acme.custom_failure_handler # Use a custom failure handler instead of the default one
 
                 # Use a custom authentication required handler instead of the default one

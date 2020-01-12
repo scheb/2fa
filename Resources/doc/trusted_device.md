@@ -17,6 +17,7 @@ scheb_two_factor:
         cookie_secure: false           # Set the 'Secure' (HTTPS Only) flag on the trusted device cookie
         cookie_same_site: "lax"        # The same-site option of the cookie, can be "lax" or "strict"
         cookie_domain: ".example.com"  # Domain to use when setting the cookie, fallback to the request domain if not set
+        cookie_path: "/"               # Path to use when setting the cookie
 ```
 
 Trusted device cookies are versioned, which gives you (or the user) to possibility to invalidate all trusted device

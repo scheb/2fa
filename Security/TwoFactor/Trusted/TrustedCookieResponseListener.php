@@ -38,6 +38,11 @@ class TrustedCookieResponseListener
     /**
      * @var string|null
      */
+    private $cookiePath;
+
+    /**
+     * @var string|null
+     */
     private $cookieDomain;
 
     public function __construct(
@@ -46,6 +51,7 @@ class TrustedCookieResponseListener
         string $cookieName,
         bool $cookieSecure,
         ?string $cookieSameSite,
+        ?string $cookiePath,
         ?string $cookieDomain
     ) {
         $this->trustedTokenStorage = $trustedTokenStorage;
@@ -53,6 +59,7 @@ class TrustedCookieResponseListener
         $this->cookieName = $cookieName;
         $this->cookieSecure = $cookieSecure;
         $this->cookieSameSite = $cookieSameSite;
+        $this->cookiePath = $cookiePath;
         $this->cookieDomain = $cookieDomain;
     }
 
@@ -78,7 +85,7 @@ class TrustedCookieResponseListener
                 $this->cookieName,
                 $this->trustedTokenStorage->getCookieValue(),
                 $this->getValidUntil(),
-                '/',
+                $this->cookiePath,
                 $domain,
                 $this->cookieSecure,
                 true,

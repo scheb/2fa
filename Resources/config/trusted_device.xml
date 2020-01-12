@@ -18,6 +18,7 @@
 			<argument>%scheb_two_factor.trusted_device.cookie_name%</argument>
 			<argument>%scheb_two_factor.trusted_device.cookie_secure%</argument>
 			<argument>%scheb_two_factor.trusted_device.cookie_same_site%</argument>
+			<argument>%scheb_two_factor.trusted_device.cookie_path%</argument>
 			<argument>%scheb_two_factor.trusted_device.cookie_domain%</argument>
 			<tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" />
 		</service>
