@@ -38,7 +38,7 @@ class User implements TrustedDeviceInterface
 
     // [...]
 
-    public function getTrustedTokenVersion(): int;
+    public function getTrustedTokenVersion(): int
     {
         return $this->trustedVersion;
     }
