@@ -3,6 +3,13 @@ Upgrading
 
 Here's an overview if you have to do any work when upgrading.
 
+## 4.x to 5.x
+
+Guard-based authentication has become the preferred way of building a custom authentication provider. Therefore,
+`Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken` is now configured per default in `security_tokens`
+as a token to triggers two-factor authentication. If you don't want to have it automatically configured, please set
+`security_tokens` in your bundle configuration.
+
 ## 3.x to 4.x
 
 ### Dependencies
@@ -43,7 +50,7 @@ Use the method `getQRContent()` on that same class to retrieve the content for t
 ### Translations
 
 The bundle's translations have been moved to its own domain `SchebTwoFactorBundle`. The prefix `scheb_two_factor.` has
-been removed on the translation keys. Please update in your templates: 
+been removed on the translation keys. Please update in your templates:
 
 Before:
 ```twig
@@ -76,10 +83,10 @@ implementations.
 - `Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterface`
 - `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface`
 - `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface`
-- `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface` 
+- `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface`
 
 The method `Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextFactoryInterface::create` requires
-`$firewallName` as the 3rd argument. 
+`$firewallName` as the 3rd argument.
 
 In the two-factor provider interface `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface` the
 method `requestAuthenticationCode()` has been removed and replaced by `validateAuthenticationCode()`. The method
@@ -108,7 +115,7 @@ In the interface `Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface` the meth
 The trusted device feature no longer requires you to store trusted tokens. Instead, it is using JWT to store on a signed
 cookie on the trusted device.
 
-The configuration node `scheb_two_factor.trusted_computer` has been renamed to `scheb_two_factor.trusted_device`. 
+The configuration node `scheb_two_factor.trusted_computer` has been renamed to `scheb_two_factor.trusted_device`.
 
 `Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedComputerManagerInterface` has been replaced by
 `Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface`. If you want to have your own

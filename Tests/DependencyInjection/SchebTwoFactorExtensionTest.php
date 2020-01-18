@@ -63,7 +63,10 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertParameter('lax', 'scheb_two_factor.trusted_device.cookie_same_site');
         $this->assertParameter(null, 'scheb_two_factor.trusted_device.cookie_domain');
         $this->assertParameter('/', 'scheb_two_factor.trusted_device.cookie_path');
-        $this->assertParameter(['Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken'], 'scheb_two_factor.security_tokens');
+        $this->assertParameter([
+            'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken',
+            'Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken',
+        ], 'scheb_two_factor.security_tokens');
         $this->assertParameter([], 'scheb_two_factor.ip_whitelist');
     }
 

@@ -70,7 +70,8 @@ More per-firewall configuration options can be found in the [configuration refer
 ### Step 5: Configure authentication tokens
 
 Your firewall may offer different ways how to login. By default the bundle is only listening to the user-password
-authentication (which uses the token class `Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken`).
+authentication (which uses the token class `Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken`)
+and guard-based providers (which are using `Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken`).
 If you want to support two-factor authentication with another login method, you have to register its token class in the
 `scheb_two_factor.security_tokens` configuration option.
 
@@ -79,11 +80,9 @@ If you want to support two-factor authentication with another login method, you 
 scheb_two_factor:
     security_tokens:
         - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+        - Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken
         - Acme\AuthenticationBundle\Token\CustomAuthenticationToken
 ```
-
-For a guard-based authentication method, you have to configure the
-`Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken` token class.
 
 ### Step 6: Enable two-factor authentication methods
 

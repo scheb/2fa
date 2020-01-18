@@ -88,7 +88,10 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->arrayNode('security_tokens')
-                    ->defaultValue(["Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken"])
+                    ->defaultValue([
+                        "Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken",
+                        "Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken",
+                    ])
                     ->prototype('scalar')->end()
                 ->end()
                 ->arrayNode('ip_whitelist')
