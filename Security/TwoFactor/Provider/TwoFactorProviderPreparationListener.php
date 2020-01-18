@@ -103,20 +103,22 @@ class TwoFactorProviderPreparationListener
         $providerName = $this->twoFactorToken->getCurrentTwoFactorProvider();
         $firewallName = $this->twoFactorToken->getProviderKey();
 
-        if ($this->preparationRecorder->isProviderPrepared($firewallName, $providerName)) {
-            if ($this->logger) {
-                $this->logger->info(sprintf('Two-factor provider "%s" was already prepared.', $providerName));
+        try {
+            if ($this->preparationRecorder->isProviderPrepared($firewallName, $providerName)) {
+                if ($this->logger) {
+                    $this->logger->info(sprintf('Two-factor provider "%s" was already prepared.', $providerName));
+                }
+
+                return;
             }
-
-            return;
-        }
-
-        $user = $this->twoFactorToken->getUser();
-        $this->providerRegistry->getProvider($providerName)->prepareAuthentication($user);
-        $this->preparationRecorder->recordProviderIsPrepared($firewallName, $providerName);
-
-        if ($this->logger) {
-            $this->logger->info(sprintf('Two-factor provider "%s" prepared.', $providerName));
+            $user = $this->twoFactorToken->getUser();
+            $this->providerRegistry->getProvider($providerName)->prepareAuthentication($user);
+            $this->preparationRecorder->recordProviderIsPrepared($firewallName, $providerName);
+            if ($this->logger) {
+                $this->logger->info(sprintf('Two-factor provider "%s" prepared.', $providerName));
+            }
+        } finally {
+            $this->preparationRecorder->saveSession();
         }
     }
 

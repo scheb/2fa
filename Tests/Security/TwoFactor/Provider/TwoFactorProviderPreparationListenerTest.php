@@ -131,6 +131,10 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
             ->expects($this->once())
             ->method('prepareAuthentication')
             ->with($this->identicalTo($this->user));
+
+        $this->preparationRecorder
+            ->expects($this->once())
+            ->method('saveSession');
     }
 
     private function expectNotPrepareCurrentProvider(): void
@@ -217,7 +221,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
     /**
      * @test
      */
-    public function onKernelFinishRequest_providerAlreadyPrepared_doNothing(): void
+    public function onKernelFinishRequest_providerAlreadyPrepared_saveSession(): void
     {
         $this->initTwoFactorProviderPreparationListener(true, true);
         $event = $this->createTwoFactorAuthenticationEvent();
@@ -227,6 +231,10 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
             ->method('isProviderPrepared')
             ->with(self::FIREWALL_NAME, self::CURRENT_PROVIDER_NAME)
             ->willReturn(true);
+
+        $this->preparationRecorder
+            ->expects($this->once())
+            ->method('saveSession');
 
         $this->preparationRecorder
             ->expects($this->never())

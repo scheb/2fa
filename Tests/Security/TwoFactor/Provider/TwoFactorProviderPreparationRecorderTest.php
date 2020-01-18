@@ -84,4 +84,38 @@ class TwoFactorProviderPreparationRecorderTest extends TestCase
 
         $this->recorder->recordProviderIsPrepared(self::FIREWALL_NAME, self::CURRENT_PROVIDER_NAME);
     }
+
+    /**
+     * @test
+     */
+    public function saveSession_sessionIsStarted_save(): void
+    {
+        $this->session
+            ->expects($this->any())
+            ->method('isStarted')
+            ->willReturn(true);
+
+        $this->session
+            ->expects($this->once())
+            ->method('save');
+
+        $this->recorder->saveSession();
+    }
+
+    /**
+     * @test
+     */
+    public function saveSession_sessionNotStarted_doNotSave(): void
+    {
+        $this->session
+            ->expects($this->any())
+            ->method('isStarted')
+            ->willReturn(false);
+
+        $this->session
+            ->expects($this->never())
+            ->method('save');
+
+        $this->recorder->saveSession();
+    }
 }

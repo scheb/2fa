@@ -37,4 +37,11 @@ class TwoFactorProviderPreparationRecorder
         $calledProviders[$firewallName][] = $providerName;
         $this->session->set(self::CALLED_PROVIDERS_SESSION_KEY, $calledProviders);
     }
+
+    public function saveSession(): void
+    {
+        if ($this->session->isStarted()) {
+            $this->session->save();
+        }
+    }
 }
