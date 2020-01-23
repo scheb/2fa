@@ -8,18 +8,22 @@ scheb/two-factor-bundle
 [![Total Downloads](https://poser.pugx.org/scheb/two-factor-bundle/downloads)](https://packagist.org/packages/scheb/two-factor-bundle)
 [![License](https://poser.pugx.org/scheb/two-factor-bundle/license.svg)](https://packagist.org/packages/scheb/two-factor-bundle)
 
-This bundle provides **two-factor authentication for your Symfony application**. It comes with the following two-factor
-authentication methods:
+This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki/Multi-factor_authentication) for your
+[Symfony](https://symfony.com/) application**.
 
-- Google Authenticator
-- Email authentication code
+It comes with the following two-factor authentication methods:
+
+- [TOTP authentication](https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm)
+- [Google Authenticator](https://en.wikipedia.org/wiki/Google_Authenticator)
+- Authentication code via email
 
 Additional features you will like:
+
 - Interface for custom two-factor authentication methods
 - Trusted IPs
 - Trusted devices (once passed, no more two-factor authentication on that device)
 - Single-use backup codes for when you don't have access to the second factor device
-- Multi-factor authentication
+- Multi-factor authentication (more than 2 steps)
 - CSRF protection
 - Whitelisted routes (accessible during two-factor authentication)
 

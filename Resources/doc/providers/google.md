@@ -3,9 +3,9 @@ Google Authentication
 
 ## How it works
 
-The user entity has to be linked with Google Authenticator first. This is done by generating a secret code and storing
-it in the user entity. Users can add that code to the Google Authenticator app on their mobile. The app will generate a
-6-digit numeric code from it that changes every 30 seconds.
+The user entity has to be linked with [Google Authenticator](https://en.wikipedia.org/wiki/Google_Authenticator) first.
+This is done by generating a secret code and storing it in the user entity. Users can add that code to the Google
+Authenticator app on their mobile. The app will generate a 6-digit numeric code from it that changes every 30 seconds.
 
 On successful authentication the bundle checks if there is a secret stored in the user entity. If that's the case it
 will ask for the authentication code. The user must enter the code currently shown in the Google Authenticator app to
@@ -43,7 +43,7 @@ class User implements UserInterface, TwoFactorInterface
     private $googleAuthenticatorSecret;
 
     // [...]
-    
+
     public function isGoogleAuthenticatorEnabled(): bool
     {
         return $this->googleAuthenticatorSecret ? true : false;
