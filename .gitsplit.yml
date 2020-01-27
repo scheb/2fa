@@ -1,0 +1,14 @@
+splits:
+    - prefix: "src/bundle"
+      target: "https://${GH_TOKEN}@github.com/scheb/two-factor-bundle.git"
+    - prefix: "src/email"
+      target: "https://${GH_TOKEN}@github.com/scheb/two-factor-email.git"
+    - prefix: "src/google"
+      target: "https://${GH_TOKEN}@github.com/scheb/two-factor-google-authenticator.git"
+    - prefix: "src/totp"
+      target: "https://${GH_TOKEN}@github.com/scheb/two-factor-totp.git"
+
+origins:
+    - ^master$
+    - ^v\d+\.\d+$
+    - ^v\d+\.\d+\.\d+.*$

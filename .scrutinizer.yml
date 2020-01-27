@@ -1,5 +1,5 @@
 filter:
-    excluded_paths: [vendor/*, Tests/*]
+    excluded_paths: [doc/*, vendor/*, tests/*]
 build:
     environment:
         php:

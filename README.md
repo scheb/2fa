@@ -34,11 +34,11 @@ Installation
 composer require scheb/two-factor-bundle
 ```
 
-... and follow the [installation instructions](Resources/doc/installation.md).
+... and follow the [installation instructions](doc/installation.md).
 
 Documentation
 -------------
-Detailed documentation of all features can be found in the [Resources/doc](Resources/doc/index.md) directory.
+Detailed documentation of all features can be found in the [doc](doc/index.md) directory.
 
 Compatibility
 -------------
@@ -75,7 +75,7 @@ creating a pull requests or feature request in the issues section. For pull requ
 
 Besides new features, [translations](Resources/translations) are highly welcome.
 
-To run the test suite install the dependencies with `composer install` and then execute `bin/phpunit`.
+To run the test suite install the dependencies with `composer install` and then execute `vendor/bin/phpunit`.
 
 License
 -------

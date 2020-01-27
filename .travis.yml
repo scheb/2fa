@@ -32,8 +32,8 @@ install:
 
 script:
   - mkdir -p build/logs
-  - ./bin/phpunit --coverage-clover build/logs/clover.xml
-  - ./bin/phpcs --standard=php_cs.xml --ignore=*/vendor/* .
+  - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+  - ./vendor/bin/phpcs --standard=php_cs.xml --ignore=*/vendor/* .
 
 after_script:
  - travis_retry wget https://scrutinizer-ci.com/ocular.phar

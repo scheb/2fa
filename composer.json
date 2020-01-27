@@ -37,13 +37,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Scheb\\TwoFactorBundle\\": ""
-        },
-        "exclude-from-classmap": [
-            "/Tests/"
-        ]
+            "Scheb\\TwoFactorBundle\\": "src/bundle"
+        }
     },
-    "config": {
-        "bin-dir": "bin"
+    "autoload-dev": {
+        "psr-4": {
+            "Scheb\\TwoFactorBundle\\Tests\\": "tests"
+        }
     }
 }
