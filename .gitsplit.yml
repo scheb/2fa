@@ -1,12 +1,12 @@
 splits:
     - prefix: "src/bundle"
-      target: "https://${GH_TOKEN}@github.com/scheb/two-factor-bundle.git"
+      target: "https://${GH_TOKEN}@github.com/scheb/2fa-bundle.git"
     - prefix: "src/email"
-      target: "https://${GH_TOKEN}@github.com/scheb/two-factor-email.git"
+      target: "https://${GH_TOKEN}@github.com/scheb/2fa-email.git"
     - prefix: "src/google"
-      target: "https://${GH_TOKEN}@github.com/scheb/two-factor-google-authenticator.git"
+      target: "https://${GH_TOKEN}@github.com/scheb/2fa-google-authenticator.git"
     - prefix: "src/totp"
-      target: "https://${GH_TOKEN}@github.com/scheb/two-factor-totp.git"
+      target: "https://${GH_TOKEN}@github.com/scheb/2fa-totp.git"
 
 origins:
     - ^master$
