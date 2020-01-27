@@ -10,8 +10,6 @@
 			<factory service="scheb_two_factor.persister_factory.doctrine" method="getPersister" />
 		</service>
 
-		<service id="scheb_two_factor.persister" alias="scheb_two_factor.persister.doctrine" />
-
 		<!-- Alias for auto-wiring -->
 		<service id="Scheb\TwoFactorBundle\Model\PersisterInterface" alias="scheb_two_factor.persister" public="true" />
 	</services>

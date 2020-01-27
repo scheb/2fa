@@ -23,8 +23,6 @@ class SchebTwoFactorExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('security.xml');
         $loader->load('persistence.xml');
-        $loader->load('trusted_device.xml');
-        $loader->load('backup_codes.xml');
         $loader->load('two_factor.xml');
 
         // Load two-factor modules
@@ -52,17 +50,13 @@ class SchebTwoFactorExtension extends Extension
 
     private function configurePersister(ContainerBuilder $container, array $config): void
     {
-        // No custom persister configured
-        if (!$config['persister']) {
-            return;
-        }
-
-        $container->removeAlias('scheb_two_factor.persister');
         $container->setAlias('scheb_two_factor.persister', $config['persister']);
     }
 
     private function configureTrustedDeviceManager(ContainerBuilder $container, array $config): void
     {
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('trusted_device.xml');
         $container->setAlias('scheb_two_factor.trusted_device_manager', $config['trusted_device']['manager']);
 
         $container->setParameter('scheb_two_factor.trusted_device.enabled', $config['trusted_device']['enabled']);
@@ -77,28 +71,18 @@ class SchebTwoFactorExtension extends Extension
 
     private function configureBackupCodeManager(ContainerBuilder $container, array $config): void
     {
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('backup_codes.xml');
         $container->setAlias('scheb_two_factor.backup_code_manager', $config['backup_codes']['manager']);
     }
 
     private function configureIpWhitelistProvider(ContainerBuilder $container, array $config): void
     {
-        // No custom persister configured
-        if (!$config['ip_whitelist_provider']) {
-            return;
-        }
-
-        $container->removeAlias('scheb_two_factor.ip_whitelist_provider');
         $container->setAlias('scheb_two_factor.ip_whitelist_provider', $config['ip_whitelist_provider']);
     }
 
     private function configureTokenFactory(ContainerBuilder $container, array $config): void
     {
-        // No custom persister configured
-        if (!$config['two_factor_token_factory']) {
-            return;
-        }
-
-        $container->removeAlias('scheb_two_factor.token_factory');
         $container->setAlias('scheb_two_factor.token_factory', $config['two_factor_token_factory']);
     }
 

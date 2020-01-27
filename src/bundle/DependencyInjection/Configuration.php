@@ -11,6 +11,8 @@ use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface as TotpTwoFactorInterfac
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 
 class Configuration implements ConfigurationInterface
 {
@@ -27,12 +29,12 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('persister')->defaultNull()->end()
+                ->scalarNode('persister')->defaultValue('scheb_two_factor.persister.doctrine')->end()
                 ->scalarNode('model_manager_name')->defaultNull()->end()
                 ->arrayNode('security_tokens')
                     ->defaultValue([
-                        "Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken",
-                        "Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken",
+                        UsernamePasswordToken::class,
+                        PostAuthenticationGuardToken::class,
                     ])
                     ->prototype('scalar')->end()
                 ->end()
@@ -40,8 +42,8 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue([])
                     ->prototype('scalar')->end()
                 ->end()
-            ->scalarNode('ip_whitelist_provider')->defaultNull()->end()
-            ->scalarNode('two_factor_token_factory')->defaultNull()->end()
+            ->scalarNode('ip_whitelist_provider')->defaultValue('scheb_two_factor.default_ip_whitelist_provider')->end()
+            ->scalarNode('two_factor_token_factory')->defaultValue('scheb_two_factor.default_token_factory')->end()
             ->end()
         ;
         $this->addTrustedDeviceConfiguration($rootNode);
