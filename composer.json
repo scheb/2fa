@@ -38,10 +38,12 @@
     "autoload": {
         "psr-4": {
             "Scheb\\TwoFactorBundle\\": [
+                "src/backup",
                 "src/bundle",
                 "src/email",
                 "src/google",
-                "src/totp"
+                "src/totp",
+                "src/trusted"
             ]
         }
     },
@@ -51,9 +53,11 @@
         }
     },
     "replace": {
+        "scheb/2fa-backup-code": "self.version",
         "scheb/2fa-bundle": "self.version",
         "scheb/2fa-email": "self.version",
         "scheb/2fa-totp": "self.version",
+        "scheb/2fa-trusted-devices": "self.version",
         "scheb/2fa-google": "self.version"
     }
 }

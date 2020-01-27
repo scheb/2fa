@@ -28,7 +28,5 @@
 		</service>
 
 		<service id="scheb_two_factor.null_trusted_device_manager" class="Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\NullTrustedDeviceManager" />
-
-		<service id="scheb_two_factor.trusted_device_manager" alias="scheb_two_factor.null_trusted_device_manager" />
 	</services>
 </container>

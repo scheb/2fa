@@ -6,7 +6,5 @@
 		</service>
 
 		<service id="scheb_two_factor.null_backup_code_manager" class="Scheb\TwoFactorBundle\Security\TwoFactor\Backup\NullBackupCodeManager" />
-
-		<service id="scheb_two_factor.backup_code_manager" alias="scheb_two_factor.null_backup_code_manager" />
 	</services>
 </container>

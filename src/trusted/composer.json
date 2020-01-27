@@ -1,0 +1,23 @@
+{
+    "name": "scheb/2fa-trusted-devices",
+    "type": "library",
+    "description": "Trusted devices support for two-factor authentication",
+    "keywords": ["two-factor", "two-step", "authentication", "security", "symfony"],
+    "homepage": "https://github.com/scheb/two-factor-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Scheb",
+            "email": "me@christianscheb.de"
+        }
+    ],
+    "require": {
+        "scheb/2fa-bundle": "self.version",
+        "lcobucci/jwt": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Scheb\\TwoFactorBundle\\": ""
+        }
+    }
+}

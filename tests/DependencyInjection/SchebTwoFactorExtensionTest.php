@@ -40,34 +40,34 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config = $this->getEmptyConfig();
         $this->extension->load([$config], $this->container);
 
-        $this->assertParameter(null, 'scheb_two_factor.model_manager_name');
-        $this->assertParameter('no-reply@example.com', 'scheb_two_factor.email.sender_email');
-        $this->assertParameter(null, 'scheb_two_factor.email.sender_name');
-        $this->assertParameter('@SchebTwoFactor/Authentication/form.html.twig', 'scheb_two_factor.email.template');
-        $this->assertParameter(4, 'scheb_two_factor.email.digits');
-        $this->assertParameter(null, 'scheb_two_factor.google.server_name');
-        $this->assertParameter(null, 'scheb_two_factor.google.issuer');
-        $this->assertParameter('@SchebTwoFactor/Authentication/form.html.twig', 'scheb_two_factor.google.template');
-        $this->assertParameter(6, 'scheb_two_factor.google.digits');
-        $this->assertParameter(1, 'scheb_two_factor.google.window');
-        $this->assertParameter(null, 'scheb_two_factor.totp.issuer');
-        $this->assertParameter(null, 'scheb_two_factor.totp.server_name');
-        $this->assertParameter(1, 'scheb_two_factor.totp.window');
-        $this->assertParameter([], 'scheb_two_factor.totp.parameters');
-        $this->assertParameter('@SchebTwoFactor/Authentication/form.html.twig', 'scheb_two_factor.totp.template');
-        $this->assertParameter(false, 'scheb_two_factor.trusted_device.enabled');
-        $this->assertParameter(5184000, 'scheb_two_factor.trusted_device.lifetime');
-        $this->assertParameter(false, 'scheb_two_factor.trusted_device.extend_lifetime');
-        $this->assertParameter('trusted_device', 'scheb_two_factor.trusted_device.cookie_name');
-        $this->assertParameter(false, 'scheb_two_factor.trusted_device.cookie_secure');
-        $this->assertParameter('lax', 'scheb_two_factor.trusted_device.cookie_same_site');
-        $this->assertParameter(null, 'scheb_two_factor.trusted_device.cookie_domain');
-        $this->assertParameter('/', 'scheb_two_factor.trusted_device.cookie_path');
-        $this->assertParameter([
+        $this->assertHasParameter(null, 'scheb_two_factor.model_manager_name');
+        $this->assertHasNotParameter('scheb_two_factor.email.sender_email');
+        $this->assertHasNotParameter('scheb_two_factor.email.sender_name');
+        $this->assertHasNotParameter('scheb_two_factor.email.template');
+        $this->assertHasNotParameter('scheb_two_factor.email.digits');
+        $this->assertHasNotParameter('scheb_two_factor.google.server_name');
+        $this->assertHasNotParameter('scheb_two_factor.google.issuer');
+        $this->assertHasNotParameter('scheb_two_factor.google.template');
+        $this->assertHasNotParameter('scheb_two_factor.google.digits');
+        $this->assertHasNotParameter('scheb_two_factor.google.window');
+        $this->assertHasNotParameter('scheb_two_factor.totp.issuer');
+        $this->assertHasNotParameter('scheb_two_factor.totp.server_name');
+        $this->assertHasNotParameter('scheb_two_factor.totp.window');
+        $this->assertHasNotParameter('scheb_two_factor.totp.parameters');
+        $this->assertHasNotParameter('scheb_two_factor.totp.template');
+        $this->assertHasNotParameter('scheb_two_factor.trusted_device.enabled');
+        $this->assertHasNotParameter('scheb_two_factor.trusted_device.lifetime');
+        $this->assertHasNotParameter('scheb_two_factor.trusted_device.extend_lifetime');
+        $this->assertHasNotParameter('scheb_two_factor.trusted_device.cookie_name');
+        $this->assertHasNotParameter('scheb_two_factor.trusted_device.cookie_secure');
+        $this->assertHasNotParameter('scheb_two_factor.trusted_device.cookie_same_site');
+        $this->assertHasNotParameter('scheb_two_factor.trusted_device.cookie_domain');
+        $this->assertHasNotParameter('scheb_two_factor.trusted_device.cookie_path');
+        $this->assertHasParameter([
             'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken',
             'Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken',
         ], 'scheb_two_factor.security_tokens');
-        $this->assertParameter([], 'scheb_two_factor.ip_whitelist');
+        $this->assertHasParameter([], 'scheb_two_factor.ip_whitelist');
     }
 
     /**
@@ -78,31 +78,31 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
 
-        $this->assertParameter('alternative', 'scheb_two_factor.model_manager_name');
-        $this->assertParameter('me@example.com', 'scheb_two_factor.email.sender_email');
-        $this->assertParameter('Sender Name', 'scheb_two_factor.email.sender_name');
-        $this->assertParameter('AcmeTestBundle:Authentication:emailForm.html.twig', 'scheb_two_factor.email.template');
-        $this->assertParameter(6, 'scheb_two_factor.email.digits');
-        $this->assertParameter('Server Name Google', 'scheb_two_factor.google.server_name');
-        $this->assertParameter('Issuer Google', 'scheb_two_factor.google.issuer');
-        $this->assertParameter('AcmeTestBundle:Authentication:googleForm.html.twig', 'scheb_two_factor.google.template');
-        $this->assertParameter(8, 'scheb_two_factor.google.digits');
-        $this->assertParameter(2, 'scheb_two_factor.google.window');
-        $this->assertParameter('Issuer TOTP', 'scheb_two_factor.totp.issuer');
-        $this->assertParameter('Server Name TOTP', 'scheb_two_factor.totp.server_name');
-        $this->assertParameter(2, 'scheb_two_factor.totp.window');
-        $this->assertParameter(['image' => 'http://foo/bar.png'], 'scheb_two_factor.totp.parameters');
-        $this->assertParameter('AcmeTestBundle:Authentication:totpForm.html.twig', 'scheb_two_factor.totp.template');
-        $this->assertParameter(true, 'scheb_two_factor.trusted_device.enabled');
-        $this->assertParameter(2592000, 'scheb_two_factor.trusted_device.lifetime');
-        $this->assertParameter(true, 'scheb_two_factor.trusted_device.extend_lifetime');
-        $this->assertParameter('trusted_cookie', 'scheb_two_factor.trusted_device.cookie_name');
-        $this->assertParameter(true, 'scheb_two_factor.trusted_device.cookie_secure');
-        $this->assertParameter(null, 'scheb_two_factor.trusted_device.cookie_same_site');
-        $this->assertParameter('cookie.example.org', 'scheb_two_factor.trusted_device.cookie_domain');
-        $this->assertParameter('/cookie-path', 'scheb_two_factor.trusted_device.cookie_path');
-        $this->assertParameter(['Symfony\Component\Security\Core\Authentication\Token\SomeToken'], 'scheb_two_factor.security_tokens');
-        $this->assertParameter(['127.0.0.1'], 'scheb_two_factor.ip_whitelist');
+        $this->assertHasParameter('alternative', 'scheb_two_factor.model_manager_name');
+        $this->assertHasParameter('me@example.com', 'scheb_two_factor.email.sender_email');
+        $this->assertHasParameter('Sender Name', 'scheb_two_factor.email.sender_name');
+        $this->assertHasParameter('AcmeTestBundle:Authentication:emailForm.html.twig', 'scheb_two_factor.email.template');
+        $this->assertHasParameter(6, 'scheb_two_factor.email.digits');
+        $this->assertHasParameter('Server Name Google', 'scheb_two_factor.google.server_name');
+        $this->assertHasParameter('Issuer Google', 'scheb_two_factor.google.issuer');
+        $this->assertHasParameter('AcmeTestBundle:Authentication:googleForm.html.twig', 'scheb_two_factor.google.template');
+        $this->assertHasParameter(8, 'scheb_two_factor.google.digits');
+        $this->assertHasParameter(2, 'scheb_two_factor.google.window');
+        $this->assertHasParameter('Issuer TOTP', 'scheb_two_factor.totp.issuer');
+        $this->assertHasParameter('Server Name TOTP', 'scheb_two_factor.totp.server_name');
+        $this->assertHasParameter(2, 'scheb_two_factor.totp.window');
+        $this->assertHasParameter(['image' => 'http://foo/bar.png'], 'scheb_two_factor.totp.parameters');
+        $this->assertHasParameter('AcmeTestBundle:Authentication:totpForm.html.twig', 'scheb_two_factor.totp.template');
+        $this->assertHasParameter(true, 'scheb_two_factor.trusted_device.enabled');
+        $this->assertHasParameter(2592000, 'scheb_two_factor.trusted_device.lifetime');
+        $this->assertHasParameter(true, 'scheb_two_factor.trusted_device.extend_lifetime');
+        $this->assertHasParameter('trusted_cookie', 'scheb_two_factor.trusted_device.cookie_name');
+        $this->assertHasParameter(true, 'scheb_two_factor.trusted_device.cookie_secure');
+        $this->assertHasParameter(null, 'scheb_two_factor.trusted_device.cookie_same_site');
+        $this->assertHasParameter('cookie.example.org', 'scheb_two_factor.trusted_device.cookie_domain');
+        $this->assertHasParameter('/cookie-path', 'scheb_two_factor.trusted_device.cookie_path');
+        $this->assertHasParameter(['Symfony\Component\Security\Core\Authentication\Token\SomeToken'], 'scheb_two_factor.security_tokens');
+        $this->assertHasParameter(['127.0.0.1'], 'scheb_two_factor.ip_whitelist');
     }
 
     /**
@@ -177,7 +177,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config['email']['enabled'] = true; // Enable email provider
         $this->extension->load([$config], $this->container);
 
-        $this->assertAlias('scheb_two_factor.security.email.auth_code_mailer', 'scheb_two_factor.security.email.default_auth_code_mailer');
+        $this->assertHasAlias('scheb_two_factor.security.email.auth_code_mailer', 'scheb_two_factor.security.email.default_auth_code_mailer');
     }
 
     /**
@@ -188,7 +188,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
 
-        $this->assertAlias('scheb_two_factor.security.email.auth_code_mailer', 'acme_test.mailer');
+        $this->assertHasAlias('scheb_two_factor.security.email.auth_code_mailer', 'acme_test.mailer');
     }
 
     /**
@@ -200,7 +200,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config['email']['enabled'] = true; // Enable email provider
         $this->extension->load([$config], $this->container);
 
-        $this->assertAlias('scheb_two_factor.security.email.code_generator', 'scheb_two_factor.security.email.default_code_generator');
+        $this->assertHasAlias('scheb_two_factor.security.email.code_generator', 'scheb_two_factor.security.email.default_code_generator');
     }
 
     /**
@@ -211,7 +211,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
 
-        $this->assertAlias('scheb_two_factor.security.email.code_generator', 'acme_test.code_generator');
+        $this->assertHasAlias('scheb_two_factor.security.email.code_generator', 'acme_test.code_generator');
     }
 
     /**
@@ -222,7 +222,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config = $this->getEmptyConfig();
         $this->extension->load([$config], $this->container);
 
-        $this->assertAlias('scheb_two_factor.persister', 'scheb_two_factor.persister.doctrine');
+        $this->assertHasAlias('scheb_two_factor.persister', 'scheb_two_factor.persister.doctrine');
     }
 
     /**
@@ -233,7 +233,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
 
-        $this->assertAlias('scheb_two_factor.persister', 'acme_test.persister');
+        $this->assertHasAlias('scheb_two_factor.persister', 'acme_test.persister');
     }
 
     /**
@@ -245,7 +245,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config['trusted_device']['enabled'] = false;
         $this->extension->load([$config], $this->container);
 
-        $this->assertAlias('scheb_two_factor.trusted_device_manager', 'scheb_two_factor.null_trusted_device_manager');
+        $this->assertNotHasAlias('scheb_two_factor.trusted_device_manager');
     }
 
     /**
@@ -257,7 +257,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config['trusted_device']['enabled'] = true;
         $this->extension->load([$config], $this->container);
 
-        $this->assertAlias('scheb_two_factor.trusted_device_manager', 'scheb_two_factor.default_trusted_device_manager');
+        $this->assertHasAlias('scheb_two_factor.trusted_device_manager', 'scheb_two_factor.default_trusted_device_manager');
     }
 
     /**
@@ -269,7 +269,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config['trusted_device']['enabled'] = true;
         $this->extension->load([$config], $this->container);
 
-        $this->assertAlias('scheb_two_factor.trusted_device_manager', 'acme_test.trusted_device_manager');
+        $this->assertHasAlias('scheb_two_factor.trusted_device_manager', 'acme_test.trusted_device_manager');
     }
 
     /**
@@ -281,7 +281,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config['backup_codes']['enabled'] = false;
         $this->extension->load([$config], $this->container);
 
-        $this->assertAlias('scheb_two_factor.backup_code_manager', 'scheb_two_factor.null_backup_code_manager');
+        $this->assertNotHasAlias('scheb_two_factor.backup_code_manager');
     }
 
     /**
@@ -293,7 +293,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config['backup_codes']['enabled'] = true;
         $this->extension->load([$config], $this->container);
 
-        $this->assertAlias('scheb_two_factor.backup_code_manager', 'scheb_two_factor.default_backup_code_manager');
+        $this->assertHasAlias('scheb_two_factor.backup_code_manager', 'scheb_two_factor.default_backup_code_manager');
     }
 
     /**
@@ -305,7 +305,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config['backup_codes']['enabled'] = true;
         $this->extension->load([$config], $this->container);
 
-        $this->assertAlias('scheb_two_factor.backup_code_manager', 'acme_test.backup_code_manager');
+        $this->assertHasAlias('scheb_two_factor.backup_code_manager', 'acme_test.backup_code_manager');
     }
 
     /**
@@ -316,7 +316,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config = $this->getEmptyConfig();
         $this->extension->load([$config], $this->container);
 
-        $this->assertAlias('scheb_two_factor.ip_whitelist_provider', 'scheb_two_factor.default_ip_whitelist_provider');
+        $this->assertHasAlias('scheb_two_factor.ip_whitelist_provider', 'scheb_two_factor.default_ip_whitelist_provider');
     }
 
     /**
@@ -327,7 +327,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
 
-        $this->assertAlias('scheb_two_factor.ip_whitelist_provider', 'acme_test.ip_whitelist_provider');
+        $this->assertHasAlias('scheb_two_factor.ip_whitelist_provider', 'acme_test.ip_whitelist_provider');
     }
 
     /**
@@ -338,7 +338,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config = $this->getEmptyConfig();
         $this->extension->load([$config], $this->container);
 
-        $this->assertAlias('scheb_two_factor.token_factory', 'scheb_two_factor.default_token_factory');
+        $this->assertHasAlias('scheb_two_factor.token_factory', 'scheb_two_factor.default_token_factory');
     }
 
     /**
@@ -349,7 +349,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
 
-        $this->assertAlias('scheb_two_factor.token_factory', 'acme_test.two_factor_token_factory');
+        $this->assertHasAlias('scheb_two_factor.token_factory', 'acme_test.two_factor_token_factory');
     }
 
     private function getEmptyConfig(): ?array
@@ -413,9 +413,14 @@ EOF;
         return $parser->parse($yaml);
     }
 
-    private function assertParameter($value, $key): void
+    private function assertHasParameter($value, $key): void
     {
         $this->assertEquals($value, $this->container->getParameter($key), sprintf('%s parameter is correct', $key));
+    }
+
+    private function assertHasNotParameter($key): void
+    {
+        $this->assertFalse($this->container->hasParameter($key), sprintf('%s parameter is correct', $key));
     }
 
     private function assertHasDefinition($id): void
@@ -428,10 +433,15 @@ EOF;
         $this->assertFalse($this->container->hasDefinition($id), 'Service "'.$id.'" must NOT be defined.');
     }
 
-    private function assertAlias($id, $aliasId): void
+    private function assertHasAlias($id, $aliasId): void
     {
         $this->assertTrue($this->container->hasAlias($id), 'Alias "'.$id.'" must be defined.');
         $alias = $this->container->getAlias($id);
         $this->assertEquals($aliasId, (string) $alias, 'Alias "'.$id.'" must be alias for "'.$aliasId.'".');
+    }
+
+    private function assertNotHasAlias($id): void
+    {
+        $this->assertFalse($this->container->hasAlias($id), 'Alias "'.$id.'" must not be defined.');
     }
 }

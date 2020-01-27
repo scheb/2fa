@@ -1,0 +1,22 @@
+{
+    "name": "scheb/2fa-backup-code",
+    "type": "library",
+    "description": "Provides two-factor authentication using backup codes",
+    "keywords": ["two-factor", "two-step", "authentication", "security", "symfony"],
+    "homepage": "https://github.com/scheb/two-factor-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Scheb",
+            "email": "me@christianscheb.de"
+        }
+    ],
+    "require": {
+        "scheb/2fa-bundle": "self.version"
+    },
+    "autoload": {
+        "psr-4": {
+            "Scheb\\TwoFactorBundle\\": ""
+        }
+    }
+}

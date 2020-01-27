@@ -7,6 +7,10 @@ splits:
       target: "https://${GH_TOKEN}@github.com/scheb/2fa-google-authenticator.git"
     - prefix: "src/totp"
       target: "https://${GH_TOKEN}@github.com/scheb/2fa-totp.git"
+    - prefix: "src/backup"
+      target: "https://${GH_TOKEN}@github.com/scheb/2fa-backup-code.git"
+    - prefix: "src/trusted"
+      target: "https://${GH_TOKEN}@github.com/scheb/2fa-trusted-devices.git"
 
 origins:
     - ^master$
