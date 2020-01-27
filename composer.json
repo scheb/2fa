@@ -37,12 +37,23 @@
     },
     "autoload": {
         "psr-4": {
-            "Scheb\\TwoFactorBundle\\": "src/bundle"
+            "Scheb\\TwoFactorBundle\\": [
+                "src/bundle",
+                "src/email",
+                "src/google",
+                "src/totp"
+            ]
         }
     },
     "autoload-dev": {
         "psr-4": {
             "Scheb\\TwoFactorBundle\\Tests\\": "tests"
         }
+    },
+    "replace": {
+        "scheb/2fa-bundle": "self.version",
+        "scheb/2fa-email": "self.version",
+        "scheb/2fa-totp": "self.version",
+        "scheb/2fa-google": "self.version"
     }
 }
