@@ -12,4 +12,4 @@
 /php_cs.xml export-ignore
 /phpunit.xml.dist export-ignore
 /README.md export-ignore
-/Upgrade.md export-ignore
+/UPGRADE.md export-ignore
