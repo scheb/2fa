@@ -10,11 +10,6 @@ interface AuthenticationRequiredHandlerInterface
 {
     /**
      * Redirect to the two-factor authentication form.
-     *
-     * @param Request        $request
-     * @param TokenInterface $token
-     *
-     * @return Response
      */
     public function onAuthenticationRequired(Request $request, TokenInterface $token): Response;
 }

@@ -70,7 +70,7 @@ class RememberMeServicesDecoratorTest extends TestCase
         $token = $this->createMock(TwoFactorTokenInterface::class);
 
         $responseCallback = function ($argument) {
-            /** @var Response $argument */
+            /* @var Response $argument */
             $this->assertInstanceOf(Response::class, $argument);
             $this->assertFalse($argument === $this->response, 'Response objects must NOT be identical');
             $argument->headers->setCookie(new Cookie('name', 'value'));

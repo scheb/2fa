@@ -22,8 +22,6 @@ class ParameterBagUtils
      * @param Request $request The request
      * @param string  $path    The key
      *
-     * @return string|null
-     *
      * @throws \InvalidArgumentException when the given path is malformed
      */
     public static function getRequestParameterValue(Request $request, string $path): ?string

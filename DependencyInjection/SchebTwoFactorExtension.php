@@ -59,7 +59,7 @@ class SchebTwoFactorExtension extends Extension
         if (true === $config['google']['enabled']) {
             $this->configureGoogleAuthenticationProvider($container);
         }
-        if ($config['totp']['enabled'] === true) {
+        if (true === $config['totp']['enabled']) {
             $this->configureTotpAuthenticationProvider($container);
         }
 

@@ -32,10 +32,10 @@ class TotpConfiguration implements TotpConfigurationInterface
     private $digits;
 
     /**
-     * @param string $secret Base32 encoded secret key
+     * @param string $secret    Base32 encoded secret key
      * @param string $algorithm Hashing algorithm to be used, see class constants for available values
-     * @param int $period Period in seconds, when the one-time password changes
-     * @param int $digits Number of digits of the one-time password
+     * @param int    $period    Period in seconds, when the one-time password changes
+     * @param int    $digits    Number of digits of the one-time password
      */
     public function __construct(string $secret, string $algorithm, int $period, int $digits)
     {

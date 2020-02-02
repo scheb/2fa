@@ -16,7 +16,7 @@ class TotpFactory
     private $server;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     private $issuer;
 

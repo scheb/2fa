@@ -9,10 +9,6 @@ interface AuthenticationHandlerInterface
 {
     /**
      * Begin the two-factor authentication process.
-     *
-     * @param AuthenticationContextInterface $context
-     *
-     * @return TokenInterface
      */
     public function beginTwoFactorAuthentication(AuthenticationContextInterface $context): TokenInterface;
 }

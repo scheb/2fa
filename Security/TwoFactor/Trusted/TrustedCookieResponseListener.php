@@ -71,7 +71,7 @@ class TrustedCookieResponseListener
         if ($this->trustedTokenStorage->hasUpdatedCookie()) {
             $domain = null;
 
-            if ($this->cookieDomain !== null) {
+            if (null !== $this->cookieDomain) {
                 $domain = $this->cookieDomain;
             } else {
                 $requestHost = $event->getRequest()->getHost();
