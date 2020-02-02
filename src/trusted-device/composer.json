@@ -1,5 +1,5 @@
 {
-    "name": "scheb/2fa-trusted-devices",
+    "name": "scheb/2fa-trusted-device",
     "type": "library",
     "description": "Trusted devices support for two-factor authentication",
     "keywords": ["two-factor", "two-step", "authentication", "security", "symfony"],

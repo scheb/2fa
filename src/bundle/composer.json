@@ -33,6 +33,6 @@
         "scheb/2fa-email": "Send codes by e-mail",
         "scheb/2fa-totp": "Popular one-time password support (Google Authenticator compatible)",
         "scheb/2fa-google": "Google Authenticator support",
-        "scheb/2fa-trusted-devices": "Trusted devices support"
+        "scheb/2fa-trusted-device": "Trusted devices support"
     }
 }
