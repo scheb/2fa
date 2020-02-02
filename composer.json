@@ -53,11 +53,11 @@
         }
     },
     "replace": {
-        "scheb/2fa-backup-code": "self.version",
-        "scheb/2fa-bundle": "self.version",
-        "scheb/2fa-email": "self.version",
-        "scheb/2fa-totp": "self.version",
-        "scheb/2fa-trusted-devices": "self.version",
-        "scheb/2fa-google": "self.version"
+        "scheb/2fa-backup-code": "^5.0",
+        "scheb/2fa-bundle": "^5.0",
+        "scheb/2fa-email": "^5.0",
+        "scheb/2fa-totp": "^5.0",
+        "scheb/2fa-trusted-devices": "^5.0",
+        "scheb/2fa-google": "^5.0"
     }
 }
