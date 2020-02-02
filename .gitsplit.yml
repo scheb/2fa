@@ -3,13 +3,13 @@ splits:
       target: "https://${GH_TOKEN}@github.com/scheb/2fa-bundle.git"
     - prefix: "src/email"
       target: "https://${GH_TOKEN}@github.com/scheb/2fa-email.git"
-    - prefix: "src/google"
+    - prefix: "src/google-authenticator"
       target: "https://${GH_TOKEN}@github.com/scheb/2fa-google-authenticator.git"
     - prefix: "src/totp"
       target: "https://${GH_TOKEN}@github.com/scheb/2fa-totp.git"
-    - prefix: "src/backup"
+    - prefix: "src/backup-code"
       target: "https://${GH_TOKEN}@github.com/scheb/2fa-backup-code.git"
-    - prefix: "src/trusted"
+    - prefix: "src/trusted-devices"
       target: "https://${GH_TOKEN}@github.com/scheb/2fa-trusted-devices.git"
 
 origins:

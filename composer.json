@@ -38,12 +38,12 @@
     "autoload": {
         "psr-4": {
             "Scheb\\TwoFactorBundle\\": [
-                "src/backup",
+                "src/backup-code",
                 "src/bundle",
                 "src/email",
-                "src/google",
+                "src/google-authenticator",
                 "src/totp",
-                "src/trusted"
+                "src/trusted-devices"
             ]
         }
     },
