@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider;
 
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
@@ -29,7 +30,7 @@ class TwoFactorProviderPreparationListener
     private $twoFactorToken;
 
     /**
-     * @var LoggerInterface|null
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -58,7 +59,7 @@ class TwoFactorProviderPreparationListener
     ) {
         $this->providerRegistry = $providerRegistry;
         $this->preparationRecorder = $preparationRecorder;
-        $this->logger = $logger;
+        $this->logger = $logger === null ? new NullLogger() : $logger;
         $this->firewallName = $firewallName;
         $this->prepareOnLogin = $prepareOnLogin;
         $this->prepareOnAccessDenied = $prepareOnAccessDenied;
@@ -105,18 +106,14 @@ class TwoFactorProviderPreparationListener
 
         try {
             if ($this->preparationRecorder->isProviderPrepared($firewallName, $providerName)) {
-                if ($this->logger) {
-                    $this->logger->info(sprintf('Two-factor provider "%s" was already prepared.', $providerName));
-                }
+                $this->logger->info(sprintf('Two-factor provider "%s" was already prepared.', $providerName));
 
                 return;
             }
             $user = $this->twoFactorToken->getUser();
             $this->providerRegistry->getProvider($providerName)->prepareAuthentication($user);
             $this->preparationRecorder->recordProviderIsPrepared($firewallName, $providerName);
-            if ($this->logger) {
-                $this->logger->info(sprintf('Two-factor provider "%s" prepared.', $providerName));
-            }
+            $this->logger->info(sprintf('Two-factor provider "%s" prepared.', $providerName));
         } finally {
             $this->preparationRecorder->saveSession();
         }

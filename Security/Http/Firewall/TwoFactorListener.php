@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\Http\Firewall;
 
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
@@ -140,7 +141,7 @@ class TwoFactorListener
         $this->twoFactorAccessDecider = $twoFactorAccessDecider;
         $this->eventDispatcher = $eventDispatcher;
         $this->twoFactorTokenFactory = $twoFactorTokenFactory;
-        $this->logger = $logger;
+        $this->logger = $logger === null ? new NullLogger() : $logger;
         $this->trustedDeviceManager = $trustedDeviceManager;
     }
 
@@ -215,9 +216,7 @@ class TwoFactorListener
 
     private function onFailure(Request $request, AuthenticationException $failed): Response
     {
-        if ($this->logger) {
-            $this->logger->info('Two-factor authentication request failed.', ['exception' => $failed]);
-        }
+        $this->logger->info('Two-factor authentication request failed.', ['exception' => $failed]);
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::FAILURE, $request, $this->tokenStorage->getToken());
 
         return $this->failureHandler->onAuthenticationFailure($request, $failed);
@@ -225,9 +224,7 @@ class TwoFactorListener
 
     private function onSuccess(Request $request, TokenInterface $token, TwoFactorTokenInterface $previousTwoFactorToken): Response
     {
-        if ($this->logger) {
-            $this->logger->info('User has been two-factor authenticated successfully.', ['username' => $token->getUsername()]);
-        }
+        $this->logger->info('User has been two-factor authenticated successfully.', ['username' => $token->getUsername()]);
         $this->tokenStorage->setToken($token);
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::SUCCESS, $request, $token);
 
