@@ -141,7 +141,7 @@ class TwoFactorListener
         $this->twoFactorAccessDecider = $twoFactorAccessDecider;
         $this->eventDispatcher = $eventDispatcher;
         $this->twoFactorTokenFactory = $twoFactorTokenFactory;
-        $this->logger = $logger === null ? new NullLogger() : $logger;
+        $this->logger = $logger ?? new NullLogger();
         $this->trustedDeviceManager = $trustedDeviceManager;
     }
 

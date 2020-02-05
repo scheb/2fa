@@ -59,7 +59,7 @@ class TwoFactorProviderPreparationListener
     ) {
         $this->providerRegistry = $providerRegistry;
         $this->preparationRecorder = $preparationRecorder;
-        $this->logger = $logger === null ? new NullLogger() : $logger;
+        $this->logger = $logger ?? new NullLogger();
         $this->firewallName = $firewallName;
         $this->prepareOnLogin = $prepareOnLogin;
         $this->prepareOnAccessDenied = $prepareOnAccessDenied;
