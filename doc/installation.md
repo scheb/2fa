@@ -10,8 +10,24 @@ If you're using anything other than Doctrine ORM to manage the user entity you w
 
 ### Step 1: Install with Composer
 
-Add this bundle via Composer:
+The bundle is organized into sub-repositories, so you can choose the exact feature set you need and keep installed
+dependencies to a minimum.
 
+Install at least the bundle via Composer:
+```
+composer require scheb/2fa-bundle
+```
+
+Optionally, install additional packages to extend the feature set for your needs:
+```
+composer require scheb/2fa-backup-code        # Add backup code feature
+composer require scheb/2fa-trusted-devices    # Add trusted devices feature
+composer require scheb/totp                   # Add two-factor authentication using TOTP
+composer require scheb/google-authenticator   # Add two-factor authentication with Google Authenticator
+composer require scheb/email                  # Add two-factor authentication using email
+```
+
+Alternatively, you can install all packages at once:
 ```bash
 composer require scheb/2fa
 ```
@@ -22,7 +38,7 @@ Enable this bundle in your `config/bundles.php`:
 
 ```php
 return [
-	// ...
+    // ...
     Scheb\TwoFactorBundle\SchebTwoFactorBundle::class => ['all' => true],
 ];
 ```
@@ -86,8 +102,12 @@ scheb_two_factor:
 
 ### Step 6: Enable two-factor authentication methods
 
-The two-factor authentication methods need to be enabled separately. Read how to do this for
-[Google Authenticator](providers/google.md), [TOTP Authenticator](providers/totp.md) or [email authentication](providers/email.md).
+If you have installed any of the two-factor authentication methods, you have to enable these separately. Read how to do
+this for:
+
+- [`scheb/totp` TOTP authentication](providers/totp.md)
+- [`scheb/google-authenticator` Google Authenticator](providers/google.md)
+- [`scheb/email` Email authentication](providers/email.md)
 
 ### Step 7: Detailed configuration
 
