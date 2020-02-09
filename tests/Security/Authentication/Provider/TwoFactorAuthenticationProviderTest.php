@@ -20,7 +20,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class TwoFactorAuthenticationProviderTest extends TestCase
 {
-    const FIREWALL_NAME = 'firewallName';
+    private const FIREWALL_NAME = 'firewallName';
+
     /**
      * @var MockObject|TwoFactorProviderRegistry
      */
