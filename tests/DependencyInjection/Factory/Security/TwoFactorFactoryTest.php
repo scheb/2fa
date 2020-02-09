@@ -13,7 +13,6 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Yaml\Parser;
 
 class TwoFactorFactoryTest extends TestCase
@@ -152,15 +151,8 @@ EOF;
     public function create_createForFirewall_returnServiceIds(): void
     {
         $returnValue = $this->callCreateFirewall();
-        $expectedListenerId = 'security.authentication.listener.two_factor.firewallName';
-
-        // Symfony < 4.3
-        if (!class_exists(RequestEvent::class)) {
-            $expectedListenerId = 'security.authentication.legacy_listener.two_factor.firewallName';
-        }
-
         $this->assertEquals('security.authentication.provider.two_factor.firewallName', $returnValue[0]);
-        $this->assertEquals($expectedListenerId, $returnValue[1]);
+        $this->assertEquals('security.authentication.listener.two_factor.firewallName', $returnValue[1]);
         $this->assertEquals(self::DEFAULT_ENTRY_POINT, $returnValue[2]);
     }
 
@@ -371,13 +363,7 @@ class TestableFactoryConfiguration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder(TwoFactorFactory::AUTHENTICATION_PROVIDER_KEY);
-        if (method_exists($treeBuilder, 'getRootNode')) {
-            $rootNode = $treeBuilder->getRootNode();
-        } else {
-            // BC layer for symfony/config 4.1 and older
-            $rootNode = $treeBuilder->root(TwoFactorFactory::AUTHENTICATION_PROVIDER_KEY);
-        }
-
+        $rootNode = $treeBuilder->getRootNode();
         $this->factory->addConfiguration($rootNode);
 
         return $treeBuilder;

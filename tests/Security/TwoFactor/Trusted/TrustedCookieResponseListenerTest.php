@@ -11,8 +11,8 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class TrustedCookieResponseListenerTest extends TestCase
 {
@@ -69,33 +69,21 @@ class TrustedCookieResponseListenerTest extends TestCase
     }
 
     /**
-     * @return MockObject|FilterResponseEvent|RequestEvent
+     * @param MockObject|Request $request
+     *
+     * @return MockObject|ResponseEvent
      */
     private function createEventWithRequest(MockObject $request)
     {
-        // Symfony < 4.3
-        if (!class_exists(RequestEvent::class)) {
-            $event = $this->createMock(FilterResponseEvent::class);
-        } else {
-            $event = $this->createMock(RequestEvent::class);
-        }
-
-        $event
-            ->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($request);
-        $event
-            ->expects($this->any())
-            ->method('getResponse')
-            ->willReturn($this->response);
-
-        return $event;
+        return new ResponseEvent(
+            $this->createMock(HttpKernelInterface::class),
+            $request,
+            HttpKernelInterface::MASTER_REQUEST,
+            $this->response
+        );
     }
 
-    /**
-     * @return MockObject|FilterResponseEvent|RequestEvent
-     */
-    private function createEvent(): MockObject
+    private function createEvent(): ResponseEvent
     {
         $request = $this->createRequestWithHost();
 
