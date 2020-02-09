@@ -1,8 +1,8 @@
 {
     "name": "scheb/2fa-email",
     "type": "library",
-    "description": "Provides two-factor authentication using e-mails",
-    "keywords": ["two-factor", "two-step", "authentication", "security", "symfony"],
+    "description": "Provides two-factor authentication via email",
+    "keywords": ["2fa", "two-factor", "two-step", "authentication", "symfony", "email"],
     "homepage": "https://github.com/scheb/2fa",
     "license": "MIT",
     "authors": [
