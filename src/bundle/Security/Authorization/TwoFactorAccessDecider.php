@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Christian Scheb
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Scheb\TwoFactorBundle\Security\Authorization;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -65,11 +74,11 @@ class TwoFactorAccessDecider
     private function makeRelativeToBaseUrl(string $logoutPath, Request $request): string
     {
         $baseUrl = $request->getBaseUrl();
-        if (null === $baseUrl || 0 === strlen($baseUrl)) {
+        if (null === $baseUrl || 0 === \mb_strlen($baseUrl)) {
             return $logoutPath;
         }
 
-        $pathInfo = substr($logoutPath, strlen($baseUrl));
+        $pathInfo = mb_substr($logoutPath, \mb_strlen($baseUrl));
         if (false === $pathInfo || '' === $pathInfo) {
             return '/';
         }

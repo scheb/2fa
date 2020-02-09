@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Christian Scheb
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Scheb\TwoFactorBundle\DependencyInjection\Compiler;
 
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
@@ -15,6 +24,9 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class AuthenticationProviderDecoratorCompilerPass implements CompilerPassInterface
 {
+    /**
+     * @return void
+     */
     public function process(ContainerBuilder $container)
     {
         $authenticationManager = $container->getDefinition('security.authentication.manager');
@@ -40,6 +52,6 @@ class AuthenticationProviderDecoratorCompilerPass implements CompilerPassInterfa
 
     private function isTwoFactorProvider(string $authenticationProviderId): bool
     {
-        return false !== strpos($authenticationProviderId, TwoFactorFactory::PROVIDER_ID_PREFIX);
+        return false !== mb_strpos($authenticationProviderId, TwoFactorFactory::PROVIDER_ID_PREFIX);
     }
 }

@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Christian Scheb
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Scheb\TwoFactorBundle\Security\Http\Authentication;
 
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
@@ -46,7 +55,7 @@ class DefaultAuthenticationRequiredHandler implements AuthenticationRequiredHand
     {
         // Do not save the target path when the current one is the one for checking the authentication code. Then it's
         // another redirect which happens in multi-factor scenarios.
-        if (!$this->isCheckAuthCodeRequest($request) && $request->hasSession() && $request->isMethodSafe(false) && !$request->isXmlHttpRequest()) {
+        if (!$this->isCheckAuthCodeRequest($request) && $request->hasSession() && $request->isMethodSafe() && !$request->isXmlHttpRequest()) {
             $this->saveTargetPath($request->getSession(), $this->firewallName, $request->getUri());
         }
 

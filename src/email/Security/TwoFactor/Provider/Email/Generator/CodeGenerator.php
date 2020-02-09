@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Christian Scheb
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator;
 
 use Scheb\TwoFactorBundle\Mailer\AuthCodeMailerInterface;
@@ -34,8 +43,8 @@ class CodeGenerator implements CodeGeneratorInterface
 
     public function generateAndSend(TwoFactorInterface $user): void
     {
-        $min = pow(10, $this->digits - 1);
-        $max = pow(10, $this->digits) - 1;
+        $min = 10 ** ($this->digits - 1);
+        $max = 10 ** $this->digits - 1;
         $code = $this->generateCode($min, $max);
         $user->setEmailAuthCode((string) $code);
         $this->persister->persist($user);

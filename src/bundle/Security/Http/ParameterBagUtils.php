@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Christian Scheb
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Scheb\TwoFactorBundle\Security\Http;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -26,11 +35,11 @@ class ParameterBagUtils
      */
     public static function getRequestParameterValue(Request $request, string $path): ?string
     {
-        if (false === $pos = strpos($path, '[')) {
+        if (false === $pos = mb_strpos($path, '[')) {
             return $request->get($path);
         }
 
-        $root = substr($path, 0, $pos);
+        $root = mb_substr($path, 0, $pos);
 
         if (null === $value = $request->get($root)) {
             return null;
@@ -41,7 +50,7 @@ class ParameterBagUtils
         }
 
         try {
-            return self::$propertyAccessor->getValue($value, substr($path, $pos));
+            return self::$propertyAccessor->getValue($value, mb_substr($path, $pos));
         } catch (AccessException $e) {
             return null;
         }

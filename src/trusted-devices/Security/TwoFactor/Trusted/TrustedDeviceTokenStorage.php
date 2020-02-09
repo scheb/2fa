@@ -2,8 +2,22 @@
 
 declare(strict_types=1);
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Christian Scheb
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
+use DateInterval;
+use DateTimeImmutable;
+use DateTimeInterface;
+use RuntimeException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class TrustedDeviceTokenStorage
@@ -55,7 +69,7 @@ class TrustedDeviceTokenStorage
 
     public function getCookieValue(): ?string
     {
-        return implode(self::TOKEN_DELIMITER, array_map(function (TrustedDeviceToken $token) {
+        return implode(self::TOKEN_DELIMITER, array_map(static function (TrustedDeviceToken $token): string {
             return $token->serialize();
         }, $this->getTrustedTokenList()));
     }
@@ -92,14 +106,14 @@ class TrustedDeviceTokenStorage
         $this->updateCookie = true;
     }
 
-    private function getValidUntil(): \DateTime
+    private function getValidUntil(): DateTimeInterface
     {
-        return $this->getDateTimeNow()->add(new \DateInterval('PT'.$this->trustedTokenLifetime.'S'));
+        return $this->getDateTimeNow()->add(new DateInterval('PT'.$this->trustedTokenLifetime.'S'));
     }
 
-    protected function getDateTimeNow(): \DateTime
+    protected function getDateTimeNow(): DateTimeImmutable
     {
-        return new \DateTime();
+        return new DateTimeImmutable();
     }
 
     /**
@@ -140,6 +154,16 @@ class TrustedDeviceTokenStorage
 
     private function readCookieValue(): ?string
     {
-        return $this->requestStack->getMasterRequest()->cookies->get($this->cookieName, null);
+        return $this->getRequest()->cookies->get($this->cookieName, null);
+    }
+
+    private function getRequest(): Request
+    {
+        $request = $this->requestStack->getMasterRequest();
+        if (null === $request) {
+            throw new RuntimeException('No request available');
+        }
+
+        return $request;
     }
 }

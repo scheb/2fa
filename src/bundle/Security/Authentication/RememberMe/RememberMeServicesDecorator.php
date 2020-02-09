@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Christian Scheb
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Scheb\TwoFactorBundle\Security\Authentication\RememberMe;
 
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
@@ -23,6 +32,9 @@ class RememberMeServicesDecorator implements RememberMeServicesInterface, Logout
         $this->decoratedRememberMeServices = $decoratedRememberMeServices;
     }
 
+    /**
+     * @return void
+     */
     public function loginSuccess(Request $request, Response $response, TokenInterface $token)
     {
         if ($token instanceof TwoFactorTokenInterface) {
@@ -42,11 +54,17 @@ class RememberMeServicesDecorator implements RememberMeServicesInterface, Logout
         return $this->decoratedRememberMeServices->autoLogin($request);
     }
 
+    /**
+     * @return void
+     */
     public function loginFail(Request $request, \Exception $exception = null)
     {
         $this->decoratedRememberMeServices->loginFail($request, $exception);
     }
 
+    /**
+     * @return void
+     */
     public function logout(Request $request, Response $response, TokenInterface $token)
     {
         $this->decoratedRememberMeServices->logout($request, $response, $token);

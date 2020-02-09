@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Christian Scheb
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Scheb\TwoFactorBundle\Security\Authentication\Token;
 
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
@@ -47,6 +56,9 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return $this->authenticatedToken->getUser();
     }
 
+    /**
+     * @return void
+     */
     public function setUser($user)
     {
         $this->authenticatedToken->setUser($user);
@@ -74,6 +86,9 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return $this->credentials;
     }
 
+    /**
+     * @return void
+     */
     public function eraseCredentials()
     {
         $this->credentials = null;
@@ -107,7 +122,7 @@ class TwoFactorToken implements TwoFactorTokenInterface
 
     private function removeTwoFactorProvider(string $providerName): void
     {
-        $key = array_search($providerName, $this->twoFactorProviders);
+        $key = array_search($providerName, $this->twoFactorProviders, true);
         if (false === $key) {
             throw new UnknownTwoFactorProviderException(sprintf('Two-factor provider "%s" is not active.', $providerName));
         }
@@ -116,7 +131,7 @@ class TwoFactorToken implements TwoFactorTokenInterface
 
     public function allTwoFactorProvidersAuthenticated(): bool
     {
-        return 0 === count($this->twoFactorProviders);
+        return 0 === \count($this->twoFactorProviders);
     }
 
     public function getProviderKey(): string
@@ -129,6 +144,9 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return true;
     }
 
+    /**
+     * @return void
+     */
     public function setAuthenticated($isAuthenticated)
     {
         throw new \RuntimeException('Cannot change authenticated once initialized.');
@@ -161,6 +179,9 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return $this->attributes;
     }
 
+    /**
+     * @return void
+     */
     public function setAttributes(array $attributes)
     {
         $this->attributes = $attributes;
@@ -168,18 +189,21 @@ class TwoFactorToken implements TwoFactorTokenInterface
 
     public function hasAttribute($name)
     {
-        return array_key_exists($name, $this->attributes);
+        return \array_key_exists($name, $this->attributes);
     }
 
     public function getAttribute($name)
     {
-        if (!array_key_exists($name, $this->attributes)) {
+        if (!\array_key_exists($name, $this->attributes)) {
             throw new \InvalidArgumentException(sprintf('This token has no "%s" attribute.', $name));
         }
 
         return $this->attributes[$name];
     }
 
+    /**
+     * @return void
+     */
     public function setAttribute($name, $value)
     {
         $this->attributes[$name] = $value;

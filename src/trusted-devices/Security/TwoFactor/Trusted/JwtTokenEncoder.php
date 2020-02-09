@@ -2,8 +2,18 @@
 
 declare(strict_types=1);
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Christian Scheb
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
+use DateTimeInterface;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
@@ -31,7 +41,7 @@ class JwtTokenEncoder
         $this->applicationSecret = $applicationSecret;
     }
 
-    public function generateToken(string $username, string $firewallName, int $version, \DateTime $validUntil): Token
+    public function generateToken(string $username, string $firewallName, int $version, DateTimeInterface $validUntil): Token
     {
         $builder = (new Builder())
             ->setIssuedAt(time())

@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Christian Scheb
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Scheb\TwoFactorBundle\Model\Totp;
 
 class TotpConfiguration implements TotpConfigurationInterface
@@ -51,14 +60,14 @@ class TotpConfiguration implements TotpConfigurationInterface
 
     private static function isValidAlgorithm(string $algorithm): bool
     {
-        return in_array(
+        return \in_array(
             $algorithm,
             [
                 self::ALGORITHM_MD5,
                 self::ALGORITHM_SHA1,
                 self::ALGORITHM_SHA256,
                 self::ALGORITHM_SHA512,
-            ]
+            ], true
         );
     }
 

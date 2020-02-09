@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Christian Scheb
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Scheb\TwoFactorBundle\Security\Authentication\Exception;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -23,6 +32,9 @@ class InvalidTwoFactorCodeException extends AuthenticationException
         $this->messageKey = $messageKey;
     }
 
+    /**
+     * @return string
+     */
     public function serialize()
     {
         return serialize($this->__serialize());
@@ -37,6 +49,9 @@ class InvalidTwoFactorCodeException extends AuthenticationException
         return [$this->messageKey, $parentData];
     }
 
+    /**
+     * @return void
+     */
     public function unserialize($serialized)
     {
         $this->__unserialize(\is_array($serialized) ? $serialized : unserialize($serialized));

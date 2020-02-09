@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Christian Scheb
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Scheb\TwoFactorBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -18,12 +27,15 @@ class RememberMeServicesDecoratorCompilerPass implements CompilerPassInterface
 {
     private const REMEMBER_ME_LISTENER_ID_PREFIX = 'security.authentication.listener.rememberme.';
 
+    /**
+     * @return void
+     */
     public function process(ContainerBuilder $container)
     {
         // Find all remember-me listener definitions
-        $prefixLength = strlen(self::REMEMBER_ME_LISTENER_ID_PREFIX);
+        $prefixLength = \mb_strlen(self::REMEMBER_ME_LISTENER_ID_PREFIX);
         foreach ($container->getDefinitions() as $definitionId => $definition) {
-            if (0 === strpos($definitionId, self::REMEMBER_ME_LISTENER_ID_PREFIX)) {
+            if (0 === mb_strpos($definitionId, self::REMEMBER_ME_LISTENER_ID_PREFIX)) {
                 $this->decorateRememberMeServices($container, $definition);
             }
         }

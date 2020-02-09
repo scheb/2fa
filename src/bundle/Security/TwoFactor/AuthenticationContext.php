@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Christian Scheb
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -39,11 +48,11 @@ class AuthenticationContext implements AuthenticationContextInterface
 
     public function getUser()
     {
-        if (is_object($user = $this->token->getUser())) {
+        if (\is_object($user = $this->token->getUser())) {
             return $user;
         }
 
-        return null;
+        return;
     }
 
     public function getRequest(): Request

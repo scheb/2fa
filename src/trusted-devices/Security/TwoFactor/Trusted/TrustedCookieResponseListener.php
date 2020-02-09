@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Christian Scheb
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
 use Symfony\Component\HttpFoundation\Cookie;
@@ -99,7 +108,7 @@ class TrustedCookieResponseListener
         return !(
             'localhost' === $requestHost
             || preg_match('#^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$#', $requestHost) // IPv4
-            || substr_count($requestHost, ':') > 1 // IPv6
+            || mb_substr_count($requestHost, ':') > 1 // IPv6
         );
     }
 

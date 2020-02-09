@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Christian Scheb
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Scheb\TwoFactorBundle\Security\Authentication\Provider;
 
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
@@ -14,6 +23,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
 {
@@ -67,8 +77,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
 
     public function authenticate(TokenInterface $token)
     {
-        /** @var TwoFactorTokenInterface $token */
-        if (!$this->supports($token)) {
+        if (!$token instanceof TwoFactorTokenInterface || $this->firewallName !== $token->getProviderKey()) {
             throw new AuthenticationException('The token is not supported by this authentication provider.');
         }
 
@@ -90,11 +99,11 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
             }
 
             return $token;
-        } else {
-            $exception = new InvalidTwoFactorCodeException('Invalid two-factor authentication code.');
-            $exception->setMessageKey('code_invalid');
-            throw $exception;
         }
+
+        $exception = new InvalidTwoFactorCodeException('Invalid two-factor authentication code.');
+        $exception->setMessageKey('code_invalid');
+        throw $exception;
     }
 
     private function isValidAuthenticationCode(string $providerName, TwoFactorTokenInterface $token): bool
@@ -112,6 +121,9 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
         return false;
     }
 
+    /**
+     * @param UserInterface|string $user
+     */
     private function isValidTwoFactorCode($user, string $providerName, string $authenticationCode): bool
     {
         try {
@@ -125,6 +137,9 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
         return $authenticationProvider->validateAuthenticationCode($user, $authenticationCode);
     }
 
+    /**
+     * @param object|string $user
+     */
     private function isValidBackupCode($user, string $authenticationCode): bool
     {
         if ($this->backupCodeManager->isBackupCode($user, $authenticationCode)) {

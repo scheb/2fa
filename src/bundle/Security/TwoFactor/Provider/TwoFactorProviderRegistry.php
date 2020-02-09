@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Christian Scheb
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ */
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider;
 
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
@@ -13,7 +22,10 @@ class TwoFactorProviderRegistry
      */
     private $providers;
 
-    public function __construct(iterable $providers)
+    /**
+     * @param TwoFactorProviderInterface[] $providers
+     */
+    public function __construct(array $providers)
     {
         $this->providers = $providers;
     }
