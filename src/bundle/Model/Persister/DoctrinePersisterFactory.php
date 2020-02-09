@@ -22,7 +22,7 @@ class DoctrinePersisterFactory
     public function __construct(?ManagerRegistry $managerRegistry, ?string $objectManagerName)
     {
         if (!$managerRegistry) {
-            $msg = 'scheb/two-factor-bundle requires Doctrine to manage the user entity. If you don\'t want something else ';
+            $msg = 'scheb/2fa requires Doctrine to manage the user entity. If you don\'t want something else ';
             $msg .= 'for persistence, implement your own persister service and configure it in scheb_two_factor.persister.';
             throw new \InvalidArgumentException($msg);
         }

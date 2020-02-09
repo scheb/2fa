@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 <!--
-Please check the troubleshooting guide first: https://github.com/scheb/two-factor-bundle/blob/master/Resources/doc/troubleshooting.md
+Please check the troubleshooting guide first: https://github.com/scheb/2fa/blob/master/doc/troubleshooting.md
 -->
 
 **Bundle version**: x.y.z
@@ -26,5 +26,5 @@ Steps to reproduce the behavior:
 4. See error
 -->
 
-**Additional Context**  
+**Additional Context**
 <!-- Optional: Any other context to help understanding the problem: your bundle and security configuration, log messages, screenshots, etc. -->

@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Trusted devices support for two-factor authentication",
     "keywords": ["two-factor", "two-step", "authentication", "security", "symfony"],
-    "homepage": "https://github.com/scheb/two-factor-bundle",
+    "homepage": "https://github.com/scheb/2fa",
     "license": "MIT",
     "authors": [
         {
