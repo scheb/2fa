@@ -13,7 +13,7 @@ If you're using anything other than Doctrine ORM to manage the user entity you w
 Add this bundle via Composer:
 
 ```bash
-composer require scheb/two-factor-bundle
+composer require scheb/2fa
 ```
 
 ### Step 2: Enable the bundle

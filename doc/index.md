@@ -1,5 +1,5 @@
-scheb/two-factor-bundle
-=======================
+scheb/2fa
+=========
 
 This bundle provides **two-factor authentication for your Symfony application**.
 

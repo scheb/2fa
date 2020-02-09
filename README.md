@@ -1,12 +1,12 @@
-scheb/two-factor-bundle
-=======================
+scheb/2fa
+=========
 
-[![Build Status](https://travis-ci.org/scheb/two-factor-bundle.svg?branch=master)](https://travis-ci.org/scheb/two-factor-bundle)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/scheb/two-factor-bundle/?branch=master)
-[![Latest Stable Version](https://poser.pugx.org/scheb/two-factor-bundle/v/stable.svg)](https://packagist.org/packages/scheb/two-factor-bundle)
-[![Total Downloads](https://poser.pugx.org/scheb/two-factor-bundle/downloads)](https://packagist.org/packages/scheb/two-factor-bundle)
-[![License](https://poser.pugx.org/scheb/two-factor-bundle/license.svg)](https://packagist.org/packages/scheb/two-factor-bundle)
+[![Build Status](https://travis-ci.org/scheb/2fa.svg?branch=master)](https://travis-ci.org/scheb/2fa)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/scheb/2fa/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/scheb/2fa/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/scheb/2fa/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/scheb/2fa/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/scheb/2fa/v/stable.svg)](https://packagist.org/packages/scheb/2fa)
+[![Total Downloads](https://poser.pugx.org/scheb/2fa/downloads)](https://packagist.org/packages/scheb/2fa)
+[![License](https://poser.pugx.org/scheb/2fa/license.svg)](https://packagist.org/packages/scheb/2fa)
 
 This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki/Multi-factor_authentication) for your
 [Symfony](https://symfony.com/) application**.
@@ -31,7 +31,7 @@ Installation
 -------------
 
 ```bash
-composer require scheb/two-factor-bundle
+composer require scheb/2fa
 ```
 
 ... and follow the [installation instructions](doc/installation.md).
@@ -57,14 +57,14 @@ Known security issues:
 - Before version 3.7 the bundle is vulnerable to a
 [security issue in JWT](https://auth0.com/blog/critical-vulnerabilities-in-json-web-token-libraries/), which can be
 exploited by an attacker to generate trusted device cookies on their own, effectively by-passing two-factor
-authentication. ([#143](https://github.com/scheb/two-factor-bundle/issues/143))
+authentication. ([#143](https://github.com/scheb/2fa/issues/143))
 
 - Before versions 3.26.0 / 4.11.0 it was possible to bypass two-factor authentication when the remember-me option is
-available on the login form. ([#253](https://github.com/scheb/two-factor-bundle/issues/253))
+available on the login form. ([#253](https://github.com/scheb/2fa/issues/253))
 
 Contribute
 ----------
-You're welcome to [contribute](https://github.com/scheb/two-factor-bundle/graphs/contributors) to this bundle by
+You're welcome to [contribute](https://github.com/scheb/2fa/graphs/contributors) to this bundle by
 creating a pull requests or feature request in the issues section. For pull requests, please follow these guidelines:
 
 - Symfony code style (use `php_cs.xml` to configure the code style in your IDE)
@@ -73,7 +73,7 @@ creating a pull requests or feature request in the issues section. For pull requ
 - Please add/update test cases
 - Test methods should be named `[method]_[scenario]_[expected result]`
 
-Besides new features, [translations](Resources/translations) are highly welcome.
+Besides new features, [translations](src/bundle/Resources/translations) are highly welcome.
 
 To run the test suite install the dependencies with `composer install` and then execute `vendor/bin/phpunit`.
 
