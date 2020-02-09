@@ -10,7 +10,6 @@ use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class TwoFactorFactory implements SecurityFactoryInterface
 {
@@ -30,7 +29,6 @@ class TwoFactorFactory implements SecurityFactoryInterface
 
     public const PROVIDER_ID_PREFIX = 'security.authentication.provider.two_factor.';
     public const LISTENER_ID_PREFIX = 'security.authentication.listener.two_factor.';
-    public const LEGACY_LISTENER_ID_PREFIX = 'security.authentication.legacy_listener.two_factor.';
     public const SUCCESS_HANDLER_ID_PREFIX = 'security.authentication.success_handler.two_factor.';
     public const FAILURE_HANDLER_ID_PREFIX = 'security.authentication.failure_handler.two_factor.';
     public const AUTHENTICATION_REQUIRED_HANDLER_ID_PREFIX = 'security.authentication.authentication_required_handler.two_factor.';
@@ -41,7 +39,6 @@ class TwoFactorFactory implements SecurityFactoryInterface
 
     public const PROVIDER_DEFINITION_ID = 'scheb_two_factor.security.authentication.provider';
     public const LISTENER_DEFINITION_ID = 'scheb_two_factor.security.authentication.listener';
-    public const LEGACY_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.authentication.legacy_listener';
     public const SUCCESS_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.success_handler';
     public const FAILURE_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.failure_handler';
     public const AUTHENTICATION_REQUIRED_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.authentication_required_handler';
@@ -113,17 +110,6 @@ class TwoFactorFactory implements SecurityFactoryInterface
             ->replaceArgument(6, new Reference($authRequiredHandlerId))
             ->replaceArgument(7, new Reference($csrfTokenValidatorId))
             ->replaceArgument(8, $config);
-
-        // Symfony < 4.3
-        if (!class_exists(RequestEvent::class)) {
-            $legacyListenerId = self::LEGACY_LISTENER_ID_PREFIX.$firewallName;
-            $container
-                ->setDefinition($legacyListenerId, new ChildDefinition(self::LEGACY_LISTENER_DEFINITION_ID))
-                ->replaceArgument(0, new Reference($legacyListenerId.'.inner'))
-                ->setDecoratedService($listenerId);
-
-            return $legacyListenerId;
-        }
 
         return $listenerId;
     }

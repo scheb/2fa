@@ -50,11 +50,6 @@
 			<argument type="service" id="logger" on-invalid="null" />
 		</service>
 
-		<!-- For Symfony < 4.3 -->
-		<service id="scheb_two_factor.security.authentication.legacy_listener" class="Scheb\TwoFactorBundle\Security\Http\Firewall\LegacyTwoFactorListener" abstract="true">
-			<argument /> <!-- Decorated listener -->
-		</service>
-
 		<service id="scheb_two_factor.security.rememberme_services_decorator" class="\Scheb\TwoFactorBundle\Security\Authentication\RememberMe\RememberMeServicesDecorator" abstract="true">
 			<argument /> <!-- Decorated remember-me services instance -->
 		</service>

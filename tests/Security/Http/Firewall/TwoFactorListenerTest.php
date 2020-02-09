@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -31,7 +30,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 
 class TwoFactorListenerTest extends TestCase
 {
@@ -98,9 +96,9 @@ class TwoFactorListenerTest extends TestCase
     private $twoFactorAccessDecider;
 
     /**
-     * @var MockObject|GetResponseEvent
+     * @var MockObject|RequestEvent
      */
-    private $getResponseEvent;
+    private $requestEvent;
 
     /**
      * @var MockObject|Request
@@ -147,14 +145,8 @@ class TwoFactorListenerTest extends TestCase
                 return $this->requestParams[$param];
             });
 
-        // Symfony < 4.3
-        if (!class_exists(RequestEvent::class)) {
-            $this->getResponseEvent = $this->createMock(GetResponseEvent::class);
-        } else {
-            $this->getResponseEvent = $this->createMock(RequestEvent::class);
-        }
-
-        $this->getResponseEvent
+        $this->requestEvent = $this->createMock(RequestEvent::class);
+        $this->requestEvent
             ->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->request);
@@ -317,14 +309,14 @@ class TwoFactorListenerTest extends TestCase
 
     private function assertNoResponseSet(): void
     {
-        $this->getResponseEvent
+        $this->requestEvent
             ->expects($this->never())
             ->method('getResponse');
     }
 
     private function assertRedirectToAuthForm(): void
     {
-        $this->getResponseEvent
+        $this->requestEvent
             ->expects($this->once())
             ->method('setResponse')
             ->with($this->identicalTo($this->authFormRedirectResponse));
@@ -335,13 +327,9 @@ class TwoFactorListenerTest extends TestCase
         $numEvents = count($eventTypes);
         $consecutiveParams = [];
         foreach ($eventTypes as $eventType) {
-            // Symfony < 4.3
-            if ($this->eventDispatcher instanceof ContractsEventDispatcherInterface) {
-                $consecutiveParams[] = [$this->isInstanceOf(TwoFactorAuthenticationEvent::class), $eventType];
-            } else {
-                $consecutiveParams[] = [$eventType, $this->isInstanceOf(TwoFactorAuthenticationEvent::class)];
-            }
+            $consecutiveParams[] = [$this->isInstanceOf(TwoFactorAuthenticationEvent::class), $eventType];
         }
+
         $this->eventDispatcher
             ->expects($this->exactly($numEvents))
             ->method('dispatch')
@@ -358,7 +346,7 @@ class TwoFactorListenerTest extends TestCase
         $this->assertPathNotChecked();
         $this->assertNoResponseSet();
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -371,7 +359,7 @@ class TwoFactorListenerTest extends TestCase
         $this->assertPathNotChecked();
         $this->assertNoResponseSet();
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -390,7 +378,7 @@ class TwoFactorListenerTest extends TestCase
 
         $this->assertRedirectToAuthForm();
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -406,7 +394,7 @@ class TwoFactorListenerTest extends TestCase
             TwoFactorAuthenticationEvents::REQUIRE,
         ]);
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -420,7 +408,7 @@ class TwoFactorListenerTest extends TestCase
 
         $this->assertNoResponseSet();
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -436,7 +424,7 @@ class TwoFactorListenerTest extends TestCase
             TwoFactorAuthenticationEvents::FORM,
         ]);
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -464,7 +452,7 @@ class TwoFactorListenerTest extends TestCase
             ->with($this->identicalTo($credentialToken))
             ->willReturn($this->createMock(TokenInterface::class));
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -483,7 +471,7 @@ class TwoFactorListenerTest extends TestCase
             TwoFactorAuthenticationEvents::FAILURE,
         ]);
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -501,12 +489,12 @@ class TwoFactorListenerTest extends TestCase
             ->method('onAuthenticationFailure')
             ->willReturn($response);
 
-        $this->getResponseEvent
+        $this->requestEvent
             ->expects($this->once())
             ->method('setResponse')
             ->with($this->identicalTo($response));
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -521,7 +509,7 @@ class TwoFactorListenerTest extends TestCase
 
         $this->assertEventsDispatched([TwoFactorAuthenticationEvents::FAILURE]);
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -541,7 +529,7 @@ class TwoFactorListenerTest extends TestCase
             $this->anything(),
         ]);
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -562,7 +550,7 @@ class TwoFactorListenerTest extends TestCase
 
         $this->assertRedirectToAuthForm();
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -582,7 +570,7 @@ class TwoFactorListenerTest extends TestCase
             TwoFactorAuthenticationEvents::REQUIRE,
         ]);
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -601,12 +589,12 @@ class TwoFactorListenerTest extends TestCase
             ->method('onAuthenticationSuccess')
             ->willReturn($response);
 
-        $this->getResponseEvent
+        $this->requestEvent
             ->expects($this->once())
             ->method('setResponse')
             ->with($this->identicalTo($response));
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -626,7 +614,7 @@ class TwoFactorListenerTest extends TestCase
             TwoFactorAuthenticationEvents::COMPLETE,
         ]);
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -652,7 +640,7 @@ class TwoFactorListenerTest extends TestCase
             ->method('addTrustedDevice')
             ->with('user', 'firewallName');
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -671,7 +659,7 @@ class TwoFactorListenerTest extends TestCase
             ->expects($this->never())
             ->method($this->anything());
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
     }
 
     /**
@@ -695,7 +683,7 @@ class TwoFactorListenerTest extends TestCase
         $this->stubAuthenticationManagerReturnsToken($authenticatedToken); // Not a TwoFactorToken
         $response = $this->stubHandlersReturnResponse();
 
-        ($this->listener)($this->getResponseEvent);
+        ($this->listener)($this->requestEvent);
 
         $this->assertContains($rememberMeCookie, $response->headers->getCookies());
     }
