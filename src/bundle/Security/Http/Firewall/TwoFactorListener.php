@@ -19,7 +19,6 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterfa
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -29,7 +28,6 @@ use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 
 class TwoFactorListener
 {
@@ -145,10 +143,7 @@ class TwoFactorListener
         $this->trustedDeviceManager = $trustedDeviceManager;
     }
 
-    /**
-     * @param $event GetResponseEvent|RequestEvent
-     */
-    public function __invoke($event)
+    public function __invoke(RequestEvent $event)
     {
         $currentToken = $this->tokenStorage->getToken();
         if (!($currentToken instanceof TwoFactorTokenInterface && $currentToken->getProviderKey() === $this->firewallName)) {
@@ -255,13 +250,7 @@ class TwoFactorListener
     private function dispatchTwoFactorAuthenticationEvent(string $eventType, Request $request, TokenInterface $token): void
     {
         $event = new TwoFactorAuthenticationEvent($request, $token);
-
-        // Symfony < 4.3
-        if ($this->eventDispatcher instanceof ContractsEventDispatcherInterface) {
-            $this->eventDispatcher->dispatch($event, $eventType);
-        } else {
-            $this->eventDispatcher->dispatch($eventType, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $eventType);
     }
 
     private function addRememberMeCookies(TwoFactorTokenInterface $twoFactorToken, Response $response): void

@@ -46,7 +46,7 @@ class DefaultAuthenticationRequiredHandler implements AuthenticationRequiredHand
     {
         // Do not save the target path when the current one is the one for checking the authentication code. Then it's
         // another redirect which happens in multi-factor scenarios.
-        if (!$this->isCheckAuthCodeRequest($request) && $request->hasSession() && $request->isMethodSafe(false) && !$request->isXmlHttpRequest()) {
+        if (!$this->isCheckAuthCodeRequest($request) && $request->hasSession() && $request->isMethodSafe() && !$request->isXmlHttpRequest()) {
             $this->saveTargetPath($request->getSession(), $this->firewallName, $request->getUri());
         }
 
