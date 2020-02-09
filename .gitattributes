@@ -8,6 +8,7 @@
 /.php_cs.dist export-ignore
 /.scrutinizer.yml export-ignore
 /.travis.yml export-ignore
+/LICENSE export-ignore
 /php_cs.xml export-ignore
 /phpunit.xml.dist export-ignore
 /README.md export-ignore
