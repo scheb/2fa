@@ -6,6 +6,7 @@
 		<exclude name="Symfony.Functions.Arguments.Invalid" />
 		<exclude name="Symfony.Commenting.License.Warning" />
 	</rule>
+	<rule ref="PSR12.Properties.ConstantVisibility" />
 	<rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses">
 		<exclude-pattern>*/Tests/*</exclude-pattern>
 		<exclude-pattern>*/Security/TwoFactor/Event/Event.php</exclude-pattern>

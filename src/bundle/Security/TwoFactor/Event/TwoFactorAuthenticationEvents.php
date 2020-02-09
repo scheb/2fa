@@ -15,7 +15,7 @@ class TwoFactorAuthenticationEvents
     /**
      * When the two-factor authentication form is shown.
      */
-    const FORM = 'scheb_two_factor.authentication.form';
+    public const FORM = 'scheb_two_factor.authentication.form';
 
     /**
      * When two-factor authentication is attempted, dispatched before the code is checked.
