@@ -1,5 +1,5 @@
 {
-    "name": "scheb/2fa-google",
+    "name": "scheb/2fa-google-authenticator",
     "type": "library",
     "description": "Provides two-factor authentication using Google Authenticator",
     "keywords": ["two-factor", "two-step", "authentication", "security", "symfony"],
