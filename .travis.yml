@@ -6,27 +6,17 @@ php:
   - 7.4
   - nightly
 
-sudo: false
+env:
+  - COMPOSER_FLAGS="--prefer-lowest"
+  - SYMFONY_VERSION=^4.4
+  - SYMFONY_VERSION=^5.0
 
-matrix:
-  fast_finish: true
-  include:
-    - php: 7.2
-      env: COMPOSER_FLAGS="--prefer-lowest"
-    - php: 7.4
-      env: SYMFONY_VERSION=^4.4
-    - php: 7.4
-      env: SYMFONY_VERSION=^5.0
-    - php: nightly
-      env: SYMFONY_VERSION=^5.0
+sudo: false
 
 cache:
   directories:
     - $HOME/.composer/cache
     - vendor
-
-before_script:
-  - mkdir -p build/logs
 
 before_install:
   - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{,.disabled} || echo "xdebug not available"
@@ -37,17 +27,16 @@ install:
 
 script:
   - ./vendor/bin/phpunit
-
+  
 jobs:
   allow_failures:
     - php: nightly
-
   include:
     - stage: Metrics and quality
-      env: COVERAGE
       before_script:
         - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{.disabled,}
         - if [[ ! $(php -m | grep -si xdebug) ]]; then echo "xdebug required for coverage"; exit 1; fi
+        - mkdir -p build/logs
       script:
         - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
       after_script:
@@ -55,12 +44,10 @@ jobs:
         - travis_retry php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
 
     - stage: Metrics and quality
-      env: STATIC_ANALYSIS
       script:
         - echo "To Be done"
 
     - stage: Metrics and quality
-      env: CODING_STANDARDS
       before_script:
         - wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer
         - chmod a+x php-cs-fixer
@@ -68,7 +55,6 @@ jobs:
         - ./php-cs-fixer fix --dry-run --stop-on-violation --using-cache=no
 
     - stage: Security Check
-      env: SECURITY_CHECK
       before_script:
         - wget -c https://get.sensiolabs.org/security-checker.phar
         - chmod +x security-checker.phar
