@@ -30,7 +30,7 @@
         "doctrine/lexer": "^1.0.1",
         "doctrine/orm": "^2.6",
         "egulias/email-validator": "^2.1.10",
-        "phpunit/phpunit": "^9.0",
+        "phpunit/phpunit": "^8.0|^9.0",
         "swiftmailer/swiftmailer": "^6.0",
         "symfony/yaml": "^4.4|^5.0",
         "escapestudios/symfony2-coding-standard": "^3.9",
