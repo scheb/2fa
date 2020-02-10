@@ -1,6 +1,7 @@
 language: php
 
-sudo: false
+os:
+  - linux
 
 cache:
   directories:
