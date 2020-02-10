@@ -58,7 +58,7 @@ jobs:
       before_script:
         - travis_retry composer global require vimeo/psalm
       script:
-        - travis_retry php $HOME/.composer/vendor/bin/psalm
+        - travis_retry php $HOME/.composer/vendor/bin/psalm --show-info=false
 
     - stage: Metrics and quality
       php: 7.4
