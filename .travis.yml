@@ -38,6 +38,9 @@ jobs:
         - SYMFONY_VERSION=^5.0
   
     - stage: Metrics and quality
+      php: 7.4
+      env:
+        - SYMFONY_VERSION=^5.0
       before_script:
         - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{.disabled,}
         - if [[ ! $(php -m | grep -si xdebug) ]]; then echo "xdebug required for coverage"; exit 1; fi
@@ -49,10 +52,18 @@ jobs:
         - travis_retry php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
 
     - stage: Metrics and quality
+      php: 7.4
+      env:
+        - SYMFONY_VERSION=^5.0
+      before_script:
+        - travis_retry composer --global require vimeo/psalm
       script:
-        - echo "To Be done"
+        - travis_retry php $HOME/.composer/vendor/bin/psalm
 
     - stage: Metrics and quality
+      php: 7.4
+      env:
+        - SYMFONY_VERSION=^5.0
       before_script:
         - wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer
         - chmod a+x php-cs-fixer
@@ -60,6 +71,9 @@ jobs:
         - ./php-cs-fixer fix --dry-run --stop-on-violation --using-cache=no
 
     - stage: Security Check
+      php: 7.4
+      env:
+        - SYMFONY_VERSION=^5.0
       before_script:
         - wget -c https://get.sensiolabs.org/security-checker.phar
         - chmod +x security-checker.phar
