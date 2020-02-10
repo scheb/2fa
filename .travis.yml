@@ -56,7 +56,7 @@ jobs:
       env:
         - SYMFONY_VERSION=^5.0
       before_script:
-        - travis_retry composer --global require vimeo/psalm
+        - travis_retry composer global require vimeo/psalm
       script:
         - travis_retry php $HOME/.composer/vendor/bin/psalm
 
