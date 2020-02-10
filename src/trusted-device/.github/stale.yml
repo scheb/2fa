@@ -1,0 +1,8 @@
+daysUntilStale: 1
+daysUntilClose: 1
+staleLabel: wontfix
+markComment: >
+    This issue has been automatically marked as stale because this repository is read-only and nobody will take care of it.
+    **Please submit it to the [main repository](https://github.com/scheb/2fa).**
+    Thank you for your contributions.
+closeComment: false
