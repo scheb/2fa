@@ -3,6 +3,13 @@
 	<services>
 		<service id="scheb_two_factor.security.email.default_auth_code_mailer" class="Scheb\TwoFactorBundle\Mailer\AuthCodeMailer">
 			<argument type="service" id="mailer" />
+			<argument type="service" id="swiftmailer.mailer.default" />
+			<argument>%scheb_two_factor.email.sender_email%</argument>
+			<argument>%scheb_two_factor.email.sender_name%</argument>
+		</service>
+
+		<service id="scheb_two_factor.security.email.symfony_auth_code_mailer" class="Scheb\TwoFactorBundle\Mailer\SymfonyAuthCodeMailer">
+			<argument type="service" id="mailer.mailer" />
 			<argument>%scheb_two_factor.email.sender_email%</argument>
 			<argument>%scheb_two_factor.email.sender_name%</argument>
 		</service>
