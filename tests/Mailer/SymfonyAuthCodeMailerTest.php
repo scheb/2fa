@@ -25,11 +25,6 @@ class SymfonyAuthCodeMailerTest extends TestCase
 
     protected function setUp(): void
     {
-        if (\interface_exists(MailerInterface::class) === false) {
-            $this->markTestSkipped("Symfony mailer not installed");
-
-            return;
-        }
         $this->symfonyMailer = $this->createMock(MailerInterface::class);
         $this->mailer = new SymfonyAuthCodeMailer($this->symfonyMailer, 'sender@example.com', 'Sender Name');
     }
