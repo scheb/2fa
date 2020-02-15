@@ -43,13 +43,22 @@ Documentation
 -------------
 Detailed documentation of all features can be found in the [doc](doc/index.md) directory.
 
-Compatibility
--------------
-- **Recommended version:** Bundle version 5.x is compatible with Symfony 4.4, and 5.x.
-- [Bundle version 4.x](https://github.com/scheb/two-factor-bundle) (managed in a different repository) is compatible
-  with Symfony 3.4, 4.x and 5.x.
+Version Guidance
+----------------
 
-Previous versions are no longer maintained, please consider upgrading.
+| Version        | Status         | Symfony Version  |
+|----------------|----------------|------------------|
+| [1.x][v1-repo] | EOL            | >= 2.1, < 2.7    |
+| [2.x][v2-repo] | EOL            | ^2.6, ^3.0, ^4.0 |
+| [3.x][v3-repo] | Maintained     | 3.4, ^4.0, ^5.0  |
+| [4.x][v4-repo] | Maintained     | 3.4, ^4.0, ^5.0  |
+| [5.x][v5-repo] | In Development | 4.4, ^5.0  |
+
+[v1-repo]: https://github.com/scheb/two-factor-bundle/tree/1.x
+[v2-repo]: https://github.com/scheb/two-factor-bundle/tree/2.x
+[v3-repo]: https://github.com/scheb/two-factor-bundle/tree/3.x
+[v4-repo]: https://github.com/scheb/two-factor-bundle/tree/master
+[v5-repo]: https://github.com/scheb/2fa/tree/master
 
 Security Issues
 ---------------
