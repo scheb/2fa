@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist;
 
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
