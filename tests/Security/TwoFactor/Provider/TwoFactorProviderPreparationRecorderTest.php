@@ -33,7 +33,7 @@ class TwoFactorProviderPreparationRecorderTest extends TestCase
     /**
      * @test
      */
-    public function isProviderPrepared_providerIsNotPrepared_returnFalse()
+    public function isProviderPrepared_providerIsNotPrepared_returnFalse(): void
     {
         $this->session
             ->expects($this->once())
@@ -48,7 +48,7 @@ class TwoFactorProviderPreparationRecorderTest extends TestCase
     /**
      * @test
      */
-    public function isProviderPrepared_providerIsPrepared_returnTrue()
+    public function isProviderPrepared_providerIsPrepared_returnTrue(): void
     {
         $this->session
             ->expects($this->once())

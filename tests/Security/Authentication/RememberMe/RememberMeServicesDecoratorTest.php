@@ -47,7 +47,7 @@ class RememberMeServicesDecoratorTest extends TestCase
     /**
      * @test
      */
-    public function loginSuccess_noATwoFactorToken_forwardCall()
+    public function loginSuccess_noTwoFactorToken_forwardCall(): void
     {
         $token = $this->createMock(TokenInterface::class);
         $this->innerRememberMeServices
@@ -65,7 +65,7 @@ class RememberMeServicesDecoratorTest extends TestCase
     /**
      * @test
      */
-    public function loginSuccess_isTwoFactorToken_setRememberMeAttribute()
+    public function loginSuccess_isTwoFactorToken_setRememberMeAttribute(): void
     {
         $token = $this->createMock(TwoFactorTokenInterface::class);
 
