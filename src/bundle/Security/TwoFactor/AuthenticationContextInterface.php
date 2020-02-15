@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor;
 
 use Symfony\Component\HttpFoundation\Request;

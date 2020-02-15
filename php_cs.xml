@@ -21,4 +21,5 @@
 	<rule ref="Zend.NamingConventions.ValidVariableName.MemberVarContainsNumbers">
 		<exclude-pattern>*/Tests/*</exclude-pattern>
 	</rule>
+	<rule ref="Generic.PHP.RequireStrictTypes" />
 </ruleset>

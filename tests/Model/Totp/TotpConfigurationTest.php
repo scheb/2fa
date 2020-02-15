@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scheb\TwoFactorBundle\Tests\Model\Totp;
 
 use PHPUnit\Framework\TestCase;

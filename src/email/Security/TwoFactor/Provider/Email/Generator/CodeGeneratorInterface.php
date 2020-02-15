@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator;
 
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
