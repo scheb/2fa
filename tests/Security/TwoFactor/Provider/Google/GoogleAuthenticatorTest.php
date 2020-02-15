@@ -100,4 +100,13 @@ class GoogleAuthenticatorTest extends TestCase
         $returnValue = $this->authenticator->getQRContent($this->user);
         $this->assertEquals('QRCodeContent', $returnValue);
     }
+
+    /**
+     * @test
+     */
+    public function generateSecret_getRandomSecretCode_returnString(): void
+    {
+        $returnValue = $this->authenticator->generateSecret();
+        $this->assertEquals(52, strlen($returnValue));
+    }
 }
