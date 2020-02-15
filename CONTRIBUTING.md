@@ -23,7 +23,7 @@ For pull requests, please follow these guidelines:
 - PHP7.1 type hints for everything (including: return types, `void`, nullable types)
 - `declare(strict_types=1)` must be used
 - Please add/update test cases
-- Test methods should be named `[method]_[scenario]_[expected result]`
+- Test methods should be named `[method]_[scenario]_[expectedResult]`
 
 ### Running Quality Checks
 
