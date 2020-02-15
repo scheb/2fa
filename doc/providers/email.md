@@ -130,6 +130,18 @@ scheb_two_factor:
         mailer: acme.custom_mailer_service
 ```
 
+## Symfony Mailer Component
+
+The default mailer service uses Swift Mailer to send the email. To use the Symfony Mailer component instead (without
+creating your own custom mailer service) simply update your configuration as follows:
+
+```yaml
+# config/packages/scheb_two_factor.yaml
+scheb_two_factor:
+    email:
+        mailer: scheb_two_factor.security.email.symfony_auth_code_mailer
+```
+
 ## Custom Code Generator
 
 If you want to have the code generated differently, you can have your own code generator. Create a service implementing
