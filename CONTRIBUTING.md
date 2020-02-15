@@ -30,5 +30,5 @@ For pull requests, please follow these guidelines:
 Before you create a pull request, please make sure your changes fulfill the quality criteria:
 
 1) Install the dependencies with `composer install`
-2) Run the PHPUnit tests with `bin/phpunit`
-3) Run PHP CodeSniffer with `bin/phpcs --standard=php_cs.xml --ignore=/vendor/ .`
+2) Run the PHPUnit tests with `vendor/bin/phpunit`
+3) Run PHP CodeSniffer with `vendor/bin/phpcs --standard=php_cs.xml --ignore=/vendor/ .`
