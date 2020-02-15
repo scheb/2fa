@@ -70,10 +70,8 @@ class TrustedCookieResponseListenerTest extends TestCase
 
     /**
      * @param MockObject|Request $request
-     *
-     * @return MockObject|ResponseEvent
      */
-    private function createEventWithRequest(MockObject $request)
+    private function createEventWithRequest(MockObject $request): ResponseEvent
     {
         return new ResponseEvent(
             $this->createMock(HttpKernelInterface::class),
