@@ -56,20 +56,9 @@ Security Issues
 If you think that you have found a security issue in the bundle, don't use the bug tracker and don't publish it
 publicly. Instead, please report via email to me@christianscheb.de.
 
-Contribute
-----------
-You're welcome to [contribute](https://github.com/scheb/2fa/graphs/contributors) to this bundle by
-creating a pull requests or feature request in the issues section. For pull requests, please follow these guidelines:
-
-- Symfony code style (use `php_cs.xml` to configure the code style in your IDE)
-- PHP7.1 type hints for everything (including: return types, `void`, nullable types)
-- `declare(strict_types=1)` must be used
-- Please add/update test cases
-- Test methods should be named `[method]_[scenario]_[expected result]`
-
-Besides new features, [translations](src/bundle/Resources/translations) are highly welcome.
-
-To run the test suite install the dependencies with `composer install` and then execute `vendor/bin/phpunit`.
+Contributing
+------------
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 License
 -------
