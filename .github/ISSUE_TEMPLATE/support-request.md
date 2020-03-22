@@ -15,7 +15,7 @@ Please check the troubleshooting guide first: https://github.com/scheb/2fa/blob/
 **Symfony version**: x.y.z
 
 **Description**
-<!-- A clear and concise description of what the bug is. If you used the troubleshooting guide, how far did you reach and what did you discover? -->
+<!-- A clear and concise description of what the bug is. If you used the troubleshooting guide, how far did you reach and what did you discover? Please provide the content of your security.yaml. -->
 
 **To Reproduce**
 <!--
