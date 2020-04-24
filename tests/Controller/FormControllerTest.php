@@ -405,6 +405,11 @@ class FormControllerTest extends TestCase
      */
     public function form_renderForm_renderTemplateWithTemplateVars(): void
     {
+        $this->firewallConfig
+            ->expects($this->any())
+            ->method('getCheckPath')
+            ->willReturn('/2fa_check');
+
         $this->stubTokenStorageHasTwoFactorToken();
 
         $this->assertTemplateVars(function (array $templateVars) {
@@ -418,6 +423,8 @@ class FormControllerTest extends TestCase
             $this->assertArrayHasKey('isCsrfProtectionEnabled', $templateVars);
             $this->assertArrayHasKey('csrfParameterName', $templateVars);
             $this->assertArrayHasKey('csrfTokenId', $templateVars);
+            $this->assertArrayHasKey('checkPathRoute', $templateVars);
+            $this->assertArrayHasKey('checkPathUrl', $templateVars);
             $this->assertArrayHasKey('logoutPath', $templateVars);
 
             $this->assertEquals(self::CURRENT_TWO_FACTOR_PROVIDER, $templateVars['twoFactorProvider']);
@@ -428,6 +435,52 @@ class FormControllerTest extends TestCase
             $this->assertEquals(self::CSRF_PARAMETER, $templateVars['csrfParameterName']);
             $this->assertEquals(self::CSRF_TOKEN_ID, $templateVars['csrfTokenId']);
             $this->assertEquals(self::LOGOUT_PATH, $templateVars['logoutPath']);
+            $this->assertEquals('/2fa_check', $templateVars['checkPathUrl']);
+            $this->assertNull($templateVars['checkPathRoute']);
+
+            return true;
+        });
+
+        $this->controller->form($this->request);
+    }
+
+    /**
+     * @test
+     */
+    public function form_renderForm_renderTemplateWithTemplateVarsSetsRoutePath(): void
+    {
+        $this->firewallConfig
+            ->expects($this->any())
+            ->method('getCheckPath')
+            ->willReturn('admin_2fa_check');
+
+        $this->stubTokenStorageHasTwoFactorToken();
+
+        $this->assertTemplateVars(function (array $templateVars) {
+            $this->assertArrayHasKey('twoFactorProvider', $templateVars);
+            $this->assertArrayHasKey('availableTwoFactorProviders', $templateVars);
+            $this->assertArrayHasKey('authenticationError', $templateVars);
+            $this->assertArrayHasKey('authenticationErrorData', $templateVars);
+            $this->assertArrayHasKey('displayTrustedOption', $templateVars);
+            $this->assertArrayHasKey('authCodeParameterName', $templateVars);
+            $this->assertArrayHasKey('trustedParameterName', $templateVars);
+            $this->assertArrayHasKey('isCsrfProtectionEnabled', $templateVars);
+            $this->assertArrayHasKey('csrfParameterName', $templateVars);
+            $this->assertArrayHasKey('csrfTokenId', $templateVars);
+            $this->assertArrayHasKey('checkPathRoute', $templateVars);
+            $this->assertArrayHasKey('checkPathUrl', $templateVars);
+            $this->assertArrayHasKey('logoutPath', $templateVars);
+
+            $this->assertEquals(self::CURRENT_TWO_FACTOR_PROVIDER, $templateVars['twoFactorProvider']);
+            $this->assertEquals(['provider1', 'provider2'], $templateVars['availableTwoFactorProviders']);
+            $this->assertEquals(self::AUTH_CODE_PARAM_NAME, $templateVars['authCodeParameterName']);
+            $this->assertEquals(self::TRUSTED_PARAM_NAME, $templateVars['trustedParameterName']);
+            $this->assertFalse($templateVars['isCsrfProtectionEnabled']);
+            $this->assertEquals(self::CSRF_PARAMETER, $templateVars['csrfParameterName']);
+            $this->assertEquals(self::CSRF_TOKEN_ID, $templateVars['csrfTokenId']);
+            $this->assertEquals(self::LOGOUT_PATH, $templateVars['logoutPath']);
+            $this->assertEquals('admin_2fa_check', $templateVars['checkPathRoute']);
+            $this->assertNull($templateVars['checkPathUrl']);
 
             return true;
         });
