@@ -18,7 +18,7 @@ especially when you're using different route names than the ones used here.
 {# Display current two-factor provider #}
 <p class="label"><label for="_auth_code">{{ "auth_code"|trans({}, 'SchebTwoFactorBundle') }} {{ twoFactorProvider }}:</label></p>
 
-<form class="form" action="{{ path("2fa_login_check") }}" method="post">
+<form class="form" action="{{ checkPathUrl ? checkPathUrl: path(checkPathRoute) }}" method="post">
     <p class="widget">
         <input
             id="_auth_code"
