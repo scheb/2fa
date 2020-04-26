@@ -34,8 +34,8 @@ class CodeGenerator implements CodeGeneratorInterface
 
     public function generateAndSend(TwoFactorInterface $user): void
     {
-        $min = pow(10, $this->digits - 1);
-        $max = pow(10, $this->digits) - 1;
+        $min = 10 ** ($this->digits - 1);
+        $max = 10 ** $this->digits - 1;
         $code = $this->generateCode($min, $max);
         $user->setEmailAuthCode((string) $code);
         $this->persister->persist($user);

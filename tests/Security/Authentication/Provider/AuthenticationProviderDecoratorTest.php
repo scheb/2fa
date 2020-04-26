@@ -177,7 +177,6 @@ class AuthenticationProviderDecoratorTest extends TestCase
         return [
             [$this->createMock(AnonymousToken::class)],
             [$this->createMock(TwoFactorTokenInterface::class)],
-            [null],
         ];
     }
 

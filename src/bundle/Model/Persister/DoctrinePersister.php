@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Model\Persister;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Scheb\TwoFactorBundle\Model\PersisterInterface;
 
 class DoctrinePersister implements PersisterInterface

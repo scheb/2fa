@@ -7,22 +7,20 @@ namespace Scheb\TwoFactorBundle\Security\Http;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class ParameterBagUtils
 {
+    /**
+     * @var PropertyAccessor|null
+     */
     private static $propertyAccessor;
 
     /**
-     * @see Symfony\Component\Security\Http\ParameterBagUtils
+     * @see \Symfony\Component\Security\Http\ParameterBagUtils
      *
      * Returns a request "parameter" value.
-     *
      * Paths like foo[bar] will be evaluated to find deeper items in nested data structures.
-     *
-     * @param Request $request The request
-     * @param string  $path    The key
-     *
-     * @throws \InvalidArgumentException when the given path is malformed
      */
     public static function getRequestParameterValue(Request $request, string $path): ?string
     {

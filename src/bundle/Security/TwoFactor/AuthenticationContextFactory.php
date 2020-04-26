@@ -21,6 +21,13 @@ class AuthenticationContextFactory implements AuthenticationContextFactoryInterf
 
     public function create(Request $request, TokenInterface $token, string $firewallName): AuthenticationContextInterface
     {
-        return new $this->authenticationContextClass($request, $token, $firewallName);
+        /**
+         * @psalm-suppress InvalidStringClass
+         *
+         * @var AuthenticationContextInterface $authenticationContext
+         */
+        $authenticationContext = new $this->authenticationContextClass($request, $token, $firewallName);
+
+        return $authenticationContext;
     }
 }

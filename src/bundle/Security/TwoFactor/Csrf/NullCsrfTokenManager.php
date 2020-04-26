@@ -9,21 +9,31 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class NullCsrfTokenManager implements CsrfTokenManagerInterface
 {
-    public function getToken($tokenId)
+    /**
+     * @param string $tokenId
+     */
+    public function getToken($tokenId): CsrfToken
     {
         return new CsrfToken($tokenId, '');
     }
 
-    public function refreshToken($tokenId)
+    /**
+     * @param string $tokenId
+     */
+    public function refreshToken($tokenId): CsrfToken
     {
         return new CsrfToken($tokenId, '');
     }
 
-    public function removeToken($tokenId)
+    /**
+     * @param string $tokenId
+     */
+    public function removeToken($tokenId): ?string
     {
+        return null;
     }
 
-    public function isTokenValid(CsrfToken $token)
+    public function isTokenValid(CsrfToken $token): bool
     {
         return true;
     }

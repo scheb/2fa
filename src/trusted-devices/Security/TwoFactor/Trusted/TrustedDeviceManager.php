@@ -44,7 +44,7 @@ class TrustedDeviceManager implements TrustedDeviceManagerInterface
         return $this->trustedTokenStorage->hasTrustedToken($username, $firewallName, $version);
     }
 
-    private function getTrustedTokenVersion($user): int
+    private function getTrustedTokenVersion(UserInterface $user): int
     {
         if ($user instanceof TrustedDeviceInterface) {
             return $user->getTrustedTokenVersion();

@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class TwoFactorFirewallConfigCompilerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->hasDefinition('scheb_two_factor.firewall_context')) {
             return;

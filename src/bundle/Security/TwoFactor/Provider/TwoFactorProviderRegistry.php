@@ -9,7 +9,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactor
 class TwoFactorProviderRegistry
 {
     /**
-     * @var TwoFactorProviderInterface[]
+     * @var iterable|TwoFactorProviderInterface[]
      */
     private $providers;
 

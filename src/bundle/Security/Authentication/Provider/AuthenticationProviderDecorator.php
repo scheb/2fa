@@ -8,7 +8,9 @@ use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextFactoryInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterface;
+use Symfony\Bundle\SecurityBundle\Security\FirewallConfig;
 use Symfony\Bundle\SecurityBundle\Security\FirewallMap;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
@@ -55,12 +57,12 @@ class AuthenticationProviderDecorator implements AuthenticationProviderInterface
         $this->requestStack = $requestStack;
     }
 
-    public function supports(TokenInterface $token)
+    public function supports(TokenInterface $token): bool
     {
         return $this->decoratedAuthenticationProvider->supports($token);
     }
 
-    public function authenticate(TokenInterface $token)
+    public function authenticate(TokenInterface $token): TokenInterface
     {
         $wasAlreadyAuthenticated = $token->isAuthenticated();
         $token = $this->decoratedAuthenticationProvider->authenticate($token);
@@ -73,15 +75,14 @@ class AuthenticationProviderDecorator implements AuthenticationProviderInterface
         }
 
         // AnonymousToken and TwoFactorTokenInterface can be ignored
-        // in case of Guard, it can return null due to having multiple guard authenticators
-        if ($token instanceof AnonymousToken || $token instanceof TwoFactorTokenInterface || null === $token) {
+        if ($token instanceof AnonymousToken || $token instanceof TwoFactorTokenInterface) {
             return $token;
         }
 
-        $request = $this->requestStack->getMasterRequest();
-        $firewallConfig = $this->firewallMap->getFirewallConfig($request);
+        $request = $this->getRequest();
+        $firewallConfig = $this->getFirewallConfig($request);
 
-        if (!\in_array(TwoFactorFactory::AUTHENTICATION_PROVIDER_KEY, $firewallConfig->getListeners())) {
+        if (!\in_array(TwoFactorFactory::AUTHENTICATION_PROVIDER_KEY, $firewallConfig->getListeners(), true)) {
             return $token; // This firewall doesn't support two-factor authentication
         }
 
@@ -90,8 +91,31 @@ class AuthenticationProviderDecorator implements AuthenticationProviderInterface
         return $this->twoFactorAuthenticationHandler->beginTwoFactorAuthentication($context);
     }
 
-    public function __call($method, $arguments)
+    /**
+     * @return mixed
+     */
+    public function __call(string $method, array $arguments)
     {
         return ($this->decoratedAuthenticationProvider)->{$method}(...$arguments);
+    }
+
+    private function getRequest(): Request
+    {
+        $request = $this->requestStack->getMasterRequest();
+        if (null === $request) {
+            throw new \RuntimeException('No request available');
+        }
+
+        return $request;
+    }
+
+    private function getFirewallConfig(Request $request): FirewallConfig
+    {
+        $firewallConfig = $this->firewallMap->getFirewallConfig($request);
+        if (null === $firewallConfig) {
+            throw new \RuntimeException('No firewall configuration available');
+        }
+
+        return $firewallConfig;
     }
 }

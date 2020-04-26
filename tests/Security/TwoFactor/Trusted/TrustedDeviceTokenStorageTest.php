@@ -40,7 +40,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
             ->willReturn($this->request);
 
         $this->tokenStorage = new TestableTrustedDeviceTokenStorage($requestStack, $this->jwtEncoder, 'cookieName', 3600);
-        $this->tokenStorage->now = new \DateTime('2018-01-01 00:00:00');
+        $this->tokenStorage->now = new \DateTimeImmutable('2018-01-01 00:00:00');
     }
 
     public function stubCookieHasToken(string $serializedTokenList): void
@@ -306,7 +306,7 @@ class TestableTrustedDeviceTokenStorage extends TrustedDeviceTokenStorage
 {
     public $now;
 
-    protected function getDateTimeNow(): \DateTime
+    protected function getDateTimeNow(): \DateTimeImmutable
     {
         return $this->now;
     }

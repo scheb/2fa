@@ -154,6 +154,7 @@ class TwoFactorAccessDeciderTest extends TestCase
      */
     public function isAccessible_isNotAccessible_returnFalse(): void
     {
+        $this->whenRequestBaseUrl('');
         $this->whenGeneratedLogoutPath(self::LOGOUT_PATH);
         $this->whenPathAccess(false);
         $this->whenIsLogoutPath(false);

@@ -35,6 +35,9 @@ class TotpFactory
     public function createTotpForUser(TwoFactorInterface $user): TOTPInterface
     {
         $totpConfiguration = $user->getTotpAuthenticationConfiguration();
+        if (null === $totpConfiguration) {
+            throw new \RuntimeException('Cannot create TOTP, no TotpAuthenticationConfiguration provided.');
+        }
 
         $totp = TOTP::create(
             $totpConfiguration->getSecret(),

@@ -58,7 +58,8 @@ class TotpConfiguration implements TotpConfigurationInterface
                 self::ALGORITHM_SHA1,
                 self::ALGORITHM_SHA256,
                 self::ALGORITHM_SHA512,
-            ]
+            ],
+            true
         );
     }
 

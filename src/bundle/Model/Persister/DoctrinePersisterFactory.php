@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Model\Persister;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Scheb\TwoFactorBundle\Model\PersisterInterface;
 
 class DoctrinePersisterFactory
@@ -15,7 +15,7 @@ class DoctrinePersisterFactory
     private $managerRegistry;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $objectManagerName;
 
@@ -33,6 +33,8 @@ class DoctrinePersisterFactory
 
     public function getPersister(): PersisterInterface
     {
-        return new DoctrinePersister($this->managerRegistry->getManager($this->objectManagerName));
+        $objectManager = $this->managerRegistry->getManager($this->objectManagerName);
+
+        return new DoctrinePersister($objectManager);
     }
 }

@@ -14,16 +14,19 @@ use Symfony\Component\Security\Http\RememberMe\RememberMeServicesInterface;
 class RememberMeServicesDecorator implements RememberMeServicesInterface, LogoutHandlerInterface
 {
     /**
-     * @var RememberMeServicesInterface|LogoutHandlerInterface
+     * @var RememberMeServicesInterface&LogoutHandlerInterface
      */
     private $decoratedRememberMeServices;
 
+    /**
+     * @param RememberMeServicesInterface&LogoutHandlerInterface $decoratedRememberMeServices
+     */
     public function __construct($decoratedRememberMeServices)
     {
         $this->decoratedRememberMeServices = $decoratedRememberMeServices;
     }
 
-    public function loginSuccess(Request $request, Response $response, TokenInterface $token)
+    public function loginSuccess(Request $request, Response $response, TokenInterface $token): void
     {
         if ($token instanceof TwoFactorTokenInterface) {
             // Create a fake response to capture the remember-me cookie but not let it leak to the real response.
@@ -37,22 +40,25 @@ class RememberMeServicesDecorator implements RememberMeServicesInterface, Logout
         }
     }
 
-    public function autoLogin(Request $request)
+    public function autoLogin(Request $request): ?TokenInterface
     {
         return $this->decoratedRememberMeServices->autoLogin($request);
     }
 
-    public function loginFail(Request $request, \Exception $exception = null)
+    public function loginFail(Request $request, \Exception $exception = null): void
     {
         $this->decoratedRememberMeServices->loginFail($request, $exception);
     }
 
-    public function logout(Request $request, Response $response, TokenInterface $token)
+    public function logout(Request $request, Response $response, TokenInterface $token): void
     {
         $this->decoratedRememberMeServices->logout($request, $response, $token);
     }
 
-    public function __call($method, $arguments)
+    /**
+     * @return mixed
+     */
+    public function __call(string $method, array $arguments)
     {
         return ($this->decoratedRememberMeServices)->{$method}(...$arguments);
     }

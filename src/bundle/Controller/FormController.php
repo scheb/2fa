@@ -64,6 +64,10 @@ class FormController
         $this->setPreferredProvider($request, $token);
 
         $providerName = $token->getCurrentTwoFactorProvider();
+        if (null === $providerName) {
+            throw new AccessDeniedException('User is not in a two-factor authentication process.');
+        }
+
         $renderer = $this->providerRegistry->getProvider($providerName)->getFormRenderer();
         $templateVars = $this->getTemplateVars($request, $token);
 
