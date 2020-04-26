@@ -29,12 +29,14 @@
     "require-dev": {
         "doctrine/lexer": "^1.0.1",
         "doctrine/orm": "^2.6",
-        "phpunit/phpunit": "^7.0|^8.0",
+        "phpunit/phpunit": "^8.0|^9.0",
         "swiftmailer/swiftmailer": "^6.0",
         "symfony/mailer": "^4.4|^5.0",
         "symfony/yaml": "^4.4|^5.0",
         "escapestudios/symfony2-coding-standard": "^3.9",
-        "squizlabs/php_codesniffer": "^3.5"
+        "squizlabs/php_codesniffer": "^3.5",
+        "vimeo/psalm": "^3.11",
+        "symfony/polyfill-php80": "^1.15"
     },
     "autoload": {
         "psr-4": {
