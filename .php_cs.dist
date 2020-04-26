@@ -3,6 +3,7 @@
 $rules = [
     '@Symfony' => true,
     'native_function_invocation' => ['include' => ['@compiler_optimized'], 'scope' => 'namespaced'],
+    'phpdoc_to_comment' => false,
 ];
 
 $finder = PhpCsFixer\Finder::create()
