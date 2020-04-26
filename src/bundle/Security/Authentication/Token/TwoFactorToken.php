@@ -6,6 +6,7 @@ namespace Scheb\TwoFactorBundle\Security\Authentication\Token;
 
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class TwoFactorToken implements TwoFactorTokenInterface
 {
@@ -47,18 +48,21 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return $this->authenticatedToken->getUser();
     }
 
-    public function setUser($user)
+    /**
+     * @param string|\Stringable|UserInterface $user
+     */
+    public function setUser($user): void
     {
         $this->authenticatedToken->setUser($user);
     }
 
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->authenticatedToken->getUsername();
     }
 
     // Compatibility for Symfony < 5.0
-    public function getRoles()
+    public function getRoles(): array
     {
         return [];
     }
@@ -69,12 +73,12 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return $this->getRoles();
     }
 
-    public function getCredentials()
+    public function getCredentials(): ?string
     {
         return $this->credentials;
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         $this->credentials = null;
     }
@@ -97,7 +101,9 @@ class TwoFactorToken implements TwoFactorTokenInterface
 
     public function getCurrentTwoFactorProvider(): ?string
     {
-        return reset($this->twoFactorProviders) ?? null;
+        $first = reset($this->twoFactorProviders);
+
+        return false !== $first ? $first : null;
     }
 
     public function setTwoFactorProviderComplete(string $providerName): void
@@ -107,7 +113,7 @@ class TwoFactorToken implements TwoFactorTokenInterface
 
     private function removeTwoFactorProvider(string $providerName): void
     {
-        $key = array_search($providerName, $this->twoFactorProviders);
+        $key = array_search($providerName, $this->twoFactorProviders, true);
         if (false === $key) {
             throw new UnknownTwoFactorProviderException(sprintf('Two-factor provider "%s" is not active.', $providerName));
         }
@@ -124,53 +130,64 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return $this->providerKey;
     }
 
-    public function isAuthenticated()
+    public function isAuthenticated(): bool
     {
         return true;
     }
 
-    public function setAuthenticated($isAuthenticated)
+    /**
+     * @param bool $isAuthenticated
+     */
+    public function setAuthenticated($isAuthenticated): void
     {
         throw new \RuntimeException('Cannot change authenticated once initialized.');
     }
 
-    // Compatibility for Symfony >= 4.3 & PHP >= 7.4
     public function __serialize(): array
     {
         return [$this->authenticatedToken, $this->credentials, $this->providerKey, $this->attributes, $this->twoFactorProviders];
     }
 
-    public function serialize()
+    // Compatibility for Symfony 4.4 & PHP < 7.4
+    public function serialize(): string
     {
         return serialize($this->__serialize());
     }
 
-    // Compatibility for Symfony >= 4.3 & PHP >= 7.4
     public function __unserialize(array $data): void
     {
         [$this->authenticatedToken, $this->credentials, $this->providerKey, $this->attributes, $this->twoFactorProviders] = $data;
     }
 
-    public function unserialize($serialized)
+    // Compatibility for Symfony 4.4 & PHP < 7.4
+    public function unserialize($serialized): void
     {
-        $this->__unserialize(\is_array($serialized) ? $serialized : unserialize($serialized));
+        $this->__unserialize(unserialize($serialized));
     }
 
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
 
-    public function setAttributes(array $attributes)
+    public function setAttributes(array $attributes): void
     {
         $this->attributes = $attributes;
     }
 
-    public function hasAttribute($name)
+    /**
+     * @param string $name
+     */
+    public function hasAttribute($name): bool
     {
         return \array_key_exists($name, $this->attributes);
     }
 
+    /**
+     * @param string $name
+     *
+     * @return mixed
+     */
     public function getAttribute($name)
     {
         if (!\array_key_exists($name, $this->attributes)) {
@@ -180,12 +197,16 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return $this->attributes[$name];
     }
 
-    public function setAttribute($name, $value)
+    /**
+     * @param string $name
+     * @param mixed $value
+     */
+    public function setAttribute($name, $value): void
     {
         $this->attributes[$name] = $value;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getUsername();
     }

@@ -60,14 +60,13 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
         $this->preparationRecorder = $preparationRecorder;
     }
 
-    public function supports(TokenInterface $token)
+    public function supports(TokenInterface $token): bool
     {
         return $token instanceof TwoFactorTokenInterface && $this->firewallName === $token->getProviderKey();
     }
 
-    public function authenticate(TokenInterface $token)
+    public function authenticate(TokenInterface $token): TokenInterface
     {
-        /** @var TwoFactorTokenInterface $token */
         if (!$this->supports($token)) {
             throw new AuthenticationException('The token is not supported by this authentication provider.');
         }
@@ -77,7 +76,11 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
             return $token;
         }
 
+        /** @var TwoFactorTokenInterface $token */
         $providerName = $token->getCurrentTwoFactorProvider();
+        if (!$providerName) {
+            throw new AuthenticationException('There is no active two-factor provider.');
+        }
 
         if (!$this->preparationRecorder->isProviderPrepared($this->firewallName, $providerName)) {
             throw new AuthenticationException(sprintf('The two-factor provider "%s" has not been prepared.', $providerName));
@@ -112,6 +115,9 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
         return false;
     }
 
+    /**
+     * @param object|string $user
+     */
     private function isValidTwoFactorCode($user, string $providerName, string $authenticationCode): bool
     {
         try {
@@ -125,6 +131,9 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
         return $authenticationProvider->validateAuthenticationCode($user, $authenticationCode);
     }
 
+    /**
+     * @param object|string $user
+     */
     private function isValidBackupCode($user, string $authenticationCode): bool
     {
         if ($this->backupCodeManager->isBackupCode($user, $authenticationCode)) {

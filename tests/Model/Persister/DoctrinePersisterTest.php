@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Model\Persister;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Persister\DoctrinePersister;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -12,9 +12,9 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 class DoctrinePersisterTest extends TestCase
 {
     /**
-     * @var MockObject|EntityManager
+     * @var MockObject|ObjectManager
      */
-    private $em;
+    private $objectManager;
 
     /**
      * @var DoctrinePersister
@@ -23,13 +23,8 @@ class DoctrinePersisterTest extends TestCase
 
     protected function setUp(): void
     {
-        // Although we use Doctrine's generic ObjectManager as an interface, for testing we will use Doctrine2 ORM's EntityManager
-        $this->em = $this->getMockBuilder(EntityManager::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['persist', 'flush'])
-            ->getMock();
-
-        $this->persister = new DoctrinePersister($this->em);
+        $this->objectManager = $this->createMock(ObjectManager::class);
+        $this->persister = new DoctrinePersister($this->objectManager);
     }
 
     /**
@@ -40,11 +35,11 @@ class DoctrinePersisterTest extends TestCase
         $user = new \stdClass(); //Some user object
 
         //Mock the EntityManager
-        $this->em
+        $this->objectManager
             ->expects($this->once())
             ->method('persist')
             ->with($user);
-        $this->em
+        $this->objectManager
             ->expects($this->once())
             ->method('flush');
 

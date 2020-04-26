@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class TwoFactorProviderCompilerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->hasDefinition('scheb_two_factor.provider_registry')) {
             return;

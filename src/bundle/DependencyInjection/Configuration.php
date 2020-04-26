@@ -16,10 +16,15 @@ use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 
 class Configuration implements ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('scheb_two_factor');
         $rootNode = $treeBuilder->getRootNode();
+
+        /**
+         * @psalm-suppress PossiblyNullReference
+         * @psalm-suppress PossiblyUndefinedMethod
+         */
         $rootNode
             ->children()
                 ->scalarNode('persister')->defaultValue('scheb_two_factor.persister.doctrine')->end()
@@ -39,13 +44,23 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('two_factor_token_factory')->defaultValue('scheb_two_factor.default_token_factory')->end()
             ->end()
         ;
+
+        /** @psalm-suppress ArgumentTypeCoercion */
+        $this->addExtraConfiguration($rootNode);
+
+        return $treeBuilder;
+    }
+
+    /**
+     * @psalm-suppress ArgumentTypeCoercion
+     */
+    private function addExtraConfiguration(ArrayNodeDefinition $rootNode): void
+    {
         $this->addTrustedDeviceConfiguration($rootNode);
         $this->addBackupCodeConfiguration($rootNode);
         $this->addEMailConfiguration($rootNode);
         $this->addGoogleAuthenticatorConfiguration($rootNode);
         $this->addTotpConfiguration($rootNode);
-
-        return $treeBuilder;
     }
 
     private function addBackupCodeConfiguration(ArrayNodeDefinition $rootNode): void
@@ -53,6 +68,11 @@ class Configuration implements ConfigurationInterface
         if (!interface_exists(BackupCodeInterface::class)) {
             return;
         }
+
+        /**
+         * @psalm-suppress PossiblyNullReference
+         * @psalm-suppress PossiblyUndefinedMethod
+         */
         $rootNode
             ->children()
                 ->arrayNode('backup_codes')
@@ -67,6 +87,10 @@ class Configuration implements ConfigurationInterface
 
     private function addTrustedDeviceConfiguration(ArrayNodeDefinition $rootNode): void
     {
+        /**
+         * @psalm-suppress PossiblyNullReference
+         * @psalm-suppress PossiblyUndefinedMethod
+         */
         $rootNode
             ->children()
                 ->arrayNode('trusted_device')
@@ -97,6 +121,11 @@ class Configuration implements ConfigurationInterface
         if (!interface_exists(EMailTwoFactorInterface::class)) {
             return;
         }
+
+        /**
+         * @psalm-suppress PossiblyNullReference
+         * @psalm-suppress PossiblyUndefinedMethod
+         */
         $rootNode
             ->children()
                 ->arrayNode('email')
@@ -119,6 +148,11 @@ class Configuration implements ConfigurationInterface
         if (!interface_exists(TotpTwoFactorInterface::class)) {
             return;
         }
+
+        /**
+         * @psalm-suppress PossiblyNullReference
+         * @psalm-suppress PossiblyUndefinedMethod
+         */
         $rootNode
             ->children()
                 ->arrayNode('totp')
@@ -142,6 +176,11 @@ class Configuration implements ConfigurationInterface
         if (!interface_exists(GoogleTwoFactorInterface::class)) {
             return;
         }
+
+        /**
+         * @psalm-suppress PossiblyNullReference
+         * @psalm-suppress PossiblyUndefinedMethod
+         */
         $rootNode
             ->children()
                 ->arrayNode('google')

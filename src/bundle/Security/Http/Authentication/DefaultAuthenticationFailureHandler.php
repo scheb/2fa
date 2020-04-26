@@ -6,6 +6,7 @@ namespace Scheb\TwoFactorBundle\Security\Http\Authentication;
 
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
@@ -33,7 +34,7 @@ class DefaultAuthenticationFailureHandler implements AuthenticationFailureHandle
         $this->options = array_merge(self::DEFAULT_OPTIONS, $options);
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
 

@@ -24,7 +24,7 @@ class SymfonyAuthCodeMailer implements AuthCodeMailerInterface
     public function __construct(MailerInterface $mailer, string $senderEmail, ?string $senderName)
     {
         $this->mailer = $mailer;
-        $this->senderAddress = new Address($senderEmail, $senderName);
+        $this->senderAddress = new Address($senderEmail, $senderName ?? '');
     }
 
     public function sendAuthCode(TwoFactorInterface $user): void

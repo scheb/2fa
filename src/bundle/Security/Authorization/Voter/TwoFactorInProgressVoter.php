@@ -13,7 +13,7 @@ class TwoFactorInProgressVoter implements VoterInterface
 {
     public const IS_AUTHENTICATED_2FA_IN_PROGRESS = 'IS_AUTHENTICATED_2FA_IN_PROGRESS';
 
-    public function vote(TokenInterface $token, $subject, array $attributes)
+    public function vote(TokenInterface $token, $subject, array $attributes): int
     {
         if (!($token instanceof TwoFactorTokenInterface)) {
             return VoterInterface::ACCESS_ABSTAIN;

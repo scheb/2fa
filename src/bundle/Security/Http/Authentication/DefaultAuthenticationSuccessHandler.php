@@ -6,6 +6,7 @@ namespace Scheb\TwoFactorBundle\Security\Http\Authentication;
 
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
@@ -43,7 +44,7 @@ class DefaultAuthenticationSuccessHandler implements AuthenticationSuccessHandle
         $this->options = array_merge(self::DEFAULT_OPTIONS, $options);
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token)
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token): Response
     {
         $request->getSession()->remove(Security::AUTHENTICATION_ERROR);
 

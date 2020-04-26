@@ -69,6 +69,7 @@ class TwoFactorProviderPreparationListener
     {
         $token = $event->getAuthenticationToken();
         if ($this->prepareOnLogin && $this->supports($token)) {
+            /** @var TwoFactorTokenInterface $token */
             // After login, when the token is a TwoFactorTokenInterface, execute preparation
             $this->twoFactorToken = $token;
         }
@@ -78,6 +79,7 @@ class TwoFactorProviderPreparationListener
     {
         $token = $event->getToken();
         if ($this->prepareOnAccessDenied && $this->supports($token)) {
+            /** @var TwoFactorTokenInterface $token */
             // Whenever two-factor authentication is required, execute preparation
             $this->twoFactorToken = $token;
         }
@@ -87,6 +89,7 @@ class TwoFactorProviderPreparationListener
     {
         $token = $event->getToken();
         if ($this->supports($token)) {
+            /** @var TwoFactorTokenInterface $token */
             // Whenever two-factor authentication form is shown, execute preparation
             $this->twoFactorToken = $token;
         }
@@ -102,6 +105,10 @@ class TwoFactorProviderPreparationListener
         }
 
         $providerName = $this->twoFactorToken->getCurrentTwoFactorProvider();
+        if (null === $providerName) {
+            return;
+        }
+
         $firewallName = $this->twoFactorToken->getProviderKey();
 
         try {
