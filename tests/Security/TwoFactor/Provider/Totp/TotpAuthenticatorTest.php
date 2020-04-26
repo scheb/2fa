@@ -107,6 +107,6 @@ class TotpAuthenticatorTest extends TestCase
     public function generateSecret_getRandomSecretCode_returnString(): void
     {
         $returnValue = $this->authenticator->generateSecret();
-        $this->assertEquals(52, strlen($returnValue));
+        $this->assertEquals(52, \strlen($returnValue));
     }
 }

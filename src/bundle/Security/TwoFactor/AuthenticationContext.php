@@ -39,7 +39,7 @@ class AuthenticationContext implements AuthenticationContextInterface
 
     public function getUser()
     {
-        if (is_object($user = $this->token->getUser())) {
+        if (\is_object($user = $this->token->getUser())) {
             return $user;
         }
 

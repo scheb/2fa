@@ -96,7 +96,7 @@ class FormController
     {
         $config = $this->twoFactorFirewallContext->getFirewallConfig($token->getProviderKey());
         $pendingTwoFactorProviders = $token->getTwoFactorProviders();
-        $displayTrustedOption = $this->trustedFeatureEnabled && (!$config->isMultiFactor() || 1 === count($pendingTwoFactorProviders));
+        $displayTrustedOption = $this->trustedFeatureEnabled && (!$config->isMultiFactor() || 1 === \count($pendingTwoFactorProviders));
         $authenticationException = $this->getLastAuthenticationException($request->getSession());
 
         return [

@@ -81,7 +81,7 @@ class AuthenticationProviderDecorator implements AuthenticationProviderInterface
         $request = $this->requestStack->getMasterRequest();
         $firewallConfig = $this->firewallMap->getFirewallConfig($request);
 
-        if (!in_array(TwoFactorFactory::AUTHENTICATION_PROVIDER_KEY, $firewallConfig->getListeners())) {
+        if (!\in_array(TwoFactorFactory::AUTHENTICATION_PROVIDER_KEY, $firewallConfig->getListeners())) {
             return $token; // This firewall doesn't support two-factor authentication
         }
 

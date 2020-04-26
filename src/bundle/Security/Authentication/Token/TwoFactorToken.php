@@ -116,7 +116,7 @@ class TwoFactorToken implements TwoFactorTokenInterface
 
     public function allTwoFactorProvidersAuthenticated(): bool
     {
-        return 0 === count($this->twoFactorProviders);
+        return 0 === \count($this->twoFactorProviders);
     }
 
     public function getProviderKey(): string
@@ -168,12 +168,12 @@ class TwoFactorToken implements TwoFactorTokenInterface
 
     public function hasAttribute($name)
     {
-        return array_key_exists($name, $this->attributes);
+        return \array_key_exists($name, $this->attributes);
     }
 
     public function getAttribute($name)
     {
-        if (!array_key_exists($name, $this->attributes)) {
+        if (!\array_key_exists($name, $this->attributes)) {
             throw new \InvalidArgumentException(sprintf('This token has no "%s" attribute.', $name));
         }
 
