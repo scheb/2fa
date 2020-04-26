@@ -324,7 +324,7 @@ class TwoFactorListenerTest extends TestCase
 
     private function assertEventsDispatched(array $eventTypes): void
     {
-        $numEvents = count($eventTypes);
+        $numEvents = \count($eventTypes);
         $consecutiveParams = [];
         foreach ($eventTypes as $eventType) {
             $consecutiveParams[] = [$this->isInstanceOf(TwoFactorAuthenticationEvent::class), $eventType];

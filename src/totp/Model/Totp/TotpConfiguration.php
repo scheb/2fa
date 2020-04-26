@@ -51,7 +51,7 @@ class TotpConfiguration implements TotpConfigurationInterface
 
     private static function isValidAlgorithm(string $algorithm): bool
     {
-        return in_array(
+        return \in_array(
             $algorithm,
             [
                 self::ALGORITHM_MD5,

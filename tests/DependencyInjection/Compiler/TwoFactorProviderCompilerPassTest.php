@@ -55,7 +55,7 @@ class TwoFactorProviderCompilerPassTest extends TestCase
     {
         $providersArgument = $this->container->getDefinition('scheb_two_factor.provider_registry')->getArgument(0);
         $this->assertInstanceOf(IteratorArgument::class, $providersArgument);
-        $this->assertCount(count($providers), $providersArgument->getValues());
+        $this->assertCount(\count($providers), $providersArgument->getValues());
     }
 
     /**
