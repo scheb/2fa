@@ -29,6 +29,11 @@ class TrustedDeviceToken
         return $this->jwtToken->getClaim(JwtTokenEncoder::CLAIM_VERSION, false) === $version;
     }
 
+    public function isExpired(): bool
+    {
+        return $this->jwtToken->isExpired();
+    }
+
     public function serialize(): string
     {
         return (string) $this->jwtToken;

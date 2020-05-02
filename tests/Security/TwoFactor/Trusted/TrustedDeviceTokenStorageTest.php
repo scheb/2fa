@@ -6,7 +6,8 @@ namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Trusted;
 
 use Lcobucci\JWT\Token;
 use PHPUnit\Framework\MockObject\MockObject;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\JwtTokenEncoder;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceToken;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceTokenEncoder;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceTokenStorage;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,14 +16,14 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class TrustedDeviceTokenStorageTest extends TestCase
 {
     /**
-     * @var MockObject|JwtTokenEncoder
-     */
-    private $jwtEncoder;
-
-    /**
      * @var Request
      */
     private $request;
+
+    /**
+     * @var MockObject|TrustedDeviceTokenEncoder
+     */
+    private $tokenEncoder;
 
     /**
      * @var TrustedDeviceTokenStorage
@@ -31,7 +32,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->jwtEncoder = $this->createMock(JwtTokenEncoder::class);
+        $this->tokenEncoder = $this->createMock(TrustedDeviceTokenEncoder::class);
         $this->request = new Request();
         $requestStack = $this->createMock(RequestStack::class);
         $requestStack
@@ -39,8 +40,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
             ->method('getMasterRequest')
             ->willReturn($this->request);
 
-        $this->tokenStorage = new TestableTrustedDeviceTokenStorage($requestStack, $this->jwtEncoder, 'cookieName', 3600);
-        $this->tokenStorage->now = new \DateTimeImmutable('2018-01-01 00:00:00');
+        $this->tokenStorage = new TrustedDeviceTokenStorage($requestStack, $this->tokenEncoder, 'cookieName');
     }
 
     public function stubCookieHasToken(string $serializedTokenList): void
@@ -50,7 +50,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
 
     private function stubGenerateNewToken(MockObject $newToken): void
     {
-        $this->jwtEncoder
+        $this->tokenEncoder
             ->expects($this->any())
             ->method('generateToken')
             ->willReturn($newToken);
@@ -58,27 +58,31 @@ class TrustedDeviceTokenStorageTest extends TestCase
 
     private function stubDecodeToken(...$serializedValues): void
     {
-        $this->jwtEncoder
+        $this->tokenEncoder
             ->expects($this->any())
             ->method('decodeToken')
             ->willReturnOnConsecutiveCalls(...$serializedValues);
     }
 
-    private function createTokenWithProperties(string $serializedValue, ?string $username = null, ?string $firewallName = null, ?int $version = null): MockObject
+    private function createTokenWithProperties(string $serializedValue, bool $authenticatesRealm, bool $versionMatches, bool $isExpired): MockObject
     {
-        $jwtToken = $this->createMock(Token::class);
+        $jwtToken = $this->createMock(TrustedDeviceToken::class);
         $jwtToken
             ->expects($this->any())
-            ->method('__toString')
+            ->method('serialize')
             ->willReturn($serializedValue);
         $jwtToken
             ->expects($this->any())
-            ->method('getClaim')
-            ->willReturnMap([
-                [JwtTokenEncoder::CLAIM_USERNAME, false, $username],
-                [JwtTokenEncoder::CLAIM_FIREWALL, false, $firewallName],
-                [JwtTokenEncoder::CLAIM_VERSION, false, $version],
-            ]);
+            ->method('authenticatesRealm')
+            ->willReturn($authenticatesRealm);
+        $jwtToken
+            ->expects($this->any())
+            ->method('versionMatches')
+            ->willReturn($versionMatches);
+        $jwtToken
+            ->expects($this->any())
+            ->method('isExpired')
+            ->willReturn($isExpired);
 
         return $jwtToken;
     }
@@ -88,10 +92,9 @@ class TrustedDeviceTokenStorageTest extends TestCase
      */
     public function hasTrustedToken_differentRealm_returnFalse(): void
     {
-        $this->stubCookieHasToken('validToken1;validToken2');
+        $this->stubCookieHasToken('serializedToken');
         $this->stubDecodeToken(
-            $this->createTokenWithProperties('validToken1', 'username', 'otherFirewallName', 1),
-            $this->createTokenWithProperties('validToken2', 'otherUsername', 'firewallName', 1)
+            $this->createTokenWithProperties('serializedToken', false, true, false)
         );
 
         $returnValue = $this->tokenStorage->hasTrustedToken('username', 'firewallName', 1);
@@ -101,15 +104,28 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function hasTrustedToken_sameRealDifferentVersion_returnFalse(): void
+    public function hasTrustedToken_sameRealmDifferentVersion_returnFalse(): void
     {
-        $this->stubCookieHasToken('validToken1;validToken2');
+        $this->stubCookieHasToken('serializedToken');
         $this->stubDecodeToken(
-            $this->createTokenWithProperties('validToken1', 'username', 'otherFirewallName', 1),
-            $this->createTokenWithProperties('validToken2', 'username', 'firewallName', 1)
+            $this->createTokenWithProperties('serializedToken', true, false, false)
         );
 
-        $returnValue = $this->tokenStorage->hasTrustedToken('username', 'firewallName', 2);
+        $returnValue = $this->tokenStorage->hasTrustedToken('username', 'firewallName', 1);
+        $this->assertFalse($returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function hasTrustedToken_sameRealmSameVersionIsExpired_returnFalse(): void
+    {
+        $this->stubCookieHasToken('serializedToken');
+        $this->stubDecodeToken(
+            $this->createTokenWithProperties('serializedToken', true, true, true)
+        );
+
+        $returnValue = $this->tokenStorage->hasTrustedToken('username', 'firewallName', 1);
         $this->assertFalse($returnValue);
     }
 
@@ -118,10 +134,10 @@ class TrustedDeviceTokenStorageTest extends TestCase
      */
     public function hasTrustedToken_sameRealmSameVersion_returnTrue(): void
     {
-        $this->stubCookieHasToken('validToken1;validToken2');
+        $this->stubCookieHasToken('serializedToken1;serializedToken2');
         $this->stubDecodeToken(
-            $this->createTokenWithProperties('validToken1', 'username', 'otherFirewallName', 1),
-            $this->createTokenWithProperties('validToken2', 'username', 'firewallName', 1)
+            $this->createTokenWithProperties('serializedToken1', false, true, false),
+            $this->createTokenWithProperties('serializedToken2', true, true, false)
         );
 
         $returnValue = $this->tokenStorage->hasTrustedToken('username', 'firewallName', 1);
@@ -133,10 +149,10 @@ class TrustedDeviceTokenStorageTest extends TestCase
      */
     public function addTrustedToken_addNewToken_generateToken(): void
     {
-        $this->jwtEncoder
+        $this->tokenEncoder
             ->expects($this->once())
             ->method('generateToken')
-            ->with('username', 'firewallName', 1, new \DateTime('2018-01-01 01:00:00'));
+            ->with('username', 'firewallName', 1);
 
         $this->tokenStorage->addTrustedToken('username', 'firewallName', 1);
     }
@@ -172,8 +188,8 @@ class TrustedDeviceTokenStorageTest extends TestCase
     {
         $this->stubCookieHasToken('validToken1;validToken2');
         $this->stubDecodeToken(
-            $this->createTokenWithProperties('validToken1'),
-            $this->createTokenWithProperties('validToken2')
+            $this->createTokenWithProperties('validToken1', true, true, false),
+            $this->createTokenWithProperties('validToken2', true, true, false)
         );
 
         $returnValue = $this->tokenStorage->hasUpdatedCookie();
@@ -197,7 +213,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     {
         $this->stubCookieHasToken('validToken');
         $this->stubDecodeToken(
-            $this->createTokenWithProperties('validToken', 'username', 'firewallName', 1)
+            $this->createTokenWithProperties('validToken', true, true, false)
         );
 
         $this->tokenStorage->hasTrustedToken('username', 'firewallName', 1);
@@ -212,10 +228,10 @@ class TrustedDeviceTokenStorageTest extends TestCase
     {
         $this->stubCookieHasToken('differentVersionToken');
         $this->stubDecodeToken(
-            $this->createTokenWithProperties('differentVersionToken', 'username', 'firewallName', 1)
+            $this->createTokenWithProperties('differentVersionToken', true, false, false)
         );
 
-        $this->tokenStorage->hasTrustedToken('username', 'firewallName', 2);
+        $this->tokenStorage->hasTrustedToken('username', 'firewallName', 1);
         $returnValue = $this->tokenStorage->hasUpdatedCookie();
         $this->assertTrue($returnValue);
     }
@@ -227,8 +243,8 @@ class TrustedDeviceTokenStorageTest extends TestCase
     {
         $this->stubCookieHasToken('validToken1;validToken2');
         $this->stubDecodeToken(
-            $this->createTokenWithProperties('validToken1'),
-            $this->createTokenWithProperties('validToken2')
+            $this->createTokenWithProperties('validToken1', true, true, false),
+            $this->createTokenWithProperties('validToken2', true, true, false)
         );
 
         $returnValue = $this->tokenStorage->getCookieValue();
@@ -242,7 +258,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     {
         $this->stubCookieHasToken('validToken;invalidToken');
         $this->stubDecodeToken(
-            $this->createTokenWithProperties('validToken'),
+            $this->createTokenWithProperties('validToken', true, true, false),
             null
         );
 
@@ -257,10 +273,10 @@ class TrustedDeviceTokenStorageTest extends TestCase
     {
         $this->stubCookieHasToken('validToken1;validToken2');
         $this->stubDecodeToken(
-            $this->createTokenWithProperties('validToken1'),
-            $this->createTokenWithProperties('validToken2')
+            $this->createTokenWithProperties('validToken1', false, true, false),
+            $this->createTokenWithProperties('validToken2', false, true, false)
         );
-        $this->stubGenerateNewToken($this->createTokenWithProperties('newToken'));
+        $this->stubGenerateNewToken($this->createTokenWithProperties('newToken', true, true, false));
 
         $this->tokenStorage->addTrustedToken('username', 'firewallName', 1);
         $returnValue = $this->tokenStorage->getCookieValue();
@@ -274,10 +290,10 @@ class TrustedDeviceTokenStorageTest extends TestCase
     {
         $this->stubCookieHasToken('validToken1;validToken2');
         $this->stubDecodeToken(
-            $this->createTokenWithProperties('validToken1', 'username', 'firewallName', 1),
-            $this->createTokenWithProperties('validToken2', 'otherUsername', 'firewallName', 1)
+            $this->createTokenWithProperties('validToken1', true, true, false),
+            $this->createTokenWithProperties('validToken2', false, true, false)
         );
-        $this->stubGenerateNewToken($this->createTokenWithProperties('newToken', 'username', 'firewallName', 1));
+        $this->stubGenerateNewToken($this->createTokenWithProperties('newToken', true, true, false));
 
         $this->tokenStorage->addTrustedToken('username', 'firewallName', 1);
         $returnValue = $this->tokenStorage->getCookieValue();
@@ -291,23 +307,11 @@ class TrustedDeviceTokenStorageTest extends TestCase
     {
         $this->stubCookieHasToken('differentVersionToken;validToken');
         $this->stubDecodeToken(
-            $this->createTokenWithProperties('invalidVersionToken', 'username', 'firewallName', 1),
-            $this->createTokenWithProperties('validToken', 'otherUsername', 'firewallName', 1)
+            $this->createTokenWithProperties('validToken', true, true, false)
         );
 
         $this->tokenStorage->hasTrustedToken('username', 'firewallName', 2);
         $returnValue = $this->tokenStorage->getCookieValue();
         $this->assertEquals('validToken', $returnValue);
-    }
-}
-
-// Make the current DateTime testable
-class TestableTrustedDeviceTokenStorage extends TrustedDeviceTokenStorage
-{
-    public $now;
-
-    protected function getDateTimeNow(): \DateTimeImmutable
-    {
-        return $this->now;
     }
 }
