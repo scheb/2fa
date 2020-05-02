@@ -53,7 +53,7 @@ jobs:
         -   name: PHP Code Style Sniffer
             php: 7.4
             script:
-                - ./vendor/bin/phpcs --standard=php_cs.xml --ignore=*/vendor/* .
+                - ./vendor/bin/phpcs --standard=php_cs.xml ./src ./tests ./app/src
 
         -   name: PHP Coding Standards Fixer
             php: 7.4

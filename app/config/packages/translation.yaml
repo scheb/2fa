@@ -1,0 +1,6 @@
+framework:
+    default_locale: '%locale%'
+    translator:
+        paths: ~
+        fallbacks:
+            - '%locale%'
