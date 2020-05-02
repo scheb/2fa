@@ -1,0 +1,9 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h1>Welcome to Member's Area</h1>
+    <p>This is a secured page, only accessible when 2fa has been completed</p>
+    <p>GA secret: {{ app.user.googleAuthenticatorSecret }}</p>
+    <p>QR code (GA):<br/><img src="https://api.qrserver.com/v1/create-qr-code/?data={{ qrCodeGa|url_encode }}&size=150x150&margin=0"></p>
+    <p>QR code (TOTP):<br/><img src="https://api.qrserver.com/v1/create-qr-code/?data={{ qrCodeTotp|url_encode }}&size=150x150&margin=0"></p>
+{% endblock %}

@@ -1,0 +1,9 @@
+framework:
+    secret: '%env(APP_SECRET)%'
+    csrf_protection: ~
+    session:
+        handler_id: ~
+
+    esi: { enabled: true }
+    php_errors:
+        log: true
