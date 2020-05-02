@@ -5,11 +5,15 @@
 			<argument>%kernel.secret%</argument>
 		</service>
 
+		<service id="scheb_two_factor.trusted_token_encoder" class="Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceTokenEncoder">
+			<argument type="service" id="scheb_two_factor.trusted_jwt_encoder" />
+			<argument>%scheb_two_factor.trusted_device.lifetime%</argument>
+		</service>
+
 		<service id="scheb_two_factor.trusted_token_storage" class="Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceTokenStorage" lazy="true">
 			<argument type="service" id="request_stack" />
-			<argument type="service" id="scheb_two_factor.trusted_jwt_encoder" />
+			<argument type="service" id="scheb_two_factor.trusted_token_encoder" />
 			<argument>%scheb_two_factor.trusted_device.cookie_name%</argument>
-			<argument>%scheb_two_factor.trusted_device.lifetime%</argument>
 		</service>
 
 		<service id="scheb_two_factor.trusted_cookie_response_listener" class="Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedCookieResponseListener" lazy="true">

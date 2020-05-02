@@ -17,19 +17,14 @@ class TrustedDeviceTokenStorage
     private $requestStack;
 
     /**
-     * @var JwtTokenEncoder
+     * @var TrustedDeviceTokenEncoder
      */
-    private $jwtTokenEncoder;
+    private $tokenGenerator;
 
     /**
      * @var string
      */
     private $cookieName;
-
-    /**
-     * @var int
-     */
-    private $trustedTokenLifetime;
 
     /**
      * @var TrustedDeviceToken[]|null
@@ -41,12 +36,11 @@ class TrustedDeviceTokenStorage
      */
     private $updateCookie = false;
 
-    public function __construct(RequestStack $requestStack, JwtTokenEncoder $jwtTokenEncoder, string $cookieName, int $trustedTokenLifetime)
+    public function __construct(RequestStack $requestStack, TrustedDeviceTokenEncoder $tokenGenerator, string $cookieName)
     {
-        $this->jwtTokenEncoder = $jwtTokenEncoder;
         $this->requestStack = $requestStack;
+        $this->tokenGenerator = $tokenGenerator;
         $this->cookieName = $cookieName;
-        $this->trustedTokenLifetime = $trustedTokenLifetime;
     }
 
     public function hasUpdatedCookie(): bool
@@ -89,20 +83,8 @@ class TrustedDeviceTokenStorage
             }
         }
 
-        $validUntil = $this->getValidUntil();
-        $jwtToken = $this->jwtTokenEncoder->generateToken($username, $firewall, $version, $validUntil);
-        $this->trustedTokenList[] = new TrustedDeviceToken($jwtToken);
+        $this->trustedTokenList[] = $this->tokenGenerator->generateToken($username, $firewall, $version);
         $this->updateCookie = true;
-    }
-
-    private function getValidUntil(): \DateTimeInterface
-    {
-        return $this->getDateTimeNow()->add(new \DateInterval('PT'.$this->trustedTokenLifetime.'S'));
-    }
-
-    protected function getDateTimeNow(): \DateTimeImmutable
-    {
-        return new \DateTimeImmutable();
     }
 
     /**
@@ -130,11 +112,11 @@ class TrustedDeviceTokenStorage
         $trustedTokenList = [];
         $trustedTokenEncodedList = explode(self::TOKEN_DELIMITER, $cookie);
         foreach ($trustedTokenEncodedList as $trustedTokenEncoded) {
-            $trustedToken = $this->jwtTokenEncoder->decodeToken($trustedTokenEncoded);
+            $trustedToken = $this->tokenGenerator->decodeToken($trustedTokenEncoded);
             if (!$trustedToken || $trustedToken->isExpired()) {
                 $this->updateCookie = true; // When there are invalid token, update the cookie to remove them
             } else {
-                $trustedTokenList[] = new TrustedDeviceToken($trustedToken);
+                $trustedTokenList[] = $trustedToken;
             }
         }
 
