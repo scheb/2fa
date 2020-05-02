@@ -86,7 +86,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function testHasTrustedToken_differentRealm_returnFalse(): void
+    public function hasTrustedToken_differentRealm_returnFalse(): void
     {
         $this->stubCookieHasToken('validToken1;validToken2');
         $this->stubDecodeToken(
@@ -101,7 +101,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function testHasTrustedToken_sameRealDifferentVersion_returnFalse(): void
+    public function hasTrustedToken_sameRealDifferentVersion_returnFalse(): void
     {
         $this->stubCookieHasToken('validToken1;validToken2');
         $this->stubDecodeToken(
@@ -116,7 +116,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function testHasTrustedToken_sameRealmSameVersion_returnTrue(): void
+    public function hasTrustedToken_sameRealmSameVersion_returnTrue(): void
     {
         $this->stubCookieHasToken('validToken1;validToken2');
         $this->stubDecodeToken(
@@ -131,7 +131,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
-    public function testAddTrustedToken_addNewToken_generateToken(): void
+    public function addTrustedToken_addNewToken_generateToken(): void
     {
         $this->jwtEncoder
             ->expects($this->once())
