@@ -11,6 +11,9 @@
         "spomky-labs/otphp": "^9.1|^10.0",
         "paragonie/constant_time_encoding": "^2.2"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0|^9.0"
+    },
     "config": {
         "preferred-install": {
             "*": "dist"
