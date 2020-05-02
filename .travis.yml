@@ -7,31 +7,45 @@ cache:
     directories:
         - $HOME/.composer/cache
         - vendor
+        - app/vendor
 
 before_install:
-    - if php -v | grep -q 'Xdebug'; then phpenv config-rm xdebug.ini; fi
-    - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
+    - if [ php -v | grep -q 'Xdebug' ]; then phpenv config-rm xdebug.ini; fi
 
 install:
-    - travis_retry composer update --prefer-dist --no-interaction --no-suggest $COMPOSER_FLAGS
+    - ./bin/build/install.sh
 
 script:
-    - ./vendor/bin/phpunit
+    - ./bin/build/script.sh
 
 jobs:
     include:
-        # Tests
+        # Unit Tests
         -   php: 7.2
             env:
+                - TEST_SUITE=UNIT
                 - COMPOSER_FLAGS="--prefer-lowest"
         -   php: 7.3
             env:
+                - TEST_SUITE=UNIT
                 - SYMFONY_VERSION=^4.4
         -   php: 7.4
             env:
+                - TEST_SUITE=UNIT
                 - SYMFONY_VERSION=^4.4
         -   php: 7.4
             env:
+                - TEST_SUITE=UNIT
+                - SYMFONY_VERSION=^5.0
+
+        # Integration Tests
+        -   php: 7.4
+            env:
+                - TEST_SUITE=INTEGRATION
+                - SYMFONY_VERSION=^4.4
+        -   php: 7.4
+            env:
+                - TEST_SUITE=INTEGRATION
                 - SYMFONY_VERSION=^5.0
 
         # Metrics and Quality
