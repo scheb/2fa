@@ -25,12 +25,12 @@
 			<tag name="security.voter" priority="249" />
 		</service>
 
-        <service id="scheb_two_factor.security.access.access_decider" class="Scheb\TwoFactorBundle\Security\Authorization\TwoFactorAccessDecider">
-            <argument type="service" id="security.access_map" />
-            <argument type="service" id="security.access.decision_manager" />
+		<service id="scheb_two_factor.security.access.access_decider" class="Scheb\TwoFactorBundle\Security\Authorization\TwoFactorAccessDecider">
+			<argument type="service" id="security.access_map" />
+			<argument type="service" id="security.access.decision_manager" />
 			<argument type="service" id="security.http_utils" />
 			<argument type="service" id="security.logout_url_generator" />
-        </service>
+		</service>
 
 		<service id="scheb_two_factor.security.authentication.listener" class="Scheb\TwoFactorBundle\Security\Http\Firewall\TwoFactorListener" abstract="true">
 			<tag name="monolog.logger" channel="security" />
@@ -44,7 +44,7 @@
 			<argument /> <!-- CSRF token validator -->
 			<argument type="collection" /> <!-- Options -->
 			<argument type="service" id="scheb_two_factor.trusted_device_manager" />
-            <argument type="service" id="scheb_two_factor.security.access.access_decider" />
+			<argument type="service" id="scheb_two_factor.security.access.access_decider" />
 			<argument type="service" id="event_dispatcher" on-invalid="null"/>
 			<argument type="service" id="scheb_two_factor.token_factory" />
 			<argument type="service" id="logger" on-invalid="null" />

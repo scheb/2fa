@@ -47,13 +47,13 @@
 		<!-- Alias for auto-wiring -->
 		<service id="Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallContext" alias="scheb_two_factor.firewall_context" public="true" />
 
-        <service id="scheb_two_factor.form_controller" class="Scheb\TwoFactorBundle\Controller\FormController" public="true">
-            <argument type="service" id="security.token_storage" />
-            <argument type="service" id="scheb_two_factor.provider_registry" />
+		<service id="scheb_two_factor.form_controller" class="Scheb\TwoFactorBundle\Controller\FormController" public="true">
+			<argument type="service" id="security.token_storage" />
+			<argument type="service" id="scheb_two_factor.provider_registry" />
 			<argument type="service" id="scheb_two_factor.firewall_context" />
 			<argument type="service" id="security.logout_url_generator" />
 			<argument>%scheb_two_factor.trusted_device.enabled%</argument>
-        </service>
+		</service>
 
 		<service id="scheb_two_factor.security.form_renderer" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer" lazy="true">
 			<argument type="service" id="twig" />
