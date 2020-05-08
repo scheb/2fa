@@ -18,6 +18,7 @@ class DefaultAuthenticationRequiredHandler implements AuthenticationRequiredHand
     private const DEFAULT_OPTIONS = [
         'auth_form_path' => TwoFactorFactory::DEFAULT_AUTH_FORM_PATH,
         'check_path' => TwoFactorFactory::DEFAULT_CHECK_PATH,
+        'post_only' => TwoFactorFactory::DEFAULT_POST_ONLY,
     ];
 
     /**
@@ -31,7 +32,7 @@ class DefaultAuthenticationRequiredHandler implements AuthenticationRequiredHand
     private $firewallName;
 
     /**
-     * @var string[]
+     * @var array
      */
     private $options;
 
@@ -55,6 +56,7 @@ class DefaultAuthenticationRequiredHandler implements AuthenticationRequiredHand
 
     private function isCheckAuthCodeRequest(Request $request): bool
     {
-        return $this->httpUtils->checkRequestPath($request, $this->options['check_path']);
+        return ($this->options['post_only'] ? $request->isMethod('POST') : true)
+            && $this->httpUtils->checkRequestPath($request, $this->options['check_path']);
     }
 }

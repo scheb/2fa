@@ -52,6 +52,7 @@ class TwoFactorFactoryTest extends TestCase
         $yaml = <<<EOF
 two_factor:
     check_path: /check_path
+    post_only: true
     auth_form_path: /auth_form_path
     always_use_default_target_path: true
     default_target_path: /default_target_path
@@ -104,6 +105,7 @@ EOF;
         $processedConfiguration = $this->processConfiguration($config);
 
         $this->assertEquals(TwoFactorFactory::DEFAULT_CHECK_PATH, $processedConfiguration['check_path']);
+        $this->assertEquals(TwoFactorFactory::DEFAULT_POST_ONLY, $processedConfiguration['post_only']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_AUTH_FORM_PATH, $processedConfiguration['auth_form_path']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_ALWAYS_USE_DEFAULT_TARGET_PATH, $processedConfiguration['always_use_default_target_path']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_TARGET_PATH, $processedConfiguration['default_target_path']);
@@ -129,6 +131,7 @@ EOF;
         $processedConfiguration = $this->processConfiguration($config);
 
         $this->assertEquals('/check_path', $processedConfiguration['check_path']);
+        $this->assertTrue($processedConfiguration['post_only']);
         $this->assertEquals('/auth_form_path', $processedConfiguration['auth_form_path']);
         $this->assertTrue($processedConfiguration['always_use_default_target_path']);
         $this->assertEquals('/default_target_path', $processedConfiguration['default_target_path']);
