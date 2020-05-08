@@ -7,6 +7,7 @@ namespace Scheb\TwoFactorBundle\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class SchebTwoFactorExtension extends Extension
@@ -58,6 +59,9 @@ class SchebTwoFactorExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('trusted_device.xml');
         $container->setAlias('scheb_two_factor.trusted_device_manager', $config['trusted_device']['manager']);
+
+        $ipWhitelistHandlerDefinition = $container->getDefinition('scheb_two_factor.ip_whitelist_handler');
+        $ipWhitelistHandlerDefinition->setArgument(0, new Reference('scheb_two_factor.trusted_device_handler'));
 
         $container->setParameter('scheb_two_factor.trusted_device.enabled', $config['trusted_device']['enabled']);
         $container->setParameter('scheb_two_factor.trusted_device.cookie_name', $config['trusted_device']['cookie_name']);
