@@ -52,7 +52,7 @@ class TwoFactorFactoryTest extends TestCase
         $yaml = <<<EOF
 two_factor:
     check_path: /check_path
-    post_only: true
+    post_only: false
     auth_form_path: /auth_form_path
     always_use_default_target_path: true
     default_target_path: /default_target_path
@@ -131,7 +131,7 @@ EOF;
         $processedConfiguration = $this->processConfiguration($config);
 
         $this->assertEquals('/check_path', $processedConfiguration['check_path']);
-        $this->assertTrue($processedConfiguration['post_only']);
+        $this->assertFalse($processedConfiguration['post_only']);
         $this->assertEquals('/auth_form_path', $processedConfiguration['auth_form_path']);
         $this->assertTrue($processedConfiguration['always_use_default_target_path']);
         $this->assertEquals('/default_target_path', $processedConfiguration['default_target_path']);

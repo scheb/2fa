@@ -16,7 +16,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
     public const AUTHENTICATION_PROVIDER_KEY = 'two_factor';
 
     public const DEFAULT_CHECK_PATH = '/2fa_check';
-    public const DEFAULT_POST_ONLY = false;
+    public const DEFAULT_POST_ONLY = true;
     public const DEFAULT_AUTH_FORM_PATH = '/2fa';
     public const DEFAULT_ALWAYS_USE_DEFAULT_TARGET_PATH = false;
     public const DEFAULT_TARGET_PATH = '/';
