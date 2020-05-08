@@ -57,4 +57,9 @@ class TwoFactorFirewallConfig
     {
         return $this->options['check_path'] ?? TwoFactorFactory::DEFAULT_CHECK_PATH;
     }
+
+    public function isPostOnly(): bool
+    {
+        return $this->options['post_only'] ?? TwoFactorFactory::DEFAULT_POST_ONLY;
+    }
 }

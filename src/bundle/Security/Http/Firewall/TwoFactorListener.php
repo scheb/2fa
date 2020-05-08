@@ -34,6 +34,7 @@ class TwoFactorListener
     private const DEFAULT_OPTIONS = [
         'auth_form_path' => TwoFactorFactory::DEFAULT_AUTH_FORM_PATH,
         'check_path' => TwoFactorFactory::DEFAULT_CHECK_PATH,
+        'post_only' => TwoFactorFactory::DEFAULT_POST_ONLY,
         'auth_code_parameter_name' => TwoFactorFactory::DEFAULT_AUTH_CODE_PARAMETER_NAME,
         'trusted_parameter_name' => TwoFactorFactory::DEFAULT_TRUSTED_PARAMETER_NAME,
     ];
@@ -79,7 +80,7 @@ class TwoFactorListener
     private $csrfTokenValidator;
 
     /**
-     * @var string[]
+     * @var array
      */
     private $options;
 
@@ -176,7 +177,8 @@ class TwoFactorListener
 
     private function isCheckAuthCodeRequest(Request $request): bool
     {
-        return $this->httpUtils->checkRequestPath($request, $this->options['check_path']);
+        return ($this->options['post_only'] ? $request->isMethod('POST') : true)
+            && $this->httpUtils->checkRequestPath($request, $this->options['check_path']);
     }
 
     private function isAuthFormRequest(Request $request): bool

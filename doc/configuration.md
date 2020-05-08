@@ -94,6 +94,7 @@ security:
             two_factor:
                 auth_form_path: /2fa                  # Path or route name of the two-factor form
                 check_path: /2fa_check                # Path or route name of the two-factor code check
+                post_only: false                      # If the check_path should accept the code only as a POST request
                 default_target_path: /                # Where to redirect by default after successful authentication
                 always_use_default_target_path: false # If it should always redirect to default_target_path
                 auth_code_parameter_name: _auth_code  # Name of the parameter for the two-factor authentication code

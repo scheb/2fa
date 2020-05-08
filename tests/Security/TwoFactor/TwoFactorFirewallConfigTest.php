@@ -11,6 +11,7 @@ class TwoFactorFirewallConfigTest extends TestCase
 {
     private const FULL_OPTIONS = [
         'check_path' => 'check_path_route_name',
+        'post_only' => true,
         'auth_form_path' => 'auth_form_path_route_name',
         'multi_factor' => true,
         'auth_code_parameter_name' => 'auth_code_param',
@@ -122,5 +123,23 @@ class TwoFactorFirewallConfigTest extends TestCase
     {
         $returnValue = $this->createConfig([])->getCheckPath();
         $this->assertEquals('/2fa_check', $returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function isPostOnly_optionSet_returnThatValue(): void
+    {
+        $returnValue = $this->createConfig()->isPostOnly();
+        $this->assertTrue($returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function isPostOnly_optionNotSet_returnDefault(): void
+    {
+        $returnValue = $this->createConfig([])->isPostOnly();
+        $this->assertFalse($returnValue);
     }
 }
