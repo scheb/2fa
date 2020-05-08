@@ -20,11 +20,11 @@ composer require scheb/2fa-bundle
 
 Optionally, install additional packages to extend the feature set for your needs:
 ```
-composer require scheb/2fa-backup-code        # Add backup code feature
-composer require scheb/2fa-trusted-devices    # Add trusted devices feature
-composer require scheb/totp                   # Add two-factor authentication using TOTP
-composer require scheb/google-authenticator   # Add two-factor authentication with Google Authenticator
-composer require scheb/email                  # Add two-factor authentication using email
+composer require scheb/2fa-backup-code            # Add backup code feature
+composer require scheb/2fa-trusted-devices        # Add trusted devices feature
+composer require scheb/2fa-totp                   # Add two-factor authentication using TOTP
+composer require scheb/2fa-google-authenticator   # Add two-factor authentication with Google Authenticator
+composer require scheb/2fa-email                  # Add two-factor authentication using email
 ```
 
 Alternatively, you can install all packages at once:
@@ -105,9 +105,9 @@ scheb_two_factor:
 If you have installed any of the two-factor authentication methods, you have to enable these separately. Read how to do
 this for:
 
-- [`scheb/totp` TOTP authentication](providers/totp.md)
-- [`scheb/google-authenticator` Google Authenticator](providers/google.md)
-- [`scheb/email` Email authentication](providers/email.md)
+- [`scheb/2fa-totp` TOTP authentication](providers/totp.md)
+- [`scheb/2fa-google-authenticator` Google Authenticator](providers/google.md)
+- [`scheb/2fa-email` Email authentication](providers/email.md)
 
 ### Step 7: Detailed configuration
 
