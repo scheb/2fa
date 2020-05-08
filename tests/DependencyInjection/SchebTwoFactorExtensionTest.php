@@ -8,6 +8,7 @@ use Scheb\TwoFactorBundle\DependencyInjection\SchebTwoFactorExtension;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Yaml\Parser;
 
 class SchebTwoFactorExtensionTest extends TestCase
@@ -234,6 +235,38 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->extension->load([$config], $this->container);
 
         $this->assertHasAlias('scheb_two_factor.persister', 'acme_test.persister');
+    }
+
+    /**
+     * @test
+     */
+    public function load_trustedDeviceFeatureDisabled_defaultHandlerConfiguration(): void
+    {
+        $config = $this->getFullConfig();
+        $config['trusted_device']['enabled'] = false;
+        $this->extension->load([$config], $this->container);
+
+        $ipWhitelistHandlerDefinition = $this->container->getDefinition('scheb_two_factor.ip_whitelist_handler');
+        $nextHandlerArgument = $ipWhitelistHandlerDefinition->getArgument(0);
+
+        $this->assertInstanceOf(Reference::class, $nextHandlerArgument);
+        $this->assertEquals('scheb_two_factor.provider_handler', (string) $nextHandlerArgument);
+    }
+
+    /**
+     * @test
+     */
+    public function load_trustedDeviceFeatureDisabled_trustedDeviceHandlerConfigured(): void
+    {
+        $config = $this->getFullConfig();
+        $config['trusted_device']['enabled'] = true;
+        $this->extension->load([$config], $this->container);
+
+        $ipWhitelistHandlerDefinition = $this->container->getDefinition('scheb_two_factor.ip_whitelist_handler');
+        $nextHandlerArgument = $ipWhitelistHandlerDefinition->getArgument(0);
+
+        $this->assertInstanceOf(Reference::class, $nextHandlerArgument);
+        $this->assertEquals('scheb_two_factor.trusted_device_handler', (string) $nextHandlerArgument);
     }
 
     /**
