@@ -8,7 +8,7 @@ scheb/2fa-backup-code
 [![Total Downloads](https://poser.pugx.org/scheb/2fa-backup-code/downloads)](https://packagist.org/packages/scheb/2fa-backup-code)
 [![License](https://poser.pugx.org/scheb/2fa-backup-code/license.svg)](https://packagist.org/packages/scheb/2fa-backup-code)
 
-Two-factor authentication for Symfony applications with backup codes.
+This package extends [scheb/2fa-bundle](https://github.com/scheb/2fa-bundle) with backup codes support.
 
 ---
 

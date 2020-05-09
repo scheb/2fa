@@ -8,7 +8,7 @@ scheb/2fa-email
 [![Total Downloads](https://poser.pugx.org/scheb/2fa-email/downloads)](https://packagist.org/packages/scheb/2fa-email)
 [![License](https://poser.pugx.org/scheb/2fa-email/license.svg)](https://packagist.org/packages/scheb/2fa-email)
 
-Two-factor authentication for Symfony applications via email.
+This package extends [scheb/2fa-bundle](https://github.com/scheb/2fa-bundle) with two-factor authentication via email.
 
 ---
 

@@ -8,7 +8,7 @@ scheb/2fa-totp
 [![Total Downloads](https://poser.pugx.org/scheb/2fa-totp/downloads)](https://packagist.org/packages/scheb/2fa-totp)
 [![License](https://poser.pugx.org/scheb/2fa-totp/license.svg)](https://packagist.org/packages/scheb/2fa-totp)
 
-Two-factor authentication for Symfony applications using TOTP.
+This package extends [scheb/2fa-bundle](https://github.com/scheb/2fa-bundle) with two-factor authentication using TOTP.
 
 ---
 

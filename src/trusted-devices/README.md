@@ -8,7 +8,7 @@ scheb/2fa-trusted-devices
 [![Total Downloads](https://poser.pugx.org/scheb/2fa-trusted-devices/downloads)](https://packagist.org/packages/scheb/2fa-trusted-devices)
 [![License](https://poser.pugx.org/scheb/2fa-trusted-devices/license.svg)](https://packagist.org/packages/scheb/2fa-trusted-devices)
 
-Two-factor authentication for Symfony applications with trusted devices.
+This package extends [scheb/2fa-bundle](https://github.com/scheb/2fa-bundle) with trusted devices support.
 
 ---
 

@@ -1,7 +1,7 @@
 {
     "name": "scheb/2fa-google-authenticator",
     "type": "library",
-    "description": "Provides two-factor authentication using Google Authenticator",
+    "description": "Extends scheb/2fa-bundle with two-factor authentication using Google Authenticator",
     "keywords": ["2fa", "two-factor", "two-step", "authentication", "symfony", "google-authenticator"],
     "homepage": "https://github.com/scheb/2fa",
     "license": "MIT",

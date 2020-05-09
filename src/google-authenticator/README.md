@@ -8,7 +8,8 @@
 [![Total Downloads](https://poser.pugx.org/scheb/2fa-google-authenticator/downloads)](https://packagist.org/packages/scheb/2fa-google-authenticator)
 [![License](https://poser.pugx.org/scheb/2fa-google-authenticator/license.svg)](https://packagist.org/packages/scheb/2fa-google-authenticator)
 
-Two-factor authentication for Symfony applications using Google Authenticator.
+This package extends [scheb/2fa-bundle](https://github.com/scheb/2fa-bundle) with two-factor authentication using Google
+Authenticator.
 
 ---
 

@@ -1,7 +1,7 @@
 {
     "name": "scheb/2fa-backup-code",
     "type": "library",
-    "description": "Two-factor authentication for Symfony applications with backup codes",
+    "description": "Extends scheb/2fa-bundle with backup codes support",
     "keywords": ["2fa", "two-factor", "two-step", "authentication", "symfony", "backup-codes"],
     "homepage": "https://github.com/scheb/2fa",
     "license": "MIT",

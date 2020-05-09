@@ -1,7 +1,7 @@
 {
     "name": "scheb/2fa-bundle",
     "type": "symfony-bundle",
-    "description": "Provides a generic interface to implement two-factor authentication for Symfony applications",
+    "description": "A generic interface to implement two-factor authentication in Symfony applications",
     "keywords": ["2fa", "two-factor", "two-step", "authentication", "symfony"],
     "homepage": "https://github.com/scheb/2fa",
     "license": "MIT",
