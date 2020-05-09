@@ -1,7 +1,7 @@
 {
     "name": "scheb/2fa-trusted-device",
     "type": "library",
-    "description": "Trusted devices support for two-factor authentication",
+    "description": "Extends scheb/2fa-bundle with trusted devices support",
     "keywords": ["2fa", "two-factor", "two-step", "authentication", "symfony", "trusted-device"],
     "homepage": "https://github.com/scheb/2fa",
     "license": "MIT",

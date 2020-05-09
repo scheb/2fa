@@ -8,7 +8,7 @@ scheb/2fa-bundle
 [![Total Downloads](https://poser.pugx.org/scheb/2fa-bundle/downloads)](https://packagist.org/packages/scheb/2fa-bundle)
 [![License](https://poser.pugx.org/scheb/2fa-bundle/license.svg)](https://packagist.org/packages/scheb/2fa-bundle)
 
-Provides a generic interface to implement two-factor authentication for Symfony applications.
+Provides a generic interface to implement two-factor authentication in Symfony applications.
 
 ---
 
