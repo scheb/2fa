@@ -43,6 +43,8 @@ class SchebTwoFactorExtension extends Extension
         $this->configureTokenFactory($container, $config);
         if (isset($config['trusted_device']['enabled']) && true === $config['trusted_device']['enabled']) {
             $this->configureTrustedDeviceManager($container, $config);
+        } else {
+            $container->setParameter('scheb_two_factor.trusted_device.enabled', false);
         }
         if (isset($config['backup_codes']['enabled']) && true === $config['backup_codes']['enabled']) {
             $this->configureBackupCodeManager($container, $config);
