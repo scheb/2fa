@@ -85,7 +85,7 @@ class TwoFactorListener
     private $options;
 
     /**
-     * @var TrustedDeviceManagerInterface
+     * @var TrustedDeviceManagerInterface|null
      */
     private $trustedDeviceManager;
 
@@ -118,7 +118,7 @@ class TwoFactorListener
         AuthenticationRequiredHandlerInterface $authenticationRequiredHandler,
         CsrfTokenValidator $csrfTokenValidator,
         array $options,
-        TrustedDeviceManagerInterface $trustedDeviceManager,
+        ?TrustedDeviceManagerInterface $trustedDeviceManager,
         TwoFactorAccessDecider $twoFactorAccessDecider,
         EventDispatcherInterface $eventDispatcher,
         TwoFactorTokenFactoryInterface $twoFactorTokenFactory,
@@ -234,7 +234,7 @@ class TwoFactorListener
 
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::COMPLETE, $request, $token);
 
-        if ($this->hasTrustedDeviceParameter($request)) {
+        if ($this->trustedDeviceManager && $this->hasTrustedDeviceParameter($request)) {
             $this->trustedDeviceManager->addTrustedDevice($token->getUser(), $this->firewallName);
         }
 

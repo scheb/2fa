@@ -37,7 +37,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
     private $options;
 
     /**
-     * @var BackupCodeManagerInterface
+     * @var BackupCodeManagerInterface|null
      */
     private $backupCodeManager;
 
@@ -50,7 +50,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
         string $firewallName,
         array $options,
         TwoFactorProviderRegistry $providerRegistry,
-        BackupCodeManagerInterface $backupCodeManager,
+        ?BackupCodeManagerInterface $backupCodeManager,
         TwoFactorProviderPreparationRecorder $preparationRecorder
     ) {
         $this->firewallName = $firewallName;
@@ -136,7 +136,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
      */
     private function isValidBackupCode($user, string $authenticationCode): bool
     {
-        if ($this->backupCodeManager->isBackupCode($user, $authenticationCode)) {
+        if ($this->backupCodeManager && $this->backupCodeManager->isBackupCode($user, $authenticationCode)) {
             $this->backupCodeManager->invalidateBackupCode($user, $authenticationCode);
 
             return true;
