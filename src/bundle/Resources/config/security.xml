@@ -13,7 +13,7 @@
 			<argument type="string" /> <!-- Firewall name -->
 			<argument type="collection" /> <!-- Options -->
 			<argument type="service" id="scheb_two_factor.provider_registry" />
-			<argument type="service" id="scheb_two_factor.backup_code_manager" />
+			<argument type="service" id="scheb_two_factor.backup_code_manager" on-invalid="null" />
 			<argument type="service" id="scheb_two_factor.provider_preparation_recorder" />
 		</service>
 
@@ -43,7 +43,7 @@
 			<argument /> <!-- Authentication required handler -->
 			<argument /> <!-- CSRF token validator -->
 			<argument type="collection" /> <!-- Options -->
-			<argument type="service" id="scheb_two_factor.trusted_device_manager" />
+			<argument type="service" id="scheb_two_factor.trusted_device_manager" on-invalid="null" />
 			<argument type="service" id="scheb_two_factor.security.access.access_decider" />
 			<argument type="service" id="event_dispatcher" on-invalid="null"/>
 			<argument type="service" id="scheb_two_factor.token_factory" />
