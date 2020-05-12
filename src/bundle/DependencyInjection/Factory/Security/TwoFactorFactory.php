@@ -192,6 +192,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
         $container
             ->setDefinition($firewallConfigId, new ChildDefinition(self::FIREWALL_CONFIG_DEFINITION_ID))
             ->replaceArgument(0, $config)
+            ->replaceArgument(1, $firewallName)
             ->addTag('scheb_two_factor.firewall_config', ['firewall' => $firewallName]);
 
         // The SecurityFactory doesn't have access to the service definitions of the bundle. Therefore we tag the

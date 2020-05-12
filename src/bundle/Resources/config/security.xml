@@ -100,6 +100,7 @@
 
 		<service id="scheb_two_factor.security.firewall_config" class="Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig" abstract="true">
 			<argument type="collection" /> <!-- Options -->
+			<argument type="string" /> <!-- Firewall name -->
 		</service>
 	</services>
 </container>
