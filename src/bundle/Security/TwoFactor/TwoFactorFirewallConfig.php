@@ -13,9 +13,20 @@ class TwoFactorFirewallConfig
      */
     private $options;
 
-    public function __construct(array $options)
+    /**
+     * @var string
+     */
+    private $firewallName;
+
+    public function __construct(array $options, string $firewallName)
     {
         $this->options = $options;
+        $this->firewallName = $firewallName;
+    }
+
+    public function getFirewallName(): string
+    {
+        return $this->firewallName;
     }
 
     public function isMultiFactor(): bool

@@ -9,6 +9,7 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TwoFactorFirewallConfigTest extends TestCase
 {
+    private const FIREWALL_NAME = 'firewallName';
     private const FULL_OPTIONS = [
         'check_path' => 'check_path_route_name',
         'post_only' => false,
@@ -23,7 +24,15 @@ class TwoFactorFirewallConfigTest extends TestCase
 
     private function createConfig($options = self::FULL_OPTIONS): TwoFactorFirewallConfig
     {
-        return new TwoFactorFirewallConfig($options);
+        return new TwoFactorFirewallConfig($options, self::FIREWALL_NAME);
+    }
+
+    /**
+     * @test
+     */
+    public function getFirewallName_isSet_returnFirewallName(): void
+    {
+        $this->assertEquals(self::FIREWALL_NAME, $this->createConfig()->getFirewallName());
     }
 
     /**

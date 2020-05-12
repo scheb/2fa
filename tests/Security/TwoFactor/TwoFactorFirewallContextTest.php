@@ -10,6 +10,8 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TwoFactorFirewallContextTest extends TestCase
 {
+    private const FIREWALL_NAME = 'firewallName';
+
     /**
      * @var TwoFactorFirewallContext
      */
@@ -17,8 +19,8 @@ class TwoFactorFirewallContextTest extends TestCase
 
     protected function setUp(): void
     {
-        $firewallConfig = new TwoFactorFirewallConfig(['foo' => 'bar']);
-        $this->firewallContext = new TwoFactorFirewallContext(['firewallName' => $firewallConfig]);
+        $firewallConfig = new TwoFactorFirewallConfig(['foo' => 'bar'], self::FIREWALL_NAME);
+        $this->firewallContext = new TwoFactorFirewallContext([self::FIREWALL_NAME => $firewallConfig]);
     }
 
     /**
@@ -26,7 +28,7 @@ class TwoFactorFirewallContextTest extends TestCase
      */
     public function getFirewallConfig_isRegistered_returnFirewallConfig(): void
     {
-        $returnValue = $this->firewallContext->getFirewallConfig('firewallName');
+        $returnValue = $this->firewallContext->getFirewallConfig(self::FIREWALL_NAME);
         $this->assertInstanceOf(TwoFactorFirewallConfig::class, $returnValue);
     }
 
