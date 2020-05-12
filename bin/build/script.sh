@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 if [ "$TEST_SUITE" = "UNIT" ]
 then
     ./vendor/bin/phpunit
