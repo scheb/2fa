@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
 use Scheb\TwoFactorBundle\Model\TrustedDeviceInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class TrustedDeviceManager implements TrustedDeviceManagerInterface
@@ -19,6 +20,11 @@ class TrustedDeviceManager implements TrustedDeviceManagerInterface
     public function __construct(TrustedDeviceTokenStorage $trustedTokenStorage)
     {
         $this->trustedTokenStorage = $trustedTokenStorage;
+    }
+
+    public function canSetTrustedDevice($user, Request $request, string $firewallName): bool
+    {
+        return true;
     }
 
     public function addTrustedDevice($user, string $firewallName): void

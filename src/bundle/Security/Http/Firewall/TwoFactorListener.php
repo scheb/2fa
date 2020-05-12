@@ -234,7 +234,10 @@ class TwoFactorListener
 
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::COMPLETE, $request, $token);
 
-        if ($this->trustedDeviceManager && $this->hasTrustedDeviceParameter($request)) {
+        if ($this->trustedDeviceManager
+            && $this->hasTrustedDeviceParameter($request)
+            && $this->trustedDeviceManager->canSetTrustedDevice($token->getUser(), $request, $this->firewallName)
+        ) {
             $this->trustedDeviceManager->addTrustedDevice($token->getUser(), $this->firewallName);
         }
 

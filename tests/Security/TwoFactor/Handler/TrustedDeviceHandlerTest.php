@@ -38,12 +38,20 @@ class TrustedDeviceHandlerTest extends AbstractAuthenticationHandlerTestCase
         return new TrustedDeviceHandler($this->innerAuthenticationHandler, $this->trustedDeviceManager, $extendTrustedToken);
     }
 
-    protected function stubIsTrustedDevice(bool $isTrustedDevice): void
+    private function stubIsTrustedDevice(bool $isTrustedDevice): void
     {
         $this->trustedDeviceManager
             ->expects($this->any())
             ->method('isTrustedDevice')
             ->willReturn($isTrustedDevice);
+    }
+
+    private function stubCanSetTrustedDevice(bool $canSetTrustedDevice): void
+    {
+        $this->trustedDeviceManager
+            ->expects($this->any())
+            ->method('canSetTrustedDevice')
+            ->willReturn($canSetTrustedDevice);
     }
 
     /**
@@ -82,12 +90,13 @@ class TrustedDeviceHandlerTest extends AbstractAuthenticationHandlerTestCase
     /**
      * @test
      */
-    public function beginAuthentication_isTrustedDeviceAndExtendTrustedToken_addNewTrustedToken(): void
+    public function beginAuthentication_isTrustedDeviceAndExtensionAllowed_addNewTrustedToken(): void
     {
         $trustedHandler = $this->createTrustedHandler(true);
         $user = $this->createUser();
         $context = $this->createAuthenticationContext(null, null, $user);
         $this->stubIsTrustedDevice(true);
+        $this->stubCanSetTrustedDevice(true);
 
         $this->trustedDeviceManager
             ->expects($this->once())
@@ -100,12 +109,31 @@ class TrustedDeviceHandlerTest extends AbstractAuthenticationHandlerTestCase
     /**
      * @test
      */
-    public function beginAuthentication_isTrustedDeviceAndNotExtendTrustedToken_notAddNewTrustedToken(): void
+    public function beginAuthentication_isTrustedDeviceAndConfiguredNotExtendTrustedToken_notAddNewTrustedToken(): void
     {
         $trustedHandler = $this->createTrustedHandler(false);
         $user = $this->createUser();
         $context = $this->createAuthenticationContext(null, null, $user);
         $this->stubIsTrustedDevice(true);
+        $this->stubCanSetTrustedDevice(true);
+
+        $this->trustedDeviceManager
+            ->expects($this->never())
+            ->method('addTrustedDevice');
+
+        $trustedHandler->beginTwoFactorAuthentication($context);
+    }
+
+    /**
+     * @test
+     */
+    public function beginAuthentication_isTrustedDeviceAndNotAllowedToSet_notAddNewTrustedToken(): void
+    {
+        $trustedHandler = $this->createTrustedHandler(true);
+        $user = $this->createUser();
+        $context = $this->createAuthenticationContext(null, null, $user);
+        $this->stubIsTrustedDevice(true);
+        $this->stubCanSetTrustedDevice(false);
 
         $this->trustedDeviceManager
             ->expects($this->never())

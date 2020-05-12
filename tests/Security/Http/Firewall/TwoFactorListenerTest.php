@@ -317,6 +317,14 @@ class TwoFactorListenerTest extends TestCase
             ->willReturn($accessGranted);
     }
 
+    private function stubCanSetTrustedDevice(bool $canSetTrustedDevice): void
+    {
+        $this->trustedDeviceManager
+            ->expects($this->any())
+            ->method('canSetTrustedDevice')
+            ->willReturn($canSetTrustedDevice);
+    }
+
     private function assertPathNotChecked(): void
     {
         $this->httpUtils
@@ -649,6 +657,7 @@ class TwoFactorListenerTest extends TestCase
         $this->stubCurrentPathIsCheckPath();
         $this->stubCsrfTokenValidatorHasValidCsrfTokenReturnsTrue();
         $this->stubRequestHasParameter(self::TRUSTED_PARAM, '1');
+        $this->stubCanSetTrustedDevice(true);
         $this->stubAuthenticationManagerReturnsToken($authenticatedToken); // Not a TwoFactorToken
         $this->stubHandlersReturnResponse();
 
@@ -656,6 +665,32 @@ class TwoFactorListenerTest extends TestCase
             ->expects($this->once())
             ->method('addTrustedDevice')
             ->with('user', 'firewallName');
+
+        ($this->listener)($this->requestEvent);
+    }
+
+    /**
+     * @test
+     */
+    public function handle_twoFactorProcessCompleteTrustedDeviceNotAllowed_notSetTrustedDevice(): void
+    {
+        $authenticatedToken = $this->createMock(TokenInterface::class);
+        $authenticatedToken
+            ->expects($this->any())
+            ->method('getUser')
+            ->willReturn('user');
+
+        $this->stubTokenManagerHasToken($this->createTwoFactorToken());
+        $this->stubCurrentPathIsCheckPath();
+        $this->stubCsrfTokenValidatorHasValidCsrfTokenReturnsTrue();
+        $this->stubRequestHasParameter(self::TRUSTED_PARAM, '1');
+        $this->stubCanSetTrustedDevice(false);
+        $this->stubAuthenticationManagerReturnsToken($authenticatedToken); // Not a TwoFactorToken
+        $this->stubHandlersReturnResponse();
+
+        $this->trustedDeviceManager
+            ->expects($this->never())
+            ->method('addTrustedDevice');
 
         ($this->listener)($this->requestEvent);
     }
