@@ -42,6 +42,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->extension->load([$config], $this->container);
 
         $this->assertHasParameter(null, 'scheb_two_factor.model_manager_name');
+        $this->assertHasParameter(false, 'scheb_two_factor.trusted_device.enabled');
         $this->assertHasNotParameter('scheb_two_factor.email.sender_email');
         $this->assertHasNotParameter('scheb_two_factor.email.sender_name');
         $this->assertHasNotParameter('scheb_two_factor.email.template');
@@ -56,7 +57,6 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasNotParameter('scheb_two_factor.totp.window');
         $this->assertHasNotParameter('scheb_two_factor.totp.parameters');
         $this->assertHasNotParameter('scheb_two_factor.totp.template');
-        $this->assertHasNotParameter('scheb_two_factor.trusted_device.enabled');
         $this->assertHasNotParameter('scheb_two_factor.trusted_device.lifetime');
         $this->assertHasNotParameter('scheb_two_factor.trusted_device.extend_lifetime');
         $this->assertHasNotParameter('scheb_two_factor.trusted_device.cookie_name');
