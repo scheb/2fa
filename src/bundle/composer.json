@@ -30,8 +30,8 @@
     },
     "suggest": {
         "scheb/2fa-backup-code": "Emergency codes when you have no access to other methods",
-        "scheb/2fa-email": "Send codes by e-mail",
-        "scheb/2fa-totp": "Popular one-time password support (Google Authenticator compatible)",
+        "scheb/2fa-email": "Send codes by email",
+        "scheb/2fa-totp": "Temporary one-time password (TOTP) support (Google Authenticator compatible)",
         "scheb/2fa-google": "Google Authenticator support",
         "scheb/2fa-trusted-devices": "Trusted devices support"
     }
