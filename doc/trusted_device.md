@@ -61,3 +61,16 @@ scheb_two_factor:
         manager: acme.custom_trusted_device_manager  # Use a custom trusted device manager
 ```
 
+## Conditions for trusted devices
+
+There is a way to check if a device/user fulfills certain conditions, before a device is flagged as "trusted". For
+example, you may want to allow trusted devices only within your internal network. In that case, please implement your
+own instance of the trusted device manager (as described above) and implement the `canSetTrustedDevice` method with the
+decision logic you need.
+
+```php
+public function canSetTrustedDevice($user, Request $request, string $firewallName): bool
+{
+    return true; // Always allow trusted device feature
+}
+```

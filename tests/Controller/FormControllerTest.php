@@ -11,6 +11,7 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallContext;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -78,6 +79,11 @@ class FormControllerTest extends TestCase
     private $logoutUrlGenerator;
 
     /**
+     * @var MockObject|TrustedDeviceManagerInterface
+     */
+    private $trustedDeviceManager;
+
+    /**
      * @var FormController
      */
     private $controller;
@@ -138,12 +144,29 @@ class FormControllerTest extends TestCase
             ->method('getLogoutPath')
             ->willReturn(self::LOGOUT_PATH);
 
+        $this->trustedDeviceManager = $this->createMock(TrustedDeviceManagerInterface::class);
+
         $this->initControllerWithTrustedFeature(true);
     }
 
     private function initControllerWithTrustedFeature(bool $trustedFeature): void
     {
-        $this->controller = new FormController($this->tokenStorage, $this->providerRegistry, $this->twoFactorFirewallContext, $this->logoutUrlGenerator, $trustedFeature);
+        $this->controller = new FormController(
+            $this->tokenStorage,
+            $this->providerRegistry,
+            $this->twoFactorFirewallContext,
+            $this->logoutUrlGenerator,
+            $this->trustedDeviceManager,
+            $trustedFeature
+        );
+    }
+
+    private function stubCanSetTrustedDevice(bool $canSetTrustedDevice): void
+    {
+        $this->trustedDeviceManager
+            ->expects($this->any())
+            ->method('canSetTrustedDevice')
+            ->willReturn($canSetTrustedDevice);
     }
 
     private function stubFirewallIsMultiFactor(bool $isMultiFactor): void
@@ -295,6 +318,7 @@ class FormControllerTest extends TestCase
      */
     public function form_multiFactorFirewallTwoProviders_displayTrustedOptionFalse(): void
     {
+        $this->stubCanSetTrustedDevice(true);
         $this->stubFirewallIsMultiFactor(true);
         $this->stubTokenStorageHasTwoFactorToken(['provider1', 'provider2']);
 
@@ -313,6 +337,7 @@ class FormControllerTest extends TestCase
      */
     public function form_multiFactorFirewallOneProviderLeft_displayTrustedOptionTrue(): void
     {
+        $this->stubCanSetTrustedDevice(true);
         $this->stubFirewallIsMultiFactor(true);
         $this->stubTokenStorageHasTwoFactorToken(['provider1']);
 
@@ -331,6 +356,7 @@ class FormControllerTest extends TestCase
      */
     public function form_notMultiFactorFirewallTwoProviders_displayTrustedOptionTrue(): void
     {
+        $this->stubCanSetTrustedDevice(true);
         $this->stubFirewallIsMultiFactor(false);
         $this->stubTokenStorageHasTwoFactorToken(['provider1', 'provider2']);
 
@@ -347,9 +373,29 @@ class FormControllerTest extends TestCase
     /**
      * @test
      */
+    public function form_canNotSetTrustedDevice_displayTrustedOptionFalse(): void
+    {
+        $this->stubCanSetTrustedDevice(false);
+        $this->stubFirewallIsMultiFactor(false);
+        $this->stubTokenStorageHasTwoFactorToken(['provider']);
+
+        $this->assertTemplateVars(function (array $templateVars) {
+            $this->assertArrayHasKey('displayTrustedOption', $templateVars);
+            $this->assertFalse($templateVars['displayTrustedOption']);
+
+            return true;
+        });
+
+        $this->controller->form($this->request);
+    }
+
+    /**
+     * @test
+     */
     public function form_trustedDisabledMultiFactorFirewallOneProviderLeft_displayTrustedOptionFalse(): void
     {
         $this->initControllerWithTrustedFeature(false);
+        $this->stubCanSetTrustedDevice(true);
         $this->stubFirewallIsMultiFactor(true);
         $this->stubTokenStorageHasTwoFactorToken(['provider1']);
 
@@ -369,6 +415,7 @@ class FormControllerTest extends TestCase
     public function form_trustedDisabledNotMultiFactorFirewallTwoProviders_displayTrustedOptionFalse(): void
     {
         $this->initControllerWithTrustedFeature(false);
+        $this->stubCanSetTrustedDevice(true);
         $this->stubFirewallIsMultiFactor(false);
         $this->stubTokenStorageHasTwoFactorToken(['provider1', 'provider2']);
 

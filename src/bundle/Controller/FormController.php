@@ -7,6 +7,8 @@ namespace Scheb\TwoFactorBundle\Controller;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,6 +42,11 @@ class FormController
     private $logoutUrlGenerator;
 
     /**
+     * @var TrustedDeviceManagerInterface|null
+     */
+    private $trustedDeviceManager;
+
+    /**
      * @var bool
      */
     private $trustedFeatureEnabled;
@@ -49,13 +56,15 @@ class FormController
         TwoFactorProviderRegistry $providerRegistry,
         TwoFactorFirewallContext $twoFactorFirewallContext,
         LogoutUrlGenerator $logoutUrlGenerator,
+        ?TrustedDeviceManagerInterface $trustedDeviceManager,
         bool $trustedFeatureEnabled
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->providerRegistry = $providerRegistry;
         $this->twoFactorFirewallContext = $twoFactorFirewallContext;
-        $this->trustedFeatureEnabled = $trustedFeatureEnabled;
         $this->logoutUrlGenerator = $logoutUrlGenerator;
+        $this->trustedDeviceManager = $trustedDeviceManager;
+        $this->trustedFeatureEnabled = $trustedFeatureEnabled;
     }
 
     public function form(Request $request): Response
@@ -100,7 +109,7 @@ class FormController
     {
         $config = $this->twoFactorFirewallContext->getFirewallConfig($token->getProviderKey());
         $pendingTwoFactorProviders = $token->getTwoFactorProviders();
-        $displayTrustedOption = $this->trustedFeatureEnabled && (!$config->isMultiFactor() || 1 === \count($pendingTwoFactorProviders));
+        $displayTrustedOption = $this->canSetTrustedDevice($token, $request, $config);
         $authenticationException = $this->getLastAuthenticationException($request->getSession());
         $checkPath = $config->getCheckPath();
         $isRoute = false === strpos($checkPath, '/');
@@ -132,5 +141,13 @@ class FormController
         }
 
         return null; // The value does not come from the security component.
+    }
+
+    private function canSetTrustedDevice(TwoFactorTokenInterface $token, Request $request, TwoFactorFirewallConfig $config): bool
+    {
+        return $this->trustedFeatureEnabled
+            && $this->trustedDeviceManager
+            && $this->trustedDeviceManager->canSetTrustedDevice($token->getUser(), $request, $config->getFirewallName())
+            && (!$config->isMultiFactor() || 1 === \count($token->getTwoFactorProviders()));
     }
 }
