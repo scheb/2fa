@@ -61,17 +61,14 @@
 			<argument type="string" /> <!-- Firewall name -->
 			<argument /> <!-- prepareOnLogin -->
 			<argument /> <!-- prepareOnAccessDenied -->
-			<!-- These events must be added when the child definition is created -->
-			<!-- <tag name="kernel.event_listener" event="security.authentication.success" method="onLogin" priority="PHP_INT_MAX" />-->
-			<!-- <tag name="kernel.event_listener" event="scheb_two_factor.authentication.require" method="onAccessDenied" />-->
-			<!-- <tag name="kernel.event_listener" event="scheb_two_factor.authentication.form" method="onTwoFactorForm" />-->
-			<!-- <tag name="kernel.event_listener" event="kernel.finish_request" method="onKernelFinishRequest" />-->
+			<!-- This tag must be added when the child definition is created -->
+			<!-- <tag name="kernel.event_subscriber" /> -->
 		</service>
 
 		<service id="scheb_two_factor.security.authentication_success_event_suppressor" class="Scheb\TwoFactorBundle\Security\TwoFactor\Event\AuthenticationSuccessEventSuppressor" abstract="true">
 			<argument type="string" /> <!-- Firewall name -->
-			<!-- These events must be added when the child definition is created -->
-			<!-- <tag name="kernel.event_listener" event="security.authentication.success" method="onLogin" priority="PHP_INT_MAX-1" />-->
+			<!-- This tag must be added when the child definition is created -->
+			<!-- <tag name="kernel.event_subscriber" /> -->
 		</service>
 
 		<service id="scheb_two_factor.security.authentication.success_handler" class="Scheb\TwoFactorBundle\Security\Http\Authentication\DefaultAuthenticationSuccessHandler" abstract="true">

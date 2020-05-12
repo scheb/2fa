@@ -326,12 +326,8 @@ EOF;
         $this->assertEquals(self::FIREWALL_NAME, $definition->getArgument(3));
         $this->assertTrue($definition->getArgument(4));
         $this->assertFalse($definition->getArgument(5));
-        $tag = $definition->getTag('kernel.event_listener');
-        $this->assertCount(4, $tag, 'Must have 4 events subscribed');
-        $this->assertEquals(['event' => 'security.authentication.success', 'method' => 'onLogin', 'priority' => PHP_INT_MAX], $tag[0]);
-        $this->assertEquals(['event' => 'scheb_two_factor.authentication.require', 'method' => 'onAccessDenied'], $tag[1]);
-        $this->assertEquals(['event' => 'scheb_two_factor.authentication.form', 'method' => 'onTwoFactorForm'], $tag[2]);
-        $this->assertEquals(['event' => 'kernel.finish_request', 'method' => 'onKernelFinishRequest'], $tag[3]);
+        $tag = $definition->getTag('kernel.event_subscriber');
+        $this->assertCount(1, $tag, 'Must have the "kernel.event_subscriber" tag assigned');
     }
 
     /**
@@ -344,9 +340,8 @@ EOF;
         $this->assertTrue($this->container->hasDefinition('security.authentication.authentication_success_event_suppressor.two_factor.firewallName'));
         $definition = $this->container->getDefinition('security.authentication.authentication_success_event_suppressor.two_factor.firewallName');
         $this->assertEquals(self::FIREWALL_NAME, $definition->getArgument(0));
-        $tag = $definition->getTag('kernel.event_listener');
-        $this->assertCount(1, $tag, 'Must have 4 events subscribed');
-        $this->assertEquals(['event' => 'security.authentication.success', 'method' => 'onLogin', 'priority' => PHP_INT_MAX - 1], $tag[0]);
+        $tag = $definition->getTag('kernel.event_subscriber');
+        $this->assertCount(1, $tag, 'Must have the "kernel.event_subscriber" tag assigned');
     }
 }
 

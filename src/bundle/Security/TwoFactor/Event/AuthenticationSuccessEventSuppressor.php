@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Event;
 
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\AuthenticationEvents;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
-class AuthenticationSuccessEventSuppressor
+class AuthenticationSuccessEventSuppressor implements EventSubscriberInterface
 {
     /**
      * @var string
@@ -34,5 +36,13 @@ class AuthenticationSuccessEventSuppressor
     private function isTwoFactorTokenAndFirewall(TokenInterface $token): bool
     {
         return $token instanceof TwoFactorTokenInterface && $token->getProviderKey() === $this->firewallName;
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return [
+            // Must trigger after TwoFactorProviderPreparationListener::onLogin to stop event propagation immediately
+            AuthenticationEvents::AUTHENTICATION_SUCCESS => ['onLogin', PHP_INT_MAX - 1],
+        ];
     }
 }
