@@ -207,10 +207,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
             ->replaceArgument(3, $firewallName)
             ->replaceArgument(4, $config['prepare_on_login'] ?? self::DEFAULT_PREPARE_ON_LOGIN)
             ->replaceArgument(5, $config['prepare_on_access_denied'] ?? self::DEFAULT_PREPARE_ON_ACCESS_DENIED)
-            ->addTag('kernel.event_listener', ['event' => 'security.authentication.success', 'method' => 'onLogin', 'priority' => PHP_INT_MAX])
-            ->addTag('kernel.event_listener', ['event' => 'scheb_two_factor.authentication.require', 'method' => 'onAccessDenied'])
-            ->addTag('kernel.event_listener', ['event' => 'scheb_two_factor.authentication.form', 'method' => 'onTwoFactorForm'])
-            ->addTag('kernel.event_listener', ['event' => 'kernel.finish_request', 'method' => 'onKernelFinishRequest']);
+            ->addTag('kernel.event_subscriber');
     }
 
     private function createAuthenticationSuccessEventSuppressor(ContainerBuilder $container, string $firewallName): void
@@ -219,7 +216,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
         $container
             ->setDefinition($firewallConfigId, new ChildDefinition(self::AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_ID))
             ->replaceArgument(0, $firewallName)
-            ->addTag('kernel.event_listener', ['event' => 'security.authentication.success', 'method' => 'onLogin', 'priority' => PHP_INT_MAX - 1]);
+            ->addTag('kernel.event_subscriber');
     }
 
     public function getPosition(): string

@@ -30,7 +30,7 @@
 			<argument>%scheb_two_factor.trusted_device.cookie_same_site%</argument>
 			<argument>%scheb_two_factor.trusted_device.cookie_path%</argument>
 			<argument>%scheb_two_factor.trusted_device.cookie_domain%</argument>
-			<tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" />
+			<tag name="kernel.event_subscriber" />
 		</service>
 
 		<service id="scheb_two_factor.default_trusted_device_manager" class="Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManager">

@@ -8,11 +8,15 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\AuthenticationEvents;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
-class TwoFactorProviderPreparationListener
+class TwoFactorProviderPreparationListener implements EventSubscriberInterface
 {
     /**
      * @var TwoFactorProviderRegistry
@@ -129,5 +133,16 @@ class TwoFactorProviderPreparationListener
     private function supports(TokenInterface $token): bool
     {
         return $token instanceof TwoFactorTokenInterface && $token->getProviderKey() === $this->firewallName;
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return [
+            // This must trigger very first, followed by AuthenticationSuccessEventSuppressor
+            AuthenticationEvents::AUTHENTICATION_SUCCESS => ['onLogin', PHP_INT_MAX],
+            TwoFactorAuthenticationEvents::REQUIRE => 'onAccessDenied',
+            TwoFactorAuthenticationEvents::FORM => 'onTwoFactorForm',
+            KernelEvents::FINISH_REQUEST => 'onKernelFinishRequest',
+        ];
     }
 }

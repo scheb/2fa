@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 
-class TrustedCookieResponseListener
+class TrustedCookieResponseListener implements EventSubscriberInterface
 {
     /**
      * @var TrustedDeviceTokenStorage
@@ -111,5 +113,12 @@ class TrustedCookieResponseListener
     protected function getDateTimeNow(): \DateTime
     {
         return new \DateTime();
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return [
+            KernelEvents::RESPONSE => 'onKernelResponse',
+        ];
     }
 }
