@@ -61,3 +61,5 @@ as before.
 The constructor of `Scheb\TwoFactorBundle\Controller\FormController` now takes an instance of
 `Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface` as the fifth argument. If you have
 extended the controller, please update your service definition accordingly.
+
+`Scheb\TwoFactorBundle\Security\Authentication\Exception\InvalidTwoFactorCodeException::setMessageKey` has been removed.
