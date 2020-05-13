@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\Authentication\Exception;
 
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
-class InvalidTwoFactorCodeException extends AuthenticationException
+class InvalidTwoFactorCodeException extends BadCredentialsException
 {
     /**
      * @var string
