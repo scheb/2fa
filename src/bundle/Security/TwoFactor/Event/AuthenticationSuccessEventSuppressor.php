@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Event;
 
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\AuthenticationEvents;
@@ -12,6 +13,9 @@ use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
 class AuthenticationSuccessEventSuppressor implements EventSubscriberInterface
 {
+    // Must trigger after TwoFactorProviderPreparationListener::onLogin to stop event propagation immediately
+    public const LISTENER_PRIORITY = TwoFactorProviderPreparationListener::LISTENER_PRIORITY - 1;
+
     /**
      * @var string
      */
@@ -41,8 +45,7 @@ class AuthenticationSuccessEventSuppressor implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            // Must trigger after TwoFactorProviderPreparationListener::onLogin to stop event propagation immediately
-            AuthenticationEvents::AUTHENTICATION_SUCCESS => ['onLogin', PHP_INT_MAX - 1],
+            AuthenticationEvents::AUTHENTICATION_SUCCESS => ['onLogin', self::LISTENER_PRIORITY],
         ];
     }
 }
