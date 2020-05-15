@@ -43,10 +43,10 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/2fa/accessible", name="2fa_accessible_route")
+     * @Route("/2fa/inProgress", name="2fa_in_progress")
      */
     public function accessibleDuring2fa()
     {
-        return new Response("It works!");
+        return new Response("This page is accessible during 2fa");
     }
 }
