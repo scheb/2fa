@@ -44,4 +44,15 @@ class TwoFactorAuthenticationTest extends TestCase
 
         $this->assertUserIsFullyAuthenticated();
     }
+
+    public function testLogoutLeaves2fa(): void
+    {
+        $this->setAll2faProvidersEnabled(true);
+
+        $pageAfterLogin = $this->performLogin();
+        $this->assert2faIsRequired($pageAfterLogin);
+
+        $this->performLogout();
+        $this->assertNotAuthenticated();
+    }
 }
