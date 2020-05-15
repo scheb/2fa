@@ -6,6 +6,7 @@ namespace Scheb\TwoFactorBundle\Tests\Security\Http\Authentication;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\DefaultAuthenticationFailureHandler;
+use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,10 +18,17 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 class DefaultAuthenticationFailureHandlerTest extends TestCase
 {
+    private const AUTH_FORM_PATH = '/auth_form_path';
+
     /**
      * @var MockObject|HttpUtils
      */
     private $httpUtils;
+
+    /**
+     * @var MockObject|TwoFactorFirewallConfig
+     */
+    private $twoFactorFirewallConfig;
 
     /**
      * @var DefaultAuthenticationFailureHandler
@@ -39,9 +47,14 @@ class DefaultAuthenticationFailureHandlerTest extends TestCase
 
     protected function setUp(): void
     {
-        $options = ['auth_form_path' => '/authFormPath'];
         $this->httpUtils = $this->createMock(HttpUtils::class);
-        $this->failureHandler = new DefaultAuthenticationFailureHandler($this->httpUtils, $options);
+        $this->twoFactorFirewallConfig = $this->createMock(TwoFactorFirewallConfig::class);
+        $this->twoFactorFirewallConfig
+            ->expects($this->any())
+            ->method('getAuthFormPath')
+            ->willReturn(self::AUTH_FORM_PATH);
+
+        $this->failureHandler = new DefaultAuthenticationFailureHandler($this->httpUtils, $this->twoFactorFirewallConfig);
 
         $this->session = $this->createMock(SessionInterface::class);
         $this->request = $this->createMock(Request::class);
@@ -80,7 +93,7 @@ class DefaultAuthenticationFailureHandlerTest extends TestCase
         $this->httpUtils
             ->expects($this->once())
             ->method('createRedirectResponse')
-            ->with($this->request, '/authFormPath')
+            ->with($this->request, self::AUTH_FORM_PATH)
             ->willReturn($redirectResponse);
 
         $returnValue = $this->failureHandler->onAuthenticationFailure($this->request, new AuthenticationException());

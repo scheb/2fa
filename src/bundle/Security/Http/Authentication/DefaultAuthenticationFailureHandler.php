@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\Http\Authentication;
 
-use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
+use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -14,30 +14,26 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 class DefaultAuthenticationFailureHandler implements AuthenticationFailureHandlerInterface
 {
-    private const DEFAULT_OPTIONS = [
-        'auth_form_path' => TwoFactorFactory::DEFAULT_AUTH_FORM_PATH,
-    ];
-
     /**
      * @var HttpUtils
      */
     private $httpUtils;
 
     /**
-     * @var array
+     * @var TwoFactorFirewallConfig
      */
-    private $options;
+    private $config;
 
-    public function __construct(HttpUtils $httpUtils, array $options = [])
+    public function __construct(HttpUtils $httpUtils, TwoFactorFirewallConfig $config)
     {
         $this->httpUtils = $httpUtils;
-        $this->options = array_merge(self::DEFAULT_OPTIONS, $options);
+        $this->config = $config;
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
 
-        return $this->httpUtils->createRedirectResponse($request, $this->options['auth_form_path']);
+        return $this->httpUtils->createRedirectResponse($request, $this->config->getAuthFormPath());
     }
 }

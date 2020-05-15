@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\Http\Authentication;
 
-use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
+use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -15,48 +15,30 @@ class DefaultAuthenticationRequiredHandler implements AuthenticationRequiredHand
 {
     use TargetPathTrait;
 
-    private const DEFAULT_OPTIONS = [
-        'auth_form_path' => TwoFactorFactory::DEFAULT_AUTH_FORM_PATH,
-        'check_path' => TwoFactorFactory::DEFAULT_CHECK_PATH,
-        'post_only' => TwoFactorFactory::DEFAULT_POST_ONLY,
-    ];
-
     /**
      * @var HttpUtils
      */
     private $httpUtils;
 
     /**
-     * @var string
+     * @var TwoFactorFirewallConfig
      */
-    private $firewallName;
+    private $config;
 
-    /**
-     * @var array
-     */
-    private $options;
-
-    public function __construct(HttpUtils $httpUtils, string $firewallName, array $options)
+    public function __construct(HttpUtils $httpUtils, TwoFactorFirewallConfig $config)
     {
         $this->httpUtils = $httpUtils;
-        $this->options = array_merge(self::DEFAULT_OPTIONS, $options);
-        $this->firewallName = $firewallName;
+        $this->config = $config;
     }
 
     public function onAuthenticationRequired(Request $request, TokenInterface $token): Response
     {
         // Do not save the target path when the current one is the one for checking the authentication code. Then it's
         // another redirect which happens in multi-factor scenarios.
-        if (!$this->isCheckAuthCodeRequest($request) && $request->hasSession() && $request->isMethodSafe() && !$request->isXmlHttpRequest()) {
-            $this->saveTargetPath($request->getSession(), $this->firewallName, $request->getUri());
+        if (!$this->config->isCheckPathRequest($request) && $request->hasSession() && $request->isMethodSafe() && !$request->isXmlHttpRequest()) {
+            $this->saveTargetPath($request->getSession(), $this->config->getFirewallName(), $request->getUri());
         }
 
-        return $this->httpUtils->createRedirectResponse($request, $this->options['auth_form_path']);
-    }
-
-    private function isCheckAuthCodeRequest(Request $request): bool
-    {
-        return ($this->options['post_only'] ? $request->isMethod('POST') : true)
-            && $this->httpUtils->checkRequestPath($request, $this->options['check_path']);
+        return $this->httpUtils->createRedirectResponse($request, $this->config->getAuthFormPath());
     }
 }

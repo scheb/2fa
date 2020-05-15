@@ -10,8 +10,7 @@
 		</service>
 
 		<service id="scheb_two_factor.security.authentication.provider" class="Scheb\TwoFactorBundle\Security\Authentication\Provider\TwoFactorAuthenticationProvider" abstract="true">
-			<argument type="string" /> <!-- Firewall name -->
-			<argument type="collection" /> <!-- Options -->
+			<argument /> <!-- Two-factor firewall config -->
 			<argument type="service" id="scheb_two_factor.provider_registry" />
 			<argument type="service" id="scheb_two_factor.backup_code_manager" on-invalid="null" />
 			<argument type="service" id="scheb_two_factor.provider_preparation_recorder" />
@@ -33,21 +32,19 @@
 		</service>
 
 		<service id="scheb_two_factor.security.authentication.listener" class="Scheb\TwoFactorBundle\Security\Http\Firewall\TwoFactorListener" abstract="true">
-			<tag name="monolog.logger" channel="security" />
 			<argument type="service" id="security.token_storage"/>
 			<argument type="service" id="security.authentication.manager"/>
-			<argument type="service" id="security.http_utils" />
-			<argument type="string" /> <!-- Firewall name -->
+			<argument /> <!-- Two-factor firewall config -->
 			<argument /> <!-- Success handler -->
 			<argument /> <!-- Failure handler -->
 			<argument /> <!-- Authentication required handler -->
-			<argument /> <!-- CSRF token validator -->
-			<argument type="collection" /> <!-- Options -->
+			<argument /> <!-- CSRF token manager -->
 			<argument type="service" id="scheb_two_factor.trusted_device_manager" on-invalid="null" />
 			<argument type="service" id="scheb_two_factor.security.access.access_decider" />
 			<argument type="service" id="event_dispatcher" />
 			<argument type="service" id="scheb_two_factor.token_factory" />
 			<argument type="service" id="logger" on-invalid="null" />
+			<tag name="monolog.logger" channel="security" />
 		</service>
 
 		<service id="scheb_two_factor.security.rememberme_services_decorator" class="\Scheb\TwoFactorBundle\Security\Authentication\RememberMe\RememberMeServicesDecorator" abstract="true">
@@ -88,16 +85,12 @@
 			<argument type="collection" /> <!-- Options -->
 		</service>
 
-		<service id="scheb_two_factor.security.authentication.csrf_token_validator" class="Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\CsrfTokenValidator" abstract="true">
-			<argument /> <!-- CSRF token manager -->
-			<argument type="collection" /> <!-- Options -->
-		</service>
-
 		<service id="scheb_two_factor.null_csrf_token_manager" class="Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\NullCsrfTokenManager" />
 
 		<service id="scheb_two_factor.security.firewall_config" class="Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig" abstract="true">
 			<argument type="collection" /> <!-- Options -->
 			<argument type="string" /> <!-- Firewall name -->
+			<argument type="service" id="security.http_utils" />
 		</service>
 	</services>
 </container>
