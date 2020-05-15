@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\TwoFactor;
 
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
+use Scheb\TwoFactorBundle\Security\Http\ParameterBagUtils;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\HttpUtils;
 
 class TwoFactorFirewallConfig
 {
@@ -18,10 +21,19 @@ class TwoFactorFirewallConfig
      */
     private $firewallName;
 
-    public function __construct(array $options, string $firewallName)
-    {
+    /**
+     * @var HttpUtils
+     */
+    private $httpUtils;
+
+    public function __construct(
+        array $options,
+        string $firewallName,
+        HttpUtils $httpUtils
+    ) {
         $this->options = $options;
         $this->firewallName = $firewallName;
+        $this->httpUtils = $httpUtils;
     }
 
     public function getFirewallName(): string
@@ -72,5 +84,41 @@ class TwoFactorFirewallConfig
     public function isPostOnly(): bool
     {
         return $this->options['post_only'] ?? TwoFactorFactory::DEFAULT_POST_ONLY;
+    }
+
+    public function isAlwaysUseDefaultTargetPath(): bool
+    {
+        return $this->options['always_use_default_target_path'] ?? TwoFactorFactory::DEFAULT_ALWAYS_USE_DEFAULT_TARGET_PATH;
+    }
+
+    public function getDefaultTargetPath(): string
+    {
+        return $this->options['default_target_path'] ?? TwoFactorFactory::DEFAULT_TARGET_PATH;
+    }
+
+    public function isCheckPathRequest(Request $request): bool
+    {
+        return ($this->isPostOnly() ? $request->isMethod('POST') : true)
+            && $this->httpUtils->checkRequestPath($request, $this->getCheckPath());
+    }
+
+    public function isAuthFormRequest(Request $request): bool
+    {
+        return $this->httpUtils->checkRequestPath($request, $this->getAuthFormPath());
+    }
+
+    public function getAuthCodeFromRequest(Request $request): string
+    {
+        return ParameterBagUtils::getRequestParameterValue($request, $this->getAuthCodeParameterName()) ?? '';
+    }
+
+    public function hasTrustedDeviceParameterInRequest(Request $request): bool
+    {
+        return (bool) ParameterBagUtils::getRequestParameterValue($request, $this->getTrustedParameterName());
+    }
+
+    public function getCsrfTokenFromRequest(Request $request): string
+    {
+        return ParameterBagUtils::getRequestParameterValue($request, $this->getCsrfParameterName()) ?? '';
     }
 }

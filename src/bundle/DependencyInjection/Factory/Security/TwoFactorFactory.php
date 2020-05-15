@@ -34,7 +34,6 @@ class TwoFactorFactory implements SecurityFactoryInterface
     public const FAILURE_HANDLER_ID_PREFIX = 'security.authentication.failure_handler.two_factor.';
     public const AUTHENTICATION_REQUIRED_HANDLER_ID_PREFIX = 'security.authentication.authentication_required_handler.two_factor.';
     public const FIREWALL_CONFIG_ID_PREFIX = 'security.firewall_config.two_factor.';
-    public const CSRF_TOKEN_VALIDATOR_ID_PREFIX = 'security.authentication.csrf_token_validator.two_factor.';
     public const PROVIDER_PREPARATION_LISTENER_ID_PREFIX = 'security.authentication.provider_preparation_listener.two_factor.';
     public const AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_ID_PREFIX = 'security.authentication.authentication_success_event_suppressor.two_factor.';
 
@@ -44,7 +43,6 @@ class TwoFactorFactory implements SecurityFactoryInterface
     public const FAILURE_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.failure_handler';
     public const AUTHENTICATION_REQUIRED_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.authentication_required_handler';
     public const FIREWALL_CONFIG_DEFINITION_ID = 'scheb_two_factor.security.firewall_config';
-    public const CSRF_TOKEN_VALIDATOR_DEFINITION_ID = 'scheb_two_factor.security.authentication.csrf_token_validator';
     public const PROVIDER_PREPARATION_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.provider_preparation_listener';
     public const AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_DEFINITION_ID = 'scheb_two_factor.security.authentication_success_event_suppressor';
 
@@ -87,47 +85,60 @@ class TwoFactorFactory implements SecurityFactoryInterface
      */
     public function create(ContainerBuilder $container, $id, $config, $userProvider, $defaultEntryPoint): array
     {
-        $providerId = $this->createAuthenticationProvider($container, $id, $config);
-        $listenerId = $this->createAuthenticationListener($container, $id, $config);
+        $csrfTokenManagerId = $this->getCsrfTokenManagerId($config);
+        $twoFactorFirewallConfigId = $this->createTwoFactorFirewallConfig($container, $id, $config);
+        $successHandlerId = $this->createSuccessHandler($container, $id, $config, $twoFactorFirewallConfigId);
+        $failureHandlerId = $this->createFailureHandler($container, $id, $config, $twoFactorFirewallConfigId);
+        $authRequiredHandlerId = $this->createAuthenticationRequiredHandler($container, $id, $config, $twoFactorFirewallConfigId);
+        $providerId = $this->createAuthenticationProvider($container, $id, $twoFactorFirewallConfigId);
         $this->createProviderPreparationListener($container, $id, $config);
         $this->createAuthenticationSuccessEventSuppressor($container, $id);
-        $this->createTwoFactorFirewallConfig($container, $id, $config);
+
+        $listenerId = $this->createAuthenticationListener(
+            $container,
+            $id,
+            $twoFactorFirewallConfigId,
+            $successHandlerId,
+            $failureHandlerId,
+            $authRequiredHandlerId,
+            $csrfTokenManagerId
+        );
 
         return [$providerId, $listenerId, $defaultEntryPoint];
     }
 
-    private function createAuthenticationProvider(ContainerBuilder $container, string $firewallName, array $config): string
+    private function createAuthenticationProvider(ContainerBuilder $container, string $firewallName, string $twoFactorFirewallConfigId): string
     {
         $providerId = self::PROVIDER_ID_PREFIX.$firewallName;
         $container
             ->setDefinition($providerId, new ChildDefinition(self::PROVIDER_DEFINITION_ID))
-            ->replaceArgument(0, $firewallName)
-            ->replaceArgument(1, $config);
+            ->replaceArgument(0, new Reference($twoFactorFirewallConfigId));
 
         return $providerId;
     }
 
-    private function createAuthenticationListener(ContainerBuilder $container, string $firewallName, array $config): string
-    {
-        $successHandlerId = $this->createSuccessHandler($container, $firewallName, $config);
-        $failureHandlerId = $this->createFailureHandler($container, $firewallName, $config);
-        $authRequiredHandlerId = $this->createAuthenticationRequiredHandler($container, $firewallName, $config);
-        $csrfTokenValidatorId = $this->createCsrfTokenValidator($container, $firewallName, $config);
-
+    private function createAuthenticationListener(
+        ContainerBuilder $container,
+        string $firewallName,
+        string $twoFactorFirewallConfigId,
+        string $successHandlerId,
+        string $failureHandlerId,
+        string $authRequiredHandlerId,
+        string $csrfTokenManagerId
+    ): string {
         $listenerId = self::LISTENER_ID_PREFIX.$firewallName;
         $container
             ->setDefinition($listenerId, new ChildDefinition(self::LISTENER_DEFINITION_ID))
-            ->replaceArgument(3, $firewallName)
-            ->replaceArgument(4, new Reference($successHandlerId))
-            ->replaceArgument(5, new Reference($failureHandlerId))
-            ->replaceArgument(6, new Reference($authRequiredHandlerId))
-            ->replaceArgument(7, new Reference($csrfTokenValidatorId))
-            ->replaceArgument(8, $config);
+            ->replaceArgument(2, new Reference($twoFactorFirewallConfigId))
+            ->replaceArgument(3, new Reference($successHandlerId))
+            ->replaceArgument(4, new Reference($failureHandlerId))
+            ->replaceArgument(5, new Reference($authRequiredHandlerId))
+            ->replaceArgument(6, new Reference($csrfTokenManagerId));
 
         return $listenerId;
     }
 
-    private function createSuccessHandler(ContainerBuilder $container, string $firewallName, array $config): string
+    private function createSuccessHandler(ContainerBuilder $container, string $firewallName, array $config, string $twoFactorFirewallConfigId): string
     {
         if (isset($config['success_handler'])) {
             return $config['success_handler'];
@@ -136,13 +147,12 @@ class TwoFactorFactory implements SecurityFactoryInterface
         $successHandlerId = self::SUCCESS_HANDLER_ID_PREFIX.$firewallName;
         $container
             ->setDefinition($successHandlerId, new ChildDefinition(self::SUCCESS_HANDLER_DEFINITION_ID))
-            ->replaceArgument(1, $firewallName)
-            ->replaceArgument(2, $config);
+            ->replaceArgument(1, new Reference($twoFactorFirewallConfigId));
 
         return $successHandlerId;
     }
 
-    private function createFailureHandler(ContainerBuilder $container, string $firewallName, array $config): string
+    private function createFailureHandler(ContainerBuilder $container, string $firewallName, array $config, string $twoFactorFirewallConfigId): string
     {
         if (isset($config['failure_handler'])) {
             return $config['failure_handler'];
@@ -151,12 +161,12 @@ class TwoFactorFactory implements SecurityFactoryInterface
         $failureHandlerId = self::FAILURE_HANDLER_ID_PREFIX.$firewallName;
         $container
             ->setDefinition($failureHandlerId, new ChildDefinition(self::FAILURE_HANDLER_DEFINITION_ID))
-            ->replaceArgument(1, $config);
+            ->replaceArgument(1, new Reference($twoFactorFirewallConfigId));
 
         return $failureHandlerId;
     }
 
-    private function createAuthenticationRequiredHandler(ContainerBuilder $container, string $firewallName, array $config): string
+    private function createAuthenticationRequiredHandler(ContainerBuilder $container, string $firewallName, array $config, string $twoFactorFirewallConfigId): string
     {
         if (isset($config['authentication_required_handler'])) {
             return $config['authentication_required_handler'];
@@ -165,38 +175,30 @@ class TwoFactorFactory implements SecurityFactoryInterface
         $successHandlerId = self::AUTHENTICATION_REQUIRED_HANDLER_ID_PREFIX.$firewallName;
         $container
             ->setDefinition($successHandlerId, new ChildDefinition(self::AUTHENTICATION_REQUIRED_HANDLER_DEFINITION_ID))
-            ->replaceArgument(1, $firewallName)
-            ->replaceArgument(2, $config);
+            ->replaceArgument(1, new Reference($twoFactorFirewallConfigId));
 
         return $successHandlerId;
     }
 
-    private function createCsrfTokenValidator(ContainerBuilder $container, string $firewallName, array $config): string
+    private function getCsrfTokenManagerId(array $config): string
     {
-        $csrfTokenManager = isset($config['csrf_token_generator'])
-            ? new Reference($config['csrf_token_generator'])
-            : new Reference('scheb_two_factor.null_csrf_token_manager');
-
-        $csrfTokenValidatorId = self::CSRF_TOKEN_VALIDATOR_ID_PREFIX.$firewallName;
-        $container
-            ->setDefinition($csrfTokenValidatorId, new ChildDefinition(self::CSRF_TOKEN_VALIDATOR_DEFINITION_ID))
-            ->replaceArgument(0, $csrfTokenManager)
-            ->replaceArgument(1, $config);
-
-        return $csrfTokenValidatorId;
+        return isset($config['csrf_token_generator'])
+            ? $config['csrf_token_generator']
+            : 'scheb_two_factor.null_csrf_token_manager';
     }
 
-    private function createTwoFactorFirewallConfig(ContainerBuilder $container, string $firewallName, array $config): void
+    private function createTwoFactorFirewallConfig(ContainerBuilder $container, string $firewallName, array $config): string
     {
         $firewallConfigId = self::FIREWALL_CONFIG_ID_PREFIX.$firewallName;
         $container
             ->setDefinition($firewallConfigId, new ChildDefinition(self::FIREWALL_CONFIG_DEFINITION_ID))
             ->replaceArgument(0, $config)
             ->replaceArgument(1, $firewallName)
+            // The SecurityFactory doesn't have access to the service definitions of the bundle. Therefore we tag the
+            // definition so we can find it in a compiler pass and add to the the TwoFactorFirewallContext service.
             ->addTag('scheb_two_factor.firewall_config', ['firewall' => $firewallName]);
 
-        // The SecurityFactory doesn't have access to the service definitions of the bundle. Therefore we tag the
-        // definition so we can find it in a compiler pass and add to the the TwoFactorFirewallContext service.
+        return $firewallConfigId;
     }
 
     private function createProviderPreparationListener(ContainerBuilder $container, string $firewallName, array $config): void

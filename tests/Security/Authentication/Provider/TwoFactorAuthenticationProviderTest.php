@@ -13,6 +13,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationRecorder;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
+use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -21,6 +22,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class TwoFactorAuthenticationProviderTest extends TestCase
 {
     private const FIREWALL_NAME = 'firewallName';
+
+    /**
+     * @var MockObject|TwoFactorFirewallConfig
+     */
+    private $twoFactorFirewallConfig;
 
     /**
      * @var MockObject|TwoFactorProviderRegistry
@@ -79,6 +85,12 @@ class TwoFactorAuthenticationProviderTest extends TestCase
             ->method('getUser')
             ->willReturn($this->user);
 
+        $this->twoFactorFirewallConfig = $this->createMock(TwoFactorFirewallConfig::class);
+        $this->twoFactorFirewallConfig
+            ->expects($this->any())
+            ->method('getFirewallName')
+            ->willReturn(self::FIREWALL_NAME);
+
         $this->twoFactorProvider1 = $this->createMock(TwoFactorProviderInterface::class);
         $this->twoFactorProvider2 = $this->createMock(TwoFactorProviderInterface::class);
     }
@@ -99,10 +111,13 @@ class TwoFactorAuthenticationProviderTest extends TestCase
                 }
             });
 
-        $options['multi_factor'] = $multiFactor;
+        $this->twoFactorFirewallConfig
+            ->expects($this->any())
+            ->method('isMultiFactor')
+            ->willReturn($multiFactor);
+
         $this->authenticationProvider = new TwoFactorAuthenticationProvider(
-            self::FIREWALL_NAME,
-            $options,
+            $this->twoFactorFirewallConfig,
             $this->providerRegistry,
             $this->backupCodeManager,
             $this->preparationRecorder

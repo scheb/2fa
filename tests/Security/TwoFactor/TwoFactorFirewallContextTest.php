@@ -19,7 +19,7 @@ class TwoFactorFirewallContextTest extends TestCase
 
     protected function setUp(): void
     {
-        $firewallConfig = new TwoFactorFirewallConfig(['foo' => 'bar'], self::FIREWALL_NAME);
+        $firewallConfig = $this->createMock(TwoFactorFirewallConfig::class);
         $this->firewallContext = new TwoFactorFirewallContext([self::FIREWALL_NAME => $firewallConfig]);
     }
 
