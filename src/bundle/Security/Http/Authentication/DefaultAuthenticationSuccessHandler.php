@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\Http\Authentication;
 
-use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
+use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -17,31 +17,20 @@ class DefaultAuthenticationSuccessHandler implements AuthenticationSuccessHandle
 {
     use TargetPathTrait;
 
-    private const DEFAULT_OPTIONS = [
-        'always_use_default_target_path' => TwoFactorFactory::DEFAULT_ALWAYS_USE_DEFAULT_TARGET_PATH,
-        'default_target_path' => TwoFactorFactory::DEFAULT_TARGET_PATH,
-    ];
-
     /**
      * @var HttpUtils
      */
     private $httpUtils;
 
     /**
-     * @var array
+     * @var TwoFactorFirewallConfig
      */
-    private $options;
+    private $config;
 
-    /**
-     * @var string
-     */
-    private $firewallName;
-
-    public function __construct(HttpUtils $httpUtils, string $firewallName, array $options = [])
+    public function __construct(HttpUtils $httpUtils, TwoFactorFirewallConfig $config)
     {
         $this->httpUtils = $httpUtils;
-        $this->firewallName = $firewallName;
-        $this->options = array_merge(self::DEFAULT_OPTIONS, $options);
+        $this->config = $config;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token): Response
@@ -53,17 +42,18 @@ class DefaultAuthenticationSuccessHandler implements AuthenticationSuccessHandle
 
     private function determineRedirectTargetUrl(Request $request): string
     {
-        if ($this->options['always_use_default_target_path']) {
-            return $this->options['default_target_path'];
+        if ($this->config->isAlwaysUseDefaultTargetPath()) {
+            return $this->config->getDefaultTargetPath();
         }
 
         $session = $request->getSession();
-        if ($targetUrl = $this->getTargetPath($session, $this->firewallName)) {
-            $this->removeTargetPath($session, $this->firewallName);
+        $firewallName = $this->config->getFirewallName();
+        if ($targetUrl = $this->getTargetPath($session, $firewallName)) {
+            $this->removeTargetPath($session, $firewallName);
 
             return $targetUrl;
         }
 
-        return $this->options['default_target_path'];
+        return $this->config->getDefaultTargetPath();
     }
 }

@@ -6,6 +6,7 @@ namespace Scheb\TwoFactorBundle\Tests\Security\Http\Authentication;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\DefaultAuthenticationSuccessHandler;
+use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,10 +18,19 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 class DefaultAuthenticationSuccessHandlerTest extends TestCase
 {
+    private const FIREWALL_NAME = 'firewallName';
+    private const DEFAULT_TARGET_PATH = '/defaultTargetPath';
+    private const SESSION_TARGET_PATH = '/sessionTargetPath';
+
     /**
      * @var MockObject|HttpUtils
      */
     private $httpUtils;
+
+    /**
+     * @var MockObject|TwoFactorFirewallConfig
+     */
+    private $twoFactorFirewallConfig;
 
     /**
      * @var DefaultAuthenticationSuccessHandler
@@ -40,6 +50,12 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
     protected function setUp(): void
     {
         $this->httpUtils = $this->createMock(HttpUtils::class);
+        $this->twoFactorFirewallConfig = $this->createMock(TwoFactorFirewallConfig::class);
+        $this->twoFactorFirewallConfig
+            ->expects($this->any())
+            ->method('getFirewallName')
+            ->willReturn(self::FIREWALL_NAME);
+
         $this->session = $this->createMock(SessionInterface::class);
         $this->request = $this->createMock(Request::class);
         $this->request
@@ -50,11 +66,16 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
 
     private function setUpSuccessHandlerWithOptions(bool $alwaysUseDefaultTargetPath): void
     {
-        $options = [
-            'always_use_default_target_path' => $alwaysUseDefaultTargetPath,
-            'default_target_path' => '/defaultTargetPath',
-        ];
-        $this->successHandler = new DefaultAuthenticationSuccessHandler($this->httpUtils, 'firewallName', $options);
+        $this->twoFactorFirewallConfig
+            ->expects($this->any())
+            ->method('isAlwaysUseDefaultTargetPath')
+            ->willReturn($alwaysUseDefaultTargetPath);
+        $this->twoFactorFirewallConfig
+            ->expects($this->any())
+            ->method('getDefaultTargetPath')
+            ->willReturn(self::DEFAULT_TARGET_PATH);
+
+        $this->successHandler = new DefaultAuthenticationSuccessHandler($this->httpUtils, $this->twoFactorFirewallConfig);
     }
 
     private function stubSessionHasTargetPath(string $sessionTargetPath): void
@@ -105,9 +126,9 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
     public function onAuthenticationSuccess_alwaysUseDefaultTargetPath_redirectToDefaultTargetPath(): void
     {
         $this->setUpSuccessHandlerWithOptions(true);
-        $this->stubSessionHasTargetPath('/sessionTargetPath');
+        $this->stubSessionHasTargetPath(self::SESSION_TARGET_PATH);
 
-        $redirectResponse = $this->assertCreateRedirectTo('/defaultTargetPath');
+        $redirectResponse = $this->assertCreateRedirectTo(self::DEFAULT_TARGET_PATH);
 
         $returnValue = $this->successHandler->onAuthenticationSuccess($this->request, $this->createMock(TokenInterface::class));
         $this->assertSame($redirectResponse, $returnValue);
@@ -119,9 +140,9 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
     public function onAuthenticationSuccess_hasTargetPathInSession_redirectToSessionTargetPath(): void
     {
         $this->setUpSuccessHandlerWithOptions(false);
-        $this->stubSessionHasTargetPath('/sessionTargetPath');
+        $this->stubSessionHasTargetPath(self::SESSION_TARGET_PATH);
 
-        $redirectResponse = $this->assertCreateRedirectTo('/sessionTargetPath');
+        $redirectResponse = $this->assertCreateRedirectTo(self::SESSION_TARGET_PATH);
 
         $returnValue = $this->successHandler->onAuthenticationSuccess($this->request, $this->createMock(TokenInterface::class));
         $this->assertSame($redirectResponse, $returnValue);
@@ -134,7 +155,7 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
     {
         $this->setUpSuccessHandlerWithOptions(false);
 
-        $redirectResponse = $this->assertCreateRedirectTo('/defaultTargetPath');
+        $redirectResponse = $this->assertCreateRedirectTo(self::DEFAULT_TARGET_PATH);
 
         $returnValue = $this->successHandler->onAuthenticationSuccess($this->request, $this->createMock(TokenInterface::class));
         $this->assertSame($redirectResponse, $returnValue);

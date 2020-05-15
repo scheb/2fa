@@ -4,37 +4,28 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\Authentication\Provider;
 
-use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\InvalidTwoFactorCodeException;
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\TwoFactorProviderNotFoundException;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationRecorder;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
+use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
 {
-    private const DEFAULT_OPTIONS = [
-        'multi_factor' => TwoFactorFactory::DEFAULT_MULTI_FACTOR,
-    ];
+    /**
+     * @var TwoFactorFirewallConfig
+     */
+    private $twoFactorFirewallConfig;
 
     /**
      * @var TwoFactorProviderRegistry
      */
     private $providerRegistry;
-
-    /**
-     * @var string
-     */
-    private $firewallName;
-
-    /**
-     * @var array
-     */
-    private $options;
 
     /**
      * @var BackupCodeManagerInterface|null
@@ -47,14 +38,12 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
     private $preparationRecorder;
 
     public function __construct(
-        string $firewallName,
-        array $options,
+        TwoFactorFirewallConfig $twoFactorFirewallConfig,
         TwoFactorProviderRegistry $providerRegistry,
         ?BackupCodeManagerInterface $backupCodeManager,
         TwoFactorProviderPreparationRecorder $preparationRecorder
     ) {
-        $this->firewallName = $firewallName;
-        $this->options = array_merge(self::DEFAULT_OPTIONS, $options);
+        $this->twoFactorFirewallConfig = $twoFactorFirewallConfig;
         $this->providerRegistry = $providerRegistry;
         $this->backupCodeManager = $backupCodeManager;
         $this->preparationRecorder = $preparationRecorder;
@@ -62,7 +51,8 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
 
     public function supports(TokenInterface $token): bool
     {
-        return $token instanceof TwoFactorTokenInterface && $this->firewallName === $token->getProviderKey();
+        return $token instanceof TwoFactorTokenInterface
+            && $this->twoFactorFirewallConfig->getFirewallName() === $token->getProviderKey();
     }
 
     public function authenticate(TokenInterface $token): TokenInterface
@@ -82,7 +72,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
             throw new AuthenticationException('There is no active two-factor provider.');
         }
 
-        if (!$this->preparationRecorder->isProviderPrepared($this->firewallName, $providerName)) {
+        if (!$this->preparationRecorder->isProviderPrepared($token->getProviderKey(), $providerName)) {
             throw new AuthenticationException(sprintf('The two-factor provider "%s" has not been prepared.', $providerName));
         }
 
@@ -145,6 +135,6 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
 
     private function isAuthenticationComplete(TwoFactorTokenInterface $token): bool
     {
-        return !$this->options['multi_factor'] || $token->allTwoFactorProvidersAuthenticated();
+        return !$this->twoFactorFirewallConfig->isMultiFactor() || $token->allTwoFactorProvidersAuthenticated();
     }
 }

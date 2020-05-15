@@ -6,16 +6,14 @@ namespace Scheb\TwoFactorBundle\Security\Http\Firewall;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Authorization\TwoFactorAccessDecider;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
-use Scheb\TwoFactorBundle\Security\Http\ParameterBagUtils;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\CsrfTokenValidator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,20 +23,13 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
-use Symfony\Component\Security\Http\HttpUtils;
 
 class TwoFactorListener
 {
-    private const DEFAULT_OPTIONS = [
-        'auth_form_path' => TwoFactorFactory::DEFAULT_AUTH_FORM_PATH,
-        'check_path' => TwoFactorFactory::DEFAULT_CHECK_PATH,
-        'post_only' => TwoFactorFactory::DEFAULT_POST_ONLY,
-        'auth_code_parameter_name' => TwoFactorFactory::DEFAULT_AUTH_CODE_PARAMETER_NAME,
-        'trusted_parameter_name' => TwoFactorFactory::DEFAULT_TRUSTED_PARAMETER_NAME,
-    ];
-
     /**
      * @var TokenStorageInterface
      */
@@ -50,14 +41,9 @@ class TwoFactorListener
     private $authenticationManager;
 
     /**
-     * @var HttpUtils
+     * @var TwoFactorFirewallConfig
      */
-    private $httpUtils;
-
-    /**
-     * @var string
-     */
-    private $firewallName;
+    private $twoFactorFirewallConfig;
 
     /**
      * @var AuthenticationSuccessHandlerInterface
@@ -75,14 +61,9 @@ class TwoFactorListener
     private $authenticationRequiredHandler;
 
     /**
-     * @var CsrfTokenValidator
+     * @var CsrfTokenManagerInterface
      */
-    private $csrfTokenValidator;
-
-    /**
-     * @var array
-     */
-    private $options;
+    private $csrfTokenManager;
 
     /**
      * @var TrustedDeviceManagerInterface|null
@@ -112,55 +93,49 @@ class TwoFactorListener
     public function __construct(
         TokenStorageInterface $tokenStorage,
         AuthenticationManagerInterface $authenticationManager,
-        HttpUtils $httpUtils,
-        string $firewallName,
+        TwoFactorFirewallConfig $twoFactorFirewallConfig,
         AuthenticationSuccessHandlerInterface $successHandler,
         AuthenticationFailureHandlerInterface $failureHandler,
         AuthenticationRequiredHandlerInterface $authenticationRequiredHandler,
-        CsrfTokenValidator $csrfTokenValidator,
-        array $options,
+        CsrfTokenManagerInterface $csrfTokenManager,
         ?TrustedDeviceManagerInterface $trustedDeviceManager,
         TwoFactorAccessDecider $twoFactorAccessDecider,
         EventDispatcherInterface $eventDispatcher,
         TwoFactorTokenFactoryInterface $twoFactorTokenFactory,
         ?LoggerInterface $logger = null
     ) {
-        if (empty($firewallName)) {
-            throw new \InvalidArgumentException('$firewallName must not be empty.');
-        }
-
         $this->tokenStorage = $tokenStorage;
         $this->authenticationManager = $authenticationManager;
-        $this->httpUtils = $httpUtils;
-        $this->firewallName = $firewallName;
+        $this->twoFactorFirewallConfig = $twoFactorFirewallConfig;
         $this->successHandler = $successHandler;
         $this->failureHandler = $failureHandler;
         $this->authenticationRequiredHandler = $authenticationRequiredHandler;
-        $this->csrfTokenValidator = $csrfTokenValidator;
-        $this->options = array_merge(self::DEFAULT_OPTIONS, $options);
+        $this->csrfTokenManager = $csrfTokenManager;
+        $this->trustedDeviceManager = $trustedDeviceManager;
         $this->twoFactorAccessDecider = $twoFactorAccessDecider;
         $this->eventDispatcher = $eventDispatcher;
         $this->twoFactorTokenFactory = $twoFactorTokenFactory;
         $this->logger = $logger ?? new NullLogger();
-        $this->trustedDeviceManager = $trustedDeviceManager;
     }
 
     public function __invoke(RequestEvent $event)
     {
         $currentToken = $this->tokenStorage->getToken();
-        if (!($currentToken instanceof TwoFactorTokenInterface && $currentToken->getProviderKey() === $this->firewallName)) {
+        if (!($currentToken instanceof TwoFactorTokenInterface
+            && $currentToken->getProviderKey() === $this->twoFactorFirewallConfig->getFirewallName())
+        ) {
             return;
         }
 
         $request = $event->getRequest();
-        if ($this->isCheckAuthCodeRequest($request)) {
+        if ($this->twoFactorFirewallConfig->isCheckPathRequest($request)) {
             $response = $this->attemptAuthentication($request, $currentToken);
             $event->setResponse($response);
 
             return;
         }
 
-        if ($this->isAuthFormRequest($request)) {
+        if ($this->twoFactorFirewallConfig->isAuthFormRequest($request)) {
             $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::FORM, $request, $currentToken);
 
             return;
@@ -176,31 +151,20 @@ class TwoFactorListener
         $event->setResponse($response);
     }
 
-    private function isCheckAuthCodeRequest(Request $request): bool
-    {
-        return ($this->options['post_only'] ? $request->isMethod('POST') : true)
-            && $this->httpUtils->checkRequestPath($request, $this->options['check_path']);
-    }
-
-    private function isAuthFormRequest(Request $request): bool
-    {
-        return $this->httpUtils->checkRequestPath($request, $this->options['auth_form_path']);
-    }
-
-    private function getAuthCodeFromRequest(Request $request): string
-    {
-        return ParameterBagUtils::getRequestParameterValue($request, $this->options['auth_code_parameter_name']) ?? '';
-    }
-
     private function attemptAuthentication(Request $request, TwoFactorTokenInterface $beginToken): Response
     {
-        $authCode = $this->getAuthCodeFromRequest($request);
+        $authCode = $this->twoFactorFirewallConfig->getAuthCodeFromRequest($request);
         try {
-            if (!$this->csrfTokenValidator->hasValidCsrfToken($request)) {
+            if (!$this->hasValidCsrfToken($request)) {
                 throw new InvalidCsrfTokenException('Invalid CSRF token.');
             }
 
-            $token = $this->twoFactorTokenFactory->create($beginToken->getAuthenticatedToken(), $authCode, $this->firewallName, $beginToken->getTwoFactorProviders());
+            $token = $this->twoFactorTokenFactory->create(
+                $beginToken->getAuthenticatedToken(),
+                $authCode,
+                $beginToken->getProviderKey(),
+                $beginToken->getTwoFactorProviders()
+            );
             $token->setAttributes($beginToken->getAttributes());
 
             $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::ATTEMPT, $request, $token);
@@ -210,6 +174,15 @@ class TwoFactorListener
         } catch (AuthenticationException $failureException) {
             return $this->onFailure($request, $beginToken, $failureException);
         }
+    }
+
+    public function hasValidCsrfToken(Request $request): bool
+    {
+        $tokenValue = $this->twoFactorFirewallConfig->getCsrfTokenFromRequest($request);
+        $tokenId = $this->twoFactorFirewallConfig->getCsrfTokenId();
+        $token = new CsrfToken($tokenId, $tokenValue);
+
+        return $this->csrfTokenManager->isTokenValid($token);
     }
 
     private function onFailure(Request $request, TwoFactorTokenInterface $token, AuthenticationException $failureException): Response
@@ -235,11 +208,12 @@ class TwoFactorListener
 
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::COMPLETE, $request, $token);
 
+        $firewallName = $previousTwoFactorToken->getProviderKey();
         if ($this->trustedDeviceManager
             && $this->hasTrustedDeviceParameter($request)
-            && $this->trustedDeviceManager->canSetTrustedDevice($token->getUser(), $request, $this->firewallName)
+            && $this->trustedDeviceManager->canSetTrustedDevice($token->getUser(), $request, $firewallName)
         ) {
-            $this->trustedDeviceManager->addTrustedDevice($token->getUser(), $this->firewallName);
+            $this->trustedDeviceManager->addTrustedDevice($token->getUser(), $firewallName);
         }
 
         $response = $this->successHandler->onAuthenticationSuccess($request, $token);
@@ -250,7 +224,7 @@ class TwoFactorListener
 
     private function hasTrustedDeviceParameter(Request $request): bool
     {
-        return (bool) ParameterBagUtils::getRequestParameterValue($request, $this->options['trusted_parameter_name']);
+        return $this->twoFactorFirewallConfig->hasTrustedDeviceParameterInRequest($request);
     }
 
     private function dispatchTwoFactorAuthenticationEvent(string $eventType, Request $request, TokenInterface $token): void
