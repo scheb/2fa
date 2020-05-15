@@ -46,7 +46,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
     public const FIREWALL_CONFIG_DEFINITION_ID = 'scheb_two_factor.security.firewall_config';
     public const CSRF_TOKEN_VALIDATOR_DEFINITION_ID = 'scheb_two_factor.security.authentication.csrf_token_validator';
     public const PROVIDER_PREPARATION_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.provider_preparation_listener';
-    public const AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_ID = 'scheb_two_factor.security.authentication_success_event_suppressor';
+    public const AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_DEFINITION_ID = 'scheb_two_factor.security.authentication_success_event_suppressor';
 
     public function addConfiguration(NodeDefinition $node): void
     {
@@ -214,7 +214,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
     {
         $firewallConfigId = self::AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_ID_PREFIX.$firewallName;
         $container
-            ->setDefinition($firewallConfigId, new ChildDefinition(self::AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_ID))
+            ->setDefinition($firewallConfigId, new ChildDefinition(self::AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_DEFINITION_ID))
             ->replaceArgument(0, $firewallName)
             ->addTag('kernel.event_subscriber');
     }
