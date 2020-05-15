@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
@@ -139,7 +140,7 @@ abstract class TestCase extends WebTestCase
     protected function performLogin(bool $rememberMe = false): Crawler
     {
         $loginPage = $this->client->request('GET', '/login');
-        $this->assertSuccessResponse();
+        $this->assertResponseStatusCode(200);
 
         $loginForm = $loginPage->selectButton('submit-button')->form();
         $loginForm['_username'] = self::USER_NAME;
@@ -148,10 +149,7 @@ abstract class TestCase extends WebTestCase
             $loginForm['_remember_me'] = 'on';
         }
 
-        $pageAfterLogin = $this->client->submit($loginForm);
-        $this->assertSuccessResponse();
-
-        return $pageAfterLogin;
+        return $this->client->submit($loginForm);
     }
 
     protected function perform2fa(Crawler $currentPage, bool $trustedDevice = false): Crawler
@@ -177,10 +175,32 @@ abstract class TestCase extends WebTestCase
             $twoFactorForm['_trusted'] = 'on';
         }
 
-        $currentPage = $this->client->submit($twoFactorForm);
-        $this->assertSuccessResponse();
+        return $this->client->submit($twoFactorForm);
+    }
 
-        return $currentPage;
+    protected function performLogout(): Crawler
+    {
+        return $this->client->request('GET', '/logout');
+    }
+
+    protected function navigateToSecuredPath(): Crawler
+    {
+        return $this->client->request('GET', '/members');
+    }
+
+    protected function navigateToPathWithoutAnyAccessControl(): Crawler
+    {
+        return $this->client->request('GET', '/');
+    }
+
+    protected function navigateToPathWithAnonymousAccessControl()
+    {
+        return $this->client->request('GET', '/alwaysAccessible');
+    }
+
+    protected function navigateToRouteWith2faInProgressAccessControl()
+    {
+        return $this->client->request('GET', '/2fa/inProgress');
     }
 
     ////////////////////// ASSERTS
@@ -208,6 +228,50 @@ abstract class TestCase extends WebTestCase
         );
     }
 
+    protected function assertNotAuthenticated(): void
+    {
+        $this->assertInstanceOf(
+            AnonymousToken::class,
+            $this->getSecurityToken(),
+            'The token has to be an AnonymousToken'
+        );
+    }
+
+    protected function assertIsAlwaysAccessiblePage(Crawler $page): void
+    {
+        $this->assertResponseStatusCode(200);
+        $this->assertStringContainsString(
+            'This page is accessible for any user any time',
+            $page->html(),
+            'The page shown must be the "always accessible" page'
+        );
+    }
+
+    protected function assertIsLoginPage($page)
+    {
+        $this->assertResponseStatusCode(200);
+        $this->assertStringContainsString(
+            'Please authenticate to get access',
+            $page->html(),
+            'The page shown must be the login page'
+        );
+    }
+
+    protected function assertIs2faInProgressPage($page)
+    {
+        $this->assertResponseStatusCode(200);
+        $this->assertStringContainsString(
+            'This page is accessible during 2fa',
+            $page->html(),
+            'The page shown must "2fa in progress" page'
+        );
+    }
+
+    protected function assertResponseIs403Forbidden()
+    {
+        $this->assertResponseStatusCode(403);
+    }
+
     protected function assertInvalidCodeErrorMessage(Crawler $page): void
     {
         $this->assertStringContainsString('The verification code is not valid', $page->html());
@@ -228,12 +292,12 @@ abstract class TestCase extends WebTestCase
         $this->assertNotNull($this->client->getCookieJar()->get(self::TRUSTED_DEVICE_COOKIE_NAME), 'Trusted device cookie must be set');
     }
 
-    private function assertSuccessResponse(): void
+    private function assertResponseStatusCode(int $code): void
     {
         $this->assertEquals(
-            200,
+            $code,
             $this->client->getResponse()->getStatusCode(),
-            'The client must respond with HTTP status 200'
+            'The client must respond with HTTP status '.$code
         );
     }
 

@@ -1,6 +1,8 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
+<p>Please authenticate to get access:</p>
+
 {% if error %}
 <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 {% endif %}
