@@ -3,10 +3,10 @@ Trusted Devices
 
 ## Prerequisites
 
-To make use of this feature, you have to install `scheb/2fa-trusted-devices`.
+To make use of this feature, you have to install `scheb/2fa-trusted-device`.
 
 ```bash
-composer require scheb/2fa-trusted-devices
+composer require scheb/2fa-trusted-device
 ```
 
 ## What it does

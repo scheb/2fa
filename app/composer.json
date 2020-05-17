@@ -29,7 +29,7 @@
                 "../src/email",
                 "../src/google-authenticator",
                 "../src/totp",
-                "../src/trusted-devices"
+                "../src/trusted-device"
             ]
         }
     },

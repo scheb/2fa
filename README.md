@@ -30,7 +30,7 @@ Core features provided by `scheb/2fa-bundle`:
 
 Additional features:
 
-- Trusted devices (once passed, no more two-factor authentication on that device) (`scheb/2fa-trusted-devices`)
+- Trusted devices (once passed, no more two-factor authentication on that device) (`scheb/2fa-trusted-device`)
 - Single-use backup codes for when you don't have access to the second factor device (`scheb/2fa-backup-code`)
 
 Two-factor authentication methods:

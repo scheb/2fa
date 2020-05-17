@@ -25,7 +25,7 @@ composer require scheb/2fa-bundle
 
 # Then add the extra packages, depending on what bundle features you're using in your application:
 composer require scheb/2fa-backup-code            # Add backup code feature
-composer require scheb/2fa-trusted-devices        # Add trusted devices feature
+composer require scheb/2fa-trusted-device         # Add trusted devices feature
 composer require scheb/2fa-totp                   # Add two-factor authentication using TOTP
 composer require scheb/2fa-google-authenticator   # Add two-factor authentication with Google Authenticator
 composer require scheb/2fa-email                  # Add two-factor authentication using email
