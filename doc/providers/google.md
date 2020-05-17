@@ -1,6 +1,14 @@
 Google Authentication
 ====================
 
+## Prerequisites
+
+To make use of this feature, you have to install `scheb/2fa-google-authenticator`.
+
+```bash
+composer require scheb/2fa-google-authenticator
+```
+
 ## How it works
 
 The user entity has to be linked with [Google Authenticator](https://en.wikipedia.org/wiki/Google_Authenticator) first.

@@ -1,6 +1,16 @@
 Trusted Devices
 ===============
 
+## Prerequisites
+
+To make use of this feature, you have to install `scheb/2fa-trusted-devices`.
+
+```bash
+composer require scheb/2fa-trusted-devices
+```
+
+## What it does
+
 You can give users the possibility to flag devices as "trusted", which means the two-factor process will be skipped after
 passing it once on that device.
 

@@ -1,6 +1,14 @@
 TOTP Authentication
 ====================
 
+## Prerequisites
+
+To make use of this feature, you have to install `scheb/2fa-totp`.
+
+```bash
+composer require scheb/2fa-totp
+```
+
 ## How it works
 
 The [TOTP authenticator](https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm) is similar and compatible

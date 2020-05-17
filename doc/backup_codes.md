@@ -1,6 +1,16 @@
 Backup Codes
 ============
 
+## Prerequisites
+
+To make use of this feature, you have to install `scheb/2fa-backup-code`.
+
+```bash
+composer require scheb/2fa-backup-code
+```
+
+## What it does
+
 Backup codes are one-time authentication codes, which can be used instead of the actual codes. They're meant as
 emergency codes, when the authentication device is not available and you have to pass the two-factor authentication
 process.

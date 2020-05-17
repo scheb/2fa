@@ -3,10 +3,10 @@ Email Authentication
 
 ## Prerequisites
 
-Install the mailer component:
+To make use of this feature, you have to install `scheb/2fa-email`.
 
 ```bash
-composer require mailer
+composer require scheb/2fa-email
 ```
 
 ## How it works
