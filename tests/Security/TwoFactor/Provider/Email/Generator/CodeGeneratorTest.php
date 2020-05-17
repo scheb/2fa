@@ -110,6 +110,23 @@ class CodeGeneratorTest extends TestCase
 
         $this->authCodeManager->generateAndSend($user);
     }
+
+    /**
+     * @test
+     */
+    public function reSend_whenCalled_sendMail(): void
+    {
+        //Stub the user object
+        $user = $this->createMock(TwoFactorInterface::class);
+
+        //Mock the mailer
+        $this->mailer
+            ->expects($this->once())
+            ->method('sendAuthCode')
+            ->with($user);
+
+        $this->authCodeManager->reSend($user);
+    }
 }
 
 //Make the AuthCodeManager class testable

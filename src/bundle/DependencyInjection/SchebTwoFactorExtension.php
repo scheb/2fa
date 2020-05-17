@@ -102,7 +102,7 @@ class SchebTwoFactorExtension extends Extension
         $container->setParameter('scheb_two_factor.email.template', $config['email']['template']);
         $container->setParameter('scheb_two_factor.email.digits', $config['email']['digits']);
         $container->setAlias('scheb_two_factor.security.email.auth_code_mailer', $config['email']['mailer']);
-        $container->setAlias('scheb_two_factor.security.email.code_generator', $config['email']['code_generator']);
+        $container->setAlias('scheb_two_factor.security.email.code_generator', $config['email']['code_generator'])->setPublic(true);
     }
 
     private function configureGoogleAuthenticationProvider(ContainerBuilder $container, array $config): void

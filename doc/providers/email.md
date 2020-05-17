@@ -130,6 +130,12 @@ scheb_two_factor:
         mailer: acme.custom_mailer_service
 ```
 
+## Re-send Authentication Code
+
+When you're using the default authentication code generator that is coming with the bundle, there's an easy way to
+re-send the email with the authentication code. Get/inject service `scheb_two_factor.security.email.code_generator` and
+call method `reSend(\Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface $user)`.
+
 ## Symfony Mailer Component
 
 The default mailer service uses Swift Mailer to send the email. To use the Symfony Mailer component instead (without

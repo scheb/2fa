@@ -42,6 +42,11 @@ class CodeGenerator implements CodeGeneratorInterface
         $this->mailer->sendAuthCode($user);
     }
 
+    public function reSend(TwoFactorInterface $user): void
+    {
+        $this->mailer->sendAuthCode($user);
+    }
+
     protected function generateCode(int $min, int $max): int
     {
         return random_int($min, $max);
