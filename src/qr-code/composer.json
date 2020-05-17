@@ -1,0 +1,23 @@
+{
+    "name": "scheb/2fa-qr-code",
+    "type": "library",
+    "description": "Extends scheb/2fa-bundle with the ability to render QR-codes for Google Authenticator or TOTP",
+    "keywords": ["2fa", "two-factor", "two-step", "authentication", "symfony", "qr-code"],
+    "homepage": "https://github.com/scheb/2fa",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Scheb",
+            "email": "me@christianscheb.de"
+        }
+    ],
+    "require": {
+        "scheb/2fa-bundle": "self.version",
+        "endroid/qr-code": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Scheb\\TwoFactorBundle\\": ""
+        }
+    }
+}

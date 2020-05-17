@@ -174,6 +174,17 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
+    public function load_qrCodePackageInstalled_loadQrCodeGenerator(): void
+    {
+        $config = $this->getEmptyConfig();
+        $this->extension->load([$config], $this->container);
+
+        $this->assertHasDefinition('scheb_two_factor.qr_code_generator');
+    }
+
+    /**
+     * @test
+     */
     public function load_defaultMailer_notSetAlias(): void
     {
         $config = $this->getEmptyConfig();

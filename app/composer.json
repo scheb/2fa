@@ -9,7 +9,8 @@
         "symfony/swiftmailer-bundle": "^3.1",
         "lcobucci/jwt": "^3.2",
         "spomky-labs/otphp": "^9.1|^10.0",
-        "paragonie/constant_time_encoding": "^2.2"
+        "paragonie/constant_time_encoding": "^2.2",
+        "endroid/qr-code": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0|^9.0"
@@ -28,6 +29,7 @@
                 "../src/bundle",
                 "../src/email",
                 "../src/google-authenticator",
+                "../src/qr-code",
                 "../src/totp",
                 "../src/trusted-device"
             ]
