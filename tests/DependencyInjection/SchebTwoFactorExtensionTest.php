@@ -124,6 +124,7 @@ class SchebTwoFactorExtensionTest extends TestCase
 
         //Email
         $this->assertNotHasDefinition('scheb_two_factor.security.email.swift_auth_code_mailer');
+        $this->assertNotHasDefinition('scheb_two_factor.security.email.symfony_auth_code_mailer');
         $this->assertNotHasDefinition('scheb_two_factor.security.email.code_generator');
         $this->assertNotHasDefinition('scheb_two_factor.security.email.provider');
     }
@@ -165,6 +166,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->extension->load([$config], $this->container);
 
         $this->assertHasDefinition('scheb_two_factor.security.email.swift_auth_code_mailer');
+        $this->assertHasDefinition('scheb_two_factor.security.email.symfony_auth_code_mailer');
         $this->assertHasDefinition('scheb_two_factor.security.email.default_code_generator');
         $this->assertHasDefinition('scheb_two_factor.security.email.provider');
     }
@@ -172,19 +174,19 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_defaultMailer_defaultAlias(): void
+    public function load_defaultMailer_notSetAlias(): void
     {
         $config = $this->getEmptyConfig();
         $config['email']['enabled'] = true; // Enable email provider
         $this->extension->load([$config], $this->container);
 
-        $this->assertHasAlias('scheb_two_factor.security.email.auth_code_mailer', 'scheb_two_factor.security.email.swift_auth_code_mailer');
+        $this->assertNotHasAlias('scheb_two_factor.security.email.auth_code_mailer');
     }
 
     /**
      * @test
      */
-    public function load_alternativeMailer_replaceAlias(): void
+    public function load_customMailer_setAlias(): void
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);

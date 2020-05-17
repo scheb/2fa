@@ -9,6 +9,17 @@ To make use of this feature, you have to install `scheb/2fa-email`.
 composer require scheb/2fa-email
 ```
 
+The bundle's default implementation for sending emails supports both `symfony/mailer` and `symfony/swiftmailer-bundle`.
+Please install one of them.
+
+```bash
+composer require symfony/mailer              # Either
+composer require symfony/swiftmailer-bundle  # Or
+```
+
+You're free to use any other mail-sending library you like, but then you *have* to implement your a custom mailer
+(instructions below).
+
 ## How it works
 
 On successful authentication it generates a random number and persist it in the user entity. The number is sent to the
@@ -135,18 +146,6 @@ scheb_two_factor:
 When you're using the default authentication code generator that is coming with the bundle, there's an easy way to
 re-send the email with the authentication code. Get/inject service `scheb_two_factor.security.email.code_generator` and
 call method `reSend(\Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface $user)`.
-
-## Symfony Mailer Component
-
-The default mailer service uses Swift Mailer to send the email. To use the Symfony Mailer component instead (without
-creating your own custom mailer service) simply update your configuration as follows:
-
-```yaml
-# config/packages/scheb_two_factor.yaml
-scheb_two_factor:
-    email:
-        mailer: scheb_two_factor.security.email.symfony_auth_code_mailer
-```
 
 ## Custom Code Generator
 
