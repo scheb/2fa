@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Model\Totp;
 
-use PHPUnit\Framework\TestCase;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
+use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TotpConfigurationTest extends TestCase
 {
