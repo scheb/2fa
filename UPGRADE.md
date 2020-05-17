@@ -63,3 +63,5 @@ The constructor of `Scheb\TwoFactorBundle\Controller\FormController` now takes a
 extended the controller, please update your service definition accordingly.
 
 `Scheb\TwoFactorBundle\Security\Authentication\Exception\InvalidTwoFactorCodeException::setMessageKey` has been removed.
+
+`Scheb\TwoFactorBundle\Mailer\SwiftAuthCodeMailer` was renamed to `Scheb\TwoFactorBundle\Mailer\SwiftAuthCodeMailer`.

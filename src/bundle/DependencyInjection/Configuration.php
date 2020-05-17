@@ -131,7 +131,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('email')
                     ->canBeEnabled()
                     ->children()
-                        ->scalarNode('mailer')->defaultValue('scheb_two_factor.security.email.default_auth_code_mailer')->end()
+                        ->scalarNode('mailer')->defaultValue('scheb_two_factor.security.email.swift_auth_code_mailer')->end()
                         ->scalarNode('code_generator')->defaultValue('scheb_two_factor.security.email.default_code_generator')->end()
                         ->scalarNode('sender_email')->defaultValue('no-reply@example.com')->end()
                         ->scalarNode('sender_name')->defaultNull()->end()

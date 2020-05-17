@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Mailer;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use Scheb\TwoFactorBundle\Mailer\AuthCodeMailer;
+use Scheb\TwoFactorBundle\Mailer\SwiftAuthCodeMailer;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 
-class AuthCodeMailerTest extends TestCase
+class SwiftAuthCodeMailerTest extends TestCase
 {
     /**
      * @var MockObject|\Swift_Mailer
@@ -17,14 +17,14 @@ class AuthCodeMailerTest extends TestCase
     private $swiftMailer;
 
     /**
-     * @var AuthCodeMailer
+     * @var SwiftAuthCodeMailer
      */
     private $mailer;
 
     protected function setUp(): void
     {
         $this->swiftMailer = $this->createMock(\Swift_Mailer::class);
-        $this->mailer = new AuthCodeMailer($this->swiftMailer, 'sender@example.com', 'Sender Name');
+        $this->mailer = new SwiftAuthCodeMailer($this->swiftMailer, 'sender@example.com', 'Sender Name');
     }
 
     /**
