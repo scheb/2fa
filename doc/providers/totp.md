@@ -118,21 +118,11 @@ scheb_two_factor:
 ## Generating a Secret Code
 
 The service `scheb_two_factor.security.totp_authenticator` provides a method to generate new secret for TOTP
-authentication.
+authentication. Auto-wiring of `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInterface` is
+also possible.
 
 ```php
 $secret = $container->get("scheb_two_factor.security.totp_authenticator")->generateSecret();
-```
-
-With Symfony 4, you can use auto-wiring dependency injection to get the services:
-
-```php
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInterface;
-
-public function generateSecret(TotpAuthenticatorInterface $totpAuthenticatorService)
-{
-    $secret = $totpAuthenticatorService->generateSecret();
-}
 ```
 
 ## QR Codes

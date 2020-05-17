@@ -103,21 +103,11 @@ scheb_two_factor:
 ## Generating a Secret Code
 
 The service `scheb_two_factor.security.google_authenticator` provides a method to generate new secret for Google
-Authenticator.
+Authenticator. Auto-wiring of `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface`
+is also possible.
 
 ```php
 $secret = $container->get("scheb_two_factor.security.google_authenticator")->generateSecret();
-```
-
-With Symfony 4, you can use auto-wiring dependency injection to get the services:
-
-```php
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
-
-public function generateSecret(GoogleAuthenticatorInterface $googleAuthenticatorService)
-{
-    $secret = $googleAuthenticatorService->generateSecret();
-}
 ```
 
 ## QR Codes
