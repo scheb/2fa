@@ -47,7 +47,7 @@
 			<tag name="monolog.logger" channel="security" />
 		</service>
 
-		<service id="scheb_two_factor.security.rememberme_services_decorator" class="\Scheb\TwoFactorBundle\Security\Authentication\RememberMe\RememberMeServicesDecorator" abstract="true">
+		<service id="scheb_two_factor.security.rememberme_services_decorator" class="Scheb\TwoFactorBundle\Security\Authentication\RememberMe\RememberMeServicesDecorator" abstract="true">
 			<argument /> <!-- Decorated remember-me services instance -->
 		</service>
 
