@@ -260,8 +260,13 @@ EOF;
         ]);
 
         $this->assertFalse($this->container->hasDefinition('security.authentication.authentication_required_handler.two_factor.firewallName'));
+
+        // Assert the custom handler is used
         $definition = $this->container->getDefinition('security.authentication.listener.two_factor.firewallName');
         $this->assertEquals(new Reference('my_authentication_required_handler'), $definition->getArgument(5));
+
+        $definition = $this->container->getDefinition('security.authentication.kernel_exception_listener.two_factor.firewallName');
+        $this->assertEquals(new Reference('my_authentication_required_handler'), $definition->getArgument(2));
     }
 
     /**
@@ -332,6 +337,19 @@ EOF;
         $this->assertEquals(self::FIREWALL_NAME, $definition->getArgument(0));
         $tag = $definition->getTag('kernel.event_subscriber');
         $this->assertCount(1, $tag, 'Must have the "kernel.event_subscriber" tag assigned');
+    }
+
+    /**
+     * @test
+     */
+    public function create_createForFirewall_createExceptionListener(): void
+    {
+        $this->callCreateFirewall();
+
+        $this->assertTrue($this->container->hasDefinition('security.authentication.kernel_exception_listener.two_factor.firewallName'));
+        $definition = $this->container->getDefinition('security.authentication.kernel_exception_listener.two_factor.firewallName');
+        $this->assertEquals('firewallName', $definition->getArgument(0));
+        $this->assertEquals(new Reference('security.authentication.authentication_required_handler.two_factor.firewallName'), $definition->getArgument(2));
     }
 }
 

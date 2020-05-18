@@ -68,6 +68,15 @@
 			<!-- <tag name="kernel.event_subscriber" /> -->
 		</service>
 
+		<service id="scheb_two_factor.security.kernel_exception_listener" class="Scheb\TwoFactorBundle\Security\Http\Firewall\ExceptionListener" abstract="true">
+			<argument type="string" /> <!-- Firewall name -->
+			<argument type="service" id="security.token_storage"/>
+			<argument /> <!-- Authentication required handler -->
+			<argument type="service" id="event_dispatcher" />
+			<!-- This tag must be added when the child definition is created -->
+			<!-- <tag name="kernel.event_subscriber" /> -->
+		</service>
+
 		<service id="scheb_two_factor.security.authentication.success_handler" class="Scheb\TwoFactorBundle\Security\Http\Authentication\DefaultAuthenticationSuccessHandler" abstract="true">
 			<argument type="service" id="security.http_utils" />
 			<argument type="string" /> <!-- Firewall name -->
