@@ -40,7 +40,6 @@
 			<argument /> <!-- Authentication required handler -->
 			<argument /> <!-- CSRF token manager -->
 			<argument type="service" id="scheb_two_factor.trusted_device_manager" on-invalid="null" />
-			<argument type="service" id="scheb_two_factor.security.access.access_decider" />
 			<argument type="service" id="event_dispatcher" />
 			<argument type="service" id="scheb_two_factor.token_factory" />
 			<argument type="service" id="logger" on-invalid="null" />

@@ -9,7 +9,6 @@ use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
-use Scheb\TwoFactorBundle\Security\Authorization\TwoFactorAccessDecider;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\Http\Firewall\TwoFactorListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
@@ -88,11 +87,6 @@ class TwoFactorListenerTest extends TestCase
     private $twoFactorTokenFactory;
 
     /**
-     * @var MockObject|TwoFactorAccessDecider
-     */
-    private $twoFactorAccessDecider;
-
-    /**
      * @var MockObject|RequestEvent
      */
     private $requestEvent;
@@ -122,7 +116,6 @@ class TwoFactorListenerTest extends TestCase
         $this->authenticationRequiredHandler = $this->createMock(AuthenticationRequiredHandlerInterface::class);
         $this->csrfTokenManager = $this->createMock(CsrfTokenManagerInterface::class);
         $this->trustedDeviceManager = $this->createMock(TrustedDeviceManagerInterface::class);
-        $this->twoFactorAccessDecider = $this->createMock(TwoFactorAccessDecider::class);
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->twoFactorTokenFactory = $this->createMock(TwoFactorTokenFactory::class);
 
@@ -163,7 +156,6 @@ class TwoFactorListenerTest extends TestCase
             $this->authenticationRequiredHandler,
             $this->csrfTokenManager,
             $this->trustedDeviceManager,
-            $this->twoFactorAccessDecider,
             $this->eventDispatcher,
             $this->twoFactorTokenFactory,
             $this->createMock(LoggerInterface::class)
@@ -225,15 +217,6 @@ class TwoFactorListenerTest extends TestCase
             ->willReturn($isCheckPath);
     }
 
-    private function stubRequestIsAuthFormPath(bool $isAuthFormPath): void
-    {
-        $this->twoFactorFirewallConfig
-            ->expects($this->any())
-            ->method('isAuthFormRequest')
-            ->with($this->request)
-            ->willReturn($isAuthFormPath);
-    }
-
     private function stubRequestHasTrustedParameter(bool $hasTrustedParam): void
     {
         $this->twoFactorFirewallConfig
@@ -292,14 +275,6 @@ class TwoFactorListenerTest extends TestCase
             ->willReturn(false);
     }
 
-    private function stubPathAccessGranted(bool $accessGranted): void
-    {
-        $this->twoFactorAccessDecider
-            ->expects($this->any())
-            ->method('isAccessible')
-            ->willReturn($accessGranted);
-    }
-
     private function stubCanSetTrustedDevice(bool $canSetTrustedDevice): void
     {
         $this->trustedDeviceManager
@@ -343,9 +318,7 @@ class TwoFactorListenerTest extends TestCase
     public function handle_noTwoFactorToken_doNothing(): void
     {
         $this->stubTokenManagerHasToken($this->createMock(TokenInterface::class));
-        $this->stubRequestIsCheckPath(false);
-        $this->stubRequestIsAuthFormPath(false);
-        $this->stubPathAccessGranted(false);
+        $this->stubRequestIsCheckPath(true);
 
         $this->assertNoResponseSet();
 
@@ -358,9 +331,7 @@ class TwoFactorListenerTest extends TestCase
     public function handle_differentFirewallName_doNothing(): void
     {
         $this->stubTokenManagerHasToken($this->createTwoFactorToken('otherFirewallName'));
-        $this->stubRequestIsCheckPath(false);
-        $this->stubRequestIsAuthFormPath(false);
-        $this->stubPathAccessGranted(false);
+        $this->stubRequestIsCheckPath(true);
 
         $this->assertNoResponseSet();
 
@@ -370,53 +341,12 @@ class TwoFactorListenerTest extends TestCase
     /**
      * @test
      */
-    public function handle_pathAccessibleDuringTwoFactorAuthentication_notRedirectToForm(): void
+    public function handle_notCheckPath_doNothing(): void
     {
         $this->stubTokenManagerHasToken($this->createTwoFactorToken());
         $this->stubRequestIsCheckPath(false);
-        $this->stubRequestIsAuthFormPath(false);
-        $this->stubPathAccessGranted(true);
 
         $this->assertNoResponseSet();
-
-        ($this->listener)($this->requestEvent);
-    }
-
-    /**
-     * @test
-     */
-    public function handle_protectedPath_redirectToFormAndDispatchRequireEvent(): void
-    {
-        $this->stubTokenManagerHasToken($this->createTwoFactorToken());
-        $this->stubRequestIsCheckPath(false);
-        $this->stubRequestIsAuthFormPath(false);
-        $this->stubPathAccessGranted(false);
-
-        $this->authenticationRequiredHandler
-            ->expects($this->once())
-            ->method('onAuthenticationRequired')
-            ->willReturn($this->authFormRedirectResponse);
-
-        $this->assertRedirectToAuthForm();
-        $this->assertEventsDispatched([
-            TwoFactorAuthenticationEvents::REQUIRE,
-        ]);
-
-        ($this->listener)($this->requestEvent);
-    }
-
-    /**
-     * @test
-     */
-    public function handle_isAuthFormPath_dispatchFormEvent(): void
-    {
-        $this->stubTokenManagerHasToken($this->createTwoFactorToken());
-        $this->stubRequestIsAuthFormPath(true);
-
-        $this->assertNoResponseSet();
-        $this->assertEventsDispatched([
-            TwoFactorAuthenticationEvents::FORM,
-        ]);
 
         ($this->listener)($this->requestEvent);
     }
