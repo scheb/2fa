@@ -36,6 +36,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
     public const FIREWALL_CONFIG_ID_PREFIX = 'security.firewall_config.two_factor.';
     public const PROVIDER_PREPARATION_LISTENER_ID_PREFIX = 'security.authentication.provider_preparation_listener.two_factor.';
     public const AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_ID_PREFIX = 'security.authentication.authentication_success_event_suppressor.two_factor.';
+    public const KERNEL_EXCEPTION_LISTENER_ID_PREFIX = 'security.authentication.kernel_exception_listener.two_factor.';
 
     public const PROVIDER_DEFINITION_ID = 'scheb_two_factor.security.authentication.provider';
     public const LISTENER_DEFINITION_ID = 'scheb_two_factor.security.authentication.listener';
@@ -45,6 +46,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
     public const FIREWALL_CONFIG_DEFINITION_ID = 'scheb_two_factor.security.firewall_config';
     public const PROVIDER_PREPARATION_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.provider_preparation_listener';
     public const AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_DEFINITION_ID = 'scheb_two_factor.security.authentication_success_event_suppressor';
+    public const KERNEL_EXCEPTION_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.kernel_exception_listener';
 
     public function addConfiguration(NodeDefinition $node): void
     {
@@ -91,6 +93,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
         $failureHandlerId = $this->createFailureHandler($container, $id, $config, $twoFactorFirewallConfigId);
         $authRequiredHandlerId = $this->createAuthenticationRequiredHandler($container, $id, $config, $twoFactorFirewallConfigId);
         $providerId = $this->createAuthenticationProvider($container, $id, $twoFactorFirewallConfigId);
+        $this->createKernelExceptionListener($container, $id, $authRequiredHandlerId);
         $this->createProviderPreparationListener($container, $id, $config);
         $this->createAuthenticationSuccessEventSuppressor($container, $id);
 
@@ -218,6 +221,16 @@ class TwoFactorFactory implements SecurityFactoryInterface
         $container
             ->setDefinition($firewallConfigId, new ChildDefinition(self::AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_DEFINITION_ID))
             ->replaceArgument(0, $firewallName)
+            ->addTag('kernel.event_subscriber');
+    }
+
+    private function createKernelExceptionListener(ContainerBuilder $container, string $firewallName, string $authRequiredHandlerId): void
+    {
+        $firewallConfigId = self::KERNEL_EXCEPTION_LISTENER_ID_PREFIX.$firewallName;
+        $container
+            ->setDefinition($firewallConfigId, new ChildDefinition(self::KERNEL_EXCEPTION_LISTENER_DEFINITION_ID))
+            ->replaceArgument(0, $firewallName)
+            ->replaceArgument(2, new Reference($authRequiredHandlerId))
             ->addTag('kernel.event_subscriber');
     }
 
