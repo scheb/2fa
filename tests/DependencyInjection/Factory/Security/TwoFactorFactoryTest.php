@@ -351,6 +351,21 @@ EOF;
         $this->assertEquals('firewallName', $definition->getArgument(0));
         $this->assertEquals(new Reference('security.authentication.authentication_required_handler.two_factor.firewallName'), $definition->getArgument(2));
     }
+
+    /**
+     * @test
+     */
+    public function create_createForFirewall_createAccessListener(): void
+    {
+        $this->callCreateFirewall();
+
+        $this->assertTrue($this->container->hasDefinition('security.authentication.access_listener.two_factor.firewallName'));
+        $definition = $this->container->getDefinition('security.authentication.access_listener.two_factor.firewallName');
+        $this->assertEquals(new Reference('security.firewall_config.two_factor.firewallName'), $definition->getArgument(0));
+        $this->assertTrue($definition->hasTag('scheb_two_factor.access_listener'));
+        $tag = $definition->getTag('scheb_two_factor.access_listener');
+        $this->assertEquals(['firewall' => 'firewallName'], $tag[0]);
+    }
 }
 
 // Helper class to process config
