@@ -8,7 +8,6 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
-use Scheb\TwoFactorBundle\Security\Authorization\TwoFactorAccessDecider;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
@@ -85,11 +84,6 @@ class TwoFactorListener
      */
     private $logger;
 
-    /**
-     * @var TwoFactorAccessDecider
-     */
-    private $twoFactorAccessDecider;
-
     public function __construct(
         TokenStorageInterface $tokenStorage,
         AuthenticationManagerInterface $authenticationManager,
@@ -99,7 +93,6 @@ class TwoFactorListener
         AuthenticationRequiredHandlerInterface $authenticationRequiredHandler,
         CsrfTokenManagerInterface $csrfTokenManager,
         ?TrustedDeviceManagerInterface $trustedDeviceManager,
-        TwoFactorAccessDecider $twoFactorAccessDecider,
         EventDispatcherInterface $eventDispatcher,
         TwoFactorTokenFactoryInterface $twoFactorTokenFactory,
         ?LoggerInterface $logger = null
@@ -112,7 +105,6 @@ class TwoFactorListener
         $this->authenticationRequiredHandler = $authenticationRequiredHandler;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->trustedDeviceManager = $trustedDeviceManager;
-        $this->twoFactorAccessDecider = $twoFactorAccessDecider;
         $this->eventDispatcher = $eventDispatcher;
         $this->twoFactorTokenFactory = $twoFactorTokenFactory;
         $this->logger = $logger ?? new NullLogger();
@@ -120,35 +112,20 @@ class TwoFactorListener
 
     public function __invoke(RequestEvent $event)
     {
-        $currentToken = $this->tokenStorage->getToken();
-        if (!($currentToken instanceof TwoFactorTokenInterface
-            && $currentToken->getProviderKey() === $this->twoFactorFirewallConfig->getFirewallName())
-        ) {
-            return;
-        }
-
         $request = $event->getRequest();
-        if ($this->twoFactorFirewallConfig->isCheckPathRequest($request)) {
+        $currentToken = $this->tokenStorage->getToken();
+        if ($this->isSupported($request, $currentToken)) {
+            /** @var TwoFactorTokenInterface $currentToken */
             $response = $this->attemptAuthentication($request, $currentToken);
             $event->setResponse($response);
-
-            return;
         }
+    }
 
-        if ($this->twoFactorFirewallConfig->isAuthFormRequest($request)) {
-            $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::FORM, $request, $currentToken);
-
-            return;
-        }
-
-        // Let routes pass, e.g. if a route needs to be callable during two-factor authentication
-        if ($this->twoFactorAccessDecider->isAccessible($request, $currentToken)) {
-            return;
-        }
-
-        $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::REQUIRE, $request, $currentToken);
-        $response = $this->authenticationRequiredHandler->onAuthenticationRequired($request, $currentToken);
-        $event->setResponse($response);
+    private function isSupported(Request $request, ?TokenInterface $token): bool
+    {
+        return $token instanceof TwoFactorTokenInterface
+            && $token->getProviderKey() === $this->twoFactorFirewallConfig->getFirewallName()
+            && $this->twoFactorFirewallConfig->isCheckPathRequest($request);
     }
 
     private function attemptAuthentication(Request $request, TwoFactorTokenInterface $beginToken): Response
@@ -210,7 +187,7 @@ class TwoFactorListener
 
         $firewallName = $previousTwoFactorToken->getProviderKey();
         if ($this->trustedDeviceManager
-            && $this->hasTrustedDeviceParameter($request)
+            && $this->twoFactorFirewallConfig->hasTrustedDeviceParameterInRequest($request)
             && $this->trustedDeviceManager->canSetTrustedDevice($token->getUser(), $request, $firewallName)
         ) {
             $this->trustedDeviceManager->addTrustedDevice($token->getUser(), $firewallName);
@@ -220,11 +197,6 @@ class TwoFactorListener
         $this->addRememberMeCookies($previousTwoFactorToken, $response);
 
         return $response;
-    }
-
-    private function hasTrustedDeviceParameter(Request $request): bool
-    {
-        return $this->twoFactorFirewallConfig->hasTrustedDeviceParameterInRequest($request);
     }
 
     private function dispatchTwoFactorAuthenticationEvent(string $eventType, Request $request, TokenInterface $token): void
