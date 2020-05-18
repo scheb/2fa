@@ -26,8 +26,9 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
+use Symfony\Component\Security\Http\Firewall\AbstractListener;
 
-class TwoFactorListener
+class TwoFactorListener extends AbstractListener
 {
     /**
      * @var TokenStorageInterface
@@ -110,22 +111,21 @@ class TwoFactorListener
         $this->logger = $logger ?? new NullLogger();
     }
 
-    public function __invoke(RequestEvent $event)
+    public function supports(Request $request): ?bool
     {
-        $request = $event->getRequest();
-        $currentToken = $this->tokenStorage->getToken();
-        if ($this->isSupported($request, $currentToken)) {
-            /** @var TwoFactorTokenInterface $currentToken */
-            $response = $this->attemptAuthentication($request, $currentToken);
-            $event->setResponse($response);
-        }
-    }
+        $token = $this->tokenStorage->getToken();
 
-    private function isSupported(Request $request, ?TokenInterface $token): bool
-    {
         return $token instanceof TwoFactorTokenInterface
             && $token->getProviderKey() === $this->twoFactorFirewallConfig->getFirewallName()
             && $this->twoFactorFirewallConfig->isCheckPathRequest($request);
+    }
+
+    public function authenticate(RequestEvent $event): void
+    {
+        /** @var TwoFactorTokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+        $response = $this->attemptAuthentication($event->getRequest(), $token);
+        $event->setResponse($response);
     }
 
     private function attemptAuthentication(Request $request, TwoFactorTokenInterface $beginToken): Response
