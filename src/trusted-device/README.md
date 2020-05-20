@@ -16,6 +16,10 @@ This repository is a sub-repository of [scheb/2fa](https://github.com/scheb/2fa)
 
 **Please do not submit any Pull Request here.** Use the [main repository](https://github.com/scheb/2fa) instead.
 
+Documentation
+-------------
+Documentation can be found in the [main repository](https://github.com/scheb/2fa/blob/master/doc/index.md).
+
 License
 -------
 This software is available under the [MIT license](LICENSE).
