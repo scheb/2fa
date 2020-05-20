@@ -72,8 +72,8 @@ are redirected back to the login page or the page is shown with the authenticate
 
    - Yes -> Your authenticated token was flagged as invalid. Follow solution below.
    - No -> Unknown issue. Try to reach out for help by
-     [creating an issue](https://github.com/scheb/2fa/issues/new) and let us know what you've already
-     tested.
+     [creating an issue](https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request.md) and let us
+     know what you've already tested.
 
 **Solution to: Your authenticated token was flagged as invalid**
 
@@ -116,16 +116,16 @@ Basic checks:
          change your `access_control` configuration or after login force-redirect to user to a page that requires full
          authentication.
    - No -> Unknown issue. Try to reach out for help by
-     [creating an issue](https://github.com/scheb/2fa/issues/new) and let us know what you've already
-     tested.
+     [creating an issue](https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request.md) and let us
+     know what you've already tested.
 
 3) On login, do you reach the end (return statement) of method
    `Scheb\TwoFactorBundle\Security\Authentication\Provider\AuthenticationProviderDecorator::authenticate()`?
 
    - Yes -> Continue with 4)
    - No -> Something is wrong with the integration of the bundle. Try to reach out for help by
-     [creating an issue](https://github.com/scheb/2fa/issues/new) and let us know what you've already
-     tested.
+     [creating an issue](https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request.md) and let us
+     know what you've already tested.
 
 4) On login, is method
    `Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderHandler::getActiveTwoFactorProviders()` called?
@@ -140,8 +140,8 @@ Basic checks:
    return any values?
 
    - Yes, it returns an array of strings -> Unknown issue. Try to reach out for help by
-     [creating an issue](https://github.com/scheb/2fa/issues/new) and let us know what you've already
-     tested.
+     [creating an issue](https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request.md) and let us
+     know what you've already tested.
    - No, it returns an empty array:
        - **Solution:** our user doesn't have an active two-factor authentication method. Either the `is*Enabled` method
          returns `false` or an essential piece of data (e.g. Google Authenticator secret) is missing.
