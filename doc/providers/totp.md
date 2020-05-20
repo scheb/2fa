@@ -42,6 +42,8 @@ We warned, custom configurations will not be compatible with the defaults of Goo
 have to use another application (e.g. FreeOTP on Android).
 
 ```php
+<?php
+
 namespace Acme\DemoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;

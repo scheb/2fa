@@ -37,6 +37,8 @@ Your user entity has to implement `Scheb\TwoFactorBundle\Model\Google\TwoFactorI
 Authenticator for a user, generate a secret code and persist it with the user entity.
 
 ```php
+<?php
+
 namespace Acme\DemoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;

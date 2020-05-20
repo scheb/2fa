@@ -35,6 +35,8 @@ cookies at once, e.g. in case of a security breach. To make use of this feature,
 `Scheb\TwoFactorBundle\Model\TrustedDeviceInterface` in the user entity.
 
 ```php
+<?php
+
 namespace Acme\DemoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -79,6 +81,8 @@ own instance of the trusted device manager (as described above) and implement th
 decision logic you need.
 
 ```php
+<?php
+
 public function canSetTrustedDevice($user, Request $request, string $firewallName): bool
 {
     return true; // Always allow trusted device feature

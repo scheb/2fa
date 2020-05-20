@@ -38,6 +38,8 @@ composer require scheb/2fa
 Enable this bundle in your `config/bundles.php`:
 
 ```php
+<?php
+
 return [
     // ...
     Scheb\TwoFactorBundle\SchebTwoFactorBundle::class => ['all' => true],

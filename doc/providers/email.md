@@ -51,6 +51,8 @@ Your user entity has to implement `Scheb\TwoFactorBundle\Model\Email\TwoFactorIn
 be persisted, so make sure that it is stored in a persisted field.
 
 ```php
+<?php
+
 namespace Acme\DemoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -114,6 +116,8 @@ By default the email is plain text and very simple. If you want a different styl
 own mailer service. It must implement `Scheb\TwoFactorBundle\Mailer\AuthCodeMailerInterface`.
 
 ```php
+<?php
+
 namespace Acme\DemoBundle\Mailer;
 
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;

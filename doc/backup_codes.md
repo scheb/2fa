@@ -28,6 +28,7 @@ Backup codes have to be provided from the user object. The user entity has to im
 `Scheb\TwoFactorBundle\Model\BackupCodeInterface`. Here's an example:
 
 ```php
+<?php
 
 namespace Acme\DemoBundle\Entity;
 
