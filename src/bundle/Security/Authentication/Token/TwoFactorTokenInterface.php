@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\Authentication\Token;
 
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\PreparationRecorderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-interface TwoFactorTokenInterface extends TokenInterface
+interface TwoFactorTokenInterface extends TokenInterface, PreparationRecorderInterface
 {
     public const ATTRIBUTE_NAME_REMEMBER_ME_COOKIE = 'remember_me_cookie';
 
@@ -14,6 +15,11 @@ interface TwoFactorTokenInterface extends TokenInterface
      * Return the authenticated token.
      */
     public function getAuthenticatedToken(): TokenInterface;
+
+    /**
+     * Duplicate the token with credentials.
+     */
+    public function createWithCredentials(string $credentials): self;
 
     /**
      * Return list of two-factor providers (their aliases), which are available.

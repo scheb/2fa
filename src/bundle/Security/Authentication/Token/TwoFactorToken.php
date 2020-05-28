@@ -35,6 +35,11 @@ class TwoFactorToken implements TwoFactorTokenInterface
      */
     private $twoFactorProviders;
 
+    /**
+     * @var bool[]
+     */
+    private $preparedProviders = [];
+
     public function __construct(TokenInterface $authenticatedToken, ?string $credentials, string $providerKey, array $twoFactorProviders)
     {
         $this->authenticatedToken = $authenticatedToken;
@@ -73,6 +78,17 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return $this->getRoles();
     }
 
+    public function createWithCredentials(string $credentials): TwoFactorTokenInterface
+    {
+        $credentialsToken = new self($this->authenticatedToken, $credentials, $this->providerKey, $this->twoFactorProviders);
+        foreach (array_keys($this->preparedProviders) as $preparedProviderName) {
+            $credentialsToken->setTwoFactorProviderPrepared($this->providerKey, $preparedProviderName);
+        }
+        $credentialsToken->setAttributes($this->getAttributes());
+
+        return $credentialsToken;
+    }
+
     public function getCredentials(): ?string
     {
         return $this->credentials;
@@ -106,8 +122,30 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return false !== $first ? $first : null;
     }
 
+    public function isTwoFactorProviderPrepared(string $firewallName, string $providerName): bool
+    {
+        if ($firewallName !== $this->providerKey) {
+            throw new \LogicException(sprintf('Cannot store preparation state for firewall "%s" in a TwoFactorToken belonging to "%s".', $firewallName, $this->providerKey));
+        }
+
+        return $this->preparedProviders[$providerName] ?? false;
+    }
+
+    public function setTwoFactorProviderPrepared(string $firewallName, string $providerName): void
+    {
+        if ($firewallName !== $this->providerKey) {
+            throw new \LogicException(sprintf('Cannot store preparation state for firewall "%s" in a TwoFactorToken belonging to "%s".', $firewallName, $this->providerKey));
+        }
+
+        $this->preparedProviders[$providerName] = true;
+    }
+
     public function setTwoFactorProviderComplete(string $providerName): void
     {
+        if (!$this->isTwoFactorProviderPrepared($this->providerKey, $providerName)) {
+            throw new \LogicException(sprintf('Two-factor provider "%s" cannot be completed because it was not prepared.', $providerName));
+        }
+
         $this->removeTwoFactorProvider($providerName);
     }
 
@@ -145,7 +183,14 @@ class TwoFactorToken implements TwoFactorTokenInterface
 
     public function __serialize(): array
     {
-        return [$this->authenticatedToken, $this->credentials, $this->providerKey, $this->attributes, $this->twoFactorProviders];
+        return [
+            $this->authenticatedToken,
+            $this->credentials,
+            $this->providerKey,
+            $this->attributes,
+            $this->twoFactorProviders,
+            $this->preparedProviders,
+        ];
     }
 
     // Compatibility for Symfony 4.4 & PHP < 7.4
@@ -156,7 +201,14 @@ class TwoFactorToken implements TwoFactorTokenInterface
 
     public function __unserialize(array $data): void
     {
-        [$this->authenticatedToken, $this->credentials, $this->providerKey, $this->attributes, $this->twoFactorProviders] = $data;
+        [
+            $this->authenticatedToken,
+            $this->credentials,
+            $this->providerKey,
+            $this->attributes,
+            $this->twoFactorProviders,
+            $this->preparedProviders,
+        ] = $data;
     }
 
     // Compatibility for Symfony 4.4 & PHP < 7.4

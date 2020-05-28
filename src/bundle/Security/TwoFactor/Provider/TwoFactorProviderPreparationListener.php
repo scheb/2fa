@@ -10,7 +10,7 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\AuthenticationEvents;
@@ -26,7 +26,7 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
     private $providerRegistry;
 
     /**
-     * @var TwoFactorProviderPreparationRecorder
+     * @var PreparationRecorderInterface
      */
     private $preparationRecorder;
 
@@ -57,7 +57,7 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
 
     public function __construct(
         TwoFactorProviderRegistry $providerRegistry,
-        TwoFactorProviderPreparationRecorder $preparationRecorder,
+        PreparationRecorderInterface $preparationRecorder,
         ?LoggerInterface $logger,
         string $firewallName,
         bool $prepareOnLogin,
@@ -101,7 +101,7 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
         }
     }
 
-    public function onKernelFinishRequest(FinishRequestEvent $event): void
+    public function onKernelResponse(ResponseEvent $event): void
     {
         if (!$event->isMasterRequest()) {
             return;
@@ -117,19 +117,16 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
 
         $firewallName = $this->twoFactorToken->getProviderKey();
 
-        try {
-            if ($this->preparationRecorder->isProviderPrepared($firewallName, $providerName)) {
-                $this->logger->info(sprintf('Two-factor provider "%s" was already prepared.', $providerName));
+        if ($this->preparationRecorder->isTwoFactorProviderPrepared($firewallName, $providerName)) {
+            $this->logger->info(sprintf('Two-factor provider "%s" was already prepared.', $providerName));
 
-                return;
-            }
-            $user = $this->twoFactorToken->getUser();
-            $this->providerRegistry->getProvider($providerName)->prepareAuthentication($user);
-            $this->preparationRecorder->recordProviderIsPrepared($firewallName, $providerName);
-            $this->logger->info(sprintf('Two-factor provider "%s" prepared.', $providerName));
-        } finally {
-            $this->preparationRecorder->saveSession();
+            return;
         }
+
+        $user = $this->twoFactorToken->getUser();
+        $this->providerRegistry->getProvider($providerName)->prepareAuthentication($user);
+        $this->preparationRecorder->setTwoFactorProviderPrepared($firewallName, $providerName);
+        $this->logger->info(sprintf('Two-factor provider "%s" prepared.', $providerName));
     }
 
     private function supports(TokenInterface $token): bool
@@ -144,7 +141,7 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
             AuthenticationEvents::AUTHENTICATION_SUCCESS => ['onLogin', self::LISTENER_PRIORITY],
             TwoFactorAuthenticationEvents::REQUIRE => 'onAccessDenied',
             TwoFactorAuthenticationEvents::FORM => 'onTwoFactorForm',
-            KernelEvents::FINISH_REQUEST => 'onKernelFinishRequest',
+            KernelEvents::RESPONSE => 'onKernelResponse',
         ];
     }
 }

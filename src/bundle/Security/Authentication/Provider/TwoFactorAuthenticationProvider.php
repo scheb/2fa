@@ -8,7 +8,7 @@ use Scheb\TwoFactorBundle\Security\Authentication\Exception\InvalidTwoFactorCode
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\TwoFactorProviderNotFoundException;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationRecorder;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\PreparationRecorderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
@@ -33,7 +33,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
     private $backupCodeManager;
 
     /**
-     * @var TwoFactorProviderPreparationRecorder
+     * @var PreparationRecorderInterface
      */
     private $preparationRecorder;
 
@@ -41,7 +41,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
         TwoFactorFirewallConfig $twoFactorFirewallConfig,
         TwoFactorProviderRegistry $providerRegistry,
         ?BackupCodeManagerInterface $backupCodeManager,
-        TwoFactorProviderPreparationRecorder $preparationRecorder
+        PreparationRecorderInterface $preparationRecorder
     ) {
         $this->twoFactorFirewallConfig = $twoFactorFirewallConfig;
         $this->providerRegistry = $providerRegistry;
@@ -72,7 +72,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
             throw new AuthenticationException('There is no active two-factor provider.');
         }
 
-        if (!$this->preparationRecorder->isProviderPrepared($token->getProviderKey(), $providerName)) {
+        if (!$this->preparationRecorder->isTwoFactorProviderPrepared($token->getProviderKey(), $providerName)) {
             throw new AuthenticationException(sprintf('The two-factor provider "%s" has not been prepared.', $providerName));
         }
 
@@ -80,6 +80,8 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
             $token->setTwoFactorProviderComplete($providerName);
             if ($this->isAuthenticationComplete($token)) {
                 $token = $token->getAuthenticatedToken(); // Authentication complete, unwrap the token
+            } else {
+                $token->eraseCredentials();
             }
 
             return $token;

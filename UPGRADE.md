@@ -59,6 +59,16 @@ security:
 you have implemented your own TrustedDeviceManager, please add this method. Just return `true` to get the same behaviour
 as before.
 
+`Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface` was extended with new methods to store the
+preparation state of two-factor authentication providers. Methods `isTwoFactorProviderPrepared` and
+`setTwoFactorProviderPrepared` have been added. Furthermore, the method `createWithCredentials` was added to recreate
+an identical token with credentials. See `Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken` for a
+reference implementation.
+
+Related to this change, the `crendetials` argument was removed from
+`Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface::create`. So if you're using your
+own token factory, please update your code.
+
 The constructor of `Scheb\TwoFactorBundle\Controller\FormController` now takes an instance of
 `Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface` as the fifth argument. If you have
 extended the controller to customize it, please update your service definition accordingly.
@@ -67,4 +77,7 @@ extended the controller to customize it, please update your service definition a
 
 `Scheb\TwoFactorBundle\Mailer\AuthCodeMailer` was renamed to `Scheb\TwoFactorBundle\Mailer\SwiftAuthCodeMailer`.
 
-`Scheb\TwoFactorBundle\Mailer\SwiftAuthCodeMailer` was renamed to `Scheb\TwoFactorBundle\Mailer\SwiftAuthCodeMailer`.
+### Behavioural
+
+The preparation of two-factor providers now executes on the `kernel.response` event to make sure the session state is
+written before the response is sent back to the user (was `kernel.finish_request` before).

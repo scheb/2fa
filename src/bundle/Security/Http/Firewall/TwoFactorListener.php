@@ -136,14 +136,7 @@ class TwoFactorListener extends AbstractListener
                 throw new InvalidCsrfTokenException('Invalid CSRF token.');
             }
 
-            $token = $this->twoFactorTokenFactory->create(
-                $beginToken->getAuthenticatedToken(),
-                $authCode,
-                $beginToken->getProviderKey(),
-                $beginToken->getTwoFactorProviders()
-            );
-            $token->setAttributes($beginToken->getAttributes());
-
+            $token = $beginToken->createWithCredentials($authCode);
             $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::ATTEMPT, $request, $token);
             $resultToken = $this->authenticationManager->authenticate($token);
 

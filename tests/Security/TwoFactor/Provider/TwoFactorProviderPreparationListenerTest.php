@@ -8,14 +8,14 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\PreparationRecorderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationListener;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationRecorder;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
@@ -35,7 +35,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
     private $request;
 
     /**
-     * @var MockObject|SessionInterface
+     * @var MockObject|PreparationRecorderInterface
      */
     private $preparationRecorder;
 
@@ -72,7 +72,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
             ->method('getUser')
             ->willReturn($this->user);
 
-        $this->preparationRecorder = $this->createMock(TwoFactorProviderPreparationRecorder::class);
+        $this->preparationRecorder = $this->createMock(PreparationRecorderInterface::class);
 
         $this->providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
     }
@@ -99,12 +99,13 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         return new AuthenticationEvent($this->token);
     }
 
-    private function createFinishRequestEvent(): FinishRequestEvent
+    private function createResponseEvent(): ResponseEvent
     {
         $kernel = $this->createMock(HttpKernelInterface::class);
+        $response = $this->createMock(Response::class);
 
         // Class is final, have to use a real instance instead of a mock
-        return new FinishRequestEvent($kernel, $this->request, HttpKernelInterface::MASTER_REQUEST);
+        return new ResponseEvent($kernel, $this->request, HttpKernelInterface::MASTER_REQUEST, $response);
     }
 
     private function expectPrepareCurrentProvider(): void
@@ -112,7 +113,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $twoFactorProvider = $this->createMock(TwoFactorProviderInterface::class);
         $this->preparationRecorder
             ->expects($this->once())
-            ->method('isProviderPrepared')
+            ->method('isTwoFactorProviderPrepared')
             ->with(self::FIREWALL_NAME, self::CURRENT_PROVIDER_NAME)
             ->willReturn(false);
 
@@ -124,17 +125,13 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
 
         $this->preparationRecorder
             ->expects($this->once())
-            ->method('recordProviderIsPrepared')
+            ->method('setTwoFactorProviderPrepared')
             ->with(self::FIREWALL_NAME, self::CURRENT_PROVIDER_NAME);
 
         $twoFactorProvider
             ->expects($this->once())
             ->method('prepareAuthentication')
             ->with($this->identicalTo($this->user));
-
-        $this->preparationRecorder
-            ->expects($this->once())
-            ->method('saveSession');
     }
 
     private function expectNotPrepareCurrentProvider(): void
@@ -159,7 +156,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $this->expectPrepareCurrentProvider();
 
         $this->listener->onLogin($event);
-        $this->listener->onKernelFinishRequest($this->createFinishRequestEvent());
+        $this->listener->onKernelResponse($this->createResponseEvent());
     }
 
     /**
@@ -173,7 +170,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $this->expectNotPrepareCurrentProvider();
 
         $this->listener->onLogin($event);
-        $this->listener->onKernelFinishRequest($this->createFinishRequestEvent());
+        $this->listener->onKernelResponse($this->createResponseEvent());
     }
 
     /**
@@ -187,7 +184,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $this->expectPrepareCurrentProvider();
 
         $this->listener->onAccessDenied($event);
-        $this->listener->onKernelFinishRequest($this->createFinishRequestEvent());
+        $this->listener->onKernelResponse($this->createResponseEvent());
     }
 
     /**
@@ -201,7 +198,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $this->expectNotPrepareCurrentProvider();
 
         $this->listener->onAccessDenied($event);
-        $this->listener->onKernelFinishRequest($this->createFinishRequestEvent());
+        $this->listener->onKernelResponse($this->createResponseEvent());
     }
 
     /**
@@ -215,36 +212,32 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $this->expectPrepareCurrentProvider();
 
         $this->listener->onTwoFactorForm($event);
-        $this->listener->onKernelFinishRequest($this->createFinishRequestEvent());
+        $this->listener->onKernelResponse($this->createResponseEvent());
     }
 
     /**
      * @test
      */
-    public function onKernelFinishRequest_providerAlreadyPrepared_saveSession(): void
+    public function onKernelResponse_providerAlreadyPrepared_saveSession(): void
     {
         $this->initTwoFactorProviderPreparationListener(true, true);
         $event = $this->createTwoFactorAuthenticationEvent();
 
         $this->preparationRecorder
             ->expects($this->once())
-            ->method('isProviderPrepared')
+            ->method('isTwoFactorProviderPrepared')
             ->with(self::FIREWALL_NAME, self::CURRENT_PROVIDER_NAME)
             ->willReturn(true);
 
         $this->preparationRecorder
-            ->expects($this->once())
-            ->method('saveSession');
-
-        $this->preparationRecorder
             ->expects($this->never())
-            ->method('recordProviderIsPrepared');
+            ->method('setTwoFactorProviderPrepared');
 
         $this->providerRegistry
             ->expects($this->never())
             ->method('getProvider');
 
         $this->listener->onTwoFactorForm($event);
-        $this->listener->onKernelFinishRequest($this->createFinishRequestEvent());
+        $this->listener->onKernelResponse($this->createResponseEvent());
     }
 }
