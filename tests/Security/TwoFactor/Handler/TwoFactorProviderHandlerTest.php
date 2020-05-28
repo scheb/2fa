@@ -134,7 +134,7 @@ class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
         $this->twoFactorTokenFactory
             ->expects($this->once())
             ->method('create')
-            ->with($originalToken, null, self::FIREWALL_NAME, ['test2'])
+            ->with($originalToken, self::FIREWALL_NAME, ['test2'])
             ->willReturn($twoFactorToken);
 
         /** @var TwoFactorTokenInterface $returnValue */

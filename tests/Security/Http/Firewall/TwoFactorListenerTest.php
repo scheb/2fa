@@ -360,17 +360,17 @@ class TwoFactorListenerTest extends TestCase
         $this->stubCsrfTokenIsValid();
         $this->stubHandlersReturnResponse();
 
-        $credentialToken = $this->createTwoFactorToken();
-        $this->twoFactorTokenFactory
+        $credentialsToken = $this->createTwoFactorToken();
+        $twoFactorToken
             ->expects($this->once())
-            ->method('create')
-            ->with($authenticatedToken, 'authCode', 'firewallName', self::TWO_FACTOR_PROVIDERS)
-            ->willReturn($credentialToken);
+            ->method('createWithCredentials')
+            ->with('authCode')
+            ->willReturn($credentialsToken);
 
         $this->authenticationManager
             ->expects($this->once())
             ->method('authenticate')
-            ->with($this->identicalTo($credentialToken))
+            ->with($this->identicalTo($credentialsToken))
             ->willReturn($this->createMock(TokenInterface::class));
 
         $this->listener->authenticate($this->requestEvent);
