@@ -55,14 +55,16 @@ security:
 ### Interfaces
 
 `Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface` was extended with a new method
-`canSetTrustedDevice` which allows the application to influence when a device can be flagged as a "trusted device". If
+`canSetTrustedDevice`, which allows the application to influence when a device can be flagged as a "trusted device". If
 you have implemented your own TrustedDeviceManager, please add this method. Just return `true` to get the same behaviour
 as before.
 
 The constructor of `Scheb\TwoFactorBundle\Controller\FormController` now takes an instance of
 `Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface` as the fifth argument. If you have
-extended the controller, please update your service definition accordingly.
+extended the controller to customize it, please update your service definition accordingly.
 
-`Scheb\TwoFactorBundle\Security\Authentication\Exception\InvalidTwoFactorCodeException::setMessageKey` has been removed.
+`Scheb\TwoFactorBundle\Security\Authentication\Exception\InvalidTwoFactorCodeException::setMessageKey` has been removed
+
+`Scheb\TwoFactorBundle\Mailer\AuthCodeMailer` was renamed to `Scheb\TwoFactorBundle\Mailer\SwiftAuthCodeMailer`.
 
 `Scheb\TwoFactorBundle\Mailer\SwiftAuthCodeMailer` was renamed to `Scheb\TwoFactorBundle\Mailer\SwiftAuthCodeMailer`.
