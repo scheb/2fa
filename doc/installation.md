@@ -18,7 +18,7 @@ Install at least the bundle via Composer:
 composer require scheb/2fa-bundle
 ```
 
-Optionally, install additional packages to extend the feature set for your needs:
+Optionally, install any additional packages to extend the feature set for your needs:
 ```
 composer require scheb/2fa-backup-code            # Add backup code feature
 composer require scheb/2fa-trusted-device         # Add trusted devices feature
@@ -28,7 +28,7 @@ composer require scheb/2fa-email                  # Add two-factor authenticatio
 composer require scheb/2fa-qr-code                # Add to render QR-codes for Google Authenticator / TOTP
 ```
 
-Alternatively, you can install all packages at once:
+Alternatively, install everything in a single package:
 ```bash
 composer require scheb/2fa
 ```
