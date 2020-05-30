@@ -297,6 +297,23 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
+    public function load_enabledTrustedDeviceManager_loadTrustedDeviceServices(): void
+    {
+        $config = $this->getFullConfig();
+        $config['trusted_device']['enabled'] = true;
+        $this->extension->load([$config], $this->container);
+
+        $this->assertHasDefinition('scheb_two_factor.trusted_jwt_encoder');
+        $this->assertHasDefinition('scheb_two_factor.trusted_token_encoder');
+        $this->assertHasDefinition('scheb_two_factor.trusted_token_storage');
+        $this->assertHasDefinition('scheb_two_factor.trusted_device_handler');
+        $this->assertHasDefinition('scheb_two_factor.trusted_cookie_response_listener');
+        $this->assertHasDefinition('scheb_two_factor.default_trusted_device_manager');
+    }
+
+    /**
+     * @test
+     */
     public function load_enabledTrustedDeviceManager_defaultAlias(): void
     {
         $config = $this->getEmptyConfig();
@@ -328,6 +345,19 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->extension->load([$config], $this->container);
 
         $this->assertNotHasAlias('scheb_two_factor.backup_code_manager');
+    }
+
+    /**
+     * @test
+     */
+    public function load_enabledBackupCodeManager_loadBackupCodeServices(): void
+    {
+        $config = $this->getFullConfig();
+        $config['backup_codes']['enabled'] = true;
+        $this->extension->load([$config], $this->container);
+
+        $this->assertHasDefinition('scheb_two_factor.default_backup_code_manager');
+        $this->assertHasDefinition('scheb_two_factor.null_backup_code_manager');
     }
 
     /**
