@@ -62,7 +62,7 @@ jobs:
         -   name: Psalm
             php: 7.4
             script:
-                - ./vendor/bin/psalm --show-info=true
+                - ./vendor/bin/psalm
 
         -   name: PHP Code Style Sniffer
             php: 7.4
