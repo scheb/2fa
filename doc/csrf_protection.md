@@ -12,7 +12,7 @@ framework:
     csrf_protection: ~
 ```
 
-Then, the `two_factor` security configuration needs a a CSRF token provider. You can set this to use the default
+Then, the `two_factor` security configuration needs a CSRF token provider. You can set this to use the default
 provider available in the security component:
 
 ```yaml
