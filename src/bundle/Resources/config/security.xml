@@ -61,10 +61,8 @@
 			<!-- <tag name="kernel.event_subscriber" /> -->
 		</service>
 
-		<service id="scheb_two_factor.security.authentication_success_event_suppressor" class="Scheb\TwoFactorBundle\Security\TwoFactor\Event\AuthenticationSuccessEventSuppressor" abstract="true">
-			<argument type="string" /> <!-- Firewall name -->
-			<!-- This tag must be added when the child definition is created -->
-			<!-- <tag name="kernel.event_subscriber" /> -->
+		<service id="scheb_two_factor.security.authentication_success_event_suppressor" class="Scheb\TwoFactorBundle\Security\TwoFactor\Event\AuthenticationSuccessEventSuppressor">
+			<tag name="kernel.event_subscriber" />
 		</service>
 
 		<service id="scheb_two_factor.security.kernel_exception_listener" class="Scheb\TwoFactorBundle\Security\Http\Firewall\ExceptionListener" abstract="true">

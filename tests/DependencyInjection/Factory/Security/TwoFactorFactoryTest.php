@@ -328,20 +328,6 @@ EOF;
     /**
      * @test
      */
-    public function create_createForFirewall_createAuthenticationSuccessEventSuppressorDefinition(): void
-    {
-        $this->callCreateFirewall();
-
-        $this->assertTrue($this->container->hasDefinition('security.authentication.authentication_success_event_suppressor.two_factor.firewallName'));
-        $definition = $this->container->getDefinition('security.authentication.authentication_success_event_suppressor.two_factor.firewallName');
-        $this->assertEquals(self::FIREWALL_NAME, $definition->getArgument(0));
-        $tag = $definition->getTag('kernel.event_subscriber');
-        $this->assertCount(1, $tag, 'Must have the "kernel.event_subscriber" tag assigned');
-    }
-
-    /**
-     * @test
-     */
     public function create_createForFirewall_createExceptionListener(): void
     {
         $this->callCreateFirewall();

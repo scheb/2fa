@@ -35,7 +35,6 @@ class TwoFactorFactory implements SecurityFactoryInterface
     public const AUTHENTICATION_REQUIRED_HANDLER_ID_PREFIX = 'security.authentication.authentication_required_handler.two_factor.';
     public const FIREWALL_CONFIG_ID_PREFIX = 'security.firewall_config.two_factor.';
     public const PROVIDER_PREPARATION_LISTENER_ID_PREFIX = 'security.authentication.provider_preparation_listener.two_factor.';
-    public const AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_ID_PREFIX = 'security.authentication.authentication_success_event_suppressor.two_factor.';
     public const KERNEL_EXCEPTION_LISTENER_ID_PREFIX = 'security.authentication.kernel_exception_listener.two_factor.';
     public const KERNEL_ACCESS_LISTENER_ID_PREFIX = 'security.authentication.access_listener.two_factor.';
 
@@ -46,7 +45,6 @@ class TwoFactorFactory implements SecurityFactoryInterface
     public const AUTHENTICATION_REQUIRED_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.authentication_required_handler';
     public const FIREWALL_CONFIG_DEFINITION_ID = 'scheb_two_factor.security.firewall_config';
     public const PROVIDER_PREPARATION_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.provider_preparation_listener';
-    public const AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_DEFINITION_ID = 'scheb_two_factor.security.authentication_success_event_suppressor';
     public const KERNEL_EXCEPTION_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.kernel_exception_listener';
     public const KERNEL_ACCESS_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.access_listener';
 
@@ -98,7 +96,6 @@ class TwoFactorFactory implements SecurityFactoryInterface
         $this->createKernelExceptionListener($container, $id, $authRequiredHandlerId);
         $this->createAccessListener($container, $id, $twoFactorFirewallConfigId);
         $this->createProviderPreparationListener($container, $id, $config);
-        $this->createAuthenticationSuccessEventSuppressor($container, $id);
 
         $listenerId = $this->createAuthenticationListener(
             $container,
@@ -215,15 +212,6 @@ class TwoFactorFactory implements SecurityFactoryInterface
             ->replaceArgument(3, $firewallName)
             ->replaceArgument(4, $config['prepare_on_login'] ?? self::DEFAULT_PREPARE_ON_LOGIN)
             ->replaceArgument(5, $config['prepare_on_access_denied'] ?? self::DEFAULT_PREPARE_ON_ACCESS_DENIED)
-            ->addTag('kernel.event_subscriber');
-    }
-
-    private function createAuthenticationSuccessEventSuppressor(ContainerBuilder $container, string $firewallName): void
-    {
-        $firewallConfigId = self::AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_ID_PREFIX.$firewallName;
-        $container
-            ->setDefinition($firewallConfigId, new ChildDefinition(self::AUTHENTICATION_SUCCESS_EVENT_SUPPRESSOR_DEFINITION_ID))
-            ->replaceArgument(0, $firewallName)
             ->addTag('kernel.event_subscriber');
     }
 
