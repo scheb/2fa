@@ -33,7 +33,6 @@ class JwtTokenEncoder
 
     public function generateToken(string $username, string $firewallName, int $version, \DateTimeInterface $validUntil): Token
     {
-        /** @psalm-suppress DeprecatedMethod */
         $builder = (new Builder())
             ->setIssuedAt(time())
             ->setExpiration($validUntil->getTimestamp())
