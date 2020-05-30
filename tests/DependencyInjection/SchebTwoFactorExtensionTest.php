@@ -67,6 +67,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasParameter([
             'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken',
             'Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken',
+            'Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken',
         ], 'scheb_two_factor.security_tokens');
         $this->assertHasParameter([], 'scheb_two_factor.ip_whitelist');
     }
@@ -285,7 +286,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_disabledTrustedDeviceManager_nullAlias(): void
+    public function load_disabledTrustedDeviceManager_noAliasDefined(): void
     {
         $config = $this->getEmptyConfig();
         $config['trusted_device']['enabled'] = false;
@@ -338,7 +339,7 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_disabledBackupCodeManager_nullAlias(): void
+    public function load_disabledBackupCodeManager_noAliasDefined(): void
     {
         $config = $this->getEmptyConfig();
         $config['backup_codes']['enabled'] = false;
@@ -358,6 +359,7 @@ class SchebTwoFactorExtensionTest extends TestCase
 
         $this->assertHasDefinition('scheb_two_factor.default_backup_code_manager');
         $this->assertHasDefinition('scheb_two_factor.null_backup_code_manager');
+        $this->assertHasDefinition('scheb_two_factor.security.listener.check_backup_code');
     }
 
     /**

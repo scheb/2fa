@@ -1,6 +1,4 @@
 security:
-    always_authenticate_before_granting: true
-
     providers:
         our_db_provider:
             entity:
@@ -15,7 +13,7 @@ security:
             security: false
         main:
             pattern:    ^/
-            anonymous: ~
+            # anonymous: ~ # Configured on environment-level
             provider: our_db_provider
             form_login:
                 login_path: _security_login
@@ -27,8 +25,8 @@ security:
             two-factor:
                 auth_form_path: 2fa_login
                 check_path: 2fa_login_check
-                auth_code_parameter_name: _auth_code          # Name of the parameter containing the authentication code
-                trusted_parameter_name: _trusted              # Name of the parameter containing the trusted flag
+                auth_code_parameter_name: _auth_code
+                trusted_parameter_name: _trusted
                 multi_factor: true
                 provider: our_db_provider
                 prepare_on_login: true

@@ -33,6 +33,11 @@
 			<tag name="kernel.event_subscriber" />
 		</service>
 
+		<service id="scheb_two_factor.security.listener.trusted_device" class="\Scheb\TwoFactorBundle\Security\Http\EventListener\TrustedDeviceListener">
+			<argument type="service" id="scheb_two_factor.trusted_device_manager" />
+			<tag name="kernel.event_subscriber" />
+		</service>
+
 		<service id="scheb_two_factor.default_trusted_device_manager" class="Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManager">
 			<argument type="service" id="scheb_two_factor.trusted_token_storage" />
 		</service>

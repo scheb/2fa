@@ -34,10 +34,16 @@ composer require scheb/2fa-qr-code                # Add to render QR-codes for G
 
 ### Configuration
 
-Guard-based authentication has become the preferred way of building a custom authentication provider. Therefore,
-`Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken` is now configured per default in `security_tokens`
-as a token to triggers two-factor authentication. If you don't want to have it automatically configured, please set
-`security_tokens` in your bundle configuration.
+Guard-based authentication has become the preferred way of building a custom authentication provider. Furthermore,
+Symfony 5.1 introduced the new "authenticator"-based system, which is intended to become the preferred way in the
+future. Therefore, the security token
+
+- `Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken`
+- `Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken`
+- `Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken`
+
+are now configured per default in `security_tokens` as token to triggers two-factor authentication. If you don't want to
+have these automatically configured, please set `security_tokens` in your bundle configuration.
 
 The `check_path` now accepts the two-factor authentication code only with a POST request. This can be changed by setting
 the `post_only: false` option on the firewall.

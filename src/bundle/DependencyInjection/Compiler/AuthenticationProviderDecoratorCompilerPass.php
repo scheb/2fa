@@ -8,6 +8,7 @@ use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\OutOfBoundsException;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -17,15 +18,29 @@ class AuthenticationProviderDecoratorCompilerPass implements CompilerPassInterfa
 {
     public function process(ContainerBuilder $container): void
     {
-        $authenticationManager = $container->getDefinition('security.authentication.manager');
-        $authenticationProviderIds = $authenticationManager->getArgument(0)->getValues();
-        /** @var Reference $authenticationProvider */
-        foreach ($authenticationProviderIds as $authenticationProvider) {
+        foreach ($this->getAuthenticationProviderIds($container) as $authenticationProvider) {
             // Ensure not to decorate the two-factor authentication provider, otherwise we'll get an endless loop
             $authenticationProviderId = (string) $authenticationProvider;
             if (!$this->isTwoFactorProvider($authenticationProviderId)) {
                 $this->decorateAuthenticationProvider($container, $authenticationProviderId);
             }
+        }
+    }
+
+    /**
+     * @return Reference[]
+     */
+    private function getAuthenticationProviderIds(ContainerBuilder $container): array
+    {
+        if (!$container->hasDefinition('security.authentication.manager')) {
+            return [];
+        }
+
+        try {
+            return $container->getDefinition('security.authentication.manager')->getArgument(0)->getValues();
+        } catch (OutOfBoundsException $e) {
+            // Authentication providers are not set, so the authenticator system is used
+            return [];
         }
     }
 

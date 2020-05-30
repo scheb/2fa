@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\DependencyInjection\Factory\Security;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
+use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorServicesFactory;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Config\Definition\BaseNode;
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -22,6 +22,17 @@ class TwoFactorFactoryTest extends TestCase
     private const USER_PROVIDER = 'userProvider';
     private const DEFAULT_ENTRY_POINT = 'defaultEntryPoint';
 
+    private const SUCCESS_HANDLER_ID = 'success_handler_id';
+    private const FAILURE_HANDLER_ID = 'failure_handler_id';
+    private const AUTH_REQUIRED_HANDLER_ID = 'auth_required_handler_id';
+    private const CSRF_TOKEN_MANAGER_ID = 'csrf_token_manager_id';
+    private const TWO_FACTOR_FIREWALL_CONFIG_ID = 'firewall_config_id';
+
+    /**
+     * @var MockObject|TwoFactorServicesFactory
+     */
+    private $servicesFactory;
+
     /**
      * @var TwoFactorFactory
      */
@@ -34,7 +45,8 @@ class TwoFactorFactoryTest extends TestCase
 
     public function setUp(): void
     {
-        $this->factory = new TwoFactorFactory();
+        $this->servicesFactory = $this->createMock(TwoFactorServicesFactory::class);
+        $this->factory = new TwoFactorFactory($this->servicesFactory);
         $this->container = new ContainerBuilder();
         $this->container->setDefinition('scheb_two_factor.firewall_context', new Definition());
     }
@@ -73,6 +85,85 @@ EOF;
         return $parser->parse($yaml);
     }
 
+    private function stubServicesFactory(): void
+    {
+        $this->servicesFactory
+            ->expects($this->any())
+            ->method('createSuccessHandler')
+            ->willReturn(self::SUCCESS_HANDLER_ID);
+
+        $this->servicesFactory
+            ->expects($this->any())
+            ->method('createFailureHandler')
+            ->willReturn(self::FAILURE_HANDLER_ID);
+
+        $this->servicesFactory
+            ->expects($this->any())
+            ->method('createAuthenticationRequiredHandler')
+            ->willReturn(self::AUTH_REQUIRED_HANDLER_ID);
+
+        $this->servicesFactory
+            ->expects($this->any())
+            ->method('getCsrfTokenManagerId')
+            ->willReturn(self::CSRF_TOKEN_MANAGER_ID);
+
+        $this->servicesFactory
+            ->expects($this->any())
+            ->method('createTwoFactorFirewallConfig')
+            ->willReturn(self::TWO_FACTOR_FIREWALL_CONFIG_ID);
+    }
+
+    private function expectDependingServicesCreated(): void
+    {
+        $this->servicesFactory
+            ->expects($this->once())
+            ->method('createSuccessHandler')
+            ->with($this->container, self::FIREWALL_NAME, $this->isType('array'), self::TWO_FACTOR_FIREWALL_CONFIG_ID)
+            ->willReturn(self::SUCCESS_HANDLER_ID);
+
+        $this->servicesFactory
+            ->expects($this->once())
+            ->method('createFailureHandler')
+            ->with($this->container, self::FIREWALL_NAME, $this->isType('array'), self::TWO_FACTOR_FIREWALL_CONFIG_ID)
+            ->willReturn(self::FAILURE_HANDLER_ID);
+
+        $this->servicesFactory
+            ->expects($this->once())
+            ->method('createAuthenticationRequiredHandler')
+            ->with($this->container, self::FIREWALL_NAME, $this->isType('array'), self::TWO_FACTOR_FIREWALL_CONFIG_ID)
+            ->willReturn(self::AUTH_REQUIRED_HANDLER_ID);
+
+        $this->servicesFactory
+            ->expects($this->once())
+            ->method('createTwoFactorFirewallConfig')
+            ->with($this->container, self::FIREWALL_NAME, $this->isType('array'))
+            ->willReturn(self::TWO_FACTOR_FIREWALL_CONFIG_ID);
+
+        $this->servicesFactory
+            ->expects($this->once())
+            ->method('createKernelExceptionListener')
+            ->with($this->container, self::FIREWALL_NAME, self::AUTH_REQUIRED_HANDLER_ID);
+
+        $this->servicesFactory
+            ->expects($this->once())
+            ->method('createAccessListener')
+            ->with($this->container, self::FIREWALL_NAME, self::TWO_FACTOR_FIREWALL_CONFIG_ID);
+
+        $this->servicesFactory
+            ->expects($this->once())
+            ->method('createProviderPreparationListener')
+            ->with($this->container, self::FIREWALL_NAME, $this->isType('array'));
+    }
+
+    private function expectCsrfManagerIdRetrieved(): void
+    {
+        $this->servicesFactory
+            ->expects($this->once())
+            ->method('getCsrfTokenManagerId')
+            ->with($this->isType('array'))
+            ->willReturn(self::CSRF_TOKEN_MANAGER_ID);
+    }
+
     private function processConfiguration(array $config): array
     {
         $firewallConfiguration = new TestableFactoryConfiguration($this->factory);
@@ -85,7 +176,7 @@ EOF;
         return (new Processor())->processConfiguration($firewallConfiguration, $config);
     }
 
-    private function callCreateFirewall(array $customConfig = []): array
+    private function callCreate(array $customConfig = []): array
     {
         return $this->factory->create(
             $this->container,
@@ -93,6 +184,16 @@ EOF;
             array_merge(self::DEFAULT_CONFIG, $customConfig),
             self::USER_PROVIDER,
             self::DEFAULT_ENTRY_POINT
+        );
+    }
+
+    private function callCreateAuthenticator(array $customConfig = []): string
+    {
+        return $this->factory->createAuthenticator(
+            $this->container,
+            self::FIREWALL_NAME,
+            array_merge(self::DEFAULT_CONFIG, $customConfig),
+            self::USER_PROVIDER
         );
     }
 
@@ -151,9 +252,21 @@ EOF;
     /**
      * @test
      */
+    public function create_createForFirewall_createServices(): void
+    {
+        $this->expectDependingServicesCreated();
+        $this->expectCsrfManagerIdRetrieved();
+
+        $this->callCreate();
+    }
+
+    /**
+     * @test
+     */
     public function create_createForFirewall_returnServiceIds(): void
     {
-        $returnValue = $this->callCreateFirewall();
+        $this->stubServicesFactory();
+        $returnValue = $this->callCreate();
         $this->assertEquals('security.authentication.provider.two_factor.firewallName', $returnValue[0]);
         $this->assertEquals('security.authentication.listener.two_factor.firewallName', $returnValue[1]);
         $this->assertEquals(self::DEFAULT_ENTRY_POINT, $returnValue[2]);
@@ -164,11 +277,12 @@ EOF;
      */
     public function create_createForFirewall_createAuthenticationProviderDefinition(): void
     {
-        $this->callCreateFirewall();
+        $this->stubServicesFactory();
+        $this->callCreate();
 
         $this->assertTrue($this->container->hasDefinition('security.authentication.provider.two_factor.firewallName'));
         $definition = $this->container->getDefinition('security.authentication.provider.two_factor.firewallName');
-        $this->assertEquals(new Reference('security.firewall_config.two_factor.firewallName'), $definition->getArgument(0));
+        $this->assertEquals(new Reference(self::TWO_FACTOR_FIREWALL_CONFIG_ID), $definition->getArgument(0));
     }
 
     /**
@@ -176,214 +290,51 @@ EOF;
      */
     public function create_createForFirewall_createAuthenticationListenerDefinition(): void
     {
-        $this->callCreateFirewall();
+        $this->stubServicesFactory();
+        $this->callCreate();
 
         $this->assertTrue($this->container->hasDefinition('security.authentication.listener.two_factor.firewallName'));
         $definition = $this->container->getDefinition('security.authentication.listener.two_factor.firewallName');
-        $this->assertEquals(new Reference('security.firewall_config.two_factor.firewallName'), $definition->getArgument(2));
-        $this->assertEquals(new Reference('security.authentication.success_handler.two_factor.firewallName'), (string) $definition->getArgument(3));
-        $this->assertEquals(new Reference('security.authentication.failure_handler.two_factor.firewallName'), (string) $definition->getArgument(4));
-        $this->assertEquals(new Reference('security.authentication.authentication_required_handler.two_factor.firewallName'), (string) $definition->getArgument(5));
+        $this->assertEquals(new Reference(self::TWO_FACTOR_FIREWALL_CONFIG_ID), $definition->getArgument(2));
+        $this->assertEquals(new Reference(self::SUCCESS_HANDLER_ID), (string) $definition->getArgument(3));
+        $this->assertEquals(new Reference(self::FAILURE_HANDLER_ID), (string) $definition->getArgument(4));
+        $this->assertEquals(new Reference(self::AUTH_REQUIRED_HANDLER_ID), (string) $definition->getArgument(5));
+        $this->assertEquals(new Reference(self::CSRF_TOKEN_MANAGER_ID), (string) $definition->getArgument(6));
     }
 
     /**
      * @test
      */
-    public function create_createForFirewall_createSuccessHandlerDefinition(): void
+    public function createAuthenticator_createForFirewall_createServices(): void
     {
-        $this->callCreateFirewall();
-
-        $this->assertTrue($this->container->hasDefinition('security.authentication.success_handler.two_factor.firewallName'));
-        $definition = $this->container->getDefinition('security.authentication.success_handler.two_factor.firewallName');
-        $this->assertEquals(new Reference('security.firewall_config.two_factor.firewallName'), $definition->getArgument(1));
+        $this->expectDependingServicesCreated();
+        $this->callCreateAuthenticator();
     }
 
     /**
      * @test
      */
-    public function create_customSuccessHandler_useCustomSuccessHandlerDefinition(): void
+    public function createAuthenticator_createForFirewall_returnServiceIds(): void
     {
-        $this->callCreateFirewall([
-            'success_handler' => 'my_success_handler',
-        ]);
+        $this->stubServicesFactory();
+        $returnValue = $this->callCreateAuthenticator();
 
-        $this->assertFalse($this->container->hasDefinition('security.authentication.success_handler.two_factor.firewallName'));
-        $definition = $this->container->getDefinition('security.authentication.listener.two_factor.firewallName');
-        $this->assertEquals(new Reference('my_success_handler'), $definition->getArgument(3));
+        $this->assertEquals('security.authenticator.two_factor.firewallName', $returnValue);
     }
 
     /**
      * @test
      */
-    public function create_createForFirewall_createFailureHandlerDefinition(): void
+    public function createAuthenticator_createForFirewall_createAuthenticatiorDefinition(): void
     {
-        $this->callCreateFirewall();
+        $this->stubServicesFactory();
+        $this->callCreateAuthenticator();
 
-        $this->assertTrue($this->container->hasDefinition('security.authentication.failure_handler.two_factor.firewallName'));
-        $definition = $this->container->getDefinition('security.authentication.failure_handler.two_factor.firewallName');
-        $this->assertEquals(new Reference('security.firewall_config.two_factor.firewallName'), $definition->getArgument(1));
-    }
-
-    /**
-     * @test
-     */
-    public function create_customFailureHandler_useCustomFailureHandlerDefinition(): void
-    {
-        $this->callCreateFirewall([
-            'failure_handler' => 'my_failure_handler',
-        ]);
-
-        $this->assertFalse($this->container->hasDefinition('security.authentication.failure_handler.two_factor.firewallName'));
-        $definition = $this->container->getDefinition('security.authentication.listener.two_factor.firewallName');
-        $this->assertEquals(new Reference('my_failure_handler'), $definition->getArgument(4));
-    }
-
-    /**
-     * @test
-     */
-    public function create_createForFirewall_createAuthenticationRequiredHandlerDefinition(): void
-    {
-        $this->callCreateFirewall();
-
-        $this->assertTrue($this->container->hasDefinition('security.authentication.authentication_required_handler.two_factor.firewallName'));
-        $definition = $this->container->getDefinition('security.authentication.authentication_required_handler.two_factor.firewallName');
-        $this->assertEquals(new Reference('security.firewall_config.two_factor.firewallName'), $definition->getArgument(1));
-    }
-
-    /**
-     * @test
-     */
-    public function create_customAuthenticationRequired_useCustomAuthenticationRequiredHandlerDefinition(): void
-    {
-        $this->callCreateFirewall([
-            'authentication_required_handler' => 'my_authentication_required_handler',
-        ]);
-
-        $this->assertFalse($this->container->hasDefinition('security.authentication.authentication_required_handler.two_factor.firewallName'));
-
-        // Assert the custom handler is used
-        $definition = $this->container->getDefinition('security.authentication.listener.two_factor.firewallName');
-        $this->assertEquals(new Reference('my_authentication_required_handler'), $definition->getArgument(5));
-
-        $definition = $this->container->getDefinition('security.authentication.kernel_exception_listener.two_factor.firewallName');
-        $this->assertEquals(new Reference('my_authentication_required_handler'), $definition->getArgument(2));
-    }
-
-    /**
-     * @test
-     */
-    public function create_csrfOptionNotSet_useNullCsrfManager(): void
-    {
-        $this->callCreateFirewall();
-
-        $definition = $this->container->getDefinition('security.authentication.listener.two_factor.firewallName');
-        $this->assertEquals(new Reference('scheb_two_factor.null_csrf_token_manager'), $definition->getArgument(6));
-    }
-
-    /**
-     * @test
-     */
-    public function create_csrfDisabled_useNullCsrfManager(): void
-    {
-        $this->callCreateFirewall(['enable_csrf' => false]);
-
-        $definition = $this->container->getDefinition('security.authentication.listener.two_factor.firewallName');
-        $this->assertEquals(new Reference('scheb_two_factor.null_csrf_token_manager'), $definition->getArgument(6));
-    }
-
-    /**
-     * @test
-     */
-    public function create_csrfEnabled_useCsrfManagerAlias(): void
-    {
-        $this->callCreateFirewall(['enable_csrf' => true]);
-
-        $definition = $this->container->getDefinition('security.authentication.listener.two_factor.firewallName');
-        $this->assertEquals(new Reference('scheb_two_factor.csrf_token_manager'), $definition->getArgument(6));
-    }
-
-    /**
-     * @test
-     */
-    public function create_createForFirewall_createFirewallConfigDefinition(): void
-    {
-        $this->callCreateFirewall();
-
-        $this->assertTrue($this->container->hasDefinition('security.firewall_config.two_factor.firewallName'));
-        $definition = $this->container->getDefinition('security.firewall_config.two_factor.firewallName');
-        $this->assertEquals(self::DEFAULT_CONFIG, $definition->getArgument(0));
-        $this->assertTrue($definition->hasTag('scheb_two_factor.firewall_config'));
-        $tag = $definition->getTag('scheb_two_factor.firewall_config');
-        $this->assertEquals(['firewall' => 'firewallName'], $tag[0]);
-    }
-
-    /**
-     * @test
-     */
-    public function create_createForFirewall_createProviderPreparationListenerDefinition(): void
-    {
-        $this->callCreateFirewall([
-            'prepare_on_login' => true,
-            'prepare_on_access_denied' => false,
-        ]);
-
-        $this->assertTrue($this->container->hasDefinition('security.authentication.provider_preparation_listener.two_factor.firewallName'));
-        $definition = $this->container->getDefinition('security.authentication.provider_preparation_listener.two_factor.firewallName');
-        $this->assertEquals(self::FIREWALL_NAME, $definition->getArgument(3));
-        $this->assertTrue($definition->getArgument(4));
-        $this->assertFalse($definition->getArgument(5));
-        $tag = $definition->getTag('kernel.event_subscriber');
-        $this->assertCount(1, $tag, 'Must have the "kernel.event_subscriber" tag assigned');
-    }
-
-    /**
-     * @test
-     */
-    public function create_createForFirewall_createExceptionListener(): void
-    {
-        $this->callCreateFirewall();
-
-        $this->assertTrue($this->container->hasDefinition('security.authentication.kernel_exception_listener.two_factor.firewallName'));
-        $definition = $this->container->getDefinition('security.authentication.kernel_exception_listener.two_factor.firewallName');
-        $this->assertEquals('firewallName', $definition->getArgument(0));
-        $this->assertEquals(new Reference('security.authentication.authentication_required_handler.two_factor.firewallName'), $definition->getArgument(2));
-    }
-
-    /**
-     * @test
-     */
-    public function create_createForFirewall_createAccessListener(): void
-    {
-        $this->callCreateFirewall();
-
-        $this->assertTrue($this->container->hasDefinition('security.authentication.access_listener.two_factor.firewallName'));
-        $definition = $this->container->getDefinition('security.authentication.access_listener.two_factor.firewallName');
-        $this->assertEquals(new Reference('security.firewall_config.two_factor.firewallName'), $definition->getArgument(0));
-        $this->assertTrue($definition->hasTag('scheb_two_factor.access_listener'));
-        $tag = $definition->getTag('scheb_two_factor.access_listener');
-        $this->assertEquals(['firewall' => 'firewallName'], $tag[0]);
-    }
-}
-
-// Helper class to process config
-class TestableFactoryConfiguration implements ConfigurationInterface
-{
-    /**
-     * @var TwoFactorFactory
-     */
-    private $factory;
-
-    public function __construct(TwoFactorFactory $factory)
-    {
-        $this->factory = $factory;
-    }
-
-    public function getConfigTreeBuilder(): TreeBuilder
-    {
-        $treeBuilder = new TreeBuilder(TwoFactorFactory::AUTHENTICATION_PROVIDER_KEY);
-        $rootNode = $treeBuilder->getRootNode();
-        $this->factory->addConfiguration($rootNode);
-
-        return $treeBuilder;
+        $this->assertTrue($this->container->hasDefinition('security.authenticator.two_factor.firewallName'));
+        $definition = $this->container->getDefinition('security.authenticator.two_factor.firewallName');
+        $this->assertEquals(new Reference(self::TWO_FACTOR_FIREWALL_CONFIG_ID), $definition->getArgument(0));
+        $this->assertEquals(new Reference(self::SUCCESS_HANDLER_ID), (string) $definition->getArgument(2));
+        $this->assertEquals(new Reference(self::FAILURE_HANDLER_ID), (string) $definition->getArgument(3));
+        $this->assertEquals(new Reference(self::AUTH_REQUIRED_HANDLER_ID), (string) $definition->getArgument(4));
     }
 }

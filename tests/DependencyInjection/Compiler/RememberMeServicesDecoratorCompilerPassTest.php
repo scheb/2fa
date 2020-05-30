@@ -31,18 +31,36 @@ class RememberMeServicesDecoratorCompilerPassTest extends TestCase
         $this->compilerPass = new RememberMeServicesDecoratorCompilerPass();
     }
 
-    private function stubRememberMeListenersWithServices(array $firewalls): void
+    private function stubClassicRememberMeListenersWithServices(array $firewalls): void
     {
         foreach ($firewalls as $firewallName) {
-            $rememberMeServicesId = 'rememberme_services.'.$firewallName;
-            $rememberMeServicesDefinition = new Definition(AbstractRememberMeServices::class);
-            $this->container->setDefinition($rememberMeServicesId, $rememberMeServicesDefinition);
-
-            $listenerId = 'security.authentication.listener.rememberme.'.$firewallName;
-            $listenerDefinition = new Definition(RememberMeListener::class);
-            $listenerDefinition->setArgument(1, new Reference($rememberMeServicesId));
-            $this->container->setDefinition($listenerId, $listenerDefinition);
+            $rememberMeServicesId = $this->createRememberMeServicesDefinition($firewallName);
+            $this->createListenerDefinition('security.authentication.listener.rememberme.'.$firewallName, 1, $rememberMeServicesId);
         }
+    }
+
+    private function stubAuthenticatorRememberMeListenersWithServices(array $firewalls): void
+    {
+        foreach ($firewalls as $firewallName) {
+            $rememberMeServicesId = $this->createRememberMeServicesDefinition($firewallName);
+            $this->createListenerDefinition('security.listener.remember_me.'.$firewallName, 0, $rememberMeServicesId);
+        }
+    }
+
+    private function createRememberMeServicesDefinition(string $firewallName): string
+    {
+        $rememberMeServicesId = 'rememberme_services.'.$firewallName;
+        $rememberMeServicesDefinition = new Definition(AbstractRememberMeServices::class);
+        $this->container->setDefinition($rememberMeServicesId, $rememberMeServicesDefinition);
+
+        return $rememberMeServicesId;
+    }
+
+    private function createListenerDefinition(string $listenerId, int $argument, string $rememberMeServicesId): void
+    {
+        $listenerDefinition = new Definition(RememberMeListener::class);
+        $listenerDefinition->setArgument($argument, new Reference($rememberMeServicesId));
+        $this->container->setDefinition($listenerId, $listenerDefinition);
     }
 
     private function assertContainerHasDecoratedProvider(string $rememberMeServicesId): void
@@ -61,9 +79,25 @@ class RememberMeServicesDecoratorCompilerPassTest extends TestCase
     /**
      * @test
      */
-    public function process_hasMultipleRemembermeServices_decorateAll(): void
+    public function process_multipleRemembermeServicesWithClassicSecurity_decorateAll(): void
     {
-        $this->stubRememberMeListenersWithServices([
+        $this->stubClassicRememberMeListenersWithServices([
+            'firewall1',
+            'firewall2',
+        ]);
+
+        $this->compilerPass->process($this->container);
+
+        $this->assertContainerHasDecoratedProvider('rememberme_services.firewall1');
+        $this->assertContainerHasDecoratedProvider('rememberme_services.firewall2');
+    }
+
+    /**
+     * @test
+     */
+    public function process_multipleRemembermeServicesWithAuthenticatorSecurity_decorateAll(): void
+    {
+        $this->stubAuthenticatorRememberMeListenersWithServices([
             'firewall1',
             'firewall2',
         ]);
