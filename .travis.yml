@@ -48,11 +48,23 @@ jobs:
         -   php: 7.4
             env:
                 - TEST_SUITE=INTEGRATION
-                - SYMFONY_VERSION=^4.4
+                - TEST_CONFIG=default
+                - SYMFONY_VERSION=~4.4
         -   php: 7.4
             env:
                 - TEST_SUITE=INTEGRATION
-                - SYMFONY_VERSION=^5.0
+                - TEST_CONFIG=default
+                - SYMFONY_VERSION=~5.0
+        -   php: 7.4
+            env:
+                - TEST_SUITE=INTEGRATION
+                - TEST_CONFIG=default
+                - SYMFONY_VERSION=^5.1
+        -   php: 7.4
+            env:
+                - TEST_SUITE=INTEGRATION
+                - TEST_CONFIG=authenticators
+                - SYMFONY_VERSION=^5.1
 
         # Metrics and Quality
         -   name: Code Coverage

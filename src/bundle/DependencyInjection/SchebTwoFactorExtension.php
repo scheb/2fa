@@ -24,6 +24,7 @@ class SchebTwoFactorExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('security.xml');
+        $loader->load('security_authenticator.xml');
         $loader->load('persistence.xml');
         $loader->load('two_factor.xml');
 

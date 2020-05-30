@@ -99,6 +99,7 @@ Your firewall may offer different ways how to login. By default the bundle is on
 
 - `Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken` (username+password form)
 - `Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken` (guard-based security)
+- `Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken` (authenticator-based security)
 
 If you want to support two-factor authentication with another login method, you have to register its token class in the
 `scheb_two_factor.security_tokens` configuration option.
@@ -109,6 +110,7 @@ scheb_two_factor:
     security_tokens:
         - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
         - Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken
+        - Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken
         - Acme\AuthenticationBundle\Token\CustomAuthenticationToken
 ```
 

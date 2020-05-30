@@ -239,11 +239,18 @@ abstract class TestCase extends WebTestCase
 
     protected function assertNotAuthenticated(): void
     {
-        $this->assertInstanceOf(
-            AnonymousToken::class,
-            $this->getSecurityToken(),
-            'The token has to be an AnonymousToken'
-        );
+        $token = $this->getSecurityToken();
+
+        if ('authenticators' === getenv('TEST_CONFIG')) {
+            // When authenticators are used, there is no AnonymousToken but null instead
+            $this->assertNull($token, 'The token has to be null');
+        } else {
+            $this->assertInstanceOf(
+                AnonymousToken::class,
+                $this->getSecurityToken(),
+                'The token has to be an AnonymousToken'
+            );
+        }
     }
 
     protected function assertIsAlwaysAccessiblePage(Crawler $page): void
@@ -320,7 +327,7 @@ abstract class TestCase extends WebTestCase
         );
     }
 
-    private function getSecurityToken(): TokenInterface
+    private function getSecurityToken(): ?TokenInterface
     {
         return self::$container->get('security.token_storage')->getToken();
     }

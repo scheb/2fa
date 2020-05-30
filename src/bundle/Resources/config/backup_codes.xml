@@ -6,5 +6,11 @@
 		</service>
 
 		<service id="scheb_two_factor.null_backup_code_manager" class="Scheb\TwoFactorBundle\Security\TwoFactor\Backup\NullBackupCodeManager" />
+
+		<service id="scheb_two_factor.security.listener.check_backup_code" class="\Scheb\TwoFactorBundle\Security\Http\EventListener\CheckBackupCodeListener">
+			<argument type="service" id="scheb_two_factor.provider_preparation_recorder" />
+			<argument type="service" id="scheb_two_factor.backup_code_manager" />
+			<tag name="kernel.event_subscriber" />
+		</service>
 	</services>
 </container>
