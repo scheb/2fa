@@ -14,8 +14,8 @@ are available under the new name of `scheb/2fa`. You need to migrate from `scheb
 Use these operations to upgrade from `scheb/two-factor-bundle` to `scheb/2fa-*` packages:
 
 ```bash
-# Rename configuration files. This is actually not required, but good to do for consistency. Also, Symfony Flex doesn't
-# remove the config files when the "composer remove" command is later executed.
+# Rename configuration files. This is actually not required, but good to do for consistency. Also, Symfony
+# Flex doesn't remove the config files when the "composer remove" command is later executed.
 mv config/packages/scheb_two_factor.yaml config/packages/scheb_2fa.yaml
 mv config/routes/scheb_two_factor.yaml config/routes/scheb_2fa.yaml  # Might not exist, then ignore.
 
