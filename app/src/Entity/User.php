@@ -51,7 +51,7 @@ class User implements UserInterface, \Serializable, EmailTwoFactorInterface, Goo
     private $emailAuthenticationEnabled = true;
 
     /**
-     * @var string $emailAuthenticationCode
+     * @var string
      * @ORM\Column(type="integer")
      */
     private $emailAuthenticationCode;
@@ -62,7 +62,7 @@ class User implements UserInterface, \Serializable, EmailTwoFactorInterface, Goo
     private $googleAuthenticatorEnabled = true;
 
     /**
-     * @var string $googleAuthenticatorSecret
+     * @var string
      * @ORM\Column(type="string")
      */
     private $googleAuthenticatorSecret;
@@ -73,7 +73,7 @@ class User implements UserInterface, \Serializable, EmailTwoFactorInterface, Goo
     private $totpAuthenticationEnabled = true;
 
     /**
-     * @var string $isActive
+     * @var string
      * @ORM\Column(type="boolean")
      */
     private $isActive;
@@ -105,7 +105,7 @@ class User implements UserInterface, \Serializable, EmailTwoFactorInterface, Goo
 
     public function getRoles()
     {
-        return array('ROLE_USER');
+        return ['ROLE_USER'];
     }
 
     public function eraseCredentials()
@@ -114,26 +114,25 @@ class User implements UserInterface, \Serializable, EmailTwoFactorInterface, Goo
 
     public function serialize()
     {
-        return serialize(array(
+        return serialize([
             $this->id,
             $this->username,
             $this->password,
             // see section on salt below
             // $this->salt,
             $this->isActive,
-        ));
+        ]);
     }
 
     public function unserialize($serialized)
     {
-        list (
+        list(
             $this->id,
             $this->username,
             $this->password,
             // see section on salt below
             // $this->salt
-            $this->isActive,
-            ) = unserialize($serialized);
+            $this->isActive) = unserialize($serialized);
     }
 
     public function getEmailAuthRecipient(): string
@@ -168,7 +167,7 @@ class User implements UserInterface, \Serializable, EmailTwoFactorInterface, Goo
 
     public function isGoogleAuthenticatorEnabled(): bool
     {
-        return $this->googleAuthenticatorEnabled && !!$this->googleAuthenticatorSecret;
+        return $this->googleAuthenticatorEnabled && (bool) $this->googleAuthenticatorSecret;
     }
 
     public function getGoogleAuthenticatorUsername(): string
@@ -193,7 +192,7 @@ class User implements UserInterface, \Serializable, EmailTwoFactorInterface, Goo
 
     public function isTotpAuthenticationEnabled(): bool
     {
-        return $this->totpAuthenticationEnabled && !!$this->googleAuthenticatorSecret;
+        return $this->totpAuthenticationEnabled && (bool) $this->googleAuthenticatorSecret;
     }
 
     public function getTotpAuthenticationUsername(): string
@@ -208,7 +207,7 @@ class User implements UserInterface, \Serializable, EmailTwoFactorInterface, Goo
 
     public function isBackupCode(string $code): bool
     {
-        return in_array($code, self::BACKUP_CODES);
+        return \in_array($code, self::BACKUP_CODES);
     }
 
     public function invalidateBackupCode(string $code): void

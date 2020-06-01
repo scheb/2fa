@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 abstract class TestCase extends WebTestCase
 {
-    private const SQLITE_DATA_FILE = __DIR__ . '/../data/data.db';
+    private const SQLITE_DATA_FILE = __DIR__.'/../data/data.db';
     private const DEFAULT_IP_ADDRESS = '127.0.0.1';
     private const WHITELISTED_IP_ADDRESS = '127.0.0.2';
     private const USER_NAME = 'user1';
@@ -117,12 +117,13 @@ abstract class TestCase extends WebTestCase
 
     private function resetSqliteDatabase(): void
     {
-        exec("git checkout " . self::SQLITE_DATA_FILE . " -q");
+        exec('git checkout '.self::SQLITE_DATA_FILE.' -q');
     }
 
     private function getEntityManager(): EntityManager
     {
         $em = self::$container->get('doctrine')->getManager();
+
         return $em;
     }
 
