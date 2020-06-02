@@ -33,6 +33,7 @@ security:
                 provider: our_db_provider
                 prepare_on_login: true
                 prepare_on_access_denied: true
+                csrf_token_generator: security.csrf.token_manager
             remember_me:
                 secret:   '%kernel.secret%'
                 lifetime: 604800 # 1 week in seconds

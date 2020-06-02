@@ -115,6 +115,11 @@ abstract class TestCase extends WebTestCase
         return $totp->at(time());
     }
 
+    protected function getBackupCode(): string
+    {
+        return self::BACKUP_CODE;
+    }
+
     private function resetSqliteDatabase(): void
     {
         exec('git checkout '.self::SQLITE_DATA_FILE.' -q');
@@ -168,12 +173,15 @@ abstract class TestCase extends WebTestCase
         return $currentPage;
     }
 
-    protected function submit2faCode(Crawler $currentPage, string $code, bool $trustedDevice = false): Crawler
+    protected function submit2faCode(Crawler $currentPage, string $code, bool $trustedDevice = false, ?string $csrfToken = null): Crawler
     {
         $twoFactorForm = $currentPage->filter('input#_auth_code')->parents()->filter('form')->form();
         $twoFactorForm['_auth_code'] = $code;
         if ($trustedDevice && $currentPage->filter('input#_trusted')->count() > 0) {
             $twoFactorForm['_trusted'] = 'on';
+        }
+        if (null !== $csrfToken) {
+            $twoFactorForm['_csrf_token'] = $csrfToken;
         }
 
         return $this->client->submit($twoFactorForm);
@@ -248,7 +256,7 @@ abstract class TestCase extends WebTestCase
         );
     }
 
-    protected function assertIsLoginPage($page)
+    protected function assertIsLoginPage(Crawler $page)
     {
         $this->assertResponseStatusCode(200);
         $this->assertStringContainsString(
@@ -258,13 +266,23 @@ abstract class TestCase extends WebTestCase
         );
     }
 
-    protected function assertIs2faInProgressPage($page)
+    protected function assertIs2faInProgressPage(Crawler $page)
     {
         $this->assertResponseStatusCode(200);
         $this->assertStringContainsString(
             'This page is accessible during 2fa',
             $page->html(),
             'The page shown must "2fa in progress" page'
+        );
+    }
+
+    protected function assertCsrfError(Crawler $page): void
+    {
+        $this->assertResponseStatusCode(200);
+        $this->assertStringContainsString(
+            'Invalid CSRF token.',
+            $page->html(),
+            'The page shown must "Invalid CSRF token" message'
         );
     }
 
