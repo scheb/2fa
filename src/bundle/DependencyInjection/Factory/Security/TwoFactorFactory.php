@@ -25,6 +25,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
     public const DEFAULT_MULTI_FACTOR = false;
     public const DEFAULT_PREPARE_ON_LOGIN = false;
     public const DEFAULT_PREPARE_ON_ACCESS_DENIED = false;
+    public const DEFAULT_ENABLE_CSRF = false;
     public const DEFAULT_CSRF_PARAMETER = '_csrf_token';
     public const DEFAULT_CSRF_TOKEN_ID = 'two_factor';
 
@@ -71,7 +72,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
             ->booleanNode('multi_factor')->defaultValue(self::DEFAULT_MULTI_FACTOR)->end()
             ->booleanNode('prepare_on_login')->defaultValue(self::DEFAULT_PREPARE_ON_LOGIN)->end()
             ->booleanNode('prepare_on_access_denied')->defaultValue(self::DEFAULT_PREPARE_ON_ACCESS_DENIED)->end()
-            ->scalarNode('csrf_token_generator')->defaultNull()->end()
+            ->scalarNode('enable_csrf')->defaultValue(self::DEFAULT_ENABLE_CSRF)->end()
             ->scalarNode('csrf_parameter')->defaultValue(self::DEFAULT_CSRF_PARAMETER)->end()
             ->scalarNode('csrf_token_id')->defaultValue(self::DEFAULT_CSRF_TOKEN_ID)->end()
             // Fake node for SecurityExtension, which requires a provider to be set when multiple user providers are registered
@@ -185,8 +186,8 @@ class TwoFactorFactory implements SecurityFactoryInterface
 
     private function getCsrfTokenManagerId(array $config): string
     {
-        return isset($config['csrf_token_generator'])
-            ? $config['csrf_token_generator']
+        return $config['enable_csrf'] ?? false
+            ? 'scheb_two_factor.csrf_token_manager'
             : 'scheb_two_factor.null_csrf_token_manager';
     }
 

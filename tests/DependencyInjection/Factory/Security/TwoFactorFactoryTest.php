@@ -64,7 +64,7 @@ two_factor:
     multi_factor: true
     prepare_on_login: true
     prepare_on_access_denied: true
-    csrf_token_generator: security.csrf.token_manager
+    enable_csrf: true
     csrf_parameter: _custom_csrf_token
     csrf_token_id: custom_two_factor
 EOF;
@@ -117,7 +117,7 @@ EOF;
         $this->assertEquals(TwoFactorFactory::DEFAULT_MULTI_FACTOR, $processedConfiguration['multi_factor']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_PREPARE_ON_LOGIN, $processedConfiguration['prepare_on_login']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_PREPARE_ON_ACCESS_DENIED, $processedConfiguration['prepare_on_access_denied']);
-        $this->assertNull($processedConfiguration['csrf_token_generator']);
+        $this->assertFalse($processedConfiguration['enable_csrf']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_PARAMETER, $processedConfiguration['csrf_parameter']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_TOKEN_ID, $processedConfiguration['csrf_token_id']);
     }
@@ -143,7 +143,7 @@ EOF;
         $this->assertTrue($processedConfiguration['multi_factor']);
         $this->assertTrue($processedConfiguration['prepare_on_login']);
         $this->assertTrue($processedConfiguration['prepare_on_access_denied']);
-        $this->assertEquals('security.csrf.token_manager', $processedConfiguration['csrf_token_generator']);
+        $this->assertTrue($processedConfiguration['enable_csrf']);
         $this->assertEquals('_custom_csrf_token', $processedConfiguration['csrf_parameter']);
         $this->assertEquals('custom_two_factor', $processedConfiguration['csrf_token_id']);
     }
@@ -272,7 +272,7 @@ EOF;
     /**
      * @test
      */
-    public function create_createForFirewall_useDefaultCsrfManager(): void
+    public function create_csrfOptionNotSet_useNullCsrfManager(): void
     {
         $this->callCreateFirewall();
 
@@ -283,12 +283,23 @@ EOF;
     /**
      * @test
      */
-    public function create_createForFirewall_useCustomCsrfManager(): void
+    public function create_csrfDisabled_useNullCsrfManager(): void
     {
-        $this->callCreateFirewall(['csrf_token_generator' => 'my_csrf_token_manager']);
+        $this->callCreateFirewall(['enable_csrf' => false]);
 
         $definition = $this->container->getDefinition('security.authentication.listener.two_factor.firewallName');
-        $this->assertEquals(new Reference('my_csrf_token_manager'), $definition->getArgument(6));
+        $this->assertEquals(new Reference('scheb_two_factor.null_csrf_token_manager'), $definition->getArgument(6));
+    }
+
+    /**
+     * @test
+     */
+    public function create_csrfEnabled_useCsrfManagerAlias(): void
+    {
+        $this->callCreateFirewall(['enable_csrf' => true]);
+
+        $definition = $this->container->getDefinition('security.authentication.listener.two_factor.firewallName');
+        $this->assertEquals(new Reference('scheb_two_factor.csrf_token_manager'), $definition->getArgument(6));
     }
 
     /**

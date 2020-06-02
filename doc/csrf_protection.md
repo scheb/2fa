@@ -12,8 +12,7 @@ framework:
     csrf_protection: ~
 ```
 
-Then, the `two_factor` security configuration needs a CSRF token provider. You can set this to use the default
-provider available in the security component:
+Then, in the firewall's `two_factor` security configuration need to enable CSRF:
 
 ```yaml
 # app/config/security.yml
@@ -21,7 +20,7 @@ security:
     firewalls:
         secured_area:
             two_factor:
-                csrf_token_generator: security.csrf.token_manager
+                enable_csrf: true
 ```
 
 Make sure you add the extra field for the CSRF token in the authentication form. The code from the default template will
@@ -42,6 +41,7 @@ security:
     firewalls:
         secured_area:
             two_factor:
+                enable_csrf: true
                 csrf_parameter: _csrf_security_token
                 csrf_token_id: a_private_string
 ```
