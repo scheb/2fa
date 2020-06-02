@@ -41,6 +41,20 @@ class TokenPreparationRecorderTest extends TestCase
     }
 
     /**
+     * @return MockObject|TwoFactorTokenInterface
+     */
+    private function createTwoFactorTokenWithFirewallName(): MockObject
+    {
+        $token = $this->createMock(TwoFactorTokenInterface::class);
+        $token
+            ->expects($this->any())
+            ->method('getProviderKey')
+            ->willReturn(self::FIREWALL_NAME);
+
+        return $token;
+    }
+
+    /**
      * @test
      */
     public function isTwoFactorProviderPrepared_invalidToken_throwRuntimeException(): void
@@ -53,17 +67,28 @@ class TokenPreparationRecorderTest extends TestCase
 
     /**
      * @test
+     */
+    public function isTwoFactorProviderPrepared_differentFirewallName_throwLogicException(): void
+    {
+        $this->stubTokenStorageHasToken($this->createMock(TwoFactorTokenInterface::class));
+
+        $this->expectException(\LogicException::class);
+        $this->recorder->isTwoFactorProviderPrepared('differentFirewallName', self::PROVIDER_NAME);
+    }
+
+    /**
+     * @test
      * @dataProvider provideReturnValues
      */
     public function isTwoFactorProviderPrepared_validToken_setOnToken(bool $expectedReturnValue): void
     {
-        $token = $this->createMock(TwoFactorTokenInterface::class);
+        $token = $this->createTwoFactorTokenWithFirewallName();
         $this->stubTokenStorageHasToken($token);
 
         $token
             ->expects($this->once())
             ->method('isTwoFactorProviderPrepared')
-            ->with(self::FIREWALL_NAME, self::PROVIDER_NAME)
+            ->with(self::PROVIDER_NAME)
             ->willReturn($expectedReturnValue);
 
         $returnValue = $this->recorder->isTwoFactorProviderPrepared(self::FIREWALL_NAME, self::PROVIDER_NAME);
@@ -93,15 +118,26 @@ class TokenPreparationRecorderTest extends TestCase
     /**
      * @test
      */
+    public function setTwoFactorProviderPrepared_differentFirewallName_throwLogicException(): void
+    {
+        $this->stubTokenStorageHasToken($this->createMock(TwoFactorTokenInterface::class));
+
+        $this->expectException(\LogicException::class);
+        $this->recorder->setTwoFactorProviderPrepared('differentFirewallName', self::PROVIDER_NAME);
+    }
+
+    /**
+     * @test
+     */
     public function setTwoFactorProviderPrepared_validToken_getFromToken(): void
     {
-        $token = $this->createMock(TwoFactorTokenInterface::class);
+        $token = $this->createTwoFactorTokenWithFirewallName();
         $this->stubTokenStorageHasToken($token);
 
         $token
             ->expects($this->once())
             ->method('setTwoFactorProviderPrepared')
-            ->with(self::FIREWALL_NAME, self::PROVIDER_NAME);
+            ->with(self::PROVIDER_NAME);
 
         $this->recorder->setTwoFactorProviderPrepared(self::FIREWALL_NAME, self::PROVIDER_NAME);
     }

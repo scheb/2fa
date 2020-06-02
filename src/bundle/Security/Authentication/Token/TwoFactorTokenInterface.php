@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\Authentication\Token;
 
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\PreparationRecorderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-interface TwoFactorTokenInterface extends TokenInterface, PreparationRecorderInterface
+interface TwoFactorTokenInterface extends TokenInterface
 {
     public const ATTRIBUTE_NAME_REMEMBER_ME_COOKIE = 'remember_me_cookie';
 
@@ -20,6 +19,11 @@ interface TwoFactorTokenInterface extends TokenInterface, PreparationRecorderInt
      * Duplicate the token with credentials.
      */
     public function createWithCredentials(string $credentials): self;
+
+    /**
+     * Return the provider key (firewall name).
+     */
+    public function getProviderKey(): string;
 
     /**
      * Return list of two-factor providers (their aliases), which are available.
@@ -49,7 +53,12 @@ interface TwoFactorTokenInterface extends TokenInterface, PreparationRecorderInt
     public function allTwoFactorProvidersAuthenticated(): bool;
 
     /**
-     * Return the provider key (firewall name).
+     * Check if a two-factor provider has completed preparation. The provider's alias is passed as the argument.
      */
-    public function getProviderKey(): string;
+    public function isTwoFactorProviderPrepared(string $providerName): bool;
+
+    /**
+     * Remember when a two-factor provider has completed preparation. The provider's alias is passed as the argument.
+     */
+    public function setTwoFactorProviderPrepared(string $providerName): void;
 }

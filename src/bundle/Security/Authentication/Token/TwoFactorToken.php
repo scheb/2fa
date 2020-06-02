@@ -82,7 +82,7 @@ class TwoFactorToken implements TwoFactorTokenInterface
     {
         $credentialsToken = new self($this->authenticatedToken, $credentials, $this->providerKey, $this->twoFactorProviders);
         foreach (array_keys($this->preparedProviders) as $preparedProviderName) {
-            $credentialsToken->setTwoFactorProviderPrepared($this->providerKey, $preparedProviderName);
+            $credentialsToken->setTwoFactorProviderPrepared($preparedProviderName);
         }
         $credentialsToken->setAttributes($this->getAttributes());
 
@@ -122,27 +122,19 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return false !== $first ? $first : null;
     }
 
-    public function isTwoFactorProviderPrepared(string $firewallName, string $providerName): bool
+    public function isTwoFactorProviderPrepared(string $providerName): bool
     {
-        if ($firewallName !== $this->providerKey) {
-            throw new \LogicException(sprintf('Cannot store preparation state for firewall "%s" in a TwoFactorToken belonging to "%s".', $firewallName, $this->providerKey));
-        }
-
         return $this->preparedProviders[$providerName] ?? false;
     }
 
-    public function setTwoFactorProviderPrepared(string $firewallName, string $providerName): void
+    public function setTwoFactorProviderPrepared(string $providerName): void
     {
-        if ($firewallName !== $this->providerKey) {
-            throw new \LogicException(sprintf('Cannot store preparation state for firewall "%s" in a TwoFactorToken belonging to "%s".', $firewallName, $this->providerKey));
-        }
-
         $this->preparedProviders[$providerName] = true;
     }
 
     public function setTwoFactorProviderComplete(string $providerName): void
     {
-        if (!$this->isTwoFactorProviderPrepared($this->providerKey, $providerName)) {
+        if (!$this->isTwoFactorProviderPrepared($providerName)) {
             throw new \LogicException(sprintf('Two-factor provider "%s" cannot be completed because it was not prepared.', $providerName));
         }
 

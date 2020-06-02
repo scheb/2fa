@@ -38,7 +38,7 @@ class TwoFactorTokenTest extends TestCase
      */
     public function createWithCredentials_tokenAndCredentialsGiven_recreateIdenticalTokenWithCredentials(): void
     {
-        $this->twoFactorToken->setTwoFactorProviderPrepared(self::FIREWALL_NAME, 'provider1');
+        $this->twoFactorToken->setTwoFactorProviderPrepared('provider1');
         $this->twoFactorToken->setAttribute('attributeName', 'attributeValue');
 
         $credentialsToken = $this->twoFactorToken->createWithCredentials('credentials');
@@ -87,28 +87,10 @@ class TwoFactorTokenTest extends TestCase
     /**
      * @test
      */
-    public function isTwoFactorProviderPrepared_differentFirewallName_throwLogicException(): void
-    {
-        $this->expectException(\LogicException::class);
-        $this->twoFactorToken->isTwoFactorProviderPrepared('differentFirewallName', 'provider1');
-    }
-
-    /**
-     * @test
-     */
     public function isTwoFactorProviderPrepared_isPrepared_returnTrue(): void
     {
-        $this->twoFactorToken->setTwoFactorProviderPrepared(self::FIREWALL_NAME, 'provider1');
-        $this->assertTrue($this->twoFactorToken->isTwoFactorProviderPrepared(self::FIREWALL_NAME, 'provider1'));
-    }
-
-    /**
-     * @test
-     */
-    public function isTwoFactorProviderPrepared_isNotPrepared_returnFalse(): void
-    {
-        $this->twoFactorToken->setTwoFactorProviderPrepared(self::FIREWALL_NAME, 'provider1');
-        $this->assertFalse($this->twoFactorToken->isTwoFactorProviderPrepared(self::FIREWALL_NAME, 'provider2'));
+        $this->twoFactorToken->setTwoFactorProviderPrepared('provider1');
+        $this->assertTrue($this->twoFactorToken->isTwoFactorProviderPrepared('provider1'));
     }
 
     /**
@@ -116,18 +98,9 @@ class TwoFactorTokenTest extends TestCase
      */
     public function isTwoFactorProviderPrepared_onePreparedProvider_returnTrueOnlyForThatProvider()
     {
-        $this->twoFactorToken->setTwoFactorProviderPrepared(self::FIREWALL_NAME, 'provider1');
-        $this->assertTrue($this->twoFactorToken->isTwoFactorProviderPrepared(self::FIREWALL_NAME, 'provider1'));
-        $this->assertFalse($this->twoFactorToken->isTwoFactorProviderPrepared(self::FIREWALL_NAME, 'provider2'));
-    }
-
-    /**
-     * @test
-     */
-    public function setTwoFactorProviderPrepared_differentFirewallName_throwLogicException(): void
-    {
-        $this->expectException(\LogicException::class);
-        $this->twoFactorToken->setTwoFactorProviderPrepared('differentFirewallName', 'provider1');
+        $this->twoFactorToken->setTwoFactorProviderPrepared('provider1');
+        $this->assertTrue($this->twoFactorToken->isTwoFactorProviderPrepared('provider1'));
+        $this->assertFalse($this->twoFactorToken->isTwoFactorProviderPrepared('provider2'));
     }
 
     /**
@@ -146,7 +119,7 @@ class TwoFactorTokenTest extends TestCase
      */
     public function setTwoFactorProviderComplete_completeProvider_continueWithNextProvider(): void
     {
-        $this->twoFactorToken->setTwoFactorProviderPrepared(self::FIREWALL_NAME, 'provider1');
+        $this->twoFactorToken->setTwoFactorProviderPrepared('provider1');
         $this->twoFactorToken->setTwoFactorProviderComplete('provider1');
         $this->assertEquals('provider2', $this->twoFactorToken->getCurrentTwoFactorProvider());
     }
@@ -158,7 +131,7 @@ class TwoFactorTokenTest extends TestCase
     {
         $this->expectException(UnknownTwoFactorProviderException::class);
 
-        $this->twoFactorToken->setTwoFactorProviderPrepared(self::FIREWALL_NAME, 'unknownProvider');
+        $this->twoFactorToken->setTwoFactorProviderPrepared('unknownProvider');
         $this->twoFactorToken->setTwoFactorProviderComplete('unknownProvider');
     }
 
@@ -167,7 +140,7 @@ class TwoFactorTokenTest extends TestCase
      */
     public function allTwoFactorProvidersAuthenticated_notComplete_returnFalse(): void
     {
-        $this->twoFactorToken->setTwoFactorProviderPrepared(self::FIREWALL_NAME, 'provider1');
+        $this->twoFactorToken->setTwoFactorProviderPrepared('provider1');
         $this->twoFactorToken->setTwoFactorProviderComplete('provider1');
 
         $this->assertFalse($this->twoFactorToken->allTwoFactorProvidersAuthenticated());
@@ -178,10 +151,10 @@ class TwoFactorTokenTest extends TestCase
      */
     public function allTwoFactorProvidersAuthenticated_allComplete_returnTrue(): void
     {
-        $this->twoFactorToken->setTwoFactorProviderPrepared(self::FIREWALL_NAME, 'provider1');
+        $this->twoFactorToken->setTwoFactorProviderPrepared('provider1');
         $this->twoFactorToken->setTwoFactorProviderComplete('provider1');
 
-        $this->twoFactorToken->setTwoFactorProviderPrepared(self::FIREWALL_NAME, 'provider2');
+        $this->twoFactorToken->setTwoFactorProviderPrepared('provider2');
         $this->twoFactorToken->setTwoFactorProviderComplete('provider2');
 
         $this->assertTrue($this->twoFactorToken->allTwoFactorProvidersAuthenticated());
@@ -194,7 +167,7 @@ class TwoFactorTokenTest extends TestCase
     {
         $innerToken = new UsernamePasswordToken('username', 'credentials', self::FIREWALL_NAME, ['ROLE']);
         $twoFactorToken = new TwoFactorToken($innerToken, 'twoFactorCode', self::FIREWALL_NAME, ['2faProvider']);
-        $twoFactorToken->setTwoFactorProviderPrepared(self::FIREWALL_NAME, '2faProvider');
+        $twoFactorToken->setTwoFactorProviderPrepared('2faProvider');
 
         $unserializedToken = unserialize(serialize($twoFactorToken));
 
