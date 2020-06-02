@@ -20,9 +20,9 @@ class TwoFactorFirewallConfigTest extends TestCase
         'multi_factor' => true,
         'auth_code_parameter_name' => 'auth_code_param',
         'trusted_parameter_name' => 'trusted_param',
+        'enable_csrf' => true,
         'csrf_parameter' => 'parameter_name',
         'csrf_token_id' => 'token_id',
-        'csrf_token_generator' => 'csrf_token_generator',
     ];
 
     /**
@@ -134,7 +134,16 @@ class TwoFactorFirewallConfigTest extends TestCase
     /**
      * @test
      */
-    public function isCsrfProtectionEnabled_configuredCsrfTokenGeneratorIsString_returnTrue(): void
+    public function isCsrfProtectionEnabled_csrfDisabled_returnTrue(): void
+    {
+        $returnValue = $this->createConfig(['enable_csrf'])->isCsrfProtectionEnabled();
+        $this->assertFalse($returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function isCsrfProtectionEnabled_csrfEnabled_returnTrue(): void
     {
         $returnValue = $this->createConfig(self::FULL_OPTIONS)->isCsrfProtectionEnabled();
         $this->assertTrue($returnValue);

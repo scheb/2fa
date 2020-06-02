@@ -98,6 +98,8 @@
 			<argument type="collection" /> <!-- Options -->
 		</service>
 
+		<service id="scheb_two_factor.csrf_token_manager" alias="security.csrf.token_manager" />
+
 		<service id="scheb_two_factor.null_csrf_token_manager" class="Scheb\TwoFactorBundle\Security\TwoFactor\Csrf\NullCsrfTokenManager" />
 
 		<service id="scheb_two_factor.security.firewall_config" class="Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig" abstract="true">

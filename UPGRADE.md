@@ -52,6 +52,36 @@ security:
                 post_only: false
 ```
 
+The option `csrf_token_generator` in two-factor firewall configuration was removed. Please use `enable_csrf: true`
+instead.
+
+Before:
+
+```yaml
+# config/packages/security.yaml
+security:
+    firewalls:
+        yourFirewallName:
+            # ...
+            two_factor:
+                csrf_token_generator: security.csrf.token_manager
+```
+
+After:
+
+```yaml
+# config/packages/security.yaml
+security:
+    firewalls:
+        yourFirewallName:
+            # ...
+            two_factor:
+                enable_csrf: true
+```
+
+If you have used a CSRF token manager other than `security.csrf.token_manager` before, please overwrite service
+definition `scheb_two_factor.csrf_token_manager` with the service to use.
+
 ### Interfaces
 
 `Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface` was extended with a new method
