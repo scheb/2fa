@@ -61,7 +61,7 @@ class Configuration implements ConfigurationInterface
     {
         $this->addTrustedDeviceConfiguration($rootNode);
         $this->addBackupCodeConfiguration($rootNode);
-        $this->addEMailConfiguration($rootNode);
+        $this->addEmailConfiguration($rootNode);
         $this->addGoogleAuthenticatorConfiguration($rootNode);
         $this->addTotpConfiguration($rootNode);
     }
@@ -123,7 +123,7 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
-    private function addEMailConfiguration(ArrayNodeDefinition $rootNode): void
+    private function addEmailConfiguration(ArrayNodeDefinition $rootNode): void
     {
         if (!interface_exists(EMailTwoFactorInterface::class)) {
             return;
