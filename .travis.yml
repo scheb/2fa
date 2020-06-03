@@ -19,6 +19,9 @@ script:
     - ./bin/build/script.sh
 
 jobs:
+    fast_finish: true
+    allow_failures:
+        -   php: nightly
     include:
         # Unit Tests
         -   php: 7.2
@@ -37,6 +40,9 @@ jobs:
             env:
                 - TEST_SUITE=UNIT
                 - SYMFONY_VERSION=^5.0
+        -   php: nightly
+            env:
+                - TEST_SUITE=UNIT
 
         # Integration Tests
         -   php: 7.4
