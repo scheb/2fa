@@ -21,5 +21,19 @@
 		<DeprecatedMethod errorLevel="info" />
 		<DeprecatedProperty errorLevel="info" />
 		<DeprecatedTrait errorLevel="info" />
+		<UndefinedClass>
+			<!-- BC layer for doctrine/persistence 1.3 -->
+			<errorLevel type="info">
+				<referencedClass name="Doctrine\Common\Persistence\ObjectManager"/>
+				<referencedClass name="Doctrine\Common\Persistence\ManagerRegistry"/>
+			</errorLevel>
+		</UndefinedClass>
+		<UndefinedDocblockClass>
+			<!-- BC layer for doctrine/persistence 1.3 -->
+			<errorLevel type="info">
+				<referencedClass name="Doctrine\Common\Persistence\ObjectManager"/>
+				<referencedClass name="Doctrine\Common\Persistence\ManagerRegistry"/>
+			</errorLevel>
+		</UndefinedDocblockClass>
 	</issueHandlers>
 </psalm>

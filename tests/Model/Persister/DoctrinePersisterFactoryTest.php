@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Model\Persister;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectManager;
 use Scheb\TwoFactorBundle\Model\Persister\DoctrinePersister;
 use Scheb\TwoFactorBundle\Model\Persister\DoctrinePersisterFactory;
 use Scheb\TwoFactorBundle\Tests\TestCase;
