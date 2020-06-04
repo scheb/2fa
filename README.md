@@ -65,10 +65,9 @@ Version Guidance
 [v4-repo]: https://github.com/scheb/two-factor-bundle/tree/master
 [v5-repo]: https://github.com/scheb/2fa/tree/master
 
-Security Issues
----------------
-If you think that you have found a security issue in the bundle, don't use the bug tracker and don't publish it
-publicly. Instead, please report via email to me@christianscheb.de.
+Security
+--------
+For information about the security policy and know security issues, see [SECURITY.md](SECURITY.md).
 
 Contributing
 ------------
