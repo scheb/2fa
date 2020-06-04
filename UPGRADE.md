@@ -3,7 +3,8 @@ Upgrading
 
 Here's an overview if you have to do any work when upgrading.
 
-## 4.x to 5.x
+4.x to 5.x
+----------
 
 ### Packages
 
@@ -34,6 +35,8 @@ composer require scheb/2fa-qr-code                # Add to render QR-codes for G
 
 ### Configuration
 
+#### Default Security Token
+
 Guard-based authentication has become the preferred way of building a custom authentication provider. Furthermore,
 Symfony 5.1 introduced the new "authenticator"-based system, which is intended to become the preferred way in the
 future. Therefore, the security token
@@ -44,6 +47,8 @@ future. Therefore, the security token
 
 are now configured per default in `security_tokens` as token to triggers two-factor authentication. If you don't want to
 have these automatically configured, please set `security_tokens` in your bundle configuration.
+
+#### Check Path POST Only
 
 The `check_path` now accepts the two-factor authentication code only with a POST request. This can be changed by setting
 the `post_only: false` option on the firewall.
@@ -57,6 +62,8 @@ security:
             two_factor:
                 post_only: false
 ```
+
+#### CSRF
 
 The option `csrf_token_generator` in two-factor firewall configuration was removed. Please use `enable_csrf: true`
 instead.
@@ -90,10 +97,7 @@ definition `scheb_two_factor.csrf_token_manager` with the service to use.
 
 ### Interfaces
 
-`Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface` was extended with a new method
-`canSetTrustedDevice`, which allows the application to influence when a device can be flagged as a "trusted device". If
-you have implemented your own TrustedDeviceManager, please add this method. Just return `true` to get the same behaviour
-as before.
+#### TwoFactorTokenInterface
 
 `Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface` was extended with new methods to store the
 preparation state of two-factor authentication providers. Methods `isTwoFactorProviderPrepared` and
@@ -101,15 +105,26 @@ preparation state of two-factor authentication providers. Methods `isTwoFactorPr
 an identical token with credentials. See `Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken` for a
 reference implementation.
 
-Related to this change, the `crendetials` argument was removed from
-`Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface::create`. So if you're using your
-own token factory, please update your code.
+#### TwoFactorTokenFactoryInterface
+
+Related to this change, the `credentials` argument was removed from
+`Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface::create`. If you're using your own
+token factory, please update your code.
+
+#### TrustedDeviceManagerInterface
+
+`Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface` was extended with a new method
+`canSetTrustedDevice`, which allows the application to influence under which conditions a device can be flagged
+"trusted" If you have implemented your own TrustedDeviceManager, please add this method. Return `true` to get the same
+behaviour as before.
+
+#### Other
 
 The constructor of `Scheb\TwoFactorBundle\Controller\FormController` now takes an instance of
 `Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface` as the fifth argument. If you have
 extended the controller to customize it, please update your service definition accordingly.
 
-`Scheb\TwoFactorBundle\Security\Authentication\Exception\InvalidTwoFactorCodeException::setMessageKey` has been removed
+`Scheb\TwoFactorBundle\Security\Authentication\Exception\InvalidTwoFactorCodeException::setMessageKey` has been removed.
 
 `Scheb\TwoFactorBundle\Mailer\AuthCodeMailer` was renamed to `Scheb\TwoFactorBundle\Mailer\SwiftAuthCodeMailer`.
 
