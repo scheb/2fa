@@ -71,7 +71,7 @@ For information about the security policy and know security issues, see [SECURIT
 
 Contributing
 ------------
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+Want to contribute to this project? See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 License
 -------
