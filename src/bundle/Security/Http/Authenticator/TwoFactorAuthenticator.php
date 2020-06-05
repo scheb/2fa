@@ -7,7 +7,6 @@ namespace Scheb\TwoFactorBundle\Security\Http\Authenticator;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
-use Scheb\TwoFactorBundle\Security\Authorization\TwoFactorAccessDecider;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Badge\TrustedDeviceBadge;
@@ -65,10 +64,6 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
      * @var LoggerInterface
      */
     private $logger;
-    /**
-     * @var TwoFactorAccessDecider
-     */
-    private $twoFactorAccessDecider;
 
     public function __construct(
         TwoFactorFirewallConfig $twoFactorFirewallConfig,
@@ -76,7 +71,6 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         AuthenticationSuccessHandlerInterface $successHandler,
         AuthenticationFailureHandlerInterface $failureHandler,
         AuthenticationRequiredHandlerInterface $authenticationRequiredHandler,
-        TwoFactorAccessDecider $twoFactorAccessDecider,
         EventDispatcherInterface $eventDispatcher,
         ?LoggerInterface $logger = null
     ) {
@@ -85,7 +79,6 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         $this->successHandler = $successHandler;
         $this->failureHandler = $failureHandler;
         $this->authenticationRequiredHandler = $authenticationRequiredHandler;
-        $this->twoFactorAccessDecider = $twoFactorAccessDecider;
         $this->eventDispatcher = $eventDispatcher;
         $this->logger = $logger ?? new NullLogger();
     }

@@ -7,7 +7,6 @@ namespace Scheb\TwoFactorBundle\Tests\Security\Http\Authenticator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
-use Scheb\TwoFactorBundle\Security\Authorization\TwoFactorAccessDecider;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Badge\TrustedDeviceBadge;
@@ -61,11 +60,6 @@ class TwoFactorAuthenticatorTest extends TestCase
     private $authenticationRequiredHandler;
 
     /**
-     * @var MockObject|TwoFactorAccessDecider
-     */
-    private $twoFactorAccessDecider;
-
-    /**
      * @var MockObject|EventDispatcherInterface
      */
     private $eventDispatcher;
@@ -89,7 +83,6 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->successHandler = $this->createMock(AuthenticationSuccessHandlerInterface::class);
         $this->failureHandler = $this->createMock(AuthenticationFailureHandlerInterface::class);
         $this->authenticationRequiredHandler = $this->createMock(AuthenticationRequiredHandlerInterface::class);
-        $this->twoFactorAccessDecider = $this->createMock(TwoFactorAccessDecider::class);
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->request = $this->createMock(Request::class);
 
@@ -116,7 +109,6 @@ class TwoFactorAuthenticatorTest extends TestCase
             $this->successHandler,
             $this->failureHandler,
             $this->authenticationRequiredHandler,
-            $this->twoFactorAccessDecider,
             $this->eventDispatcher,
             $this->createMock(LoggerInterface::class)
         );

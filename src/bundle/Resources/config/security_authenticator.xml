@@ -14,7 +14,6 @@
 			<argument /> <!-- Success handler -->
 			<argument /> <!-- Failure handler -->
 			<argument /> <!-- Authentication required handler -->
-			<argument type="service" id="scheb_two_factor.security.access.access_decider" />
 			<argument type="service" id="event_dispatcher" />
 			<argument type="service" id="logger" on-invalid="null" />
 			<tag name="monolog.logger" channel="security" />
