@@ -43,6 +43,7 @@ jobs:
         -   php: nightly
             env:
                 - TEST_SUITE=UNIT
+                - COMPOSER_FLAGS="--ignore-platform-reqs"
 
         # Integration Tests
         -   php: 7.4
