@@ -5,6 +5,7 @@
 /bin export-ignore
 /doc export-ignore
 /tests export-ignore
+/.editorconfig export-ignore
 /.gitattributes export-ignore
 /.gitignore export-ignore
 /.gitsplit.yml export-ignore
@@ -14,5 +15,7 @@
 /CONTRIBUTING.md export-ignore
 /php_cs.xml export-ignore
 /phpunit.xml.dist export-ignore
+/psalm.xml export-ignore
 /README.md export-ignore
+/SECURITY.md export-ignore
 /UPGRADE.md export-ignore
