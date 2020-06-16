@@ -32,7 +32,7 @@
         "scheb/2fa-backup-code": "Emergency codes when you have no access to other methods",
         "scheb/2fa-email": "Send codes by email",
         "scheb/2fa-totp": "Temporary one-time password (TOTP) support (Google Authenticator compatible)",
-        "scheb/2fa-google": "Google Authenticator support",
+        "scheb/2fa-google-authenticator": "Google Authenticator support",
         "scheb/2fa-trusted-device": "Trusted devices support",
         "scheb/2fa-qr-code": "Generate QR codes for Google Authenticator / TOTP"
     }
