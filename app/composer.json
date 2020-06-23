@@ -2,7 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.2.5",
+        "php": ">=7.2.5",
         "symfony/monolog-bundle": "^3.1",
         "symfony/symfony": "^4.4|^5.0",
         "symfony/orm-pack": "^1.0",
