@@ -1,7 +1,7 @@
 scheb/2fa-backup-code
 =====================
 
-[![Build Status](https://travis-ci.org/scheb/2fa.svg?branch=master)](https://travis-ci.org/scheb/2fa)
+[![Build Status](https://travis-ci.org/scheb/2fa.svg?branch=master)](https://travis-ci.org/scheb/2fa/branches)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/scheb/2fa/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/scheb/2fa/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/scheb/2fa/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/scheb/2fa/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/scheb/2fa-backup-code/v/stable.svg)](https://packagist.org/packages/scheb/2fa-backup-code)
