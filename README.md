@@ -4,9 +4,9 @@ scheb/2fa
 This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki/Multi-factor_authentication) for your
 [Symfony](https://symfony.com/) application**.
 
-[![Build Status](https://travis-ci.org/scheb/2fa.svg?branch=master)](https://travis-ci.org/scheb/2fa/branches)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/scheb/2fa/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/scheb/2fa/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/scheb/2fa/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/scheb/2fa/?branch=master)
+[![Build Status](https://travis-ci.org/scheb/2fa.svg?branch=5.x)](https://travis-ci.org/scheb/2fa/branches)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/scheb/2fa/badges/quality-score.png?b=5.x)](https://scrutinizer-ci.com/g/scheb/2fa/?branch=5.x)
+[![Code Coverage](https://scrutinizer-ci.com/g/scheb/2fa/badges/coverage.png?b=5.x)](https://scrutinizer-ci.com/g/scheb/2fa/?branch=5.x)
 [![Latest Stable Version](https://poser.pugx.org/scheb/2fa/v/stable.svg)](https://packagist.org/packages/scheb/2fa)
 [![Total Downloads](https://poser.pugx.org/scheb/2fa/downloads)](https://packagist.org/packages/scheb/2fa)
 [![License](https://poser.pugx.org/scheb/2fa/license.svg)](https://packagist.org/packages/scheb/2fa)
@@ -62,8 +62,8 @@ Version Guidance
 [v1-repo]: https://github.com/scheb/two-factor-bundle/tree/1.x
 [v2-repo]: https://github.com/scheb/two-factor-bundle/tree/2.x
 [v3-repo]: https://github.com/scheb/two-factor-bundle/tree/3.x
-[v4-repo]: https://github.com/scheb/two-factor-bundle/tree/master
-[v5-repo]: https://github.com/scheb/2fa/tree/master
+[v4-repo]: https://github.com/scheb/two-factor-bundle/tree/4.x
+[v5-repo]: https://github.com/scheb/2fa/tree/5.x
 
 Security
 --------

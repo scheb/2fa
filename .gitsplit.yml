@@ -15,6 +15,6 @@ splits:
       target: "https://${GH_TOKEN}@github.com/scheb/2fa-qr-code.git"
 
 origins:
-    - ^master$
+    - ^[0-9]+\.x$
     - ^v\d+\.\d+$
     - ^v\d+\.\d+\.\d+.*$

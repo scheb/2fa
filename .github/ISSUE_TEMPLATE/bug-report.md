@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 <!--
-Please check the troubleshooting guide first: https://github.com/scheb/2fa/blob/master/doc/troubleshooting.md
+Please check the troubleshooting guide first: https://github.com/scheb/2fa/blob/5.x/doc/troubleshooting.md
 -->
 
 **Bundle version**: x.y.z
