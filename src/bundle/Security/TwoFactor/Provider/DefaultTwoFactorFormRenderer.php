@@ -20,15 +20,18 @@ class DefaultTwoFactorFormRenderer implements TwoFactorFormRendererInterface
      */
     private $template;
 
-    public function __construct(Environment $twigRenderer, string $template)
+    private $context
+
+    public function __construct(Environment $twigRenderer, string $template, array $context = [])
     {
         $this->template = $template;
         $this->twigEnvironment = $twigRenderer;
+        $this->context = $context;
     }
 
     public function renderForm(Request $request, array $templateVars): Response
     {
-        $content = $this->twigEnvironment->render($this->template, $templateVars);
+        $content = $this->twigEnvironment->render($this->template, array_merge($this->context, $templateVars));
         $response = new Response();
         $response->setContent($content);
 
