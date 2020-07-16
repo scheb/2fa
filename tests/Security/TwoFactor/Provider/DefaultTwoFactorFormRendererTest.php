@@ -27,7 +27,7 @@ class DefaultTwoFactorFormRendererTest extends TestCase
     protected function setUp(): void
     {
         $this->twig = $this->createMock(Environment::class);
-        $this->formRender = new DefaultTwoFactorFormRenderer($this->twig, self::TEMPLATE);
+        $this->formRender = new DefaultTwoFactorFormRenderer($this->twig, self::TEMPLATE, ['defaultVar' => 'defaultValue']);
     }
 
     /**
@@ -37,11 +37,12 @@ class DefaultTwoFactorFormRendererTest extends TestCase
     {
         $request = $this->createMock(Request::class);
         $templateVars = ['var1' => 'value1', 'var2' => 'value2'];
+        $expectedTemplateVars = ['defaultVar' => 'defaultValue', 'var1' => 'value1', 'var2' => 'value2'];
 
         $this->twig
             ->expects($this->once())
             ->method('render')
-            ->with(self::TEMPLATE, $templateVars)
+            ->with(self::TEMPLATE, $expectedTemplateVars)
             ->willReturn('<RenderedForm>');
 
         $returnValue = $this->formRender->renderForm($request, $templateVars);
