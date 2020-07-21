@@ -20,7 +20,7 @@ class DefaultTwoFactorFormRenderer implements TwoFactorFormRendererInterface
      */
     private $template;
 
-    private $context
+    private array $context;
 
     public function __construct(Environment $twigRenderer, string $template, array $context = [])
     {
