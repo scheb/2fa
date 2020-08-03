@@ -5,7 +5,7 @@
         "php": ">=7.2.5",
         "symfony/monolog-bundle": "^3.1",
         "symfony/symfony": "^4.4|^5.0",
-        "symfony/orm-pack": "^1.0",
+        "symfony/orm-pack": "^2.0",
         "symfony/swiftmailer-bundle": "^3.1",
         "lcobucci/jwt": "^3.2",
         "spomky-labs/otphp": "^9.1|^10.0",
@@ -14,6 +14,9 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0|^9.0"
+    },
+    "conflict": {
+        "doctrine/doctrine-bundle": "<=2.0.2"
     },
     "config": {
         "preferred-install": {
