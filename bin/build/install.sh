@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-if [ "$TEST_SUITE" = "INTEGRATION" ]
+if [ "$TEST_SUITE" = "integration" ]
 then
     COMPOSER_WORKING_DIR="--working-dir=app"
 fi

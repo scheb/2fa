@@ -26,44 +26,44 @@ jobs:
         # Unit Tests
         -   php: 7.2
             env:
-                - TEST_SUITE=UNIT
+                - TEST_SUITE=unit
                 - COMPOSER_FLAGS="--prefer-lowest"
         -   php: 7.3
             env:
-                - TEST_SUITE=UNIT
+                - TEST_SUITE=unit
                 - SYMFONY_VERSION=^4.4
         -   php: 7.4
             env:
-                - TEST_SUITE=UNIT
+                - TEST_SUITE=unit
                 - SYMFONY_VERSION=^4.4
         -   php: 7.4
             env:
-                - TEST_SUITE=UNIT
+                - TEST_SUITE=unit
                 - SYMFONY_VERSION=^5.0
         -   php: nightly
             env:
-                - TEST_SUITE=UNIT
+                - TEST_SUITE=unit
                 - COMPOSER_FLAGS="--ignore-platform-reqs"
 
         # Integration Tests
         -   php: 7.4
             env:
-                - TEST_SUITE=INTEGRATION
+                - TEST_SUITE=integration
                 - TEST_CONFIG=default
                 - SYMFONY_VERSION=~4.4
         -   php: 7.4
             env:
-                - TEST_SUITE=INTEGRATION
+                - TEST_SUITE=integration
                 - TEST_CONFIG=default
                 - SYMFONY_VERSION=~5.0
         -   php: 7.4
             env:
-                - TEST_SUITE=INTEGRATION
+                - TEST_SUITE=integration
                 - TEST_CONFIG=default
                 - SYMFONY_VERSION=^5.1
         -   php: 7.4
             env:
-                - TEST_SUITE=INTEGRATION
+                - TEST_SUITE=integration
                 - TEST_CONFIG=authenticators
                 - SYMFONY_VERSION=^5.1
 
