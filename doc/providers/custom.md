@@ -3,11 +3,12 @@ Implementing a custom two-factor authenticator
 
 ## Getting started
 
-A good starting point are the Google Authenticator and email authentication method, which are shipped with this bundle.
-Take a look at at the classes located in those namespaces:
+A good starting point are the Google Authenticator, TOTP and email authentication implementations, which are
+available in the codebase. Have a look at the follow files:
 
- - `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email`
- - `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google`
+- [`src/google-authenticator/Security/TwoFactor/Provider/Google/GoogleAuthenticatorTwoFactorProvider.php`](https://github.com/scheb/2fa/tree/5.x/src/google-authenticator/Security/TwoFactor/Provider/Google/GoogleAuthenticatorTwoFactorProvider.php)
+- [`src/totp/Security/TwoFactor/Provider/Totp/TotpAuthenticatorTwoFactorProvider.php`](https://github.com/scheb/2fa/tree/5.x/src/totp/Security/TwoFactor/Provider/Totp/TotpAuthenticatorTwoFactorProvider.php)
+- [`src/email/Security/TwoFactor/Provider/Email/EmailTwoFactorProvider.php`](https://github.com/scheb/2fa/tree/5.x/src/email/Security/TwoFactor/Provider/Email/EmailTwoFactorProvider.php)
 
 You will get the basic idea how to implement a custom two-factor method.
 
@@ -19,7 +20,7 @@ You have to create a service, which implements the
 ### beginAuthentication
 
 ```php
-public function beginAuthentication(AuthenticationContextInterface $context): bool
+public function beginAuthentication(AuthenticationContextInterface $context): bool;
 ```
 
 The method is called after successful login. It receives an `AuthenticationContextInterface` object as the argument
@@ -39,7 +40,7 @@ generating a code and sending it to the user.
 ### validateAuthenticationCode
 
 ```php
-public function validateAuthenticationCode($user, string $authenticationCode): bool
+public function validateAuthenticationCode($user, string $authenticationCode): bool;
 ```
 
 This method is responsible for validating the authentication code entered by the user. Return `true` if the code was
@@ -59,8 +60,8 @@ public function renderForm(Request $request, array $templateVars): Response;
 ```
 
 How you render the form is totally up to you. The only important thing is to return a `Response`, which could also be a
-`RedirectResponse` redirect to an external service. A default implementation for rendering forms with Twig is available as
-`Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer`.
+`RedirectResponse` redirect to an external service. A default implementation for rendering forms with Twig is available
+as `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer`.
 
 ## Register the provider
 
