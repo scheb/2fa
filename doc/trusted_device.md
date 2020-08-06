@@ -60,6 +60,23 @@ class User implements TrustedDeviceInterface
 
 If not implemented, the bundle is defaulting to version `0`.
 
+## Flagging a device as "trusted"
+
+To flag a device as "trusted", in the last step of the 2fa process, you have to pass a parameter `_trusted` with a
+`true`-like value. The parameter name can be changed in the firewall configuration:
+
+```yaml
+security:
+    firewalls:
+        yourFirewallName:
+            # ...
+            two_factor:
+                trusted_parameter_name: _trusted  # Name of the parameter for the trusted device option
+```
+
+Please have a look at the [default authentication form template](https://github.com/scheb/2fa/blob/5.x/src/bundle/Resources/views/Authentication/form.html.twig#L38-L40)
+how it's implemented.
+
 ## Custom trusted device manager
 
 If you don't like the way this is implemented, you can also have your own trusted device manager. Create a service
