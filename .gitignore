@@ -4,3 +4,7 @@ composer.lock
 .php_cs.cache
 # PHPUnit
 .phpunit.result.cache
+# Test application
+/app/var/
+/app/vendor/
+/app/symfony.lock
