@@ -123,19 +123,19 @@ class TwoFactorFactory implements SecurityFactoryInterface
         return [$providerId, $listenerId, $defaultEntryPoint];
     }
 
-    public function createAuthenticator(ContainerBuilder $container, string $id, array $config, string $userProviderId): string
+    public function createAuthenticator(ContainerBuilder $container, string $firewallName, array $config, string $userProviderId): string
     {
-        $twoFactorFirewallConfigId = $this->twoFactorServicesFactory->createTwoFactorFirewallConfig($container, $id, $config);
-        $successHandlerId = $this->twoFactorServicesFactory->createSuccessHandler($container, $id, $config, $twoFactorFirewallConfigId);
-        $failureHandlerId = $this->twoFactorServicesFactory->createFailureHandler($container, $id, $config, $twoFactorFirewallConfigId);
-        $authRequiredHandlerId = $this->twoFactorServicesFactory->createAuthenticationRequiredHandler($container, $id, $config, $twoFactorFirewallConfigId);
-        $this->twoFactorServicesFactory->createKernelExceptionListener($container, $id, $authRequiredHandlerId);
-        $this->twoFactorServicesFactory->createAccessListener($container, $id, $twoFactorFirewallConfigId);
-        $this->twoFactorServicesFactory->createProviderPreparationListener($container, $id, $config);
+        $twoFactorFirewallConfigId = $this->twoFactorServicesFactory->createTwoFactorFirewallConfig($container, $firewallName, $config);
+        $successHandlerId = $this->twoFactorServicesFactory->createSuccessHandler($container, $firewallName, $config, $twoFactorFirewallConfigId);
+        $failureHandlerId = $this->twoFactorServicesFactory->createFailureHandler($container, $firewallName, $config, $twoFactorFirewallConfigId);
+        $authRequiredHandlerId = $this->twoFactorServicesFactory->createAuthenticationRequiredHandler($container, $firewallName, $config, $twoFactorFirewallConfigId);
+        $this->twoFactorServicesFactory->createKernelExceptionListener($container, $firewallName, $authRequiredHandlerId);
+        $this->twoFactorServicesFactory->createAccessListener($container, $firewallName, $twoFactorFirewallConfigId);
+        $this->twoFactorServicesFactory->createProviderPreparationListener($container, $firewallName, $config);
 
         return $this->createAuthenticatorService(
             $container,
-            $id,
+            $firewallName,
             $twoFactorFirewallConfigId,
             $successHandlerId,
             $failureHandlerId,

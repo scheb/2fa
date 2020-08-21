@@ -153,14 +153,14 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         return $this->successHandler->onAuthenticationSuccess($request, $token);
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $failureException): ?Response
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         /** @var TwoFactorTokenInterface $currentToken */
         $currentToken = $this->tokenStorage->getToken();
-        $this->logger->info('Two-factor authentication request failed.', ['exception' => $failureException]);
+        $this->logger->info('Two-factor authentication request failed.', ['exception' => $exception]);
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::FAILURE, $request, $currentToken);
 
-        return $this->failureHandler->onAuthenticationFailure($request, $failureException);
+        return $this->failureHandler->onAuthenticationFailure($request, $exception);
     }
 
     private function dispatchTwoFactorAuthenticationEvent(string $eventType, Request $request, TokenInterface $token): void
