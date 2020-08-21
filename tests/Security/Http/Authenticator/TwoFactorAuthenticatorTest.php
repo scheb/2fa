@@ -195,13 +195,14 @@ class TwoFactorAuthenticatorTest extends TestCase
 
     private function expectDispatchEvents(array $events): void
     {
-        $i = 0;
-        foreach ($events as $event) {
-            $this->eventDispatcher
-                ->expects($this->at($i++))
-                ->method('dispatch')
-                ->with($this->isInstanceOf(TwoFactorAuthenticationEvent::class), $event);
-        }
+        $withArguments = array_map(function ($event): array {
+            return [$this->isInstanceOf(TwoFactorAuthenticationEvent::class), $event];
+        }, $events);
+
+        $this->eventDispatcher
+            ->expects($this->exactly(\count($events)))
+            ->method('dispatch')
+            ->withConsecutive(...$withArguments);
     }
 
     /**
