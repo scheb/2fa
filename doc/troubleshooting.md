@@ -21,7 +21,7 @@ configuration.
 
 The configuration should look similar to this:
 
-```
+```yaml
 # config/packages/security.yaml
 security:
     access_control:
