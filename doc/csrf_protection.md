@@ -18,7 +18,7 @@ Then, in the firewall's `two_factor` security configuration need to enable CSRF:
 # app/config/security.yml
 security:
     firewalls:
-        secured_area:
+        your_firewall_name:
             two_factor:
                 enable_csrf: true
 ```
@@ -39,7 +39,7 @@ your configuration:
 # app/config/security.yml
 security:
     firewalls:
-        secured_area:
+        your_firewall_name:
             two_factor:
                 enable_csrf: true
                 csrf_parameter: _csrf_security_token

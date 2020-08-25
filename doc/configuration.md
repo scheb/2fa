@@ -89,7 +89,7 @@ scheb_two_factor:
 # config/packages/security.yaml
 security:
     firewalls:
-        yourFirewallName:
+        your_firewall_name:
             # ...
             two_factor:
                 auth_form_path: /2fa                  # Path or route name of the two-factor form

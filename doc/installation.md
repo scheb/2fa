@@ -76,7 +76,7 @@ Enable two-factor authentication **per firewall** and configure `access_control`
 # config/packages/security.yaml
 security:
     firewalls:
-        main:
+        your_firewall_name:
             two_factor:
                 auth_form_path: 2fa_login    # The route name you have used in the routes.yaml
                 check_path: 2fa_login_check  # The route name you have used in the routes.yaml

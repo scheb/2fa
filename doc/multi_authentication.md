@@ -11,7 +11,7 @@ You can set the in the firewall configuration:
 # config/packages/security.yaml
 security:
     firewalls:
-        yourFirewallName:
+        your_firewall_name:
             two_factor:
                 multi_factor: false  # If ALL active two-factor methods need to be fulfilled
 ```

@@ -68,7 +68,7 @@ To flag a device as "trusted", in the last step of the 2fa process, you have to 
 ```yaml
 security:
     firewalls:
-        yourFirewallName:
+        your_firewall_name:
             # ...
             two_factor:
                 trusted_parameter_name: _trusted  # Name of the parameter for the trusted device option
