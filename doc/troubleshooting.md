@@ -149,3 +149,28 @@ a different page from your application.
    - No, it returns an empty array:
        - **Solution:** our user doesn't have an active two-factor authentication method. Either the `is*Enabled` method
          returns `false` or an essential piece of data (e.g. Google Authenticator secret) is missing.
+
+# Trusted device cookie is not set
+
+### Problem
+
+After you have completed 2fa, you expect that device to be flagged as a "trusted device", but the
+trusted device cookie is not set.
+
+### Basic checks
+
+- 2fa was completed with that call and you've been fully authenticated afterwards.
+- Together with the 2fa code, you have sent the trusted parameter (default `_trusted`) with a
+  `true`-like value. (Background information: Devices are not automatically flagged as trusted. The user has to choose
+  if they can trust that device. That's why this extra parameter has to be sent over.)
+
+### Troubleshooting
+
+Have a look at the response of the HTTP call when you sent over the 2fa and the trusted parameter. Do you see a cookie
+being set (`Set-Cookie` header)?
+
+   - Yes -> Please validate the cookie's parameters. Make sure everything is fine for that cookie: the path, domain, and
+     other cookie options. Did you maybe try to [set it for a top level domain](https://github.com/scheb/two-factor-bundle/issues/242#issuecomment-538735430)?
+   - No, there's no cookie set: Unknown issue. Try to reach out for help by
+     [creating an issue](https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request.md) and let us
+     know what you've already tested.
