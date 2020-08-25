@@ -91,7 +91,7 @@ that are used in `isAccountNonExpired()`, `isAccountNonLocked()`, `isCredentials
 
 ### Problem
 
-After successful login, the two-factor authentication form is not shown. Instead you're either logged in or you see
+After successful login, the two-factor authentication form is not shown. Instead, you're either logged in or you see
 a different page from your application.
 
 ### Troubleshooting
