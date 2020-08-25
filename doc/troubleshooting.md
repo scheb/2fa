@@ -104,6 +104,32 @@ a different page from your application.
     - Additional data for the authentication method is returned, e.g. for Google Authenticator to work the
     `getGoogleAuthenticatorSecret()` method must return a secret code.
 
+**Is there something special about your security setup?**
+
+Often issues originate from a customization in the application's security setup, which is usually related to how roles
+are granted. Examples of such issue are:
+
+- [Roles are dynamically granted by a voter, which isn't aware of the intermediate 2fa state](https://github.com/scheb/2fa/issues/23)
+- [Roles are loaded by replacing the security token after login, effectively skipping 2fa](https://github.com/scheb/two-factor-bundle/issues/289)
+- [An exception thrown in a voter](https://github.com/scheb/two-factor-bundle/issues/291)
+
+For 2fa to work properly, there must be two things fulfilled: A `TwoFactorToken` must be present after login and within
+that intermediate "2fa incomplete" state no roles must be granted. That later one is achieved by `TwoFactorToken` not
+returning any roles on the `getRoleNames()` call. But if you grant roles differently other than through the token,
+things will break.
+
+The solution to this problem is usually to skip any customization for a security token of type
+`TwoFactorTokenInterface`.
+
+```php
+<?php
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
+
+if (!($token instanceof TwoFactorTokenInterface)) {
+    // Your customization here
+}
+```
+
 ### Troubleshooting
 
 1) Is a `TwoFactorToken` present after the login?
