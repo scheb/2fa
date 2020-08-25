@@ -94,13 +94,17 @@ that are used in `isAccountNonExpired()`, `isAccountNonLocked()`, `isCredentials
 After successful login, the two-factor authentication form is not shown. Instead, you're either logged in or you see
 a different page from your application.
 
-### Troubleshooting
+### Basic checks
 
-Basic checks:
 - Your login page belongs to the firewall, which has two-factor authentication configured.
-- The paths of login page, login check, 2fa and 2fa check are all located with the firewall's path pattern.
+- The paths of login page, login check, 2fa and 2fa check are all located with the firewall's path `pattern`.
 - Your user entity has the interfaces implemented, which are necessary for the two-factor authentication method.
-- Your user entity fulfills the requirements of at least one two-factor authentication method.
+- Your user entity fulfills the requirements of at least one two-factor authentication method:
+    - The `is*Enabled()` method returns `true`
+    - Additional data for the authentication method is returned, e.g. for Google Authenticator to work the
+    `getGoogleAuthenticatorSecret()` method must return a secret code.
+
+### Troubleshooting
 
 1) Is a `TwoFactorToken` present after the login?
 
