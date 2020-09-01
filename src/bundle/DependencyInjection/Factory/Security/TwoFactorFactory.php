@@ -95,10 +95,10 @@ class TwoFactorFactory implements SecurityFactoryInterface
     /**
      * @param string $id
      * @param array $config
-     * @param string $userProvider
-     * @param string|null $defaultEntryPoint
+     * @param string $userProviderId
+     * @param string|null $defaultEntryPointId
      */
-    public function create(ContainerBuilder $container, $id, $config, $userProvider, $defaultEntryPoint): array
+    public function create(ContainerBuilder $container, $id, $config, $userProviderId, $defaultEntryPointId): array
     {
         $csrfTokenManagerId = $this->twoFactorServicesFactory->getCsrfTokenManagerId($config);
         $twoFactorFirewallConfigId = $this->twoFactorServicesFactory->createTwoFactorFirewallConfig($container, $id, $config);
@@ -120,7 +120,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
             $csrfTokenManagerId
         );
 
-        return [$providerId, $listenerId, $defaultEntryPoint];
+        return [$providerId, $listenerId, $defaultEntryPointId];
     }
 
     public function createAuthenticator(ContainerBuilder $container, string $firewallName, array $config, string $userProviderId): string
