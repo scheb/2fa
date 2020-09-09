@@ -3,6 +3,48 @@ Troubleshooting
 
 How to debug and solve common issue related to the bundle.
 
+- [TOTP / Google Authenticator code is not accepted](#totp--google-authenticator-code-is-not-accepted)
+- [Logout redirects back to the two-factor authentication form](#logout-redirects-back-to-the-two-factor-authentication-form)
+- [Not logged in after completing two-factor authentication](#not-logged-in-after-completing-two-factor-authentication)
+- [Two-factor authentication form is not shown after login](#two-factor-authentication-form-is-not-shown-after-login)
+- [Trusted device cookie is not set](#trusted-device-cookie-is-not-set)
+
+
+## TOTP / Google Authenticator code is not accepted
+
+The principle of TOTP/Google Authenticator is that both systems - the server and your device - generate the same
+authentication code from a shared secret and the current time. If one of those two components isn't in sync, they'll
+generate a different code. Therefore:
+
+1) Most common cause: Make sure the UTC time on your server and device are in sync
+2) Make sure the secret used in your device matches the secret configured for the account
+
+The time window for a code is 30 seconds (in Google Authenticator, for TOTP it depends on your configuration). The
+bigger the time difference between server/device, the smaller the time window in which both generate the same code. If
+the time difference becomes too large, it can become impossible to provide the right code.
+
+To counteract the issue of time differences, you could increase the `window` setting, so accept more codes around the
+current valid code will be accepted:
+
+```yaml
+# config/packages/scheb_two_factor.yaml
+scheb_two_factor:
+
+    # For TOTP
+    totp:
+        window: 1  # How many codes before/after the current one would be accepted as valid
+
+    # For Google Authenticator
+    google:
+        window: 1  # How many codes before/after the current one would be accepted as valid
+```
+
+You might want to configure a time synchronization service, such as `ntpdate` on your server to make sure your server
+time is always in sync with UTC.
+
+The Google Authenticator app has an option to sync your device time. Open the app and select
+`Settings > Time correction for codes > Sync now` from the menu. Other apps might have a similar option.
+
 
 ## Logout redirects back to the two-factor authentication form
 
@@ -176,7 +218,8 @@ if (!($token instanceof TwoFactorTokenInterface)) {
        - **Solution:** our user doesn't have an active two-factor authentication method. Either the `is*Enabled` method
          returns `false` or an essential piece of data (e.g. Google Authenticator secret) is missing.
 
-# Trusted device cookie is not set
+
+## Trusted device cookie is not set
 
 ### Problem
 
