@@ -12,10 +12,15 @@ This bundle provides **two-factor authentication for your Symfony application**.
 - [Brute Force Protection](brute_force_protection.md)
 - [CSRF Protection](csrf_protection.md)
 - [Events](events.md)
+- [Troubleshooting (common issues)](troubleshooting.md)
+
+**How-to's:**
+
 - [How to create a custom two-factor authenticator](providers/custom.md)
 - [How to handle multiple activated authentication methods](multi_authentication.md)
+- [How to configure two-factor authentication for an API](api.md)
 - [How to create a custom persister](persister.md)
-- [Troubleshooting (common issues)](troubleshooting.md)
+
 
 ## Two-Factor Authentication Methods
 
@@ -26,6 +31,7 @@ The bundle supports the following authentication methods out of the box:
   - [Email authentication code](providers/email.md)
 
 See [Providers](providers/index.md) for more information about custom or third-party provider.
+
 
 ## The Authentication Process
 
