@@ -10,6 +10,13 @@ To make two-factor authentication work in an API, your **API has to be stateful*
 session which is passed by the client on every call. The session is necessary for two-factor authentication to store the
 state of the login - if the user has already completed two-factor authentication or not.
 
+If you use a custom authenticator (you may have followed Symfony's guide
+[Custom Authentication System with Guard (API Token Example)](https://symfony.com/doc/current/security/guard_authentication.html)),
+please make sure your authenticator doesn't authenticate on every request, but only when the
+authentication route is called. For an example, have a look at the
+[Avoid Authenticating the Browser on Every Request](https://symfony.com/doc/current/security/guard_authentication.html#avoid-authenticating-the-browser-on-every-request)
+section in the Symfony guide.
+
 ## Setup
 
 ℹ️ For simplicity of this guide, it is assumed that you're building a JSON API and you're using the `json_login`
@@ -22,6 +29,21 @@ You need to implement 4 classes:
 2) A custom "two-factor authentication required" handler for the two-factor authentication
 3) A custom success handler for the two-factor authentication
 4) A custom failure handler for the two-factor authentication
+
+### Configuration
+
+Please make sure the following configuration options are set on your firewall:
+
+```
+# config/packages/security.yaml
+security:
+    firewalls:
+        your_firewall_name:
+            # ...
+            two_factor:
+                prepare_on_login: true
+                prepare_on_access_denied: true
+```
 
 ### 1) Response on login
 
@@ -74,7 +96,7 @@ security:
 
 ### 2) Response to require two-factor authentication
 
-Configure a response that is returned when the user requests a path, but it is not accessible (yet), because the user
+You need a response that is returned when the user requests a path, but it is not accessible (yet), because the user
 has to complete two-factor authentication first. This could be the same as your "access denied" response.
 
 Create a class which implements `Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface`
@@ -114,8 +136,8 @@ security:
 
 ### 3) Response when two-factor authentication was successful
 
-Configure a response that is returned when two-factor authentication was completed successfully and the user is now
-fully authentication. Implement another success handler for it:
+You need a response that is returned when two-factor authentication was completed successfully and the user is now
+fully authenticated. Implement another success handler for it:
 
 ```php
 <?php
@@ -151,7 +173,7 @@ security:
 
 ### 4) Response when two-factor authentication failed
 
-Configure a response that is returned when two-factor authentication was tried, but authentication failed for some
+You need a response that is returned when two-factor authentication was tried, but authentication failed for some
 reason. Implement a failure handler for it:
 
 ```php
