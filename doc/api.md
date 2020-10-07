@@ -34,7 +34,7 @@ You need to implement 4 classes:
 
 Please make sure the following configuration options are set on your firewall:
 
-```
+```yaml
 # config/packages/security.yaml
 security:
     firewalls:
