@@ -82,7 +82,7 @@ security:
                 check_path: 2fa_login_check  # The route name you have used in the routes.yaml
 
     # The path patterns shown here have to be updated according to your routes.
-    # Add these access control rules at the very top of the list!
+    # IMPORTANT: ADD THESE ACCESS CONTROL RULES AT THE VERY TOP OF THE LIST!
     access_control:
         # This makes the logout route accessible during two-factor authentication. Allows the user to
         # cancel two-factor authentication, if they need to.
