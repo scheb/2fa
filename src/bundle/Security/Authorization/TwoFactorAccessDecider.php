@@ -59,7 +59,9 @@ class TwoFactorAccessDecider
         }
 
         // Let the logout route pass
-        $logoutPath = $this->makeRelativeToBaseUrl($this->logoutUrlGenerator->getLogoutPath(), $request);
+        $logoutPath = $this->removeQueryParameters(
+            $this->makeRelativeToBaseUrl($this->logoutUrlGenerator->getLogoutPath(), $request)
+        );
         if ($this->httpUtils->checkRequestPath($request, $logoutPath)) {
             return true;
         }
@@ -80,5 +82,15 @@ class TwoFactorAccessDecider
         }
 
         return (string) $pathInfo;
+    }
+
+    private function removeQueryParameters(string $path): string
+    {
+        $queryPos = strpos($path, '?');
+        if (false !== $queryPos) {
+            $path = substr($path, 0, $queryPos);
+        }
+
+        return $path;
     }
 }
