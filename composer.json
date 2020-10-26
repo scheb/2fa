@@ -36,7 +36,7 @@
         "symfony/yaml": "^4.4|^5.0",
         "escapestudios/symfony2-coding-standard": "^3.9",
         "squizlabs/php_codesniffer": "^3.5",
-        "vimeo/psalm": "^3.11",
+        "vimeo/psalm": "^3.17|^4.0",
         "symfony/polyfill-php80": "^1.15"
     },
     "autoload": {
