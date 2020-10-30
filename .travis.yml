@@ -40,6 +40,10 @@ jobs:
             env:
                 - TEST_SUITE=unit
                 - SYMFONY_VERSION=^5.0
+        -   php: 7.4
+            env:
+                - TEST_SUITE=unit
+                - SYMFONY_VERSION=^5.2@beta
         -   php: nightly
             env:
                 - TEST_SUITE=unit
@@ -66,6 +70,11 @@ jobs:
                 - TEST_SUITE=integration
                 - TEST_CONFIG=authenticators
                 - SYMFONY_VERSION=^5.1
+        -   php: 7.4
+            env:
+                - TEST_SUITE=integration
+                - TEST_CONFIG=authenticators
+                - SYMFONY_VERSION=^5.2@beta
 
         # Metrics and Quality
         -   name: Code Coverage
