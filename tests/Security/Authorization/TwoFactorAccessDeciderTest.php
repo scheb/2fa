@@ -11,6 +11,7 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\AccessMapInterface;
 use Symfony\Component\Security\Http\Firewall\AccessListener;
 use Symfony\Component\Security\Http\HttpUtils;
@@ -137,8 +138,25 @@ class TwoFactorAccessDeciderTest extends TestCase
     public function isAccessible_isPublic_returnTrue(): void
     {
         $this->requireAtLeastSymfony5_1();
+        $publicAccess = null;
 
-        $this->stubAccessMapReturnsAttributes([AccessListener::PUBLIC_ACCESS]);
+        // Compatibility with Symfony 5.1
+        if (\defined(AccessListener::class.'::PUBLIC_ACCESS')) {
+            $publicAccess = AccessListener::PUBLIC_ACCESS;
+        }
+
+        // Compatibility for Symfony 5.2+
+        if (\defined(AuthenticatedVoter::class.'::PUBLIC_ACCESS')) {
+            $publicAccess = AuthenticatedVoter::PUBLIC_ACCESS;
+        }
+
+        if (null === $publicAccess) {
+            $this->fail('Could not find PUBLIC_ACCESS constant.');
+
+            return;
+        }
+
+        $this->stubAccessMapReturnsAttributes([$publicAccess]);
         $this->whenRequestBaseUrl('');
         $this->whenGeneratedLogoutPath(self::LOGOUT_PATH);
         $this->whenPathAccess(false);

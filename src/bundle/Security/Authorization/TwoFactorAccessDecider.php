@@ -7,6 +7,7 @@ namespace Scheb\TwoFactorBundle\Security\Authorization;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\AccessMapInterface;
 use Symfony\Component\Security\Http\Firewall\AccessListener;
 use Symfony\Component\Security\Http\HttpUtils;
@@ -50,7 +51,14 @@ class TwoFactorAccessDecider
     {
         // Let routes pass, e.g. if a route needs to be callable during two-factor authentication
         list($attributes) = $this->accessMap->getPatterns($request);
+
+        // Compatibility for Symfony 5.1
         if (\defined(AccessListener::class.'::PUBLIC_ACCESS') && [AccessListener::PUBLIC_ACCESS] === $attributes) {
+            return true;
+        }
+
+        // Compatibility for Symfony 5.2+
+        if (\defined(AuthenticatedVoter::class.'::PUBLIC_ACCESS') && [AuthenticatedVoter::PUBLIC_ACCESS] === $attributes) {
             return true;
         }
 
