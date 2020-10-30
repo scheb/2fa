@@ -12,12 +12,12 @@ abstract class TestCase extends PHPUnitTestCase
 {
     private const SYMFONY_5_1 = 50100;
 
-    protected function requireSymfony5_1()
+    protected function requireAtLeastSymfony5_1()
     {
-        $this->requireSymfonyVersion(self::SYMFONY_5_1);
+        $this->requireAtLeastSymfonyVersion(self::SYMFONY_5_1);
     }
 
-    private function requireSymfonyVersion(int $version)
+    private function requireAtLeastSymfonyVersion(int $version)
     {
         if (Kernel::VERSION_ID < $version) {
             $this->markTestSkipped("This Symfony version doesn't support authenticators.");

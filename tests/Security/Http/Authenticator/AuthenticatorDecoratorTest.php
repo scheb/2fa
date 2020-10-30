@@ -50,7 +50,7 @@ class AuthenticatorDecoratorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requireSymfony5_1();
+        $this->requireAtLeastSymfony5_1();
 
         $this->decoratedAuthenticator = $this->createMock(AuthenticatorInterface::class);
         $this->twoFactorAuthenticationHandler = $this->createMock(AuthenticationHandlerInterface::class);

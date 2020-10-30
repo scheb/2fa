@@ -37,7 +37,7 @@ class RememberMeListenerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requireSymfony5_1();
+        $this->requireAtLeastSymfony5_1();
         $this->response = $this->createMock(Response::class);
         $this->response->headers = $this->createMock(ResponseHeaderBag::class);
 

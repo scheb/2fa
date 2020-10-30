@@ -36,7 +36,7 @@ class TwoFactorPassportTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requireSymfony5_1();
+        $this->requireAtLeastSymfony5_1();
 
         $this->credentials = $this->createMock(CredentialsInterface::class);
         $this->badge = $this->createMock(BadgeInterface::class);

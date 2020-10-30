@@ -18,7 +18,7 @@ class TwoFactorCodeCredentialsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requireSymfony5_1();
+        $this->requireAtLeastSymfony5_1();
         $this->credentials = new TwoFactorCodeCredentials(self::CODE);
     }
 

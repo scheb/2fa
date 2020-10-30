@@ -136,7 +136,7 @@ class TwoFactorAccessDeciderTest extends TestCase
      */
     public function isAccessible_isPublic_returnTrue(): void
     {
-        $this->requireSymfony5_1();
+        $this->requireAtLeastSymfony5_1();
 
         $this->stubAccessMapReturnsAttributes([AccessListener::PUBLIC_ACCESS]);
         $this->whenRequestBaseUrl('');

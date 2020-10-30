@@ -43,7 +43,7 @@ class TrustedDeviceListenerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requireSymfony5_1();
+        $this->requireAtLeastSymfony5_1();
         $this->request = $this->createMock(Request::class);
         $this->loginSuccessEvent = $this->createMock(LoginSuccessEvent::class);
         $this->loginSuccessEvent
