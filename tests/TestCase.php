@@ -20,7 +20,7 @@ abstract class TestCase extends PHPUnitTestCase
     private function requireAtLeastSymfonyVersion(int $version)
     {
         if (Kernel::VERSION_ID < $version) {
-            $this->markTestSkipped("Skipping test case, minimum required Symfony version not fulfilled.");
+            $this->markTestSkipped('Skipping test case, minimum required Symfony version not fulfilled.');
         }
     }
 }
