@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+composer self-update --2
 
 if [ "$TEST_SUITE" = "integration" ]
 then
@@ -12,3 +13,4 @@ then
 fi
 
 COMPOSER_MEMORY_LIMIT=-1 composer update --prefer-dist --no-interaction --no-suggest $COMPOSER_FLAGS $COMPOSER_WORKING_DIR
+composer show --installed
