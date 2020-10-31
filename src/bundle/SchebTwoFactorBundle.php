@@ -6,7 +6,6 @@ namespace Scheb\TwoFactorBundle;
 
 use Scheb\TwoFactorBundle\DependencyInjection\Compiler\AccessListenerCompilerPass;
 use Scheb\TwoFactorBundle\DependencyInjection\Compiler\AuthenticationProviderDecoratorCompilerPass;
-use Scheb\TwoFactorBundle\DependencyInjection\Compiler\AuthenticatorDecoratorCompilerPass;
 use Scheb\TwoFactorBundle\DependencyInjection\Compiler\MailerCompilerPass;
 use Scheb\TwoFactorBundle\DependencyInjection\Compiler\RememberMeServicesDecoratorCompilerPass;
 use Scheb\TwoFactorBundle\DependencyInjection\Compiler\TwoFactorFirewallConfigCompilerPass;
@@ -26,7 +25,6 @@ class SchebTwoFactorBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new AuthenticationProviderDecoratorCompilerPass());
-        $container->addCompilerPass(new AuthenticatorDecoratorCompilerPass());
         $container->addCompilerPass(new RememberMeServicesDecoratorCompilerPass());
         $container->addCompilerPass(new AccessListenerCompilerPass());
         $container->addCompilerPass(new TwoFactorProviderCompilerPass());

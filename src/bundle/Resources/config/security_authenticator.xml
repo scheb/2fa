@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 	<services>
-		<service id="scheb_two_factor.security.authenticator.decorator" class="Scheb\TwoFactorBundle\Security\Http\Authenticator\AuthenticatorDecorator" abstract="true">
-			<argument /> <!-- Decorated authentication provider -->
-			<argument type="service" id="scheb_two_factor.authenticated_token_handler" />
-			<argument type="service" id="scheb_two_factor.authentication_context_factory" />
-			<argument type="service" id="request_stack" />
-		</service>
-
 		<service id="scheb_two_factor.security.authenticator" class="Scheb\TwoFactorBundle\Security\Http\Authenticator\TwoFactorAuthenticator" abstract="true">
 			<argument /> <!-- Two-factor firewall config -->
 			<argument type="service" id="security.token_storage"/>
@@ -17,6 +10,13 @@
 			<argument type="service" id="event_dispatcher" />
 			<argument type="service" id="logger" on-invalid="null" />
 			<tag name="monolog.logger" channel="security" />
+		</service>
+
+		<service id="scheb_two_factor.security.listener.token_created" class="Scheb\TwoFactorBundle\Security\TwoFactor\Event\AuthenticationTokenListener" abstract="true">
+			<argument type="string" /> <!-- Firewall name -->
+			<argument type="service" id="scheb_two_factor.authenticated_token_handler" />
+			<argument type="service" id="scheb_two_factor.authentication_context_factory" />
+			<argument type="service" id="request_stack" />
 		</service>
 
 		<service id="scheb_two_factor.security.listener.check_two_factor_code" class="\Scheb\TwoFactorBundle\Security\Http\EventListener\CheckTwoFactorCodeListener">
