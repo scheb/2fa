@@ -10,6 +10,8 @@
         <directory name="src/" />
 		<ignoreFiles>
 			<directory name="vendor" />
+			<file name="src/bundle/DependencyInjection/Factory/Security/FirewallListenerFactoryInterface.php" />
+			<file name="src/bundle/Security/Http/Firewall/FirewallListenerInterface.php" />
 		</ignoreFiles>
     </projectFiles>
 

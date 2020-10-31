@@ -9,6 +9,8 @@
 	<rule ref="PSR12.Properties.ConstantVisibility" />
 	<rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses">
 		<exclude-pattern>*/tests/*</exclude-pattern>
+		<exclude-pattern>*/src/bundle/DependencyInjection/Factory/Security/FirewallListenerFactoryInterface.php</exclude-pattern>
+		<exclude-pattern>*/src/bundle/Security/Http/Firewall/FirewallListenerInterface.php</exclude-pattern>
 	</rule>
 	<rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
 		<exclude-pattern>*/tests/*</exclude-pattern>

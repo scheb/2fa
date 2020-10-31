@@ -19,7 +19,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 /**
  * Handles access control in the "2fa in progress" phase.
  */
-class TwoFactorAccessListener extends AbstractListener
+class TwoFactorAccessListener extends AbstractListener implements FirewallListenerInterface
 {
     /**
      * @var TwoFactorFirewallConfig
@@ -83,5 +83,12 @@ class TwoFactorAccessListener extends AbstractListener
 
             throw $exception;
         }
+    }
+
+    public static function getPriority(): int
+    {
+        // When the class is injected via FirewallListenerFactoryInterface
+        // Inject before Symfony's AccessListener (-255) and after the LogoutListener (-127)
+        return -191;
     }
 }

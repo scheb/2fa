@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Security\Http\Event\AuthenticationTokenCreatedEvent;
 
-class TwoFactorFactory implements SecurityFactoryInterface
+class TwoFactorFactory implements SecurityFactoryInterface, FirewallListenerFactoryInterface
 {
     public const AUTHENTICATION_PROVIDER_KEY = 'two_factor';
 
@@ -209,6 +209,15 @@ class TwoFactorFactory implements SecurityFactoryInterface
             ->replaceArgument(6, new Reference($csrfTokenManagerId));
 
         return $listenerId;
+    }
+
+    // Compatibility for Symfony >= 5.2
+    // Uses this interface to inject TwoFactorAccessListener, instead of using the compiler pass.
+    public function createListeners(ContainerBuilder $container, string $firewallName, array $config): array
+    {
+        $accessListenerId = TwoFactorFactory::KERNEL_ACCESS_LISTENER_ID_PREFIX.$firewallName;
+
+        return [$accessListenerId];
     }
 
     public function getPosition(): string
