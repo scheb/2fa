@@ -342,4 +342,22 @@ EOF;
         $this->assertEquals(new Reference(self::FAILURE_HANDLER_ID), (string) $definition->getArgument(3));
         $this->assertEquals(new Reference(self::AUTH_REQUIRED_HANDLER_ID), (string) $definition->getArgument(4));
     }
+
+    /**
+     * @test
+     */
+    public function createAuthenticator_createForFirewall_createAuthenticationTokenCreatedListener(): void
+    {
+        $this->requireAtLeastSymfony5_2();
+
+        $this->stubServicesFactory();
+        $this->callCreateAuthenticator();
+
+        $this->assertTrue($this->container->hasDefinition('security.authentication.token_created_listener.two_factor.firewallName'));
+        $definition = $this->container->getDefinition('security.authentication.token_created_listener.two_factor.firewallName');
+        $this->assertEquals('firewallName', $definition->getArgument(0));
+        $this->assertTrue($definition->hasTag('kernel.event_subscriber'));
+        $tag = $definition->getTag('kernel.event_subscriber');
+        $this->assertEquals(['dispatcher' => 'security.event_dispatcher.firewallName'], $tag[0]);
+    }
 }

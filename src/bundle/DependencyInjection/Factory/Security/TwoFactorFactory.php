@@ -31,6 +31,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
     public const DEFAULT_CSRF_TOKEN_ID = 'two_factor';
 
     public const AUTHENTICATOR_ID_PREFIX = 'security.authenticator.two_factor.';
+    public const AUTHENTICATION_TOKEN_CREATED_LISTENER_ID_PREFIX = 'security.authentication.token_created_listener.two_factor.';
     public const PROVIDER_ID_PREFIX = 'security.authentication.provider.two_factor.';
     public const LISTENER_ID_PREFIX = 'security.authentication.listener.two_factor.';
     public const SUCCESS_HANDLER_ID_PREFIX = 'security.authentication.success_handler.two_factor.';
@@ -42,6 +43,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
     public const KERNEL_ACCESS_LISTENER_ID_PREFIX = 'security.authentication.access_listener.two_factor.';
 
     public const AUTHENTICATOR_DEFINITION_ID = 'scheb_two_factor.security.authenticator';
+    public const AUTHENTICATION_TOKEN_CREATED_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.listener.token_created';
     public const PROVIDER_DEFINITION_ID = 'scheb_two_factor.security.authentication.provider';
     public const LISTENER_DEFINITION_ID = 'scheb_two_factor.security.authentication.listener';
     public const SUCCESS_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.success_handler';
@@ -137,6 +139,7 @@ class TwoFactorFactory implements SecurityFactoryInterface
         $this->twoFactorServicesFactory->createKernelExceptionListener($container, $firewallName, $authRequiredHandlerId);
         $this->twoFactorServicesFactory->createAccessListener($container, $firewallName, $twoFactorFirewallConfigId);
         $this->twoFactorServicesFactory->createProviderPreparationListener($container, $firewallName, $config);
+        $this->createAuthenticationTokenCreatedListener($container, $firewallName);
 
         return $this->createAuthenticatorService(
             $container,
@@ -165,6 +168,16 @@ class TwoFactorFactory implements SecurityFactoryInterface
             ->replaceArgument(4, new Reference($authRequiredHandlerId));
 
         return $authenticatorId;
+    }
+
+    private function createAuthenticationTokenCreatedListener(ContainerBuilder $container, string $firewallName): void
+    {
+        $listenerId = self::AUTHENTICATION_TOKEN_CREATED_LISTENER_ID_PREFIX.$firewallName;
+        $container
+            ->setDefinition($listenerId, new ChildDefinition(self::AUTHENTICATION_TOKEN_CREATED_LISTENER_DEFINITION_ID))
+            ->replaceArgument(0, $firewallName)
+            // Important: register event only for the specific firewall
+            ->addTag('kernel.event_subscriber', ['dispatcher' => 'security.event_dispatcher.'.$firewallName]);
     }
 
     private function createAuthenticationProvider(ContainerBuilder $container, string $firewallName, string $twoFactorFirewallConfigId): string
