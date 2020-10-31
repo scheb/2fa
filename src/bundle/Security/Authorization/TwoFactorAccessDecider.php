@@ -68,12 +68,14 @@ class TwoFactorAccessDecider
             return true;
         }
 
-        // Let the logout route pass
+        // Compatibility for Symfony <= 5.1
+        // From Symfony 5.2 on, the bundle's TwoFactorAccessListener is injected after the LogoutListener, so letting
+        // the logout route pass is no longer necessary.
         $logoutPath = $this->removeQueryParameters(
             $this->makeRelativeToBaseUrl($this->logoutUrlGenerator->getLogoutPath(), $request)
         );
         if ($this->httpUtils->checkRequestPath($request, $logoutPath)) {
-            return true;
+            return true; // Let the logout route pass
         }
 
         return false;

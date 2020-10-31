@@ -14,6 +14,7 @@ use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\AuthenticatorTwoF
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorServicesFactory;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AuthenticatorFactoryInterface;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\FirewallListenerFactoryInterface;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -26,10 +27,15 @@ class SchebTwoFactorBundle extends Bundle
 
         $container->addCompilerPass(new AuthenticationProviderDecoratorCompilerPass());
         $container->addCompilerPass(new RememberMeServicesDecoratorCompilerPass());
-        $container->addCompilerPass(new AccessListenerCompilerPass());
         $container->addCompilerPass(new TwoFactorProviderCompilerPass());
         $container->addCompilerPass(new TwoFactorFirewallConfigCompilerPass());
         $container->addCompilerPass(new MailerCompilerPass());
+
+        // Compatibility for Symfony <= 5.1
+        // From Symfony 5.2 on the bundle uses FirewallListenerFactoryInterface to inject its TwoFactorAccessListener
+        if (!interface_exists(FirewallListenerFactoryInterface::class)) {
+            $container->addCompilerPass(new AccessListenerCompilerPass());
+        }
 
         /** @var SecurityExtension $extension */
         $extension = $container->getExtension('security');

@@ -12,6 +12,9 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Injects a listener into the firewall to handle access control during the "2fa in progress" phase.
+ *
+ * Compatibility for Symfony <= 5.1, from Symfony 5.2 on the bundle uses FirewallListenerFactoryInterface
+ * to inject its TwoFactorAccessListener.
  */
 class AccessListenerCompilerPass implements CompilerPassInterface
 {
