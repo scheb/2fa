@@ -69,11 +69,6 @@ jobs:
             env:
                 - TEST_SUITE=integration
                 - TEST_CONFIG=authenticators
-                - SYMFONY_VERSION=^5.1
-        -   php: 7.4
-            env:
-                - TEST_SUITE=integration
-                - TEST_CONFIG=authenticators
                 - SYMFONY_VERSION=^5.2@beta
 
         # Metrics and Quality
