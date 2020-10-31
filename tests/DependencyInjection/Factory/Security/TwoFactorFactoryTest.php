@@ -325,7 +325,7 @@ EOF;
     /**
      * @test
      */
-    public function createAuthenticator_createForFirewall_createAuthenticatiorDefinition(): void
+    public function createAuthenticator_createForFirewall_createAuthenticatorDefinition(): void
     {
         $this->stubServicesFactory();
         $this->callCreateAuthenticator();
