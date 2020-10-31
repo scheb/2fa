@@ -10,6 +10,7 @@ use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Security\Http\Event\AuthenticationTokenCreatedEvent;
 
 class TwoFactorFactory implements SecurityFactoryInterface
 {
@@ -125,6 +126,10 @@ class TwoFactorFactory implements SecurityFactoryInterface
 
     public function createAuthenticator(ContainerBuilder $container, string $firewallName, array $config, string $userProviderId): string
     {
+        if (!class_exists(AuthenticationTokenCreatedEvent::class)) {
+            throw new \LogicException('Using the authenticator security system with scheb/2fa-bundle requires symfony/security version 5.2 or higher. Either disable "enable_authenticator_manager" or upgrade Symfony.');
+        }
+
         $twoFactorFirewallConfigId = $this->twoFactorServicesFactory->createTwoFactorFirewallConfig($container, $firewallName, $config);
         $successHandlerId = $this->twoFactorServicesFactory->createSuccessHandler($container, $firewallName, $config, $twoFactorFirewallConfigId);
         $failureHandlerId = $this->twoFactorServicesFactory->createFailureHandler($container, $firewallName, $config, $twoFactorFirewallConfigId);
