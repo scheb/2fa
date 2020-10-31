@@ -205,6 +205,14 @@ class TwoFactorAuthenticatorTest extends TestCase
             ->withConsecutive(...$withArguments);
     }
 
+    private function expect2faCompleteFlagSet(MockObject $authenticatedToken): void
+    {
+        $authenticatedToken
+            ->expects($this->any())
+            ->method('setAttribute')
+            ->with(TwoFactorAuthenticator::FLAG_2FA_COMPLETE, true);
+    }
+
     /**
      * @test
      */
@@ -351,6 +359,8 @@ class TwoFactorAuthenticatorTest extends TestCase
         $twoFactorToken = $this->createTwoFactorToken($authenticatedToken, true);
         $passport = $this->createTwoFactorPassport($twoFactorToken);
 
+        $this->expect2faCompleteFlagSet($authenticatedToken);
+
         $returnValue = $this->authenticator->createAuthenticatedToken($passport, self::FIREWALL_NAME);
         $this->assertSame($authenticatedToken, $returnValue);
     }
@@ -364,6 +374,8 @@ class TwoFactorAuthenticatorTest extends TestCase
         $authenticatedToken = $this->createMock(TokenInterface::class);
         $twoFactorToken = $this->createTwoFactorToken($authenticatedToken, false);
         $passport = $this->createTwoFactorPassport($twoFactorToken);
+
+        $this->expect2faCompleteFlagSet($authenticatedToken);
 
         $returnValue = $this->authenticator->createAuthenticatedToken($passport, self::FIREWALL_NAME);
         $this->assertSame($authenticatedToken, $returnValue);

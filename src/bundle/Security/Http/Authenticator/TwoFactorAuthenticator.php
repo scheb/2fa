@@ -30,6 +30,8 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthenticatorInterface
 {
+    public const FLAG_2FA_COMPLETE = '2fa_complete';
+
     /**
      * @var TwoFactorFirewallConfig
      */
@@ -125,7 +127,10 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         $twoFactorToken = $passport->getTwoFactorToken();
 
         if ($this->isAuthenticationComplete($twoFactorToken)) {
-            return $twoFactorToken->getAuthenticatedToken(); // Authentication complete, unwrap the token
+            $authenticatedToken = $twoFactorToken->getAuthenticatedToken(); // Authentication complete, unwrap the token
+            $authenticatedToken->setAttribute(self::FLAG_2FA_COMPLETE, true);
+
+            return $authenticatedToken;
         }
 
         return $twoFactorToken;
