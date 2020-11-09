@@ -131,7 +131,7 @@ security:
     firewalls:
         your_firewall_name:
             two_factor:
-                required_handler: your_api_2fa_required_handler
+                authentication_required_handler: your_api_2fa_required_handler
 ```
 
 ### 3) Response when two-factor authentication was successful
@@ -186,7 +186,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 
-class TwoFactorAuthenticationSuccessHandler implements AuthenticationFailureHandlerInterface
+class TwoFactorAuthenticationFailureHandler implements AuthenticationFailureHandlerInterface
 {
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
