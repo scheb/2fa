@@ -40,4 +40,4 @@ security:
         - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/alwaysAccessible, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
-        - { path: ^/members, role: ROLE_USER } # Secured member's area
+        - { path: ^/members, role: [ ROLE_USER, ROLE_ADMIN ] }  # Two roles to test compatibility with AccessDecisionManager::decide()
