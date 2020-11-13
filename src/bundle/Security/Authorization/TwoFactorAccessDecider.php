@@ -62,7 +62,9 @@ class TwoFactorAccessDecider
             return true;
         }
 
-        if (null !== $attributes && $this->accessDecisionManager->decide($token, $attributes, $request)) {
+        // Compatibility for Symfony < 6.0, true flag to support multiple attributes
+        /** @psalm-suppress TooManyArguments */
+        if (null !== $attributes && $this->accessDecisionManager->decide($token, $attributes, $request, true)) {
             return true;
         }
 
