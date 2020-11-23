@@ -65,16 +65,28 @@ as `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRender
 
 ## Register the provider
 
-Now you have to register your two-factor provider as a service. A tag named `scheb_two_factor.provider` will make your
-provider available to the bundle.
+Now you have to register your two-factor provider class as a service.
 
-The attribute `alias` has to be a unique identifier for the authentication provider.
+A tag named `scheb_two_factor.provider` will make your provider available to the bundle. The tag attribute `alias` has
+to be set and must be an application-wide unique identifier for the authentication provider.
 
-```xml
-<service id="acme.two_factor.provider" class="%acme.two_factor.provider.class%">
-	<tag name="scheb_two_factor.provider" alias="acme_two_factor" />
-</service>
+**Please note**: The aliases `google`, `totp` and `email` are reserved by the authentication methods that are included
+in the bundle.
+
+**YAML Configuration**:
+```yaml
+# config/services.yaml
+services:
+    # ...
+    acme.custom_two_factor_provider:
+        class: Acme\DemoBundle\MyTwoFactorProvider
+        tags:
+            - { name: scheb_two_factor.provider, alias: acme_two_factor_provider }
 ```
 
-**Please note**: The aliases `google` and `email` are already taken by the authentication methods shipped with this
-bundle.
+**XML Configuration (alternatively)**:
+```xml
+<service id="acme.custom_two_factor_provider" class="Acme\DemoBundle\MyTwoFactorProvider">
+	<tag name="scheb_two_factor.provider" alias="acme_two_factor_provider" />
+</service>
+```
