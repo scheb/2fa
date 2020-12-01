@@ -13,4 +13,4 @@ then
 fi
 
 COMPOSER_MEMORY_LIMIT=-1 composer update --prefer-dist --no-interaction --no-suggest $COMPOSER_FLAGS $COMPOSER_WORKING_DIR
-composer show --installed
+composer show $COMPOSER_WORKING_DIR
