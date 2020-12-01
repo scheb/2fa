@@ -1,2 +1,5 @@
 security:
     enable_authenticator_manager: true
+    firewalls:
+        main:
+            entry_point: form_login  # Workaround for symfony/symfony#39249
