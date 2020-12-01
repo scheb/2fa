@@ -36,6 +36,10 @@ jobs:
             env:
                 - TEST_SUITE=unit
                 - SYMFONY_VERSION=^5.0
+        -   php: 8.0
+            env:
+                - TEST_SUITE=unit
+                - SYMFONY_VERSION=^5.0
         -   php: nightly
             env:
                 - TEST_SUITE=unit
@@ -62,10 +66,15 @@ jobs:
                 - TEST_SUITE=integration
                 - TEST_CONFIG=default
                 - SYMFONY_VERSION=~5.2.0
+        -   php: 8.0
+            env:
+                - TEST_SUITE=integration
+                - TEST_CONFIG=default
+                - SYMFONY_VERSION=~5.2.0
         -   php: 7.4
             env:
                 - TEST_SUITE=integration
-                - TEST_CONFIG=authenticators
+                - TEST_CONFIG=authenticators  # Experimental authenticators system
                 - SYMFONY_VERSION=~5.2.0
 
         # Metrics and Quality
