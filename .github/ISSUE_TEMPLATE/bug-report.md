@@ -13,12 +13,17 @@ Please check the troubleshooting guide first: https://github.com/scheb/2fa/blob/
 
 **Bundle version**: x.y.z
 **Symfony version**: x.y.z
+**PHP version**: x.y.z
+**Using authenticators** (`enable_authenticator_manager: true`): YES / NO
 
 **Description**
 <!--
 A clear and concise description of what the bug is.
-Please provide the content of your security.yaml.
 -->
+
+<--
+Please provide the content of your security.yaml.
+--->
 
 **To Reproduce**
 <!--
