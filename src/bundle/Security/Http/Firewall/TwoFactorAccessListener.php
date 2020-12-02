@@ -55,14 +55,21 @@ class TwoFactorAccessListener extends AbstractListener implements FirewallListen
 
     public function supports(Request $request): ?bool
     {
-        $token = $this->tokenStorage->getToken();
-
-        // No need to check for firewall name here, the listener is bound to the firewall context
-        return $token instanceof TwoFactorTokenInterface;
+        // When the path is explicitly configured for anonymous access, no need to check access (important for lazy
+        // firewalls, to prevent the response cache control to be flagged "private")
+        return !$this->twoFactorAccessDecider->isPubliclyAccessible($request);
     }
 
     public function authenticate(RequestEvent $requestEvent): void
     {
+        // When the firewall is lazy, the token is not initialized in the "supports" stage, so this check does only work
+        // within the "authenticate" stage.
+        $token = $this->tokenStorage->getToken();
+        if (!($token instanceof TwoFactorTokenInterface)) {
+            // No need to check for firewall name here, the listener is bound to the firewall context
+            return;
+        }
+
         /** @var TwoFactorTokenInterface $token */
         $token = $this->tokenStorage->getToken();
         $request = $requestEvent->getRequest();

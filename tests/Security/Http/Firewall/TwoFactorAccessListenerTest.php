@@ -112,22 +112,47 @@ class TwoFactorAccessListenerTest extends TestCase
             ->willReturn($isCheckPath);
     }
 
+    private function stubRequestIsPubliclyAccessiblePath(bool $result): void
+    {
+        $this->twoFactorAccessDecider
+            ->expects($this->any())
+            ->method('isPubliclyAccessible')
+            ->with($this->request)
+            ->willReturn($result);
+    }
+
     /**
      * @test
      */
-    public function supports_notTwoFactorToken_returnFalse(): void
+    public function supports_isPubliclyAccessiblePath_returnFalse(): void
     {
-        $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
+        $this->stubRequestIsPubliclyAccessiblePath(true);
         $this->assertFalse($this->accessListener->supports($this->request));
     }
 
     /**
      * @test
      */
-    public function supports_isTwoFactorToken_returnTrue(): void
+    public function supports_isAccessControlledPath_returnTrue(): void
     {
-        $this->stubTokenStorageHasToken($this->createTwoFactorToken());
+        $this->stubRequestIsPubliclyAccessiblePath(false);
         $this->assertTrue($this->accessListener->supports($this->request));
+    }
+
+    /**
+     * @test
+     */
+    public function authenticate_notTwoFactorToken_doNothing(): void
+    {
+        $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
+        $this->stubRequestIsCheckPath(false);
+        $this->stubRequestIsAuthPath(false);
+
+        $this->twoFactorAccessDecider
+            ->expects($this->never())
+            ->method($this->anything());
+
+        $this->accessListener->authenticate($this->createRequestEvent());
     }
 
     /**

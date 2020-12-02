@@ -47,21 +47,21 @@ class TwoFactorAccessDecider
         $this->logoutUrlGenerator = $logoutUrlGenerator;
     }
 
-    public function isAccessible(Request $request, TokenInterface $token): bool
+    public function isPubliclyAccessible(Request $request): bool
     {
-        // Let routes pass, e.g. if a route needs to be callable during two-factor authentication
         list($attributes) = $this->accessMap->getPatterns($request);
 
-        // Compatibility for Symfony 5.1
-        if (\defined(AccessListener::class.'::PUBLIC_ACCESS') && [AccessListener::PUBLIC_ACCESS] === $attributes) {
+        return $this->isPubliclyAccessAttribute($attributes);
+    }
+
+    public function isAccessible(Request $request, TokenInterface $token): bool
+    {
+        list($attributes) = $this->accessMap->getPatterns($request);
+        if ($this->isPubliclyAccessAttribute($attributes)) {
             return true;
         }
 
-        // Compatibility for Symfony 5.2+
-        if (\defined(AuthenticatedVoter::class.'::PUBLIC_ACCESS') && [AuthenticatedVoter::PUBLIC_ACCESS] === $attributes) {
-            return true;
-        }
-
+        // Let routes pass, e.g. if a route needs to be callable during two-factor authentication
         // Compatibility for Symfony < 6.0, true flag to support multiple attributes
         /** @psalm-suppress TooManyArguments */
         if (null !== $attributes && $this->accessDecisionManager->decide($token, $attributes, $request, true)) {
@@ -76,6 +76,30 @@ class TwoFactorAccessDecider
         );
         if ($this->httpUtils->checkRequestPath($request, $logoutPath)) {
             return true; // Let the logout route pass
+        }
+
+        return false;
+    }
+
+    private function isPubliclyAccessAttribute(?array $attributes): bool
+    {
+        if (null === $attributes) {
+            // No access control at all is treated "non-public" by 2fa
+            return false;
+        }
+
+        if ([AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY] === $attributes) {
+            return true;
+        }
+
+        // Compatibility for Symfony 5.1
+        if (\defined(AccessListener::class.'::PUBLIC_ACCESS') && [AccessListener::PUBLIC_ACCESS] === $attributes) {
+            return true;
+        }
+
+        // Compatibility for Symfony 5.2+
+        if (\defined(AuthenticatedVoter::class.'::PUBLIC_ACCESS') && [AuthenticatedVoter::PUBLIC_ACCESS] === $attributes) {
+            return true;
         }
 
         return false;

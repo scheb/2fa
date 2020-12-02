@@ -75,7 +75,7 @@ class TwoFactorAccessDeciderTest extends TestCase
         $this->accessDecider = new TwoFactorAccessDecider($this->accessMap, $this->accessDecisionManager, $this->httpUtils, $this->logoutUrlGenerator);
     }
 
-    private function stubAccessMapReturnsAttributes(array $attributes): void
+    private function stubAccessMapReturnsAttributes(?array $attributes): void
     {
         $this->attributes = $attributes;
         $this->accessMap
@@ -119,6 +119,49 @@ class TwoFactorAccessDeciderTest extends TestCase
             ->willReturn($accessGranted);
     }
 
+    public function providePublicAccessAttributes(): iterable
+    {
+        yield [AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY];
+
+        // Compatibility with Symfony 5.1
+        if (\defined(AccessListener::class.'::PUBLIC_ACCESS')) {
+            yield [AccessListener::PUBLIC_ACCESS];
+        }
+
+        // Compatibility for Symfony 5.2+
+        if (\defined(AuthenticatedVoter::class.'::PUBLIC_ACCESS')) {
+            yield [AuthenticatedVoter::PUBLIC_ACCESS];
+        }
+    }
+
+    /**
+     * @test
+     * @dataProvider providePublicAccessAttributes
+     */
+    public function isPubliclyAccessible_hasPublicAccessAttribute_returnTrue(string $publicAccessAttribute): void
+    {
+        $this->stubAccessMapReturnsAttributes([$publicAccessAttribute]);
+        $this->assertTrue($this->accessDecider->isPubliclyAccessible($this->request));
+    }
+
+    /**
+     * @test
+     */
+    public function isPubliclyAccessible_hasOtherAccessAttribute_returnFalse(): void
+    {
+        $this->stubAccessMapReturnsAttributes(['PROTECTED_ACCESS']);
+        $this->assertFalse($this->accessDecider->isPubliclyAccessible($this->request));
+    }
+
+    /**
+     * @test
+     */
+    public function isPubliclyAccessible_hasNoAccessAttribute_returnFalse(): void
+    {
+        $this->stubAccessMapReturnsAttributes(null);
+        $this->assertFalse($this->accessDecider->isPubliclyAccessible($this->request));
+    }
+
     /**
      * @test
      */
@@ -134,29 +177,11 @@ class TwoFactorAccessDeciderTest extends TestCase
 
     /**
      * @test
+     * @dataProvider providePublicAccessAttributes
      */
-    public function isAccessible_isPublic_returnTrue(): void
+    public function isAccessible_isPubliclyAccessible_returnTrue(string $publicAccessAttribute): void
     {
-        $this->requireAtLeastSymfony5_1();
-        $publicAccess = null;
-
-        // Compatibility with Symfony 5.1
-        if (\defined(AccessListener::class.'::PUBLIC_ACCESS')) {
-            $publicAccess = AccessListener::PUBLIC_ACCESS;
-        }
-
-        // Compatibility for Symfony 5.2+
-        if (\defined(AuthenticatedVoter::class.'::PUBLIC_ACCESS')) {
-            $publicAccess = AuthenticatedVoter::PUBLIC_ACCESS;
-        }
-
-        if (null === $publicAccess) {
-            $this->fail('Could not find PUBLIC_ACCESS constant.');
-
-            return;
-        }
-
-        $this->stubAccessMapReturnsAttributes([$publicAccess]);
+        $this->stubAccessMapReturnsAttributes([$publicAccessAttribute]);
         $this->whenRequestBaseUrl('');
         $this->whenGeneratedLogoutPath(self::LOGOUT_PATH);
         $this->whenPathAccess(false);
