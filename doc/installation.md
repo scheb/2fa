@@ -49,7 +49,7 @@ return [
 ### Step 3: Define routes
 
 In `config/routes.yaml` add a route for the two-factor authentication form and another one for checking the
-authentication code. The routes must be **located within the `path` of the firewall**, the one which uses
+authentication code. The routes must be **located within the path `pattern` of the firewall**, the one which uses
 two-factor authentication.
 
 ```yaml
@@ -66,7 +66,7 @@ two-factor authentication.
 ```
 
 If you have multiple firewalls with two-factor authentication, each one needs its own set of login and
-check routes that must be located within the associated firewall's `path`.
+check routes that must be located within the associated firewall's path `pattern`.
 
 ### Step 4: Configure the firewall
 
