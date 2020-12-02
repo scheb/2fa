@@ -21,6 +21,7 @@ use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterfac
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -113,17 +114,20 @@ class TwoFactorListener extends AbstractListener
 
     public function supports(Request $request): ?bool
     {
-        $token = $this->tokenStorage->getToken();
-
-        return $token instanceof TwoFactorTokenInterface
-            && $token->getProviderKey() === $this->twoFactorFirewallConfig->getFirewallName()
-            && $this->twoFactorFirewallConfig->isCheckPathRequest($request);
+        return $this->twoFactorFirewallConfig->isCheckPathRequest($request);
     }
 
     public function authenticate(RequestEvent $event): void
     {
-        /** @var TwoFactorTokenInterface $token */
+        // When the firewall is lazy, the token is not initialized in the "supports" stage, so this check does only work
+        // within the "authenticate" stage.
         $token = $this->tokenStorage->getToken();
+        if (!($token instanceof TwoFactorTokenInterface) || $token->getProviderKey() !== $this->twoFactorFirewallConfig->getFirewallName()) {
+            // This should only happen when the check path is called outside of a 2fa process and not protected via access_control
+            // or when the firewall is configured in an odd way (different firewall name)
+            throw new AuthenticationServiceException('Tried to perform two-factor authentication, but two-factor authentication is not in progress.');
+        }
+
         $response = $this->attemptAuthentication($event->getRequest(), $token);
         $event->setResponse($response);
     }

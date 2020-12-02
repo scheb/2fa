@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
@@ -87,19 +88,18 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
 
     public function supports(Request $request): ?bool
     {
-        if (!$this->twoFactorFirewallConfig->isCheckPathRequest($request)) {
-            return false;
-        }
-
-        $currentToken = $this->tokenStorage->getToken();
-
-        return $currentToken instanceof TwoFactorTokenInterface;
+        return $this->twoFactorFirewallConfig->isCheckPathRequest($request);
     }
 
     public function authenticate(Request $request): PassportInterface
     {
-        /** @var TwoFactorTokenInterface $currentToken */
+        // When the firewall is lazy, the token is not initialized in the "supports" stage, so this check does only work
+        // within the "authenticate" stage.
         $currentToken = $this->tokenStorage->getToken();
+        if (!($currentToken instanceof TwoFactorTokenInterface)) {
+            // This should only happen when the check path is called outside of a 2fa process and not protected via access_control
+            throw new AuthenticationServiceException('Tried to perform two-factor authentication, but two-factor authentication is not in progress.');
+        }
 
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::ATTEMPT, $request, $currentToken);
 

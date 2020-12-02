@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
@@ -216,37 +217,29 @@ class TwoFactorAuthenticatorTest extends TestCase
     /**
      * @test
      */
-    public function supports_notTwoFactorToken_returnFalse(): void
-    {
-        $this->stubIsCheckPath(true);
-        $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
-
-        $returnValue = $this->authenticator->supports($this->request);
-        $this->assertFalse($returnValue);
-    }
-
-    /**
-     * @test
-     */
     public function supports_notCheckPath_returnFalse(): void
     {
         $this->stubIsCheckPath(false);
-        $this->stubTokenStorageHasTwoFactorToken();
-
-        $returnValue = $this->authenticator->supports($this->request);
-        $this->assertFalse($returnValue);
+        $this->assertFalse($this->authenticator->supports($this->request));
     }
 
     /**
      * @test
      */
-    public function supports_isCheckPathAndTwoFactorToken_returnTrue(): void
+    public function supports_isCheckPath_returnTrue(): void
     {
         $this->stubIsCheckPath(true);
-        $this->stubTokenStorageHasTwoFactorToken();
+        $this->assertTrue($this->authenticator->supports($this->request));
+    }
 
-        $returnValue = $this->authenticator->supports($this->request);
-        $this->assertTrue($returnValue);
+    /**
+     * @test
+     */
+    public function authenticate_notTwoFactorToken_throwAuthenticationServiceException(): void
+    {
+        $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
+        $this->expectException(AuthenticationServiceException::class);
+        $this->authenticator->authenticate($this->request);
     }
 
     /**

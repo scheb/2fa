@@ -26,6 +26,7 @@ use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterfac
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
@@ -308,45 +309,45 @@ class TwoFactorListenerTest extends TestCase
     /**
      * @test
      */
-    public function supports_noTwoFactorToken_returnFalse(): void
+    public function supports_notCheckPath_returnFalse(): void
+    {
+        $this->stubRequestIsCheckPath(false);
+        $this->assertFalse($this->listener->supports($this->request));
+    }
+
+    /**
+     * @test
+     */
+    public function supports_isCheckPath_returnTrue(): void
+    {
+        $this->stubRequestIsCheckPath(true);
+        $this->assertTrue($this->listener->supports($this->request));
+    }
+
+    /**
+     * @test
+     */
+    public function authenticate_noTwoFactorToken_throwAuthenticationServiceException(): void
     {
         $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
         $this->stubRequestIsCheckPath(true);
 
-        $this->assertFalse($this->listener->supports($this->request));
+        $this->expectException(AuthenticationServiceException::class);
+
+        $this->listener->authenticate($this->requestEvent);
     }
 
     /**
      * @test
      */
-    public function supports_differentFirewallName_returnFalse(): void
+    public function authenticate_differentFirewallName_throwAuthenticationServiceException(): void
     {
         $this->stubTokenStorageHasToken($this->createTwoFactorToken('otherFirewallName'));
         $this->stubRequestIsCheckPath(true);
 
-        $this->assertFalse($this->listener->supports($this->request));
-    }
+        $this->expectException(AuthenticationServiceException::class);
 
-    /**
-     * @test
-     */
-    public function supports_notCheckPath_returnFalse(): void
-    {
-        $this->stubTokenStorageHasToken($this->createTwoFactorToken());
-        $this->stubRequestIsCheckPath(false);
-
-        $this->assertFalse($this->listener->supports($this->request));
-    }
-
-    /**
-     * @test
-     */
-    public function supports_requirementsFulfilled_returnTrue(): void
-    {
-        $this->stubTokenStorageHasToken($this->createTwoFactorToken());
-        $this->stubRequestIsCheckPath(true);
-
-        $this->assertTrue($this->listener->supports($this->request));
+        $this->listener->authenticate($this->requestEvent);
     }
 
     /**
