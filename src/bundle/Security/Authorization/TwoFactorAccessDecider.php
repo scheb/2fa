@@ -117,7 +117,7 @@ class TwoFactorAccessDecider
             return '/';
         }
 
-        return (string) $pathInfo;
+        return $pathInfo;
     }
 
     private function removeQueryParameters(string $path): string
