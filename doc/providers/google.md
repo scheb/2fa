@@ -124,7 +124,7 @@ $qrCodeContent = $container->get("scheb_two_factor.security.google_authenticator
 To render the QR code as an image, install `scheb/2fa-qr-code`:
 
 ```bash
-composer install scheb/2fa-qr-code
+composer require scheb/2fa-qr-code
 ```
 
 Use service `scheb_two_factor.qr_code_generator` to get the QR code image. Auto-wiring of
