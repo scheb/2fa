@@ -73,7 +73,6 @@ if ('authenticators' === $configVariant) {
         'firewalls' => [
             'main' => [
                 'lazy' => true,
-                'entry_point' => 'form_login', // Temporary workaround for symfony/symfony#39249
             ],
         ],
     ]);
