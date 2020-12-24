@@ -109,16 +109,20 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
         if (!$event->isMasterRequest()) {
             return;
         }
-        if (!($this->twoFactorToken instanceof TwoFactorTokenInterface)) {
+
+        $twoFactorToken = $this->twoFactorToken;
+        $this->twoFactorToken = null;
+
+        if (!($twoFactorToken instanceof TwoFactorTokenInterface)) {
             return;
         }
 
-        $providerName = $this->twoFactorToken->getCurrentTwoFactorProvider();
+        $providerName = $twoFactorToken->getCurrentTwoFactorProvider();
         if (null === $providerName) {
             return;
         }
 
-        $firewallName = $this->twoFactorToken->getProviderKey();
+        $firewallName = $twoFactorToken->getProviderKey();
 
         if ($this->preparationRecorder->isTwoFactorProviderPrepared($firewallName, $providerName)) {
             $this->logger->info(sprintf('Two-factor provider "%s" was already prepared.', $providerName));
@@ -126,7 +130,7 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
             return;
         }
 
-        $user = $this->twoFactorToken->getUser();
+        $user = $twoFactorToken->getUser();
         $this->providerRegistry->getProvider($providerName)->prepareAuthentication($user);
         $this->preparationRecorder->setTwoFactorProviderPrepared($firewallName, $providerName);
         $this->logger->info(sprintf('Two-factor provider "%s" prepared.', $providerName));
