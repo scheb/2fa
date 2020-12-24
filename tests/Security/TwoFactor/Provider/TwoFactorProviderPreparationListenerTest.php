@@ -213,6 +213,9 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
 
         $this->listener->onTwoFactorForm($event);
         $this->listener->onKernelResponse($this->createResponseEvent());
+
+        // Request caused by redirect after full authentication
+        $this->listener->onKernelResponse($this->createResponseEvent());
     }
 
     /**
