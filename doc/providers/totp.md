@@ -38,8 +38,8 @@ Your user entity has to implement `Scheb\TwoFactorBundle\Model\Totp\TwoFactorInt
 user, generate a secret and define the TOTP configuration. TOTP let's you configure the number of digits, the algorithm
 and the period of the temporary codes.
 
-We warned, custom configurations will not be compatible with the defaults of Google Authenticator app any more. You will
-have to use another application (e.g. FreeOTP on Android).
+**We warned, custom configurations will not be compatible with the defaults of Google Authenticator app any more. You will
+have to use another application (e.g. FreeOTP on Android).**
 
 ```php
 <?php
