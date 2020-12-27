@@ -1,7 +1,7 @@
 scheb/2fa-trusted-device
 ========================
 
-[![Build Status](https://api.travis-ci.com/scheb/2fa.svg?branch=5.x)](https://travis-ci.com/scheb/2fa/branches)
+[![Build Status](https://github.com/scheb/2fa/workflows/CI/badge.svg?branch=5.x)](https://github.com/scheb/2fa/actions?query=workflow%3ACI+branch%3A5.x)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/scheb/2fa/badges/quality-score.png?b=5.x)](https://scrutinizer-ci.com/g/scheb/2fa/?branch=5.x)
 [![Code Coverage](https://scrutinizer-ci.com/g/scheb/2fa/badges/coverage.png?b=5.x)](https://scrutinizer-ci.com/g/scheb/2fa/?branch=5.x)
 [![Latest Stable Version](https://poser.pugx.org/scheb/2fa-trusted-device/v/stable.svg)](https://packagist.org/packages/scheb/2fa-trusted-device)
