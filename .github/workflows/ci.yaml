@@ -1,0 +1,220 @@
+name: 'CI'
+
+on:
+    pull_request:
+    push:
+
+jobs:
+    coding-standards:
+        name: 'Coding Standards - PHP ${{ matrix.php-version }}'
+
+        runs-on: 'ubuntu-latest'
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version:
+                    - '7.4'
+
+        steps:
+            -   name: 'Checkout code'
+                uses: actions/checkout@v2
+
+            -   name: 'Setup PHP'
+                uses: shivammathur/setup-php@v2
+                with:
+                    coverage: 'none'
+                    php-version: '${{ matrix.php-version }}'
+                    tools: php-cs-fixer
+
+            -   name: 'Display PHP versions'
+                run: |
+                    php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
+                    php -i
+
+            -   name: 'Install Composer dependencies'
+                uses: ramsey/composer-install@v1
+                with:
+                    composer-options: '--prefer-dist'
+
+            -   name: 'Display dependencies versions'
+                run: composer show
+
+            -   name: "PHP Coding Standards Fixer"
+                run: php-cs-fixer fix --dry-run --diff --using-cache=no
+
+            -   name: "PHP Code Style Sniffer"
+                if: always()
+                run: vendor/bin/phpcs --standard=php_cs.xml app/src src tests
+
+            -   name: "Psalm"
+                if: always()
+                run: vendor/bin/psalm
+
+    unit-tests:
+        name: 'Unit Tests - PHP ${{ matrix.php-version }}, Symfony ${{ matrix.symfony-version }}'
+
+        runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    -   php-version: '7.2.5'
+                        dependency-versions: 'lowest'  # Test lowest possible configuration
+                        symfony-version: 'lowest'
+
+                    -   php-version: '7.4'
+                        symfony-version: '^4.4'
+
+                    -   php-version: '7.4'
+                        symfony-version: '^5.0'
+
+                    -   php-version: '8.0'
+                        symfony-version: '^5.0'
+
+        steps:
+            -   name: 'Checkout code'
+                uses: actions/checkout@v2
+
+            -   name: 'Setup PHP'
+                uses: shivammathur/setup-php@v2
+                with:
+                    coverage: 'none'
+                    php-version: '${{ matrix.php-version }}'
+
+            -   name: 'Display PHP versions'
+                run: |
+                    php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
+                    php -i
+
+            -   name: "Require Symfony version"
+                if: ${{ matrix.symfony-version != 'lowest' }}
+                run: composer require "symfony/symfony:${{ matrix.symfony-version }}" --no-update
+
+            -   name: 'Install Composer dependencies'
+                uses: ramsey/composer-install@v1
+                with:
+                    composer-options: '--prefer-dist'
+                    dependency-versions: '${{ matrix.dependency-versions }}'
+
+            -   name: 'Display dependencies versions'
+                run: composer show
+
+            -   name: 'Run tests'
+                run: vendor/bin/phpunit
+
+    integration-tests:
+        name: 'Integration Tests - PHP ${{ matrix.php-version }}, Symfony ${{ matrix.symfony-version }}, Config ${{ matrix.app-config }}'
+
+        runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    # Default configuration (old security system)
+                    -   php-version: '7.2.5'
+                        symfony-version: '~4.4.0'
+                        app-config: 'default'
+
+                    -   php-version: '7.4'
+                        symfony-version: '~4.4.0'
+                        app-config: 'default'
+
+                    -   php-version: '7.4'
+                        symfony-version: '~5.0.0'
+                        app-config: 'default'
+
+                    -   php-version: '7.4'
+                        symfony-version: '~5.1.0'
+                        app-config: 'default'
+
+                    -   php-version: '7.4'
+                        symfony-version: '~5.2.0'
+                        app-config: 'default'
+
+                    -   php-version: '8.0'
+                        symfony-version: '^5.0'
+                        app-config: 'default'
+
+                    # Authenticators configuration (experimental security system)
+                    -   php-version: '7.4'
+                        symfony-version: '~5.2.0'
+                        app-config: 'authenticators'
+
+        steps:
+            -   name: 'Checkout code'
+                uses: actions/checkout@v2
+
+            -   name: 'Setup PHP'
+                uses: shivammathur/setup-php@v2
+                with:
+                    coverage: 'none'
+                    php-version: '${{ matrix.php-version }}'
+
+            -   name: 'Display PHP versions'
+                run: |
+                    php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
+                    php -i
+
+            -   name: "Require Symfony version"
+                if: ${{ matrix.symfony-version != 'lowest' }}
+                run: composer require "symfony/symfony:${{ matrix.symfony-version }}" --no-update --working-dir=app
+
+            -   name: 'Install Composer dependencies'
+                uses: ramsey/composer-install@v1
+                with:
+                    composer-options: '--prefer-dist --working-dir=app'
+
+            -   name: 'Display dependencies versions'
+                run: composer show --working-dir=app
+
+            -   name: 'Run tests'
+                run: app/vendor/bin/phpunit -c app
+                env:
+                    TEST_CONFIG: '${{ matrix.app-config }}'
+
+    code-coverage:
+        name: 'Code Coverage - PHP ${{ matrix.php-version }}'
+
+        runs-on: 'ubuntu-latest'
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version:
+                    - '7.4'
+
+        steps:
+            -   name: 'Checkout code'
+                uses: actions/checkout@v2
+
+            -   name: 'Setup PHP'
+                uses: shivammathur/setup-php@v2
+                with:
+                    coverage: 'none'
+                    php-version: '${{ matrix.php-version }}'
+
+            -   name: 'Display PHP versions'
+                run: |
+                    php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
+                    php -i
+
+            -   name: 'Install Composer dependencies'
+                uses: ramsey/composer-install@v1
+                with:
+                    composer-options: '--prefer-dist'
+
+            -   name: 'Display dependencies versions'
+                run: composer show
+
+            -   name: 'Run tests with coverage'
+                run: phpdbg -qrr vendor/bin/phpunit --coverage-clover coverage/clover.xml
+
+            -   name: 'Send Coverage'
+                continue-on-error: true
+                timeout-minutes: 1
+                run: |
+                    wget https://scrutinizer-ci.com/ocular.phar
+                    php ocular.phar code-coverage:upload --format=php-clover coverage/clover.xml
