@@ -6,6 +6,7 @@ namespace App\Tests;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
+use Monolog\Handler\TestHandler;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleTotpFactory;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceTokenEncoder;
@@ -43,14 +44,19 @@ abstract class TestCase extends WebTestCase
         $this->resetSqliteDatabase();
 
         $this->client = static::createClient();
-        $this->client->followRedirects();
         $this->client->setServerParameter('REMOTE_ADDR', self::DEFAULT_IP_ADDRESS);
+        $this->followRedirects(true);
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
         $this->resetSqliteDatabase();
+    }
+
+    protected function followRedirects(bool $followRedirects): void
+    {
+        $this->client->followRedirects($followRedirects);
     }
 
     protected function configureWhitelistedIpAddress(): void
@@ -212,7 +218,29 @@ abstract class TestCase extends WebTestCase
         return $this->client->request('GET', '/2fa/inProgress');
     }
 
+    protected function navigateTo2faForm(): Crawler
+    {
+        return $this->client->request('GET', '/2fa');
+    }
+
     ////////////////////// ASSERTS
+
+    protected function assertLoggerHasInfo(string $message): void
+    {
+        $logHandler = null;
+        foreach (self::$container->get('logger')->getHandlers() as $handler) {
+            if ($handler instanceof TestHandler) {
+                $logHandler = $handler;
+                break;
+            }
+        }
+
+        if (null === $logHandler) {
+            $this->fail('Cannot assert logs, no TestHandler available');
+        }
+
+        $this->assertTrue($logHandler->hasInfoThatContains($message));
+    }
 
     protected function assert2faIsRequired(Crawler $page): void
     {

@@ -41,4 +41,38 @@ class TwoFactorProvidersTest extends TestCase
 
         $this->assertUserIsFullyAuthenticated();
     }
+
+    public function testProviderPreparedOnLogin(): void
+    {
+        $this->setIndividual2faProvidersEnabled(true, false, false);
+        $this->followRedirects(false); // Assert logs from the last request
+
+        $this->performLogin();
+
+        $this->assertLoggerHasInfo('Two-factor provider "email" prepared');
+    }
+
+    public function testProviderPreparedOnAccessDenied(): void
+    {
+        $this->setIndividual2faProvidersEnabled(true, false, false);
+        $this->followRedirects(false); // Assert logs from the last request
+
+        $this->performLogin();
+        $this->navigateToSecuredPath();
+
+        // Tried to prepare on that request (but was already prepared before)
+        $this->assertLoggerHasInfo('Two-factor provider "email" was already prepared');
+    }
+
+    public function testProviderPreparedOn2faForm(): void
+    {
+        $this->setIndividual2faProvidersEnabled(true, false, false);
+        $this->followRedirects(false); // Assert logs from the last request
+
+        $this->performLogin();
+        $this->navigateTo2faForm();
+
+        // Tried to prepare on that request (but was already prepared before)
+        $this->assertLoggerHasInfo('Two-factor provider "email" was already prepared');
+    }
 }
