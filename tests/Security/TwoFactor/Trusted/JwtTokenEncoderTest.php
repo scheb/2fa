@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Trusted;
 
-use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
-use Lcobucci\JWT\Token;
+use Lcobucci\JWT\Signer\Key\InMemory;
+use Lcobucci\JWT\Token\Plain;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\JwtTokenEncoder;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 
@@ -17,28 +18,33 @@ class JwtTokenEncoderTest extends TestCase
     private const APPLICATION_SECRET = 'applicationSecret';
 
     /**
-     * @var Sha256
-     */
-    private $signer;
-
-    /**
      * @var JwtTokenEncoder
      */
     private $encoder;
 
+    /**
+     * @var Configuration
+     */
+    private $configuration;
+
     protected function setUp(): void
     {
-        $this->signer = new Sha256();
         $this->encoder = new JwtTokenEncoder(self::APPLICATION_SECRET);
+        $this->configuration = Configuration::forSymmetricSigner(new Sha256(), InMemory::plainText(self::APPLICATION_SECRET));
     }
 
-    private function createToken(int $expirationDate): string
+    protected function createToken(\DateTimeImmutable $expirationDate): string
     {
-        return (string) (new Builder())
-            ->set(self::CLAIM, self::TOKEN_ID)
-            ->setExpiration($expirationDate)
-            ->sign($this->signer, self::APPLICATION_SECRET)
-            ->getToken();
+        return $this->configuration->builder()
+            ->withClaim(self::CLAIM, self::TOKEN_ID)
+            ->expiresAt($expirationDate)
+            ->getToken($this->configuration->signer(), $this->configuration->signingKey())
+            ->toString();
+    }
+
+    protected function assertJwtClaim(Plain $jwtToken, string $name, $expectedValue): void
+    {
+        $this->assertEquals($expectedValue, $jwtToken->claims()->get($name, false));
     }
 
     /**
@@ -46,13 +52,13 @@ class JwtTokenEncoderTest extends TestCase
      */
     public function generateToken_withClaims_returnEncodedToken(): void
     {
-        $jwtToken = $this->encoder->generateToken('username', 'firewallName', 1, new \DateTime());
-        $this->assertInstanceOf(Token::class, $jwtToken);
-        $this->assertEquals('username', $jwtToken->getClaim(JwtTokenEncoder::CLAIM_USERNAME, false));
-        $this->assertEquals('firewallName', $jwtToken->getClaim(JwtTokenEncoder::CLAIM_FIREWALL, false));
-        $this->assertEquals(1, $jwtToken->getClaim(JwtTokenEncoder::CLAIM_VERSION, false));
-        $this->assertFalse($jwtToken->isExpired(new \DateTime('-100 seconds')));
-        $this->assertTrue($jwtToken->isExpired(new \DateTime('+100 seconds')));
+        $jwtToken = $this->encoder->generateToken('username', 'firewallName', 1, new \DateTimeImmutable());
+        $this->assertInstanceOf(Plain::class, $jwtToken);
+        $this->assertJwtClaim($jwtToken, JwtTokenEncoder::CLAIM_USERNAME, 'username');
+        $this->assertJwtClaim($jwtToken, JwtTokenEncoder::CLAIM_FIREWALL, 'firewallName');
+        $this->assertJwtClaim($jwtToken, JwtTokenEncoder::CLAIM_VERSION, 1);
+        $this->assertFalse($jwtToken->isExpired(new \DateTimeImmutable('-100 seconds')));
+        $this->assertTrue($jwtToken->isExpired(new \DateTimeImmutable('+100 seconds')));
     }
 
     /**
@@ -69,7 +75,7 @@ class JwtTokenEncoderTest extends TestCase
      */
     public function decodeToken_expiredToken_returnNull(): void
     {
-        $encodedToken = $this->createToken(time() - 1000);
+        $encodedToken = $this->createToken(new \DateTimeImmutable('-1000 seconds'));
         $decodedToken = $this->encoder->decodeToken($encodedToken);
         $this->assertNull($decodedToken);
     }
@@ -79,10 +85,10 @@ class JwtTokenEncoderTest extends TestCase
      */
     public function decodeToken_validToken_returnDecodedToken(): void
     {
-        $encodedToken = $this->createToken(time() + 1000);
+        $encodedToken = $this->createToken(new \DateTimeImmutable('+1000 seconds'));
         $decodedToken = $this->encoder->decodeToken($encodedToken);
-        $this->assertInstanceOf(Token::class, $decodedToken);
-        $this->assertEquals(self::TOKEN_ID, $decodedToken->getClaim(self::CLAIM, false));
+        $this->assertInstanceOf(Plain::class, $decodedToken);
+        $this->assertJwtClaim($decodedToken, self::CLAIM, self::TOKEN_ID);
     }
 
     /**
@@ -97,7 +103,7 @@ class JwtTokenEncoderTest extends TestCase
             'LZGo1rmO-iHr5U489XaSC1io7l821fmFSIlOKcZ-c24'
         );
 
-        $this->assertInstanceOf(Token::class, $this->encoder->decodeToken($encodedToken));
+        $this->assertInstanceOf(Plain::class, $this->encoder->decodeToken($encodedToken));
     }
 
     /**

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Trusted;
 
-use Lcobucci\JWT\Token;
+use Lcobucci\JWT\Token\DataSet;
+use Lcobucci\JWT\Token\Plain;
+use Lcobucci\JWT\Token\Signature;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\JwtTokenEncoder;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceToken;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -18,20 +20,12 @@ class TrustedDeviceTokenTest extends TestCase
 
     protected function setUp(): void
     {
-        $jwtToken = $this->createMock(Token::class);
-        $jwtToken
-            ->expects($this->any())
-            ->method('getClaim')
-            ->willReturnMap([
-                [JwtTokenEncoder::CLAIM_USERNAME, false, 'username'],
-                [JwtTokenEncoder::CLAIM_FIREWALL, false, 'firewallName'],
-                [JwtTokenEncoder::CLAIM_VERSION, false, 1],
-            ]);
-        $jwtToken
-            ->expects($this->any())
-            ->method('__toString')
-            ->willReturn('serializedToken');
-
+        $claims = new DataSet([
+            JwtTokenEncoder::CLAIM_USERNAME => 'username',
+            JwtTokenEncoder::CLAIM_FIREWALL => 'firewallName',
+            JwtTokenEncoder::CLAIM_VERSION => 1,
+        ], 'encodedClaims');
+        $jwtToken = new Plain(new DataSet([], 'encodedHeaders'), $claims, Signature::fromEmptyData());
         $this->trustedToken = new TrustedDeviceToken($jwtToken);
     }
 
@@ -86,6 +80,6 @@ class TrustedDeviceTokenTest extends TestCase
     public function serialize_encodeToken_returnEncodedString(): void
     {
         $returnValue = $this->trustedToken->serialize();
-        $this->assertEquals('serializedToken', $returnValue);
+        $this->assertEquals('encodedHeaders.encodedClaims.', $returnValue);
     }
 }

@@ -8,7 +8,7 @@
         "symfony/swiftmailer-bundle": "^3.1.1",
         "doctrine/doctrine-bundle": "^2.0.3",
         "doctrine/orm": "^2.0",
-        "lcobucci/jwt": "^3.2",
+        "lcobucci/jwt": "^3.4|^4.0",
         "spomky-labs/otphp": "^9.1|^10.0",
         "paragonie/constant_time_encoding": "^2.2",
         "endroid/qr-code": "^3.0"
