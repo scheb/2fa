@@ -13,7 +13,7 @@
     ],
     "require": {
         "scheb/2fa-bundle": "self.version",
-        "lcobucci/jwt": "^3.2"
+        "lcobucci/jwt": "^3.4|^4.0"
     },
     "autoload": {
         "psr-4": {

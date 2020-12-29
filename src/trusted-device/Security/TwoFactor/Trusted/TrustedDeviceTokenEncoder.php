@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
+use Lcobucci\JWT\Token\Plain;
+
 class TrustedDeviceTokenEncoder
 {
     /**
@@ -33,14 +35,14 @@ class TrustedDeviceTokenEncoder
     public function decodeToken(string $trustedTokenEncoded): ?TrustedDeviceToken
     {
         $jwtToken = $this->jwtTokenEncoder->decodeToken($trustedTokenEncoded);
-        if (null === $jwtToken) {
+        if (!$jwtToken instanceof Plain) {
             return null;
         }
 
         return new TrustedDeviceToken($jwtToken);
     }
 
-    private function getValidUntil(): \DateTimeInterface
+    private function getValidUntil(): \DateTimeImmutable
     {
         return $this->getDateTimeNow()->add(new \DateInterval('PT'.$this->trustedTokenLifetime.'S'));
     }

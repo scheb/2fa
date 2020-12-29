@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Trusted;
 
-use Lcobucci\JWT\Token;
+use Lcobucci\JWT\Token\DataSet;
+use Lcobucci\JWT\Token\Plain;
+use Lcobucci\JWT\Token\Signature;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\JwtTokenEncoder;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceToken;
@@ -38,7 +40,8 @@ class TrustedDeviceTokenEncoderTest extends TestCase
         $this->jwtEncoder
             ->expects($this->once())
             ->method('generateToken')
-            ->with('username', 'firewallName', 1, new \DateTime('2018-01-01 01:00:00'));
+            ->with('username', 'firewallName', 1, new \DateTime('2018-01-01 01:00:00'))
+            ->willReturn(new Plain(new DataSet([], ''), new DataSet([], ''), Signature::fromEmptyData()));
 
         $token = $this->tokenEncoder->generateToken('username', 'firewallName', 1);
         $this->assertInstanceOf(TrustedDeviceToken::class, $token);
@@ -52,7 +55,7 @@ class TrustedDeviceTokenEncoderTest extends TestCase
         $this->jwtEncoder
             ->expects($this->once())
             ->method('decodeToken')
-            ->willReturn($this->createMock(Token::class));
+            ->willReturn(new Plain(new DataSet([], ''), new DataSet([], ''), Signature::fromEmptyData()));
 
         $returnValue = $this->tokenEncoder->decodeToken('validToken');
         $this->assertInstanceOf(TrustedDeviceToken::class, $returnValue);
