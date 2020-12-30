@@ -36,9 +36,9 @@ First, install the dependencies by running `composer install` in the project roo
 
 ### Code Style
 
+- Run [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) (not provided with the library) with `php-cs-fixer fix`
 - Run PHP CodeSniffer with `vendor/bin/phpcs --standard=php_cs.xml app/src src tests`
 - Run Psalm with `vendor/bin/psalm` and address any error-level issues
-- Run [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) (not provided with the library) with `php-cs-fixer fix`
 
 ### Unit Tests
 
