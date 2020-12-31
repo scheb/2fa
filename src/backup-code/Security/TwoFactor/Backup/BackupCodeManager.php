@@ -7,6 +7,9 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Backup;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 use Scheb\TwoFactorBundle\Model\PersisterInterface;
 
+/**
+ * @final
+ */
 class BackupCodeManager implements BackupCodeManagerInterface
 {
     /**

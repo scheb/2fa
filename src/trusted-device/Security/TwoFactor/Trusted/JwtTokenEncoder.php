@@ -11,6 +11,11 @@ use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Token\Plain;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
 
+/**
+ * @final
+ *
+ * @internal
+ */
 class JwtTokenEncoder
 {
     public const CLAIM_USERNAME = 'usr';

@@ -9,6 +9,9 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
+/**
+ * @final
+ */
 class SymfonyAuthCodeMailer implements AuthCodeMailerInterface
 {
     /**

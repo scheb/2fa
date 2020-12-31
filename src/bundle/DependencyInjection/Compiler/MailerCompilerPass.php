@@ -10,6 +10,8 @@ use Symfony\Component\DependencyInjection\Exception\LogicException;
 
 /**
  * Determine the default mailer to use.
+ *
+ * @final
  */
 class MailerCompilerPass implements CompilerPassInterface
 {

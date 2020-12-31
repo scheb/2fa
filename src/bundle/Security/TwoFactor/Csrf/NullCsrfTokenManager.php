@@ -7,6 +7,9 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Csrf;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
+/**
+ * @final
+ */
 class NullCsrfTokenManager implements CsrfTokenManagerInterface
 {
     /**

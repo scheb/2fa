@@ -10,6 +10,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\PreparationRecorderInterfa
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
 
+/**
+ * @final
+ */
 class CheckTwoFactorCodeListener extends AbstractCheckCodeListener
 {
     public const LISTENER_PRIORITY = 0;

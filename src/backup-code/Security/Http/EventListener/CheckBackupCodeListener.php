@@ -8,6 +8,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\PreparationRecorderInterface;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
 
+/**
+ * @final
+ */
 class CheckBackupCodeListener extends AbstractCheckCodeListener
 {
     // Must be called before CheckTwoFactorCodeListener, because CheckTwoFactorCodeListener will throw an exception

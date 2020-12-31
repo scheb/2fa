@@ -8,6 +8,9 @@ use Doctrine\Common\Persistence\ObjectManager as LegacyObjectManager;
 use Doctrine\Persistence\ObjectManager;
 use Scheb\TwoFactorBundle\Model\PersisterInterface;
 
+/**
+ * @final
+ */
 class DoctrinePersister implements PersisterInterface
 {
     /**

@@ -6,6 +6,9 @@ namespace Scheb\TwoFactorBundle\Mailer;
 
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 
+/**
+ * @final
+ */
 class SwiftAuthCodeMailer implements AuthCodeMailerInterface
 {
     /**

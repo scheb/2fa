@@ -9,6 +9,9 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\Credentia
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportTrait;
 
+/**
+ * @final
+ */
 class TwoFactorPassport implements PassportInterface
 {
     use PassportTrait;

@@ -9,6 +9,11 @@ use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
+/**
+ * @final
+ *
+ * @internal Helper class analog to Symfony's ParameterBagUtils class
+ */
 class ParameterBagUtils
 {
     /**

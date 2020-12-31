@@ -16,6 +16,9 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
 
+/**
+ * @final
+ */
 class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder

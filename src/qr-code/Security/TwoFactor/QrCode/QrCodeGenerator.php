@@ -10,6 +10,9 @@ use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface as TotpTwoFactorInterfac
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInterface;
 
+/**
+ * @final
+ */
 class QrCodeGenerator
 {
     /**

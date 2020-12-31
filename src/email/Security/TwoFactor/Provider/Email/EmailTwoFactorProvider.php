@@ -10,6 +10,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGenera
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 
+/**
+ * @final
+ */
 class EmailTwoFactorProvider implements TwoFactorProviderInterface
 {
     /**

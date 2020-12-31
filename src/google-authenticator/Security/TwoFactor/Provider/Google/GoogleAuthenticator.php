@@ -7,6 +7,9 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google;
 use ParagonIE\ConstantTime\Base32;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 
+/**
+ * @final
+ */
 class GoogleAuthenticator implements GoogleAuthenticatorInterface
 {
     /**

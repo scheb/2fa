@@ -8,6 +8,9 @@ use Scheb\TwoFactorBundle\Mailer\AuthCodeMailerInterface;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\PersisterInterface;
 
+/**
+ * @final
+ */
 class CodeGenerator implements CodeGeneratorInterface
 {
     /**

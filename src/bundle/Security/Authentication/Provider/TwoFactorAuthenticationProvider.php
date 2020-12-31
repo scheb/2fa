@@ -15,6 +15,9 @@ use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProvid
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
+/**
+ * @final
+ */
 class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
 {
     /**

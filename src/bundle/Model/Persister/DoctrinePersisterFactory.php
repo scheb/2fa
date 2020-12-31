@@ -8,6 +8,11 @@ use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
 use Doctrine\Persistence\ManagerRegistry;
 use Scheb\TwoFactorBundle\Model\PersisterInterface;
 
+/**
+ * @final
+ *
+ * @internal For the DIC to construct a DoctrinePersister instance
+ */
 class DoctrinePersisterFactory
 {
     /**

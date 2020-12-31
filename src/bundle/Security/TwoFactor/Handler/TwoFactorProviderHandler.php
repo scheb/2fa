@@ -12,6 +12,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactor
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
+/**
+ * @final
+ */
 class TwoFactorProviderHandler implements AuthenticationHandlerInterface
 {
     /**

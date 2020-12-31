@@ -16,6 +16,9 @@ use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProvid
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
+/**
+ * @final
+ */
 class AuthenticationProviderDecorator implements AuthenticationProviderInterface
 {
     /**

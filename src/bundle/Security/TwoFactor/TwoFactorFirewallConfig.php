@@ -9,6 +9,9 @@ use Scheb\TwoFactorBundle\Security\Http\ParameterBagUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\HttpUtils;
 
+/**
+ * @final
+ */
 class TwoFactorFirewallConfig
 {
     /**

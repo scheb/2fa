@@ -7,6 +7,9 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp;
 use ParagonIE\ConstantTime\Base32;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 
+/**
+ * @final
+ */
 class TotpAuthenticator implements TotpAuthenticatorInterface
 {
     /**

@@ -9,6 +9,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist\IpWhitelistProviderInte
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
+/**
+ * @final
+ */
 class IpWhitelistHandler implements AuthenticationHandlerInterface
 {
     /**

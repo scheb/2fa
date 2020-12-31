@@ -29,6 +29,9 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerI
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Firewall\AbstractListener;
 
+/**
+ * @final
+ */
 class TwoFactorListener extends AbstractListener
 {
     /**

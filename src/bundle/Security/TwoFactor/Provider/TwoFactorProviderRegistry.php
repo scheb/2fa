@@ -6,6 +6,9 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider;
 
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
 
+/**
+ * @final
+ */
 class TwoFactorProviderRegistry
 {
     /**

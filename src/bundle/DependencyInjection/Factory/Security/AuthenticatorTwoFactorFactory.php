@@ -6,7 +6,9 @@ namespace Scheb\TwoFactorBundle\DependencyInjection\Factory\Security;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AuthenticatorFactoryInterface;
 
-// Compatibility with authenticators in Symfony >= 5.1
+/**
+ * @internal Compatibility with authenticators in Symfony >= 5.1
+ */
 class AuthenticatorTwoFactorFactory extends TwoFactorFactory implements AuthenticatorFactoryInterface
 {
 }

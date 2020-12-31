@@ -11,6 +11,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
+/**
+ * @final
+ */
 class RememberMeListener implements EventSubscriberInterface
 {
     public function onSuccessfulLogin(LoginSuccessEvent $event): void

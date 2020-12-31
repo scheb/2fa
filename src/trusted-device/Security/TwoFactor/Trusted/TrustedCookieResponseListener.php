@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
+/**
+ * @final
+ */
 class TrustedCookieResponseListener implements EventSubscriberInterface
 {
     /**

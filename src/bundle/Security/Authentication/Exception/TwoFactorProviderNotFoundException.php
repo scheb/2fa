@@ -6,6 +6,9 @@ namespace Scheb\TwoFactorBundle\Security\Authentication\Exception;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
+/**
+ * @final
+ */
 class TwoFactorProviderNotFoundException extends AuthenticationException
 {
     public const MESSAGE_KEY = 'Two-factor provider not found.';

@@ -11,6 +11,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
 
+/**
+ * @internal
+ */
 abstract class AbstractCheckCodeListener implements EventSubscriberInterface
 {
     /**

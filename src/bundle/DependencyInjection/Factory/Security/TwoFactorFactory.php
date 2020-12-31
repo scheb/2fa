@@ -12,6 +12,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Security\Http\Event\AuthenticationTokenCreatedEvent;
 
+/**
+ * @internal Technically this class is final, but the compatibility layer needs to extend it
+ */
 class TwoFactorFactory implements SecurityFactoryInterface, FirewallListenerFactoryInterface
 {
     public const AUTHENTICATION_PROVIDER_KEY = 'two_factor';

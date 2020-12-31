@@ -7,6 +7,9 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * @final
+ */
 class TrustedDeviceTokenStorage
 {
     private const TOKEN_DELIMITER = ';';

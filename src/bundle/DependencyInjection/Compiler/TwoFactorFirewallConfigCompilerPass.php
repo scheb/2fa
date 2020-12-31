@@ -11,6 +11,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Collect registered two-factor firewall configs and add them to the context.
+ *
+ * @final
  */
 class TwoFactorFirewallConfigCompilerPass implements CompilerPassInterface
 {

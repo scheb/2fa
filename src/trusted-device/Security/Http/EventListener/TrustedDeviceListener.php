@@ -11,6 +11,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterfa
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
+/**
+ * @final
+ */
 class TrustedDeviceListener implements EventSubscriberInterface
 {
     /**

@@ -13,6 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Http\Event\AuthenticationTokenCreatedEvent;
 
+/**
+ * @final
+ */
 class AuthenticationTokenListener implements EventSubscriberInterface
 {
     /**

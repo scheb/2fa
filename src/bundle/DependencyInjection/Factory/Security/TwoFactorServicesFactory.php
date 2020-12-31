@@ -8,6 +8,11 @@ use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * @final
+ *
+ * @internal Helper class for TwoFactorFactory only
+ */
 class TwoFactorServicesFactory
 {
     public function createSuccessHandler(ContainerBuilder $container, string $firewallName, array $config, string $twoFactorFirewallConfigId): string

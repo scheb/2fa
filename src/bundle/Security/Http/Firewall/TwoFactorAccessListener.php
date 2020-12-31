@@ -18,6 +18,8 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Handles access control in the "2fa in progress" phase.
+ *
+ * @final
  */
 class TwoFactorAccessListener extends AbstractListener implements FirewallListenerInterface
 {

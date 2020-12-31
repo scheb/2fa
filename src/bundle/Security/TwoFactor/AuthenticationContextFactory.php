@@ -7,6 +7,9 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
+/**
+ * @final
+ */
 class AuthenticationContextFactory implements AuthenticationContextFactoryInterface
 {
     /**

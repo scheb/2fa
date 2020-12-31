@@ -8,6 +8,9 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
+/**
+ * @final
+ */
 class AuthenticationTrustResolver implements AuthenticationTrustResolverInterface
 {
     /**

@@ -13,6 +13,8 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * Decorates all remember-me services instances so that the remember-me cookie doesn't leak when two-factor
  * authentication is required.
+ *
+ * @final
  */
 class RememberMeServicesDecoratorCompilerPass implements CompilerPassInterface
 {

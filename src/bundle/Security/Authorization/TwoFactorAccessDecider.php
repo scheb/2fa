@@ -13,6 +13,9 @@ use Symfony\Component\Security\Http\Firewall\AccessListener;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
 
+/**
+ * @final
+ */
 class TwoFactorAccessDecider
 {
     /**

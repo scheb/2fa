@@ -6,6 +6,9 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
 use Lcobucci\JWT\Token\Plain;
 
+/**
+ * @final
+ */
 class TrustedDeviceToken
 {
     /**

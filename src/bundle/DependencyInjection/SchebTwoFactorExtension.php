@@ -11,6 +11,9 @@ use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
+/**
+ * @final
+ */
 class SchebTwoFactorExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void

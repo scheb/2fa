@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Backup;
 
+/**
+ * @final
+ */
 class NullBackupCodeManager implements BackupCodeManagerInterface
 {
     public function isBackupCode($user, string $code): bool

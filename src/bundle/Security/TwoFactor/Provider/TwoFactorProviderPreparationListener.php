@@ -16,6 +16,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\AuthenticationEvents;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
+/**
+ * @final
+ */
 class TwoFactorProviderPreparationListener implements EventSubscriberInterface
 {
     public const LISTENER_PRIORITY = PHP_INT_MAX;

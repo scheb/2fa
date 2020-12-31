@@ -11,6 +11,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Logout\LogoutHandlerInterface;
 use Symfony\Component\Security\Http\RememberMe\RememberMeServicesInterface;
 
+/**
+ * @final
+ */
 class RememberMeServicesDecorator implements RememberMeServicesInterface, LogoutHandlerInterface
 {
     /**

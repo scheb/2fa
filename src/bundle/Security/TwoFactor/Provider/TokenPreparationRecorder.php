@@ -9,6 +9,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 /**
  * Uses the security token to store if a two-factor provider has been prepared.
+ *
+ * @final
  */
 class TokenPreparationRecorder implements PreparationRecorderInterface
 {

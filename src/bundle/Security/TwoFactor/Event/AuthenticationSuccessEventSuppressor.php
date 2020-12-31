@@ -10,6 +10,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\AuthenticationEvents;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
+/**
+ * @final
+ */
 class AuthenticationSuccessEventSuppressor implements EventSubscriberInterface
 {
     // Must trigger after TwoFactorProviderPreparationListener::onLogin to stop event propagation immediately

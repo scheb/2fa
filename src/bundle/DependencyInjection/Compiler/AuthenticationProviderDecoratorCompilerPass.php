@@ -13,6 +13,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Get all registered authentication providers and decorate them with AuthenticationProviderDecorator.
+ *
+ * @final
  */
 class AuthenticationProviderDecoratorCompilerPass implements CompilerPassInterface
 {

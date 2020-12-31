@@ -9,6 +9,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
+/**
+ * @final
+ */
 class TwoFactorInProgressVoter implements VoterInterface
 {
     public const IS_AUTHENTICATED_2FA_IN_PROGRESS = 'IS_AUTHENTICATED_2FA_IN_PROGRESS';

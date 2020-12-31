@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
+/**
+ * @final
+ */
 class TwoFactorAuthenticationEvent extends Event
 {
     /**

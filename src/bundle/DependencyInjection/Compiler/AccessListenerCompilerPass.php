@@ -15,6 +15,8 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * Compatibility for Symfony <= 5.1, from Symfony 5.2 on the bundle uses FirewallListenerFactoryInterface
  * to inject its TwoFactorAccessListener.
+ *
+ * @final
  */
 class AccessListenerCompilerPass implements CompilerPassInterface
 {

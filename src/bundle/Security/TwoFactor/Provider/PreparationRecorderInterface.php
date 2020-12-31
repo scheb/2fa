@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider;
 
+/**
+ * @internal
+ */
 interface PreparationRecorderInterface
 {
     /**

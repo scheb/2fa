@@ -7,12 +7,16 @@ namespace Scheb\TwoFactorBundle\Security\Http\Firewall;
 use Symfony\Component\Security\Http\Firewall\FirewallListenerInterface as BaseFirewallListenerInterface;
 
 if (interface_exists(BaseFirewallListenerInterface::class)) {
-    // Compatibility for Symfony >= 5.2
+    /**
+     * @internal Compatibility for Symfony >= 5.2
+     */
     interface FirewallListenerInterface extends BaseFirewallListenerInterface
     {
     }
 } else {
-    // Compatibility for Symfony <= 5.1
+    /**
+     * @internal Compatibility for Symfony <= 5.1
+     */
     interface FirewallListenerInterface
     {
     }

@@ -29,6 +29,9 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * @final
+ */
 class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthenticatorInterface
 {
     public const FLAG_2FA_COMPLETE = '2fa_complete';

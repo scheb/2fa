@@ -8,6 +8,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
+/**
+ * @final
+ */
 class TrustedDeviceHandler implements AuthenticationHandlerInterface
 {
     /**

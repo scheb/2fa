@@ -15,6 +15,9 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * @final
+ */
 class ExceptionListener implements EventSubscriberInterface
 {
     // Just before the firewall's Symfony\Component\Security\Http\Firewall\ExceptionListener

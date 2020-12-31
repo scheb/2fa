@@ -8,6 +8,9 @@ use OTPHP\TOTP;
 use OTPHP\TOTPInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 
+/**
+ * @final
+ */
 class TotpFactory
 {
     /**

@@ -6,6 +6,9 @@ namespace Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials
 
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CredentialsInterface;
 
+/**
+ * @final
+ */
 class TwoFactorCodeCredentials implements CredentialsInterface
 {
     /**
