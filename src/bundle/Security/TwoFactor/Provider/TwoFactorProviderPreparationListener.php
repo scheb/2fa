@@ -110,6 +110,8 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
             return;
         }
 
+        // Unset the token from context. This is important for environments where this instance of the class is reused
+        // for multiple requests, such as PHP PM.
         $twoFactorToken = $this->twoFactorToken;
         $this->twoFactorToken = null;
 
