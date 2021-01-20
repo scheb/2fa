@@ -6,15 +6,12 @@ namespace Scheb\TwoFactorBundle\Security\Http\Firewall;
 
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Authorization\TwoFactorAccessDecider;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Firewall\AbstractListener;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Handles access control in the "2fa in progress" phase.
@@ -38,21 +35,14 @@ class TwoFactorAccessListener extends AbstractListener implements FirewallListen
      */
     private $twoFactorAccessDecider;
 
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
     public function __construct(
         TwoFactorFirewallConfig $twoFactorFirewallConfig,
         TokenStorageInterface $tokenStorage,
-        TwoFactorAccessDecider $twoFactorAccessDecider,
-        EventDispatcherInterface $eventDispatcher
+        TwoFactorAccessDecider $twoFactorAccessDecider
     ) {
         $this->twoFactorFirewallConfig = $twoFactorFirewallConfig;
         $this->tokenStorage = $tokenStorage;
         $this->twoFactorAccessDecider = $twoFactorAccessDecider;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function supports(Request $request): ?bool
@@ -80,9 +70,6 @@ class TwoFactorAccessListener extends AbstractListener implements FirewallListen
         }
 
         if ($this->twoFactorFirewallConfig->isAuthFormRequest($request)) {
-            $event = new TwoFactorAuthenticationEvent($request, $token);
-            $this->eventDispatcher->dispatch($event, TwoFactorAuthenticationEvents::FORM);
-
             return;
         }
 

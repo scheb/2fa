@@ -78,7 +78,6 @@
 			<argument /> <!-- Two-factor firewall config -->
 			<argument type="service" id="security.token_storage"/>
 			<argument type="service" id="scheb_two_factor.security.access.access_decider"/>
-			<argument type="service" id="event_dispatcher" />
 		</service>
 
 		<service id="scheb_two_factor.security.authentication.success_handler" class="Scheb\TwoFactorBundle\Security\Http\Authentication\DefaultAuthenticationSuccessHandler" abstract="true">
