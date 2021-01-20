@@ -61,6 +61,12 @@
 			<!-- <tag name="kernel.event_subscriber" /> -->
 		</service>
 
+		<service id="scheb_two_factor.security.form_listener" class="Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorFormListener" abstract="true">
+			<argument /> <!-- Two-factor firewall config -->
+			<argument type="service" id="security.token_storage"/>
+			<argument type="service" id="event_dispatcher"/>
+		</service>
+
 		<service id="scheb_two_factor.security.authentication_success_event_suppressor" class="Scheb\TwoFactorBundle\Security\TwoFactor\Event\AuthenticationSuccessEventSuppressor">
 			<tag name="kernel.event_subscriber" />
 		</service>

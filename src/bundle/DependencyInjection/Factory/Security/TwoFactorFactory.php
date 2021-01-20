@@ -44,6 +44,7 @@ class TwoFactorFactory implements SecurityFactoryInterface, FirewallListenerFact
     public const PROVIDER_PREPARATION_LISTENER_ID_PREFIX = 'security.authentication.provider_preparation_listener.two_factor.';
     public const KERNEL_EXCEPTION_LISTENER_ID_PREFIX = 'security.authentication.kernel_exception_listener.two_factor.';
     public const KERNEL_ACCESS_LISTENER_ID_PREFIX = 'security.authentication.access_listener.two_factor.';
+    public const FORM_LISTENER_ID_PREFIX = 'security.authentication.form_listener.two_factor.';
 
     public const AUTHENTICATOR_DEFINITION_ID = 'scheb_two_factor.security.authenticator';
     public const AUTHENTICATION_TOKEN_CREATED_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.listener.token_created';
@@ -56,6 +57,7 @@ class TwoFactorFactory implements SecurityFactoryInterface, FirewallListenerFact
     public const PROVIDER_PREPARATION_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.provider_preparation_listener';
     public const KERNEL_EXCEPTION_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.kernel_exception_listener';
     public const KERNEL_ACCESS_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.access_listener';
+    public const FORM_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.form_listener';
 
     /**
      * @var TwoFactorServicesFactory
@@ -113,6 +115,7 @@ class TwoFactorFactory implements SecurityFactoryInterface, FirewallListenerFact
         $authRequiredHandlerId = $this->twoFactorServicesFactory->createAuthenticationRequiredHandler($container, $id, $config, $twoFactorFirewallConfigId);
         $this->twoFactorServicesFactory->createKernelExceptionListener($container, $id, $authRequiredHandlerId);
         $this->twoFactorServicesFactory->createAccessListener($container, $id, $twoFactorFirewallConfigId);
+        $this->twoFactorServicesFactory->createFormListener($container, $id, $twoFactorFirewallConfigId);
         $this->twoFactorServicesFactory->createProviderPreparationListener($container, $id, $config);
 
         $providerId = $this->createAuthenticationProvider($container, $id, $twoFactorFirewallConfigId);
@@ -141,6 +144,7 @@ class TwoFactorFactory implements SecurityFactoryInterface, FirewallListenerFact
         $authRequiredHandlerId = $this->twoFactorServicesFactory->createAuthenticationRequiredHandler($container, $firewallName, $config, $twoFactorFirewallConfigId);
         $this->twoFactorServicesFactory->createKernelExceptionListener($container, $firewallName, $authRequiredHandlerId);
         $this->twoFactorServicesFactory->createAccessListener($container, $firewallName, $twoFactorFirewallConfigId);
+        $this->twoFactorServicesFactory->createFormListener($container, $firewallName, $twoFactorFirewallConfigId);
         $this->twoFactorServicesFactory->createProviderPreparationListener($container, $firewallName, $config);
         $this->createAuthenticationTokenCreatedListener($container, $firewallName);
 

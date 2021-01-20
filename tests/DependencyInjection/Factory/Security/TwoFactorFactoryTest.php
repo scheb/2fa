@@ -151,6 +151,11 @@ EOF;
 
         $this->servicesFactory
             ->expects($this->once())
+            ->method('createFormListener')
+            ->with($this->container, self::FIREWALL_NAME, self::TWO_FACTOR_FIREWALL_CONFIG_ID);
+
+        $this->servicesFactory
+            ->expects($this->once())
             ->method('createProviderPreparationListener')
             ->with($this->container, self::FIREWALL_NAME, $this->isType('array'));
     }

@@ -242,4 +242,22 @@ class TwoFactorServicesFactoryTest extends TestCase
         $tag = $definition->getTag('scheb_two_factor.access_listener');
         $this->assertEquals(['firewall' => 'firewallName'], $tag[0]);
     }
+
+    /**
+     * @test
+     */
+    public function create_createForFirewall_createFormListener(): void
+    {
+        $this->servicesFactory->createFormListener(
+            $this->container,
+            self::FIREWALL_NAME,
+            self::TWO_FACTOR_FIREWALL_CONFIG_ID
+        );
+
+        $this->assertTrue($this->container->hasDefinition('security.authentication.form_listener.two_factor.firewallName'));
+        $definition = $this->container->getDefinition('security.authentication.form_listener.two_factor.firewallName');
+        $this->assertEquals(new Reference(self::TWO_FACTOR_FIREWALL_CONFIG_ID), $definition->getArgument(0));
+        $tag = $definition->getTag('kernel.event_subscriber');
+        $this->assertCount(1, $tag, 'Must have the "kernel.event_subscriber" tag assigned');
+    }
 }

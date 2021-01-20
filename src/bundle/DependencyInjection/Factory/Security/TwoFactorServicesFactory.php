@@ -110,4 +110,13 @@ class TwoFactorServicesFactory
             // Compatibility for Symfony <= 5.1
             ->addTag('scheb_two_factor.access_listener', ['firewall' => $firewallName]);
     }
+
+    public function createFormListener(ContainerBuilder $container, string $firewallName, string $twoFactorFirewallConfigId): void
+    {
+        $firewallConfigId = TwoFactorFactory::FORM_LISTENER_ID_PREFIX.$firewallName;
+        $container
+            ->setDefinition($firewallConfigId, new ChildDefinition(TwoFactorFactory::FORM_LISTENER_DEFINITION_ID))
+            ->replaceArgument(0, new Reference($twoFactorFirewallConfigId))
+            ->addTag('kernel.event_subscriber');
+    }
 }
