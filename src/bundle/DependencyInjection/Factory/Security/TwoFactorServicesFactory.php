@@ -107,6 +107,7 @@ class TwoFactorServicesFactory
             ->replaceArgument(0, new Reference($twoFactorFirewallConfigId))
             // The SecurityFactory doesn't have access to the service definitions from the security bundle. Therefore we
             // tag the definition so we can find it in a compiler pass inject it into the firewall context.
+            // Compatibility for Symfony <= 5.1
             ->addTag('scheb_two_factor.access_listener', ['firewall' => $firewallName]);
     }
 }
