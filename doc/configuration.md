@@ -71,10 +71,10 @@ scheb_two_factor:
     # A list of IP addresses or netmasks, which will not trigger two-factor authentication.
     # Supports IPv4, IPv6 and IP subnet masks.
     ip_whitelist:
-        - 127.0.0.1 # One IPv4
-        - 192.168.0.0/16 # IPv4 subnet
-        - 2001:0db8:85a3:0000:0000:8a2e:0370:7334 # One IPv6
-        - 2001:db8:abcd:0012::0/64 # IPv6 subnet
+        - 127.0.0.1  # One IPv4
+        - 192.168.0.0/16  # IPv4 subnet
+        - 2001:0db8:85a3:0000:0000:8a2e:0370:7334  # One IPv6
+        - 2001:db8:abcd:0012::0/64  # IPv6 subnet
 
     # If you want to have your own implementation to retrieve the whitelisted IPs.
     # The configuration option "ip_whitelist" becomes meaningless in such a case.
@@ -103,8 +103,8 @@ security:
                                                       # (supports symfony/property-access notation for nested values)
                 multi_factor: false                   # If ALL active two-factor methods need to be fulfilled
                                                       # (multi-factor authentication)
-                success_handler: acme.custom_success_handler # Use a custom success handler instead of the default one
-                failure_handler: acme.custom_failure_handler # Use a custom failure handler instead of the default one
+                success_handler: acme.custom_success_handler  # Use a custom success handler instead of the default one
+                failure_handler: acme.custom_failure_handler  # Use a custom failure handler instead of the default one
 
                 # Use a custom authentication required handler instead of the default one
                 # This can be used to modify the default behavior of the bundle, which is always redirecting to the
@@ -119,11 +119,11 @@ security:
                                                  # to complete two-factor authentication to view a page. This would
                                                  # prepare right before redirecting to the two-factor form.
 
-                csrf_token_generator: security.csrf.token_manager # CSRF protection will be enabled if a service id of
-                                                                  # CsrfTokenManagerInterface is given. Default: null
-                csrf_parameter: _csrf_token                       # The default CSRF parameter name
-                csrf_token_id: two_factor                         # The default CSRF token id, for generating the token
-                                                                  # value. It is advised to use a different id per form.
+                csrf_token_generator: security.csrf.token_manager  # CSRF protection will be enabled if a service id of
+                                                                   # CsrfTokenManagerInterface is given. Default: null
+                csrf_parameter: _csrf_token                        # The default CSRF parameter name
+                csrf_token_id: two_factor                          # The default CSRF token id, for generating the token
+                                                                   # value. It is advised to use a different id per form
 
                 # If you have multiple user providers registered, Symfony's security extension requires you to configure
                 # a user provider. You're forced to configure this node, although it doesn't have any effect on the
