@@ -98,7 +98,9 @@ security:
                 default_target_path: /                # Where to redirect by default after successful authentication
                 always_use_default_target_path: false # If it should always redirect to default_target_path
                 auth_code_parameter_name: _auth_code  # Name of the parameter for the two-factor authentication code
+                                                      # (supports symfony/property-access notation for nested values)
                 trusted_parameter_name: _trusted      # Name of the parameter for the trusted device option
+                                                      # (supports symfony/property-access notation for nested values)
                 multi_factor: false                   # If ALL active two-factor methods need to be fulfilled
                                                       # (multi-factor authentication)
                 success_handler: acme.custom_success_handler # Use a custom success handler instead of the default one
