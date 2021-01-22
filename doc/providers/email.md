@@ -17,7 +17,7 @@ composer require symfony/mailer              # Either
 composer require symfony/swiftmailer-bundle  # Or
 ```
 
-You're free to use any other mail-sending library you like, but then you *have* to implement your a custom mailer
+You're free to use any other mail-sending library you like, but then you *have* to implement a custom mailer class
 (instructions below).
 
 ## How it works
