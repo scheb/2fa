@@ -1,28 +1,37 @@
 TOTP Authentication
-====================
+===================
 
-## Prerequisites
+TOTP authentication uses the [TOTP algorithm](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to generate
+authentication codes. Compared to [Google Authenticator two-factor provider](google.md), the TOTP two-factor provider
+offers more configuration options, but that means your configuration isn't necessarily compatible with the
+[Google Authenticator app](http://code.google.com/p/google-authenticator/).
+
+Several parameters can be customized:
+
+- The number of digits (default = `6`)
+- The digest (default = `sha1`)
+- The period (default = `30` seconds)
+- Custom parameters can be added
+
+ℹ️ Use the default values to configure TOTP compatible with Google Authenticator (6 digits, sha1 algorithm, 30 seconds
+period).
+
+## How authentication works
+
+The user has to link their account to the TOTP first. This is done by generating a shared secret code, which is stored
+in the user entity. Users add the code to the TOTP app either by manually typing it in together with additional
+properties to configure the TOTP algorithm, or by scanning a QR which automatically transfers the information.
+
+On successful authentication the bundle checks if there is a secret stored in the user entity. If that's the case, it
+will ask for the authentication code. The user must enter the code currently shown in the TOTP app to gain access.
+
+## Installation
 
 To make use of this feature, you have to install `scheb/2fa-totp`.
 
 ```bash
 composer require scheb/2fa-totp
 ```
-
-## How it works
-
-The [TOTP authenticator](https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm) is similar and compatible
-with [Google Authenticator](google.md). The configuration process is identical: a secret code and parameters are
-associated to the user. Users can add that code to the application on their mobile. The app will generate a numeric code
-from it that changes after a period of time.
-
-The main difference is that several parameters can be customized:
-
-* The number of digits (default = 6),
-* The digest (default = sha1),
-* The period (default = 30 seconds),
-* Custom parameters can be added.
-
 
 ## Basic Configuration
 

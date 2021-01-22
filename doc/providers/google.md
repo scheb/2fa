@@ -1,26 +1,36 @@
-Google Authentication
+Google Authenticator
 ====================
 
-## Prerequisites
+[Google Authenticator](https://en.wikipedia.org/wiki/Google_Authenticator) is a popular implementation of a
+[TOTP algorithm](https://en.wikipedia.org/wiki/Time-based_One-Time_Password) to generate authentication codes. Compared
+to the [TOTP two-factor provider](totp.md), the implementation has a fixed configuration, which is necessary to be
+compatible with the Google Authenticator app:
+
+- it generates 6-digit codes
+- the code changes every 30 seconds
+
+If you need different settings, please use the [TOTP two-factor provider](totp.md). Be warned that custom TOTP
+configurations likely won't be compatible with the Google Authenticator app.
+
+## How authentication works
+
+The user has to link their account to the Google Authenticator app first. This is done by generating a shared secret
+code, which is stored in the user entity. Users add the code to the Google Authenticator app either by manually typing
+it in, or scanning a QR which automatically transfers the information.
+
+On successful authentication the bundle checks if there is a secret stored in the user entity. If that's the case, it
+will ask for the authentication code. The user must enter the code currently shown in the Google Authenticator app to
+gain access.
+
+For more information see the [Google Authenticator website](http://code.google.com/p/google-authenticator/).
+
+## Installation
 
 To make use of this feature, you have to install `scheb/2fa-google-authenticator`.
 
 ```bash
 composer require scheb/2fa-google-authenticator
 ```
-
-## How it works
-
-The user entity has to be linked with [Google Authenticator](https://en.wikipedia.org/wiki/Google_Authenticator) first.
-This is done by generating a secret code and storing it in the user entity. Users can add that code to the Google
-Authenticator app on their mobile. The app will generate a 6-digit numeric code from it that changes every 30 seconds.
-
-On successful authentication the bundle checks if there is a secret stored in the user entity. If that's the case it
-will ask for the authentication code. The user must enter the code currently shown in the Google Authenticator app to
-gain access.
-
-For more information see the [Google Authenticator website](http://code.google.com/p/google-authenticator/).
-
 
 ## Basic Configuration
 

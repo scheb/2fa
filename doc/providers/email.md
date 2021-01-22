@@ -1,7 +1,23 @@
 Email Authentication
 ====================
 
-## Prerequisites
+A two-factor provider to generate a random numeric code and send it to the user via email.
+
+## How authentication works
+
+On successful authentication it generates a random number and persist it in the user entity. The number is sent to the
+user via email. Then the user must enter that number to gain access.
+
+The number of digits can be configured:
+
+```yaml
+# config/packages/scheb_two_factor.yaml
+scheb_two_factor:
+    email:
+        digits: 6
+```
+
+## Installation
 
 To make use of this feature, you have to install `scheb/2fa-email`.
 
@@ -19,20 +35,6 @@ composer require symfony/swiftmailer-bundle  # Or
 
 You're free to use any other mail-sending library you like, but then you *have* to implement a custom mailer class
 (instructions below).
-
-## How it works
-
-On successful authentication it generates a random number and persist it in the user entity. The number is sent to the
-user via email. Then the user must enter the right number to gain access.
-
-The number of digits can be configured:
-
-```yaml
-# config/packages/scheb_two_factor.yaml
-scheb_two_factor:
-    email:
-        digits: 6
-```
 
 ## Basic Configuration
 
