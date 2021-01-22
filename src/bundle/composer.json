@@ -35,5 +35,8 @@
         "scheb/2fa-google-authenticator": "Google Authenticator support",
         "scheb/2fa-trusted-device": "Trusted devices support",
         "scheb/2fa-qr-code": "Generate QR codes for Google Authenticator / TOTP"
+    },
+    "conflict": {
+        "scheb/two-factor-bundle": "*"
     }
 }
