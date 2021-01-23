@@ -207,3 +207,29 @@ security:
             two_factor:
                 failure_handler: your_api_2fa_failure_handler
 ```
+
+## Sending the 2fa code
+
+### POST data
+
+In the API use-case, you'd usually send the two-factor authentication code to the "2fa check" path that you have
+configured in your firewall settings. The code is sent over the same way as if you'd send it from the 2fa form - a
+`POST` request with post data in the payload.
+
+### JSON data
+
+To better integrate with JSON-style APIs, the bundle also accepts `POST` requests with a JSON payload. Make sure you
+send a JSON-encoded payload with a JSON content type, such as `application/json`.
+
+You can use [symfony/property-access](https://symfony.com/doc/current/components/property_access.html) notation to
+define the parameter names in the [bundle configuration](configuration.md), allowing you to read from complex data
+structures.
+
+Please note, since you're dealing with JSON *objects*, you have to use the dot `.` notation to access object properties.
+For example, with the following payload:
+
+```json
+{"data": {"authCode": "1234"}}
+```
+
+you'd use `data.authCode` for the authentication code. The array-style notation `data[authCode]` wouldn't work.
