@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\TwoFactor;
 
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
-use Scheb\TwoFactorBundle\Security\Http\ParameterBagUtils;
+use Scheb\TwoFactorBundle\Security\Http\Utils\RequestDataReader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\HttpUtils;
 
@@ -29,14 +29,21 @@ class TwoFactorFirewallConfig
      */
     private $httpUtils;
 
+    /**
+     * @var RequestDataReader
+     */
+    private $requestDataReader;
+
     public function __construct(
         array $options,
         string $firewallName,
-        HttpUtils $httpUtils
+        HttpUtils $httpUtils,
+        RequestDataReader $requestDataReader
     ) {
         $this->options = $options;
         $this->firewallName = $firewallName;
         $this->httpUtils = $httpUtils;
+        $this->requestDataReader = $requestDataReader;
     }
 
     public function getFirewallName(): string
@@ -112,16 +119,16 @@ class TwoFactorFirewallConfig
 
     public function getAuthCodeFromRequest(Request $request): string
     {
-        return ParameterBagUtils::getRequestParameterValue($request, $this->getAuthCodeParameterName()) ?? '';
+        return (string) ($this->requestDataReader->getRequestValue($request, $this->getAuthCodeParameterName()) ?? '');
     }
 
     public function hasTrustedDeviceParameterInRequest(Request $request): bool
     {
-        return (bool) ParameterBagUtils::getRequestParameterValue($request, $this->getTrustedParameterName());
+        return (bool) $this->requestDataReader->getRequestValue($request, $this->getTrustedParameterName());
     }
 
     public function getCsrfTokenFromRequest(Request $request): string
     {
-        return ParameterBagUtils::getRequestParameterValue($request, $this->getCsrfParameterName()) ?? '';
+        return (string) ($this->requestDataReader->getRequestValue($request, $this->getCsrfParameterName()) ?? '');
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use Scheb\TwoFactorBundle\Security\Http\Utils\RequestDataReader;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,9 +31,15 @@ class TwoFactorFirewallConfigTest extends TestCase
      */
     private $httpUtils;
 
+    /**
+     * @var MockObject|RequestDataReader
+     */
+    private $requestDataReader;
+
     protected function setUp(): void
     {
         $this->httpUtils = $this->createMock(HttpUtils::class);
+        $this->requestDataReader = $this->createMock(RequestDataReader::class);
     }
 
     private function createConfig($options = self::FULL_OPTIONS): TwoFactorFirewallConfig
@@ -40,7 +47,8 @@ class TwoFactorFirewallConfigTest extends TestCase
         return new TwoFactorFirewallConfig(
             $options,
             self::FIREWALL_NAME,
-            $this->httpUtils
+            $this->httpUtils,
+            $this->requestDataReader
         );
     }
 
@@ -279,11 +287,16 @@ class TwoFactorFirewallConfigTest extends TestCase
     /**
      * @test
      */
-    public function getAuthCodeFromRequest_hasParameter_returnValue(): void
+    public function getAuthCodeFromRequest_parameterConfigured_returnRequestData(): void
     {
-        $postData = ['auth_code' => 'authCodeValue'];
-        $request = new Request([], $postData);
+        $request = $this->createMock(Request::class);
         $config = $this->createConfig(['auth_code_parameter_name' => 'auth_code']);
+
+        $this->requestDataReader
+            ->expects($this->once())
+            ->method('getRequestValue')
+            ->with($this->identicalTo($request), 'auth_code')
+            ->willReturn('authCodeValue');
 
         $returnValue = $config->getAuthCodeFromRequest($request);
         $this->assertEquals('authCodeValue', $returnValue);
@@ -292,36 +305,16 @@ class TwoFactorFirewallConfigTest extends TestCase
     /**
      * @test
      */
-    public function getAuthCodeFromRequest_hasNestedParameter_returnValue(): void
+    public function hasTrustedDeviceParameterInRequest_trueLikeValue_returnTrue(): void
     {
-        $postData = ['auth_form' => ['auth_code' => 'authCodeValue']];
-        $request = new Request([], $postData);
-        $config = $this->createConfig(['auth_code_parameter_name' => 'auth_form[auth_code]']);
+        $request = $this->createMock(Request::class);
+        $config = $this->createConfig(['trusted_parameter_name' => 'trusted_flag']);
 
-        $returnValue = $config->getAuthCodeFromRequest($request);
-        $this->assertEquals('authCodeValue', $returnValue);
-    }
-
-    /**
-     * @test
-     */
-    public function getAuthCodeFromRequest_parameterNotSet_returnEmptyString(): void
-    {
-        $request = new Request([], []);
-        $config = $this->createConfig(['auth_code_parameter_name' => 'auth_code']);
-
-        $returnValue = $config->getAuthCodeFromRequest($request);
-        $this->assertEquals('', $returnValue);
-    }
-
-    /**
-     * @test
-     */
-    public function hasTrustedDeviceParameterInRequest_hasParameter_returnTrue(): void
-    {
-        $postData = ['trusted' => '1'];
-        $request = new Request([], $postData);
-        $config = $this->createConfig(['trusted_parameter_name' => 'trusted']);
+        $this->requestDataReader
+            ->expects($this->once())
+            ->method('getRequestValue')
+            ->with($this->identicalTo($request), 'trusted_flag')
+            ->willReturn(1);
 
         $returnValue = $config->hasTrustedDeviceParameterInRequest($request);
         $this->assertTrue($returnValue);
@@ -330,36 +323,16 @@ class TwoFactorFirewallConfigTest extends TestCase
     /**
      * @test
      */
-    public function hasTrustedDeviceParameterInRequest_hasNestedParameter_returnTrue(): void
+    public function hasTrustedDeviceParameterInRequest_falseLikeValue_returnFalse(): void
     {
-        $postData = ['auth_form' => ['trusted' => '1']];
-        $request = new Request([], $postData);
-        $config = $this->createConfig(['trusted_parameter_name' => 'auth_form[trusted]']);
+        $request = $this->createMock(Request::class);
+        $config = $this->createConfig(['trusted_parameter_name' => 'trusted_flag']);
 
-        $returnValue = $config->hasTrustedDeviceParameterInRequest($request);
-        $this->assertTrue($returnValue);
-    }
-
-    /**
-     * @test
-     */
-    public function hasTrustedDeviceParameterInRequest_parameterNotSet_returnFalse(): void
-    {
-        $request = new Request([], []);
-        $config = $this->createConfig(['trusted_parameter_name' => 'trusted']);
-
-        $returnValue = $config->hasTrustedDeviceParameterInRequest($request);
-        $this->assertFalse($returnValue);
-    }
-
-    /**
-     * @test
-     */
-    public function hasTrustedDeviceParameterInRequest_hasParameterWithFalseLikeValue_returnFalse(): void
-    {
-        $postData = ['trusted' => '0'];
-        $request = new Request([], $postData);
-        $config = $this->createConfig(['trusted_parameter_name' => 'trusted']);
+        $this->requestDataReader
+            ->expects($this->once())
+            ->method('getRequestValue')
+            ->with($this->identicalTo($request), 'trusted_flag')
+            ->willReturn(0);
 
         $returnValue = $config->hasTrustedDeviceParameterInRequest($request);
         $this->assertFalse($returnValue);
@@ -370,36 +343,16 @@ class TwoFactorFirewallConfigTest extends TestCase
      */
     public function getCsrfTokenFromRequest_hasParameter_returnValue(): void
     {
-        $postData = ['csrf_code' => 'csrfCodeValue'];
-        $request = new Request([], $postData);
+        $request = $this->createMock(Request::class);
         $config = $this->createConfig(['csrf_parameter' => 'csrf_code']);
+
+        $this->requestDataReader
+            ->expects($this->once())
+            ->method('getRequestValue')
+            ->with($this->identicalTo($request), 'csrf_code')
+            ->willReturn('csrfCodeValue');
 
         $returnValue = $config->getCsrfTokenFromRequest($request);
         $this->assertEquals('csrfCodeValue', $returnValue);
-    }
-
-    /**
-     * @test
-     */
-    public function getCsrfTokenFromRequest_hasNestedParameter_returnValue(): void
-    {
-        $postData = ['auth_form' => ['csrf_code' => 'csrfCodeValue']];
-        $request = new Request([], $postData);
-        $config = $this->createConfig(['csrf_parameter' => 'auth_form[csrf_code]']);
-
-        $returnValue = $config->getCsrfTokenFromRequest($request);
-        $this->assertEquals('csrfCodeValue', $returnValue);
-    }
-
-    /**
-     * @test
-     */
-    public function getCsrfTokenFromRequest_parameterNotSet_returnEmptyString(): void
-    {
-        $request = new Request([], []);
-        $config = $this->createConfig(['csrf_parameter' => 'csrf_code']);
-
-        $returnValue = $config->getCsrfTokenFromRequest($request);
-        $this->assertEquals('', $returnValue);
     }
 }

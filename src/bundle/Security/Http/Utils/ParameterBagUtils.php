@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Scheb\TwoFactorBundle\Security\Http;
+namespace Scheb\TwoFactorBundle\Security\Http\Utils;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\Exception\AccessException;

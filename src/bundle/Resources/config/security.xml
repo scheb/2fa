@@ -111,6 +111,9 @@
 			<argument type="collection" /> <!-- Options -->
 			<argument type="string" /> <!-- Firewall name -->
 			<argument type="service" id="security.http_utils" />
+			<argument type="service" id="scheb_two_factor.security.request_data_reader" />
 		</service>
+
+		<service id="scheb_two_factor.security.request_data_reader" class="Scheb\TwoFactorBundle\Security\Http\Utils\RequestDataReader" />
 	</services>
 </container>

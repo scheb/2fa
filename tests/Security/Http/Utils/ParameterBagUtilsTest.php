@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Scheb\TwoFactorBundle\Tests\Security\Http;
+namespace Scheb\TwoFactorBundle\Tests\Security\Http\Utils;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use Scheb\TwoFactorBundle\Security\Http\ParameterBagUtils;
+use Scheb\TwoFactorBundle\Security\Http\Utils\ParameterBagUtils;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
