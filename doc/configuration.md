@@ -119,8 +119,7 @@ security:
                                                  # to complete two-factor authentication to view a page. This would
                                                  # prepare right before redirecting to the two-factor form.
 
-                csrf_token_generator: security.csrf.token_manager  # CSRF protection will be enabled if a service id of
-                                                                   # CsrfTokenManagerInterface is given. Default: null
+                enable_csrf: true                # If CSRF protection should be enabled on the two-factor auth form
                 csrf_parameter: _csrf_token      # The default CSRF parameter name
                                                  # (supports symfony/property-access notation for nested values)
                 csrf_token_id: two_factor        # The default CSRF token id, for generating the token value, it is
