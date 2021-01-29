@@ -19,8 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
@@ -100,8 +100,9 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         // within the "authenticate" stage.
         $currentToken = $this->tokenStorage->getToken();
         if (!($currentToken instanceof TwoFactorTokenInterface)) {
-            // This should only happen when the check path is called outside of a 2fa process and not protected via access_control
-            throw new AuthenticationServiceException('Tried to perform two-factor authentication, but two-factor authentication is not in progress.');
+            // This should only happen when the check path is called outside of a 2fa process
+            // access_control can't handle this, as it's called after the authenticator
+            throw new AccessDeniedException('User is not in a two-factor authentication process.');
         }
 
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::ATTEMPT, $request, $currentToken);

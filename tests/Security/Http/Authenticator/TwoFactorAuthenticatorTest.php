@@ -21,8 +21,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
@@ -235,10 +235,10 @@ class TwoFactorAuthenticatorTest extends TestCase
     /**
      * @test
      */
-    public function authenticate_notTwoFactorToken_throwAuthenticationServiceException(): void
+    public function authenticate_notTwoFactorToken_throwAccessDeniedException(): void
     {
         $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
-        $this->expectException(AuthenticationServiceException::class);
+        $this->expectException(AccessDeniedException::class);
         $this->authenticator->authenticate($this->request);
     }
 
