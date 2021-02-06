@@ -36,15 +36,30 @@ class SchebTwoFactorExtension extends Extension
         }
 
         // Load two-factor modules
-        if (isset($config['email']['enabled']) && true === $config['email']['enabled']) {
-            $this->configureEmailAuthenticationProvider($container, $config);
+        if (isset($config['email']['enabled'])) {
+            $config['email']['enabled'] = (bool) $container->resolveEnvPlaceholders($config['email']['enabled'], true);
+
+            if (true === $config['email']['enabled']) {
+                $this->configureEmailAuthenticationProvider($container, $config);
+            }
         }
-        if (isset($config['google']['enabled']) && true === $config['google']['enabled']) {
-            $this->configureGoogleAuthenticationProvider($container, $config);
+
+        if (isset($config['google']['enabled'])) {
+            $config['google']['enabled'] = (bool) $container->resolveEnvPlaceholders($config['google']['enabled'], true);
+
+            if (true === $config['google']['enabled']) {
+                $this->configureGoogleAuthenticationProvider($container, $config);
+            }
         }
-        if (isset($config['totp']['enabled']) && true === $config['totp']['enabled']) {
-            $this->configureTotpAuthenticationProvider($container, $config);
+
+        if (isset($config['totp']['enabled'])) {
+            $config['totp']['enabled'] = (bool) $container->resolveEnvPlaceholders($config['totp']['enabled'], true);
+
+            if (true === $config['totp']['enabled']) {
+                $this->configureTotpAuthenticationProvider($container, $config);
+            }
         }
+
 
         // Configure custom services
         $this->configurePersister($container, $config);
