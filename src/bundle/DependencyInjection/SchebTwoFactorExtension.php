@@ -36,41 +36,30 @@ class SchebTwoFactorExtension extends Extension
         }
 
         // Load two-factor modules
-        if (isset($config['email']['enabled'])) {
-            $config['email']['enabled'] = (bool) $container->resolveEnvPlaceholders($config['email']['enabled'], true);
-
-            if (true === $config['email']['enabled']) {
-                $this->configureEmailAuthenticationProvider($container, $config);
-            }
+        if (isset($config['email']['enabled']) && true === $this->resolveFeatureFlag($container, $config['email']['enabled'])) {
+            $this->configureEmailAuthenticationProvider($container, $config);
         }
 
-        if (isset($config['google']['enabled'])) {
-            $config['google']['enabled'] = (bool) $container->resolveEnvPlaceholders($config['google']['enabled'], true);
-
-            if (true === $config['google']['enabled']) {
-                $this->configureGoogleAuthenticationProvider($container, $config);
-            }
+        if (isset($config['google']['enabled']) && true === $this->resolveFeatureFlag($container, $config['google']['enabled'])) {
+            $this->configureGoogleAuthenticationProvider($container, $config);
         }
 
-        if (isset($config['totp']['enabled'])) {
-            $config['totp']['enabled'] = (bool) $container->resolveEnvPlaceholders($config['totp']['enabled'], true);
-
-            if (true === $config['totp']['enabled']) {
-                $this->configureTotpAuthenticationProvider($container, $config);
-            }
+        if (isset($config['totp']['enabled']) && true === $this->resolveFeatureFlag($container, $config['totp']['enabled'])) {
+            $this->configureTotpAuthenticationProvider($container, $config);
         }
-
 
         // Configure custom services
         $this->configurePersister($container, $config);
         $this->configureIpWhitelistProvider($container, $config);
         $this->configureTokenFactory($container, $config);
-        if (isset($config['trusted_device']['enabled']) && true === $config['trusted_device']['enabled']) {
+
+        if (isset($config['trusted_device']['enabled']) && true === $this->resolveFeatureFlag($container, $config['trusted_device']['enabled'])) {
             $this->configureTrustedDeviceManager($container, $config);
         } else {
             $container->setParameter('scheb_two_factor.trusted_device.enabled', false);
         }
-        if (isset($config['backup_codes']['enabled']) && true === $config['backup_codes']['enabled']) {
+
+        if (isset($config['backup_codes']['enabled']) && true === $this->resolveFeatureFlag($container, $config['backup_codes']['enabled'])) {
             $this->configureBackupCodeManager($container, $config);
         }
     }
@@ -154,5 +143,10 @@ class SchebTwoFactorExtension extends Extension
         $container->setParameter('scheb_two_factor.totp.window', $config['totp']['window']);
         $container->setParameter('scheb_two_factor.totp.parameters', $config['totp']['parameters']);
         $container->setParameter('scheb_two_factor.totp.template', $config['totp']['template']);
+    }
+
+    private function resolveFeatureFlag(ContainerBuilder $container, $value): bool
+    {
+        return (bool) $container->resolveEnvPlaceholders($value, true);
     }
 }
