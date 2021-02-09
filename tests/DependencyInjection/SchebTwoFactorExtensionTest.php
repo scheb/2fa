@@ -110,25 +110,31 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
-    public function load_envVarBasedFullConfig_setConfigValues(): void
+    public function load_truthyEnvVarBasedConfig_setConfigValues(): void
     {
-        $config = $this->getEnvVarBasedFullConfig(true);
+        $config = $this->getEnvVarBasedConfig(true);
         $this->extension->load([$config], $this->container);
 
         $this->assertHasParameter(true, 'scheb_two_factor.trusted_device.enabled');
-        $this->assertHasParameter(true, 'scheb_two_factor.backup_codes.enabled');
-        $this->assertHasParameter(true, 'scheb_two_factor.google.enabled');
-        $this->assertHasParameter(true, 'scheb_two_factor.totp.enabled');
-        $this->assertHasParameter(true, 'scheb_two_factor.email.enabled');
+        $this->assertHasDefinition('scheb_two_factor.security.email.provider');
+        $this->assertHasAlias('scheb_two_factor.backup_code_manager', 'scheb_two_factor.default_backup_code_manager');
+        $this->assertHasDefinition('scheb_two_factor.security.google.provider');
+        $this->assertHasDefinition('scheb_two_factor.security.totp.provider');
+    }
 
-        $config = $this->getEnvVarBasedFullConfig(false);
+    /**
+     * @test
+     */
+    public function load_falsyEnvVarBasedConfig_setConfigValues(): void
+    {
+        $config = $this->getEnvVarBasedConfig(false);
         $this->extension->load([$config], $this->container);
 
         $this->assertHasParameter(false, 'scheb_two_factor.trusted_device.enabled');
-        $this->assertHasParameter(false, 'scheb_two_factor.backup_codes.enabled');
-        $this->assertHasParameter(false, 'scheb_two_factor.google.enabled');
-        $this->assertHasParameter(false, 'scheb_two_factor.totp.enabled');
-        $this->assertHasParameter(false, 'scheb_two_factor.email.enabled');
+        $this->assertNotHasDefinition('scheb_two_factor.security.email.provider');
+        $this->assertNotHasAlias('scheb_two_factor.backup_code_manager');
+        $this->assertNotHasDefinition('scheb_two_factor.security.google.provider');
+        $this->assertNotHasDefinition('scheb_two_factor.security.totp.provider');
     }
 
     /**
@@ -515,101 +521,33 @@ EOF;
         return $parser->parse($yaml);
     }
 
-    private function getEnvVarBasedFullConfig(bool $truthyConfig): array
+    private function getEnvVarBasedConfig(bool $truthyConfig): array
     {
         if (true === $truthyConfig) {
             $yaml = <<<EOF
-persister: acme_test.persister
-model_manager_name: "alternative"
-security_tokens:
-    - Symfony\Component\Security\Core\Authentication\Token\SomeToken
-ip_whitelist:
-    - 127.0.0.1
-ip_whitelist_provider: acme_test.ip_whitelist_provider
-two_factor_token_factory: acme_test.two_factor_token_factory
 trusted_device:
     enabled: "%env(ENABLE_2FA_TRUTHY)%"
-    manager: acme_test.trusted_device_manager
-    lifetime: 2592000
-    extend_lifetime: true
-    cookie_name: trusted_cookie
-    cookie_secure: true
-    cookie_same_site: null
-    cookie_domain: cookie.example.org
-    cookie_path: /cookie-path
 backup_codes:
     enabled: "%env(ENABLE_2FA_TRUTHY)%"
-    manager: acme_test.backup_code_manager
 email:
     enabled: "%env(ENABLE_2FA_TRUTHY)%"
-    mailer: acme_test.mailer
-    code_generator: acme_test.code_generator
-    sender_email: me@example.com
-    sender_name: Sender Name
-    template: AcmeTestBundle:Authentication:emailForm.html.twig
-    digits: 6
 google:
     enabled: "%env(ENABLE_2FA_TRUTHY)%"
-    issuer: Issuer Google
-    server_name: Server Name Google
-    template: AcmeTestBundle:Authentication:googleForm.html.twig
-    digits: 8
-    window: 2
 totp:
     enabled: "%env(ENABLE_2FA_TRUTHY)%"
-    issuer: Issuer TOTP
-    server_name: Server Name TOTP
-    window: 2
-    parameters:
-        image: http://foo/bar.png
-    template: AcmeTestBundle:Authentication:totpForm.html.twig
 EOF;
         } else {
             $yaml = <<<EOF
-persister: acme_test.persister
-model_manager_name: "alternative"
-security_tokens:
-    - Symfony\Component\Security\Core\Authentication\Token\SomeToken
-ip_whitelist:
-    - 127.0.0.1
-ip_whitelist_provider: acme_test.ip_whitelist_provider
-two_factor_token_factory: acme_test.two_factor_token_factory
 trusted_device:
     enabled: "%env(ENABLE_2FA_FALSY)%"
-    manager: acme_test.trusted_device_manager
-    lifetime: 2592000
-    extend_lifetime: true
-    cookie_name: trusted_cookie
-    cookie_secure: true
-    cookie_same_site: null
-    cookie_domain: cookie.example.org
-    cookie_path: /cookie-path
 backup_codes:
     enabled: "%env(ENABLE_2FA_FALSY)%"
-    manager: acme_test.backup_code_manager
 email:
     enabled: "%env(ENABLE_2FA_FALSY)%"
-    mailer: acme_test.mailer
-    code_generator: acme_test.code_generator
-    sender_email: me@example.com
-    sender_name: Sender Name
-    template: AcmeTestBundle:Authentication:emailForm.html.twig
-    digits: 6
 google:
     enabled: "%env(ENABLE_2FA_FALSY)%"
-    issuer: Issuer Google
-    server_name: Server Name Google
-    template: AcmeTestBundle:Authentication:googleForm.html.twig
-    digits: 8
-    window: 2
 totp:
     enabled: "%env(ENABLE_2FA_FALSY)%"
-    issuer: Issuer TOTP
-    server_name: Server Name TOTP
-    window: 2
-    parameters:
-        image: http://foo/bar.png
-    template: AcmeTestBundle:Authentication:totpForm.html.twig
 EOF;
         }
 
