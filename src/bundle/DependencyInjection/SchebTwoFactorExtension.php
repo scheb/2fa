@@ -78,7 +78,7 @@ class SchebTwoFactorExtension extends Extension
         $ipWhitelistHandlerDefinition = $container->getDefinition('scheb_two_factor.ip_whitelist_handler');
         $ipWhitelistHandlerDefinition->setArgument(0, new Reference('scheb_two_factor.trusted_device_handler'));
 
-        $container->setParameter('scheb_two_factor.trusted_device.enabled', $config['trusted_device']['enabled']);
+        $container->setParameter('scheb_two_factor.trusted_device.enabled', $this->resolveFeatureFlag($container, $config['trusted_device']['enabled']));
         $container->setParameter('scheb_two_factor.trusted_device.cookie_name', $config['trusted_device']['cookie_name']);
         $container->setParameter('scheb_two_factor.trusted_device.lifetime', $config['trusted_device']['lifetime']);
         $container->setParameter('scheb_two_factor.trusted_device.extend_lifetime', $config['trusted_device']['extend_lifetime']);
