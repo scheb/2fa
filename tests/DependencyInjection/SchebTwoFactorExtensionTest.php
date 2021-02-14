@@ -523,7 +523,7 @@ EOF;
 
     private function getEnvVarBasedConfig(bool $truthyConfig): array
     {
-        if (true === $truthyConfig) {
+        if ($truthyConfig) {
             $yaml = <<<EOF
 trusted_device:
     enabled: "%env(ENABLE_2FA_TRUTHY)%"
