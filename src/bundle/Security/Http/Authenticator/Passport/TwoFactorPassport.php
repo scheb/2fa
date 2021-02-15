@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport;
 
+use RuntimeException;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CredentialsInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportTrait;
+use Symfony\Component\Security\Http\Authenticator\Passport\UserPassportInterface;
 
 /**
  * @final
  */
-class TwoFactorPassport implements PassportInterface
+class TwoFactorPassport implements PassportInterface, UserPassportInterface
 {
     use PassportTrait;
 
@@ -38,5 +41,14 @@ class TwoFactorPassport implements PassportInterface
     public function getFirewallName(): string
     {
         return $this->twoFactorToken->getProviderKey();
+    }
+
+    public function getUser(): UserInterface
+    {
+        $user = $this->twoFactorToken->getUser();
+        if($user instanceof UserInterface) {
+            return $user;
+        }
+        throw new RuntimeException('Failed to find User of type UserInterface');
     }
 }
