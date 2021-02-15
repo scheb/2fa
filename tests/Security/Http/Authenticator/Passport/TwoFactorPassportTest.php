@@ -9,8 +9,10 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\TwoFactorPassport;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CredentialsInterface;
+use Throwable;
 
 class TwoFactorPassportTest extends TestCase
 {
@@ -147,5 +149,40 @@ class TwoFactorPassportTest extends TestCase
             ->willReturn(true);
 
         $this->passport->checkIfCompletelyResolved();
+    }
+
+    /**
+     * @test
+     */
+    public function testGetUserInstanceOf(): void
+    {
+        $user = $this->createMock(UserInterface::class);
+        $this->twoFactorToken
+            ->method('getUser')
+            ->willReturn($user);
+
+        $currentUser = $this->passport->getUser();
+
+        $this->assertInstanceOf(UserInterface::class, $currentUser);
+    }
+
+    /**
+     * @test
+     */
+    public function testGetUserException(): void
+    {
+        $user = 'myusername@example.com';
+        $this->twoFactorToken
+            ->method('getUser')
+            ->willReturn($user);
+
+        try {
+            $exceptionThrown = false;
+            $this->passport->getUser();
+        } catch (Throwable $exception) {
+            $exceptionThrown = true;
+        }
+
+        $this->assertTrue($exceptionThrown);
     }
 }
