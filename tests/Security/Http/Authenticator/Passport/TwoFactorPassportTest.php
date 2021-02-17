@@ -13,7 +13,6 @@ use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CredentialsInterface;
-use Throwable;
 
 class TwoFactorPassportTest extends TestCase
 {
