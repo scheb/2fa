@@ -48,6 +48,9 @@ class TwoFactorPassport implements UserPassportInterface
         if ($user instanceof UserInterface) {
             return $user;
         }
+
+        // This case should never happen as the Passport is only used with the authenticator-based security system and
+        // with that system there is no string-like user.
         throw new RuntimeException('Failed to find User of type UserInterface');
     }
 }
