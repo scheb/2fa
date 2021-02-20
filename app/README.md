@@ -6,7 +6,7 @@ scheb/2fa - app
 Setup
 -----
 
-To setup the test application, run `composer install` in **this directory**.
+To setup the test application, run `composer install` in **this directory** (the `app` directory!).
 
 Test Application
 ----------------
