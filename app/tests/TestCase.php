@@ -46,6 +46,9 @@ abstract class TestCase extends WebTestCase
         $this->client = static::createClient();
         $this->client->setServerParameter('REMOTE_ADDR', self::DEFAULT_IP_ADDRESS);
         $this->followRedirects(true);
+
+        // Workaround for Symfony >= 5.3 to retrieve the security token after request
+        self::$container->get('security.token_storage')->disableUsageTracking();
     }
 
     protected function tearDown(): void
@@ -357,6 +360,9 @@ abstract class TestCase extends WebTestCase
 
     private function getSecurityToken(): ?TokenInterface
     {
+        // Workaround for Symfony >= 5.3 to retrieve the security token after request
+        self::$container->get('security.token_storage')->disableUsageTracking();
+
         return self::$container->get('security.token_storage')->getToken();
     }
 }
