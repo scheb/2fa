@@ -139,7 +139,7 @@ jobs:
 
                     # AUTHENTICATORS configuration (experimental security system)
                     -   php-version: '8.0'
-                        symfony-version: '~5.2.0'
+                        symfony-version: '~5.3.0'
                         app-config: 'authenticators'
 
         steps:
