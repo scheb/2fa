@@ -30,17 +30,17 @@ Configuration Presets
 This test application comes with multiple configuration presets:
 
 - `default` - The default preset, using the classic Symfony security system
-- `authenticator` - Using the newer "authenticator"-based Symfony security system
+- `authenticators` - Using the newer "authenticator"-based Symfony security system
 
 To run the test application with a specific preset, set the environment variable `TEST_CONFIG`. For example, to use the
-`authenticator` preset:
+`authenticators` preset:
 
 ```bash
 # Start the application with the config preset
-TEST_CONFIG=authenticator symfony serve
+TEST_CONFIG=authenticators symfony serve
 
 # Run integration tests with the config preset
-TEST_CONFIG=authenticator vendor/bin/phpunit
+TEST_CONFIG=authenticators vendor/bin/phpunit
 ```
 
 **It's advised to delete the `var/cache` folder whenever you change configuration presets.**
