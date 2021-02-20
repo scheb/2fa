@@ -77,6 +77,10 @@ jobs:
                     -   php-version: '8.0'
                         symfony-version: '^5.0'
 
+                    # Test against upcoming Symfony 5.3
+                    -   php-version: '8.0'
+                        symfony-version: '5.x-dev as 5.3.0'
+
         steps:
             -   name: 'Checkout code'
                 uses: actions/checkout@v2
@@ -137,9 +141,14 @@ jobs:
                         symfony-version: '^5.0'
                         app-config: 'default'
 
+                    # Upcoming Symfony 5.3
+                    -   php-version: '8.0'
+                        symfony-version: '5.x-dev as 5.3.0'
+                        app-config: 'default'
+
                     # AUTHENTICATORS configuration (experimental security system)
                     -   php-version: '8.0'
-                        symfony-version: '~5.2.0'
+                        symfony-version: '5.x-dev as 5.3.0'
                         app-config: 'authenticators'
 
         steps:
