@@ -14,25 +14,28 @@ use Symfony\Component\DependencyInjection\Reference;
  * Decorates all remember-me services instances so that the remember-me cookie doesn't leak when two-factor
  * authentication is required.
  *
+ * Compatibility for Symfony's old security. When the authenticator-based security system is enabled, a different
+ * approach is used to handle the remember-me feature.
+ *
  * @final
  */
 class RememberMeServicesDecoratorCompilerPass implements CompilerPassInterface
 {
     private const REMEMBER_ME_AUTHENTICATION_LISTENER_ID_PREFIX = 'security.authentication.listener.rememberme.';
-    private const REMEMBER_ME_AUTHENTICATOR_LISTENER_ID_PREFIX = 'security.listener.remember_me.';
 
     public function process(ContainerBuilder $container): void
     {
+        // Skip this compiler pass when authenticator security is enabled. When the authenticator-based security system
+        // is enabled, a different approach is used to handle the remember-me feature.
+        if ($container->hasDefinition('security.authenticator.manager')) {
+            return;
+        }
+
         // Find all remember-me listener definitions
         foreach ($container->getDefinitions() as $definitionId => $definition) {
             // Classic security system
             if (0 === strpos((string) $definitionId, self::REMEMBER_ME_AUTHENTICATION_LISTENER_ID_PREFIX)) {
                 $this->decorateRememberMeServices($container, $definition, 1);
-            }
-
-            // Authenticator security system
-            if (0 === strpos((string) $definitionId, self::REMEMBER_ME_AUTHENTICATOR_LISTENER_ID_PREFIX)) {
-                $this->decorateRememberMeServices($container, $definition, 0);
             }
         }
     }
