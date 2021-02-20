@@ -48,6 +48,11 @@ Documentation
 -------------
 Detailed documentation of all features can be found in the [doc](doc/index.md) directory.
 
+Demo
+----
+This repository contains a small test application that can be quickly set-up locally to test two-factor authentication
+in a real Symfony environment. Check out the readme file in the [`app` folder](app/README.md) for more details.
+
 Version Guidance
 ----------------
 
