@@ -8,7 +8,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
-use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Badge\TrustedDeviceBadge;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\TwoFactorPassport;
@@ -264,7 +263,6 @@ class TwoFactorAuthenticatorTest extends TestCase
         $returnValue = $this->authenticator->authenticate($this->request);
         $this->assertInstanceOf(TwoFactorPassport::class, $returnValue);
         $this->assertTrue($returnValue->hasBadge(TwoFactorCodeCredentials::class));
-        $this->assertTrue($returnValue->hasBadge(RememberMeBadge::class));
 
         /** @var TwoFactorCodeCredentials $credentials */
         $credentials = $returnValue->getBadge(TwoFactorCodeCredentials::class);

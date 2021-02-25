@@ -8,7 +8,6 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
-use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Badge\TrustedDeviceBadge;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\TwoFactorPassport;
@@ -26,6 +25,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerI
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\InteractiveAuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -108,7 +108,12 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::ATTEMPT, $request, $currentToken);
 
         $credentials = new TwoFactorCodeCredentials($this->twoFactorFirewallConfig->getAuthCodeFromRequest($request));
-        $passport = new TwoFactorPassport($currentToken, $credentials, [new RememberMeBadge()]);
+        $passport = new TwoFactorPassport($currentToken, $credentials, []);
+        if ($currentToken->hasAttribute(TwoFactorTokenInterface::ATTRIBUTE_NAME_USE_REMEMBER_ME)) {
+            $rememberMeBadge = new RememberMeBadge();
+            $rememberMeBadge->enable();
+            $passport->addBadge($rememberMeBadge);
+        }
 
         if ($this->twoFactorFirewallConfig->isCsrfProtectionEnabled()) {
             $tokenValue = $this->twoFactorFirewallConfig->getCsrfTokenFromRequest($request);

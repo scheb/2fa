@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 interface TwoFactorTokenInterface extends TokenInterface
 {
     public const ATTRIBUTE_NAME_REMEMBER_ME_COOKIE = 'remember_me_cookie';
+    public const ATTRIBUTE_NAME_USE_REMEMBER_ME = 'use_remember_me';
 
     /**
      * Return the authenticated token.
