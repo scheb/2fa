@@ -21,7 +21,14 @@ use Symfony\Component\Security\Core\Event\AuthenticationEvent;
  */
 class TwoFactorProviderPreparationListener implements EventSubscriberInterface
 {
-    public const LISTENER_PRIORITY = PHP_INT_MAX;
+    // This must trigger very first, followed by AuthenticationSuccessEventSuppressor
+    public const AUTHENTICATION_SUCCESS_LISTENER_PRIORITY = PHP_INT_MAX;
+
+    // Execute right before ContextListener, which is serializing the security token into the session
+    public const RESPONSE_LISTENER_PRIORITY = 1;
+
+    /** @deprecated */
+    public const LISTENER_PRIORITY = self::AUTHENTICATION_SUCCESS_LISTENER_PRIORITY;
 
     /**
      * @var TwoFactorProviderRegistry
@@ -146,11 +153,10 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            // This must trigger very first, followed by AuthenticationSuccessEventSuppressor
-            AuthenticationEvents::AUTHENTICATION_SUCCESS => ['onLogin', self::LISTENER_PRIORITY],
+            AuthenticationEvents::AUTHENTICATION_SUCCESS => ['onLogin', self::AUTHENTICATION_SUCCESS_LISTENER_PRIORITY],
             TwoFactorAuthenticationEvents::REQUIRE => 'onAccessDenied',
             TwoFactorAuthenticationEvents::FORM => 'onTwoFactorForm',
-            KernelEvents::RESPONSE => 'onKernelResponse',
+            KernelEvents::RESPONSE => ['onKernelResponse', self::RESPONSE_LISTENER_PRIORITY],
         ];
     }
 }
