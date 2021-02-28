@@ -28,11 +28,6 @@ composer require scheb/2fa-email                  # Add two-factor authenticatio
 composer require scheb/2fa-qr-code                # Add to render QR-codes for Google Authenticator / TOTP
 ```
 
-Alternatively, install everything in a single package:
-```bash
-composer require scheb/2fa
-```
-
 ### Step 2: Enable the bundle
 
 Enable this bundle in your `config/bundles.php`:
