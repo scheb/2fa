@@ -18,10 +18,10 @@ This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki
 
 ---
 
-The bundle is organized into sub-repositories, so you can choose the exact feature set you need and keep installed
-dependencies to a minimum.
+The bundle is split into sub-packages, so you can choose the exact feature set you need and keep installed dependencies
+to a minimum.
 
-Core features provided by `scheb/2fa-bundle`:
+Core features are provided by `scheb/2fa-bundle`:
 
 - Interface for custom two-factor authentication methods
 - Trusted IPs
@@ -38,7 +38,7 @@ Additional features:
 Two-factor authentication methods:
 
 - [TOTP authentication](https://en.wikipedia.org/wiki/Time-based_One-time_Password_algorithm) (`scheb/2fa-totp`)
-- [Google Authenticator](https://en.wikipedia.org/wiki/Google_Authenticator)  (`scheb/2fa-google-authenticator`)
+- [Google Authenticator](https://en.wikipedia.org/wiki/Google_Authenticator) (`scheb/2fa-google-authenticator`)
 - Authentication code via email (`scheb/2fa-email`)
 
 Installation
