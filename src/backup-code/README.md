@@ -16,6 +16,10 @@ This repository is a sub-repository of [scheb/2fa](https://github.com/scheb/2fa)
 
 **Please do not submit any Pull Request here.** Use the [main repository](https://github.com/scheb/2fa) instead.
 
+Installation
+------------
+Please follow the [installation instructions in the main repository](https://github.com/scheb/2fa/blob/5.x/doc/installation.md).
+
 Documentation
 -------------
 Documentation can be found in the [main repository](https://github.com/scheb/2fa/blob/5.x/doc/index.md).
