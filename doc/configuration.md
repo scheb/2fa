@@ -57,7 +57,8 @@ scheb_two_factor:
         form_render: acme.custom_form_renderer  # Use a custom form renderer service
 
     # The service which is used to persist data in the user object. By default Doctrine is used. If your entity is
-    # managed by something else (e.g. an API), you have to implement a custom persister
+    # managed by something else (e.g. an API), you have to implement a custom persister.
+    # Must implement Scheb\TwoFactorBundle\Model\PersisterInterface
     persister: acme.custom_persister
 
     # If your Doctrine user object is managed by a model manager, which is not the default one, you have to
@@ -80,11 +81,13 @@ scheb_two_factor:
         - 2001:db8:abcd:0012::0/64  # IPv6 subnet
 
     # If you want to have your own implementation to retrieve the whitelisted IPs.
-    # The configuration option "ip_whitelist" becomes meaningless in such a case.
+    # The configuration option "ip_whitelist" becomes meaningless in that case.
+    # Must implement Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist\IpWhitelistProviderInterface
     ip_whitelist_provider: acme.custom_ip_whitelist_provider
 
     # If you want to exchange/extend the TwoFactorToken class, which is used by the bundle, you can have a factory
     # service providing your own implementation.
+    # Must implement Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextFactoryInterface
     two_factor_token_factory: acme.custom_two_factor_token_factory
 ```
 
