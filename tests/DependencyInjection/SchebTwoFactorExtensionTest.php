@@ -170,8 +170,31 @@ class SchebTwoFactorExtensionTest extends TestCase
 
         $this->assertHasDefinition('scheb_two_factor.security.google_totp_factory');
         $this->assertHasDefinition('scheb_two_factor.security.google_authenticator');
-        $this->assertHasDefinition('scheb_two_factor.security.google.form_renderer');
+        $this->assertHasDefinition('scheb_two_factor.security.google.default_form_renderer');
         $this->assertHasDefinition('scheb_two_factor.security.google.provider');
+    }
+
+    /**
+     * @test
+     */
+    public function load_defaultGoogleAuthFormRenderer_hasDefaultAlias(): void
+    {
+        $config = $this->getEmptyConfig();
+        $config['google']['enabled'] = true; // Enable Google Authenticator provider
+        $this->extension->load([$config], $this->container);
+
+        $this->assertHasAlias('scheb_two_factor.security.google.form_renderer', 'scheb_two_factor.security.google.default_form_renderer');
+    }
+
+    /**
+     * @test
+     */
+    public function load_customGoogleAuthFormRenderer_hasCustomAlias(): void
+    {
+        $config = $this->getFullConfig();
+        $this->extension->load([$config], $this->container);
+
+        $this->assertHasAlias('scheb_two_factor.security.google.form_renderer', 'acme_test.google_form_renderer');
     }
 
     /**
@@ -184,8 +207,31 @@ class SchebTwoFactorExtensionTest extends TestCase
 
         $this->assertHasDefinition('scheb_two_factor.security.totp_factory');
         $this->assertHasDefinition('scheb_two_factor.security.totp_authenticator');
-        $this->assertHasDefinition('scheb_two_factor.security.totp.form_renderer');
+        $this->assertHasDefinition('scheb_two_factor.security.totp.default_form_renderer');
         $this->assertHasDefinition('scheb_two_factor.security.totp.provider');
+    }
+
+    /**
+     * @test
+     */
+    public function load_defaultTotpFormRenderer_hasDefaultAlias(): void
+    {
+        $config = $this->getEmptyConfig();
+        $config['totp']['enabled'] = true; // Enable TOTP provider
+        $this->extension->load([$config], $this->container);
+
+        $this->assertHasAlias('scheb_two_factor.security.totp.form_renderer', 'scheb_two_factor.security.totp.default_form_renderer');
+    }
+
+    /**
+     * @test
+     */
+    public function load_customTotpFormRenderer_hasCustomAlias(): void
+    {
+        $config = $this->getFullConfig();
+        $this->extension->load([$config], $this->container);
+
+        $this->assertHasAlias('scheb_two_factor.security.totp.form_renderer', 'acme_test.totp_form_renderer');
     }
 
     /**
@@ -199,7 +245,31 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasDefinition('scheb_two_factor.security.email.swift_auth_code_mailer');
         $this->assertHasDefinition('scheb_two_factor.security.email.symfony_auth_code_mailer');
         $this->assertHasDefinition('scheb_two_factor.security.email.default_code_generator');
+        $this->assertHasDefinition('scheb_two_factor.security.email.default_form_renderer');
         $this->assertHasDefinition('scheb_two_factor.security.email.provider');
+    }
+
+    /**
+     * @test
+     */
+    public function load_defaultEmailFormRenderer_hasDefaultAlias(): void
+    {
+        $config = $this->getEmptyConfig();
+        $config['email']['enabled'] = true; // Enable email provider
+        $this->extension->load([$config], $this->container);
+
+        $this->assertHasAlias('scheb_two_factor.security.email.form_renderer', 'scheb_two_factor.security.email.default_form_renderer');
+    }
+
+    /**
+     * @test
+     */
+    public function load_customEmailFormRenderer_hasCustomAlias(): void
+    {
+        $config = $this->getFullConfig();
+        $this->extension->load([$config], $this->container);
+
+        $this->assertHasAlias('scheb_two_factor.security.email.form_renderer', 'acme_test.email_form_renderer');
     }
 
     /**
@@ -499,12 +569,14 @@ email:
     sender_email: me@example.com
     sender_name: Sender Name
     template: AcmeTestBundle:Authentication:emailForm.html.twig
+    form_renderer: acme_test.email_form_renderer
     digits: 6
 google:
     enabled: true
     issuer: Issuer Google
     server_name: Server Name Google
     template: AcmeTestBundle:Authentication:googleForm.html.twig
+    form_renderer: acme_test.google_form_renderer
     digits: 8
     window: 2
 totp:
@@ -515,6 +587,7 @@ totp:
     parameters:
         image: http://foo/bar.png
     template: AcmeTestBundle:Authentication:totpForm.html.twig
+    form_renderer: acme_test.totp_form_renderer
 EOF;
         $parser = new Parser();
 

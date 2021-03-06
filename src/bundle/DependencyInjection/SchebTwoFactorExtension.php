@@ -119,6 +119,10 @@ class SchebTwoFactorExtension extends Extension
         if (null !== $config['email']['mailer']) {
             $container->setAlias('scheb_two_factor.security.email.auth_code_mailer', $config['email']['mailer']);
         }
+
+        if (null !== $config['email']['form_renderer']) {
+            $container->setAlias('scheb_two_factor.security.email.form_renderer', $config['email']['form_renderer']);
+        }
     }
 
     private function configureGoogleAuthenticationProvider(ContainerBuilder $container, array $config): void
@@ -131,6 +135,10 @@ class SchebTwoFactorExtension extends Extension
         $container->setParameter('scheb_two_factor.google.template', $config['google']['template']);
         $container->setParameter('scheb_two_factor.google.digits', $config['google']['digits']);
         $container->setParameter('scheb_two_factor.google.window', $config['google']['window']);
+
+        if (null !== $config['google']['form_renderer']) {
+            $container->setAlias('scheb_two_factor.security.google.form_renderer', $config['google']['form_renderer']);
+        }
     }
 
     private function configureTotpAuthenticationProvider(ContainerBuilder $container, array $config): void
@@ -143,6 +151,10 @@ class SchebTwoFactorExtension extends Extension
         $container->setParameter('scheb_two_factor.totp.window', $config['totp']['window']);
         $container->setParameter('scheb_two_factor.totp.parameters', $config['totp']['parameters']);
         $container->setParameter('scheb_two_factor.totp.template', $config['totp']['template']);
+
+        if (null !== $config['totp']['form_renderer']) {
+            $container->setAlias('scheb_two_factor.security.totp.form_renderer', $config['totp']['form_renderer']);
+        }
     }
 
     /**

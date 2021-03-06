@@ -33,6 +33,7 @@ scheb_two_factor:
         sender_name: John Doe          # Sender name
         digits: 4                      # Number of digits in authentication code
         template: security/2fa_form.html.twig   # Template used to render the authentication form
+        form_render: acme.custom_form_renderer  # Use a custom form renderer service
 
     # Google Authenticator config
     google:
@@ -42,6 +43,7 @@ scheb_two_factor:
         digits: 6                      # Number of digits in authentication code
         window: 1                      # How many codes before/after the current one would be accepted as valid
         template: security/2fa_form.html.twig   # Template used to render the authentication form
+        form_render: acme.custom_form_renderer  # Use a custom form renderer service
 
     # TOTP authentication config
     totp:
@@ -52,6 +54,7 @@ scheb_two_factor:
         parameters:                    # Additional parameters added in the QR code
             image: 'https://my-service/img/logo.png'
         template: security/2fa_form.html.twig   # Template used to render the authentication form
+        form_render: acme.custom_form_renderer  # Use a custom form renderer service
 
     # The service which is used to persist data in the user object. By default Doctrine is used. If your entity is
     # managed by something else (e.g. an API), you have to implement a custom persister

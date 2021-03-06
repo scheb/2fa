@@ -22,10 +22,12 @@
 		<!-- Aliases for auto-wiring -->
 		<service id="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface" alias="scheb_two_factor.security.email.code_generator" public="true" />
 
-		<service id="scheb_two_factor.security.email.form_renderer" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer" lazy="true">
+		<service id="scheb_two_factor.security.email.default_form_renderer" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer" lazy="true">
 			<argument type="service" id="twig" />
 			<argument>%scheb_two_factor.email.template%</argument>
 		</service>
+
+		<service id="scheb_two_factor.security.email.form_renderer" alias="scheb_two_factor.security.email.default_form_renderer" />
 
 		<service id="scheb_two_factor.security.email.provider" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\EmailTwoFactorProvider">
 			<tag name="scheb_two_factor.provider" alias="email" />

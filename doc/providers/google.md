@@ -112,6 +112,43 @@ scheb_two_factor:
         template: security/2fa_form.html.twig
 ```
 
+## Custom Form Rendering
+
+There are certain cases when it's not enough to just change the template. For example, you're using two-factor
+authentication on multiple firewalls and you need to render the form differently for each firewall. In such a case you
+can implement a form renderer to fully customize the rendering logic.
+
+Create a class implementing `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface`:
+
+```php
+<?php
+
+namespace Acme\DemoBundle\FormRenderer;
+
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class MyFormRenderer implements TwoFactorFormRendererInterface
+{
+    // [...]
+
+    public function renderForm(Request $request, array $templateVars): Response
+    {
+        // Customize form rendering
+    }
+}
+```
+
+Then register it as a service and update your configuration:
+
+```yaml
+# config/packages/scheb_two_factor.yaml
+scheb_two_factor:
+    google:
+        form_renderer: acme.custom_form_renderer_service
+```
+
 ## Generating a Secret Code
 
 The service `scheb_two_factor.security.google_authenticator` provides a method to generate new secret for Google
