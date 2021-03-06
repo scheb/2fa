@@ -77,10 +77,7 @@ class FormController
             throw new AccessDeniedException('User is not in a two-factor authentication process.');
         }
 
-        $renderer = $this->providerRegistry->getProvider($providerName)->getFormRenderer();
-        $templateVars = $this->getTemplateVars($request, $token);
-
-        return $renderer->renderForm($request, $templateVars);
+        return $this->renderForm($providerName, $request, $token);
     }
 
     protected function getTwoFactorToken(): TwoFactorTokenInterface
@@ -129,6 +126,14 @@ class FormController
             'checkPathUrl' => $isRoute ? null : $checkPath,
             'logoutPath' => $this->logoutUrlGenerator->getLogoutPath(),
         ];
+    }
+
+    protected function renderForm(string $providerName, Request $request, TwoFactorTokenInterface $token): Response
+    {
+        $renderer = $this->providerRegistry->getProvider($providerName)->getFormRenderer();
+        $templateVars = $this->getTemplateVars($request, $token);
+
+        return $renderer->renderForm($request, $templateVars);
     }
 
     protected function getLastAuthenticationException(SessionInterface $session): ?AuthenticationException
