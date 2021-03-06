@@ -3,7 +3,7 @@
 	<services>
 		<service id="scheb_two_factor.security.authentication.provider.decorator" class="Scheb\TwoFactorBundle\Security\Authentication\Provider\AuthenticationProviderDecorator" abstract="true">
 			<argument /> <!-- Decorated authentication provider -->
-			<argument type="service" id="scheb_two_factor.authenticated_token_handler" />
+			<argument type="service" id="scheb_two_factor.first_two_factor_handler" />
 			<argument type="service" id="scheb_two_factor.authentication_context_factory" />
 			<argument type="service" id="security.firewall.map" />
 			<argument type="service" id="request_stack" />

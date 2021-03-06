@@ -50,6 +50,7 @@ class SchebTwoFactorExtension extends Extension
 
         // Configure custom services
         $this->configurePersister($container, $config);
+        $this->configureTwoFactorCondition($container, $config);
         $this->configureIpWhitelistProvider($container, $config);
         $this->configureTokenFactory($container, $config);
 
@@ -67,6 +68,13 @@ class SchebTwoFactorExtension extends Extension
     private function configurePersister(ContainerBuilder $container, array $config): void
     {
         $container->setAlias('scheb_two_factor.persister', $config['persister']);
+    }
+
+    private function configureTwoFactorCondition(ContainerBuilder $container, array $config): void
+    {
+        if (null !== $config['two_factor_condition']) {
+            $container->setAlias('scheb_two_factor.handler_condition', $config['two_factor_condition']);
+        }
     }
 
     private function configureTrustedDeviceManager(ContainerBuilder $container, array $config): void

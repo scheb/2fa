@@ -89,6 +89,10 @@ scheb_two_factor:
     # service providing your own implementation.
     # Must implement Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextFactoryInterface
     two_factor_token_factory: acme.custom_two_factor_token_factory
+
+    # If you need custom conditions when to perform two-factor authentication.
+    # Must implement Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionInterface
+    two_factor_condition: acme.custom_two_factor_condition
 ```
 
 ```yaml

@@ -11,6 +11,18 @@
 			<argument>Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext</argument>
 		</service>
 
+		<!-- The first two-factor handler in the cascade of handlers, alias to easily wire up the right entry point -->
+		<service id="scheb_two_factor.first_two_factor_handler" alias="scheb_two_factor.condition_handler" />
+
+		<service id="scheb_two_factor.condition_handler" class="Scheb\TwoFactorBundle\Security\TwoFactor\Handler\ConditionAuthenticationHandler" lazy="true">
+			<argument type="service" id="scheb_two_factor.authenticated_token_handler" />
+			<argument type="service" id="scheb_two_factor.handler_condition" />
+		</service>
+
+		<service id="scheb_two_factor.default_handler_condition" class="Scheb\TwoFactorBundle\Security\TwoFactor\Condition\DefaultTwoFactorCondition" />
+
+		<service id="scheb_two_factor.handler_condition" alias="scheb_two_factor.default_handler_condition" />
+
 		<service id="scheb_two_factor.authenticated_token_handler" class="Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticatedTokenHandler" lazy="true">
 			<argument type="service" id="scheb_two_factor.ip_whitelist_handler" />
 			<argument>%scheb_two_factor.security_tokens%</argument>

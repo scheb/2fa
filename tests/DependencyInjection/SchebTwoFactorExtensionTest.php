@@ -354,6 +354,28 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
+    public function load_defaultCondition_defaultAlias(): void
+    {
+        $config = $this->getEmptyConfig();
+        $this->extension->load([$config], $this->container);
+
+        $this->assertHasAlias('scheb_two_factor.handler_condition', 'scheb_two_factor.default_handler_condition');
+    }
+
+    /**
+     * @test
+     */
+    public function load_customCondition_replaceAlias(): void
+    {
+        $config = $this->getFullConfig();
+        $this->extension->load([$config], $this->container);
+
+        $this->assertHasAlias('scheb_two_factor.handler_condition', 'acme_test.two_factor_condition');
+    }
+
+    /**
+     * @test
+     */
     public function load_trustedDeviceFeatureDisabled_defaultHandlerConfiguration(): void
     {
         $config = $this->getFullConfig();
@@ -549,6 +571,7 @@ ip_whitelist:
     - 127.0.0.1
 ip_whitelist_provider: acme_test.ip_whitelist_provider
 two_factor_token_factory: acme_test.two_factor_token_factory
+two_factor_condition: acme_test.two_factor_condition
 trusted_device:
     enabled: true
     manager: acme_test.trusted_device_manager
