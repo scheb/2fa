@@ -73,6 +73,10 @@ Version Guidance
 [v4-repo]: https://github.com/scheb/two-factor-bundle/tree/4.x
 [v5-repo]: https://github.com/scheb/2fa/tree/5.x
 
+License
+-------
+This software is available under the [MIT license](LICENSE).
+
 Security
 --------
 For information about the security policy and know security issues, see [SECURITY.md](SECURITY.md).
@@ -81,6 +85,12 @@ Contributing
 ------------
 Want to contribute to this project? See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-License
--------
-This software is available under the [MIT license](LICENSE).
+Support Me
+----------
+I'm developing this library since 2014. I love to hear from people using it, giving me the motivation to keep working
+on my open source projects.
+
+If you want to let me know you're finding it useful, please consider giving it a star ⭐ on GitHub.
+
+If you love my work and want to say thank you, you can help me out for a beer 🍻️
+[via PayPal](https://paypal.me/ChristianScheb).
