@@ -21,6 +21,7 @@ This bundle provides **two-factor authentication for your Symfony application**.
 - [How to customize conditions when to require two-factor authentication](conditions.md)
 - [How to configure two-factor authentication for an API](api.md)
 - [How to create a custom persister](persister.md)
+- [How to use a different template per firewall](firewall_template.md)
 
 
 ## Two-Factor Authentication Methods
