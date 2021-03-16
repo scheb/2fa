@@ -30,7 +30,7 @@ Backup codes have to be provided from the user object. The user entity has to im
 ```php
 <?php
 
-namespace Acme\DemoBundle\Entity;
+namespace Acme\Demo\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;

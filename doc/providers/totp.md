@@ -53,7 +53,7 @@ have to use another application (e.g. FreeOTP on Android).**
 ```php
 <?php
 
-namespace Acme\DemoBundle\Entity;
+namespace Acme\Demo\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
@@ -138,7 +138,7 @@ Create a class implementing `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\T
 ```php
 <?php
 
-namespace Acme\DemoBundle\FormRenderer;
+namespace Acme\Demo\FormRenderer;
 
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Symfony\Component\HttpFoundation\Request;

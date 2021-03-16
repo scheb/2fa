@@ -79,14 +79,14 @@ in the bundle.
 services:
     # ...
     acme.custom_two_factor_provider:
-        class: Acme\DemoBundle\MyTwoFactorProvider
+        class: Acme\Demo\MyTwoFactorProvider
         tags:
             - { name: scheb_two_factor.provider, alias: acme_two_factor_provider }
 ```
 
 **XML Configuration (alternatively)**:
 ```xml
-<service id="acme.custom_two_factor_provider" class="Acme\DemoBundle\MyTwoFactorProvider">
+<service id="acme.custom_two_factor_provider" class="Acme\Demo\MyTwoFactorProvider">
 	<tag name="scheb_two_factor.provider" alias="acme_two_factor_provider" />
 </service>
 ```

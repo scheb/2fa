@@ -37,7 +37,7 @@ cookies at once, e.g. in case of a security breach. To make use of this feature,
 ```php
 <?php
 
-namespace Acme\DemoBundle\Entity;
+namespace Acme\Demo\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Scheb\TwoFactorBundle\Model\TrustedDeviceInterface;

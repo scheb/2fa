@@ -55,7 +55,7 @@ be persisted, so make sure that it is stored in a persisted field.
 ```php
 <?php
 
-namespace Acme\DemoBundle\Entity;
+namespace Acme\Demo\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
@@ -120,7 +120,7 @@ own mailer service. It must implement `Scheb\TwoFactorBundle\Mailer\AuthCodeMail
 ```php
 <?php
 
-namespace Acme\DemoBundle\Mailer;
+namespace Acme\Demo\Mailer;
 
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Mailer\AuthCodeMailerInterface;
@@ -189,7 +189,7 @@ Create a class implementing `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\T
 ```php
 <?php
 
-namespace Acme\DemoBundle\FormRenderer;
+namespace Acme\Demo\FormRenderer;
 
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Symfony\Component\HttpFoundation\Request;

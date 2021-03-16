@@ -49,7 +49,7 @@ Authenticator for a user, generate a secret code and persist it with the user en
 ```php
 <?php
 
-namespace Acme\DemoBundle\Entity;
+namespace Acme\Demo\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
@@ -123,7 +123,7 @@ Create a class implementing `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\T
 ```php
 <?php
 
-namespace Acme\DemoBundle\FormRenderer;
+namespace Acme\Demo\FormRenderer;
 
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Symfony\Component\HttpFoundation\Request;
