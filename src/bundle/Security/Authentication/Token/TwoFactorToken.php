@@ -23,7 +23,7 @@ class TwoFactorToken implements TwoFactorTokenInterface
     /**
      * @var string
      */
-    private $providerKey;
+    private $firewallName;
 
     /**
      * @var array
@@ -40,11 +40,11 @@ class TwoFactorToken implements TwoFactorTokenInterface
      */
     private $preparedProviders = [];
 
-    public function __construct(TokenInterface $authenticatedToken, ?string $credentials, string $providerKey, array $twoFactorProviders)
+    public function __construct(TokenInterface $authenticatedToken, ?string $credentials, string $firewallName, array $twoFactorProviders)
     {
         $this->authenticatedToken = $authenticatedToken;
         $this->credentials = $credentials;
-        $this->providerKey = $providerKey;
+        $this->firewallName = $firewallName;
         $this->twoFactorProviders = $twoFactorProviders;
     }
 
@@ -80,7 +80,7 @@ class TwoFactorToken implements TwoFactorTokenInterface
 
     public function createWithCredentials(string $credentials): TwoFactorTokenInterface
     {
-        $credentialsToken = new self($this->authenticatedToken, $credentials, $this->providerKey, $this->twoFactorProviders);
+        $credentialsToken = new self($this->authenticatedToken, $credentials, $this->firewallName, $this->twoFactorProviders);
         foreach (array_keys($this->preparedProviders) as $preparedProviderName) {
             $credentialsToken->setTwoFactorProviderPrepared($preparedProviderName);
         }
@@ -155,9 +155,21 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return 0 === \count($this->twoFactorProviders);
     }
 
+    /**
+     * @deprecated since 5.8, use getFirewallName() instead
+     */
     public function getProviderKey(): string
     {
-        return $this->providerKey;
+        if (1 !== \func_num_args() || true !== func_get_arg(0)) {
+            @trigger_error('Method "%s" is deprecated, use "getFirewallName()" instead.', __METHOD__);
+        }
+
+        return $this->firewallName;
+    }
+
+    public function getFirewallName(): string
+    {
+        return $this->getProviderKey(true);
     }
 
     public function isAuthenticated(): bool
@@ -178,7 +190,7 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return [
             $this->authenticatedToken,
             $this->credentials,
-            $this->providerKey,
+            $this->firewallName,
             $this->attributes,
             $this->twoFactorProviders,
             $this->preparedProviders,
@@ -196,7 +208,7 @@ class TwoFactorToken implements TwoFactorTokenInterface
         [
             $this->authenticatedToken,
             $this->credentials,
-            $this->providerKey,
+            $this->firewallName,
             $this->attributes,
             $this->twoFactorProviders,
             $this->preparedProviders,
