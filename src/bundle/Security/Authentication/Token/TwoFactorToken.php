@@ -161,7 +161,7 @@ class TwoFactorToken implements TwoFactorTokenInterface
     public function getProviderKey(): string
     {
         if (1 !== \func_num_args() || true !== func_get_arg(0)) {
-            @trigger_error('Method "%s" is deprecated, use "getFirewallName()" instead.', __METHOD__);
+            @trigger_error(sprintf('Method "%s" is deprecated, use "getFirewallName()" instead.', __METHOD__), E_USER_DEPRECATED);
         }
 
         return $this->firewallName;
