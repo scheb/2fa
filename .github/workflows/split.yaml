@@ -3,8 +3,7 @@ name: 'Split Release'
 on:
     release:
         types:
-            - released
-            - prereleased
+            - published
 
 jobs:
     split:
@@ -18,5 +17,10 @@ jobs:
                 with:
                     fetch-depth: 0  # Fetch all history
 
-            -   name: "Gitsplit"
-                run: docker run --rm -t -e "GH_TOKEN=$GITHUB_TOKEN" -v /cache/gitsplit:/cache/gitsplit -v $(pwd):/srv jderusse/gitsplit
+            -
+                name: "Gitsplit"
+                uses: docker://jderusse/gitsplit:latest
+                with:
+                    args: gitsplit
+                env:
+                    GH_TOKEN: ${{ secrets.PRIVATE_TOKEN }}
