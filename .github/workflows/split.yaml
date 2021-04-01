@@ -1,0 +1,19 @@
+name: 'Split Release'
+
+on:
+    release:
+
+jobs:
+    split:
+        name: 'Split sub-packages'
+
+        runs-on: 'ubuntu-latest'
+
+        steps:
+            -
+                uses: actions/checkout@v2
+                with:
+                    fetch-depth: 0  # Fetch all history
+
+            -   name: "Gitsplit"
+                run: docker run --rm -t -e "GH_TOKEN=$GITHUB_TOKEN" -v /cache/gitsplit:/cache/gitsplit -v $(pwd):/srv jderusse/gitsplit
