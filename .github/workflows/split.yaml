@@ -2,6 +2,9 @@ name: 'Split Release'
 
 on:
     release:
+        types:
+            - released
+            - prereleased
 
 jobs:
     split:
