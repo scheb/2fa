@@ -62,16 +62,16 @@ jobs:
             fail-fast: false
             matrix:
                 include:
+                    # Lowest possible configuration
                     -   php-version: '7.2.5'
-                        dependency-versions: 'lowest'  # Test lowest possible configuration
+                        dependency-versions: 'lowest'
                         symfony-version: 'lowest'
 
-                    -   php-version: '7.4'
+                    # Test against latest Symfony 4.4
+                    -   php-version: '8.0'
                         symfony-version: '^4.4'
 
-                    -   php-version: '7.4'
-                        symfony-version: '^5.0'
-
+                    # Test against latest Symfony 5
                     -   php-version: '8.0'
                         symfony-version: '^5.0'
 
@@ -117,33 +117,25 @@ jobs:
             fail-fast: false
             matrix:
                 include:
-                    # Default configuration (old security system)
+                    # DEFAULT configuration (old security system)
+
+                    # Symfony 4.4 on minimum PHP version
                     -   php-version: '7.2.5'
-                        symfony-version: '~4.4.0'
+                        symfony-version: '^4.4'
                         app-config: 'default'
 
-                    -   php-version: '7.4'
-                        symfony-version: '~4.4.0'
+                    # Latest Symfony 4.4
+                    -   php-version: '8.0'
+                        symfony-version: '^4.4'
                         app-config: 'default'
 
-                    -   php-version: '7.4'
-                        symfony-version: '~5.0.0'
-                        app-config: 'default'
-
-                    -   php-version: '7.4'
-                        symfony-version: '~5.1.0'
-                        app-config: 'default'
-
-                    -   php-version: '7.4'
-                        symfony-version: '~5.2.0'
-                        app-config: 'default'
-
+                    # Latest Symfony 5
                     -   php-version: '8.0'
                         symfony-version: '^5.0'
                         app-config: 'default'
 
-                    # Authenticators configuration (experimental security system)
-                    -   php-version: '7.4'
+                    # AUTHENTICATORS configuration (experimental security system)
+                    -   php-version: '8.0'
                         symfony-version: '~5.2.0'
                         app-config: 'authenticators'
 
