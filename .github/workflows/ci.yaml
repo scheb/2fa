@@ -98,6 +98,10 @@ jobs:
                 if: ${{ matrix.symfony-version != 'lowest' }}
                 run: composer require "symfony/symfony:${{ matrix.symfony-version }}" --no-update
 
+            -   name: "Require extra Composer dependencies"
+                if: ${{ matrix.composer-require }}
+                run: composer require ${{ matrix.composer-require }} --no-update
+
             -   name: 'Install Composer dependencies'
                 uses: ramsey/composer-install@v1
                 with:
@@ -162,6 +166,10 @@ jobs:
             -   name: "Require Symfony version"
                 if: ${{ matrix.symfony-version != 'lowest' }}
                 run: composer require "symfony/symfony:${{ matrix.symfony-version }}" --no-update --working-dir=app
+
+            -   name: "Require extra Composer dependencies"
+                if: ${{ matrix.composer-require }}
+                run: composer require ${{ matrix.composer-require }} --no-update --working-dir=app
 
             -   name: 'Install Composer dependencies'
                 uses: ramsey/composer-install@v1
