@@ -12,7 +12,7 @@ composer require scheb/2fa-backup-code
 ## What it does
 
 Backup codes are one-time authentication codes, which can be used instead of the actual codes. They're meant as
-emergency codes, when the authentication device is not available and you have to pass the two-factor authentication
+emergency codes, when the authentication device is not available, and you have to pass the two-factor authentication
 process.
 
 Enable the feature in the configuration:
@@ -21,7 +21,7 @@ Enable the feature in the configuration:
 # config/packages/scheb_two_factor.yaml
 scheb_two_factor:
     backup_codes:
-        enabled: false  # If the backup code feature should be enabled
+        enabled: true  # If the backup code feature should be enabled
 ```
 
 Backup codes have to be provided from the user object. The user entity has to implement
@@ -38,9 +38,9 @@ use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 class User implements BackupCodeInterface
 {
     /**
-     * @ORM\Column(type="json_array")
+     * @ORM\Column(type="json")
      */
-    private $backupCodes;
+    private $backupCodes = [];
 
     // [...]
 
@@ -67,6 +67,21 @@ class User implements BackupCodeInterface
         if ($key !== false){
             unset($this->backupCodes[$key]);
         }
+    }
+
+    /**
+     * Add a backup code
+     *
+     * @param string $backUpCode
+     * @return mixed
+     */
+    public function addBackUpCode(string $backUpCode): self
+    {
+        if (!in_array($backUpCode, $this->backupCodes)) {
+            $this->backupCodes[] = $backUpCode;
+        }
+
+        return $this;
     }
 }
 ```
