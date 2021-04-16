@@ -73,15 +73,12 @@ class User implements BackupCodeInterface
      * Add a backup code
      *
      * @param string $backUpCode
-     * @return mixed
      */
-    public function addBackUpCode(string $backUpCode): self
+    public function addBackUpCode(string $backUpCode): void
     {
         if (!in_array($backUpCode, $this->backupCodes)) {
             $this->backupCodes[] = $backUpCode;
         }
-
-        return $this;
     }
 }
 ```
