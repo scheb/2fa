@@ -128,7 +128,9 @@ class TrustedDeviceTokenStorage
 
     private function readCookieValue(): ?string
     {
-        return $this->getRequest()->cookies->get($this->cookieName, null);
+        $cookieValue = $this->getRequest()->cookies->get($this->cookieName, null);
+
+        return null === $cookieValue ? null : (string) $cookieValue;
     }
 
     private function getRequest(): Request
