@@ -25,6 +25,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class TwoFactorAuthenticatorTest extends TestCase
@@ -165,9 +166,15 @@ class TwoFactorAuthenticatorTest extends TestCase
             ->willReturn($token);
     }
 
-    private function stubTokenStorageHasTwoFactorToken(): void
+    /**
+     * @return MockObject|TwoFactorTokenInterface
+     */
+    private function stubTokenStorageHasTwoFactorToken(): MockObject
     {
-        $this->stubTokenStorageHasToken($this->createTwoFactorToken());
+        $token = $this->createTwoFactorToken();
+        $this->stubTokenStorageHasToken($token);
+
+        return $token;
     }
 
     /**
@@ -263,10 +270,28 @@ class TwoFactorAuthenticatorTest extends TestCase
         $returnValue = $this->authenticator->authenticate($this->request);
         $this->assertInstanceOf(TwoFactorPassport::class, $returnValue);
         $this->assertTrue($returnValue->hasBadge(TwoFactorCodeCredentials::class));
+        $this->assertFalse($returnValue->hasBadge(RememberMeBadge::class));
 
         /** @var TwoFactorCodeCredentials $credentials */
         $credentials = $returnValue->getBadge(TwoFactorCodeCredentials::class);
         $this->assertEquals(self::CODE, $credentials->getCode());
+    }
+
+    /**
+     * @test
+     */
+    public function authenticate_tokenHasRememberMeAttribute_createTwoFactorPassportWithRememberMeBadge(): void
+    {
+        $twoFactorToken = $this->stubTokenStorageHasTwoFactorToken();
+        $twoFactorToken
+            ->expects($this->any())
+            ->method('hasAttribute')
+            ->with(TwoFactorTokenInterface::ATTRIBUTE_NAME_USE_REMEMBER_ME)
+            ->willReturn(true);
+
+        $returnValue = $this->authenticator->authenticate($this->request);
+        $this->assertInstanceOf(TwoFactorPassport::class, $returnValue);
+        $this->assertTrue($returnValue->hasBadge(RememberMeBadge::class));
     }
 
     /**
