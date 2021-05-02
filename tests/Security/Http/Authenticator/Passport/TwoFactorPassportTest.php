@@ -9,7 +9,6 @@ use RuntimeException;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\TwoFactorPassport;
 use Scheb\TwoFactorBundle\Tests\TestCase;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CredentialsInterface;
@@ -112,43 +111,6 @@ class TwoFactorPassportTest extends TestCase
     {
         $returnValue = $this->passport->getBadge('unknownBadge');
         $this->assertNull($returnValue);
-    }
-
-    /**
-     * @test
-     */
-    public function checkIfCompletelyResolved_hasUnresolvedBadges_throwBadCredentialsException(): void
-    {
-        $this->badge
-            ->expects($this->any())
-            ->method('isResolved')
-            ->willReturn(true);
-
-        $this->credentials
-            ->expects($this->any())
-            ->method('isResolved')
-            ->willReturn(false);
-
-        $this->expectException(BadCredentialsException::class);
-        $this->passport->checkIfCompletelyResolved();
-    }
-
-    /**
-     * @test
-     */
-    public function checkIfCompletelyResolved_allBadgesResolved_doNothing(): void
-    {
-        $this->badge
-            ->expects($this->once())
-            ->method('isResolved')
-            ->willReturn(true);
-
-        $this->credentials
-            ->expects($this->once())
-            ->method('isResolved')
-            ->willReturn(true);
-
-        $this->passport->checkIfCompletelyResolved();
     }
 
     /**
