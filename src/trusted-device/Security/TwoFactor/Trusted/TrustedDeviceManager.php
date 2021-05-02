@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
 use Scheb\TwoFactorBundle\Model\TrustedDeviceInterface;
+use Scheb\TwoFactorBundle\Security\UsernameHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -33,7 +34,7 @@ class TrustedDeviceManager implements TrustedDeviceManagerInterface
             return;
         }
 
-        $username = $user->getUsername();
+        $username = UsernameHelper::getUserUsername($user);
         $version = $this->getTrustedTokenVersion($user);
         $this->trustedTokenStorage->addTrustedToken($username, $firewallName, $version);
     }
@@ -44,7 +45,7 @@ class TrustedDeviceManager implements TrustedDeviceManagerInterface
             return false;
         }
 
-        $username = $user->getUsername();
+        $username = UsernameHelper::getUserUsername($user);
         $version = $this->getTrustedTokenVersion($user);
 
         return $this->trustedTokenStorage->hasTrustedToken($username, $firewallName, $version);

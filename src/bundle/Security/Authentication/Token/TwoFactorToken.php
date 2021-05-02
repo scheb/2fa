@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\Authentication\Token;
 
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
+use Scheb\TwoFactorBundle\Security\UsernameHelper;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -61,9 +62,14 @@ class TwoFactorToken implements TwoFactorTokenInterface
         $this->authenticatedToken->setUser($user);
     }
 
+    public function getUserIdentifier(): string
+    {
+        return UsernameHelper::getTokenUsername($this->authenticatedToken);
+    }
+
     public function getUsername(): string
     {
-        return $this->authenticatedToken->getUsername();
+        return $this->getUserIdentifier();
     }
 
     // Compatibility for Symfony < 5.0

@@ -14,6 +14,7 @@ use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\TwoFactorPassport
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
+use Scheb\TwoFactorBundle\Security\UsernameHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -152,7 +153,7 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        $this->logger->info('User has been two-factor authenticated successfully.', ['username' => $token->getUsername()]);
+        $this->logger->info('User has been two-factor authenticated successfully.', ['username' => UsernameHelper::getTokenUsername($token)]);
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::SUCCESS, $request, $token);
 
         // When it's still a TwoFactorTokenInterface, keep showing the auth form
