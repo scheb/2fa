@@ -77,7 +77,7 @@ class TwoFactorAuthenticatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requireAtLeastSymfony5_1();
+        $this->requireAtLeastSymfony5_3();
 
         $this->twoFactorFirewallConfig = $this->createMock(TwoFactorFirewallConfig::class);
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
