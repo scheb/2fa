@@ -14,8 +14,10 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version:
-                    - '8.0'
+                include:
+                    -   php-version: '8.0'
+                        symfony-version: '5.x-dev as 5.3.0'
+                        composer-require: 'symfony/runtime:"5.x-dev as 5.3.0"'
 
         steps:
             -   name: 'Checkout code'
@@ -34,6 +36,14 @@ jobs:
                 run: |
                     php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
                     php -i
+
+            -   name: "Require Symfony version"
+                if: ${{ matrix.symfony-version != 'lowest' }}
+                run: composer require "symfony/symfony:${{ matrix.symfony-version }}" --no-update
+
+            -   name: "Require extra Composer dependencies"
+                if: ${{ matrix.composer-require }}
+                run: composer require ${{ matrix.composer-require }} --no-update
 
             -   name: 'Install Composer dependencies'
                 uses: ramsey/composer-install@v1
