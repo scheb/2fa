@@ -7,7 +7,7 @@ use App\Kernel;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 $configVariant = getenv('TEST_CONFIG');
-if (!\is_string($configVariant) || 0 === \strlen($configVariant)) {
+if (!is_string($configVariant) || 0 === strlen($configVariant)) {
     $configVariant = 'default';
 }
 

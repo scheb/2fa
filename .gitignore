@@ -1,7 +1,7 @@
 vendor/
 composer.lock
 # PHPCS Fixer
-.php_cs.cache
+.php-cs-fixer.cache
 # PHPUnit
 .phpunit.result.cache
 # Test application

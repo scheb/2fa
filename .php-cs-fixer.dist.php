@@ -19,7 +19,8 @@ $finder = PhpCsFixer\Finder::create()
     __DIR__.'/app/tests',
 ]);
 
-return PhpCsFixer\Config::create()
+$config = new PhpCsFixer\Config();
+return $config
     ->setFinder($finder)
     ->setRiskyAllowed(true)
     ->setRules($rules)
