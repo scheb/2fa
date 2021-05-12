@@ -37,5 +37,11 @@
 				<referencedClass name="Doctrine\Common\Persistence\ManagerRegistry"/>
 			</errorLevel>
 		</UndefinedDocblockClass>
+		<!-- Suppress error because of deprecation flag -->
+		<TooManyArguments>
+			<errorLevel type="suppress">
+				<referencedFunction name="Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface::getproviderkey"/>
+			</errorLevel>
+		</TooManyArguments>
 	</issueHandlers>
 </psalm>

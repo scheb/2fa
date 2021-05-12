@@ -104,7 +104,7 @@ class FormController
 
     protected function getTemplateVars(Request $request, TwoFactorTokenInterface $token): array
     {
-        $config = $this->twoFactorFirewallContext->getFirewallConfig($token->getProviderKey());
+        $config = $this->twoFactorFirewallContext->getFirewallConfig($token->getProviderKey(true));
         $pendingTwoFactorProviders = $token->getTwoFactorProviders();
         $displayTrustedOption = $this->canSetTrustedDevice($token, $request, $config);
         $authenticationException = $this->getLastAuthenticationException($request->getSession());

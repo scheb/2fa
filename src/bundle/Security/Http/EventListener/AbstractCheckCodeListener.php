@@ -45,7 +45,7 @@ abstract class AbstractCheckCodeListener implements EventSubscriberInterface
             throw new AuthenticationException('There is no active two-factor provider.');
         }
 
-        if (!$this->preparationRecorder->isTwoFactorProviderPrepared($token->getProviderKey(), $providerName)) {
+        if (!$this->preparationRecorder->isTwoFactorProviderPrepared($token->getProviderKey(true), $providerName)) {
             throw new AuthenticationException(sprintf('The two-factor provider "%s" has not been prepared.', $providerName));
         }
 

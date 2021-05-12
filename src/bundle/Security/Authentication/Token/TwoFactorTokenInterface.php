@@ -6,6 +6,9 @@ namespace Scheb\TwoFactorBundle\Security\Authentication\Token;
 
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
+/**
+ * @method string getFirewallName() To be used instead of getProviderKey(true), which is deprecated since 5.8
+ */
 interface TwoFactorTokenInterface extends TokenInterface
 {
     public const ATTRIBUTE_NAME_REMEMBER_ME_COOKIE = 'remember_me_cookie';
@@ -21,6 +24,8 @@ interface TwoFactorTokenInterface extends TokenInterface
     public function createWithCredentials(string $credentials): self;
 
     /**
+     * @deprecated since 5.8, use getFirewallName() instead
+     *
      * Return the provider key (firewall name).
      */
     public function getProviderKey(): string;

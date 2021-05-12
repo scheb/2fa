@@ -39,7 +39,7 @@ class TwoFactorPassport implements UserPassportInterface
 
     public function getFirewallName(): string
     {
-        return $this->twoFactorToken->getProviderKey();
+        return $this->twoFactorToken->getProviderKey(true);
     }
 
     public function getUser(): UserInterface

@@ -55,7 +55,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
     public function supports(TokenInterface $token): bool
     {
         return $token instanceof TwoFactorTokenInterface
-            && $this->twoFactorFirewallConfig->getFirewallName() === $token->getProviderKey();
+            && $this->twoFactorFirewallConfig->getFirewallName() === $token->getProviderKey(true);
     }
 
     public function authenticate(TokenInterface $token): TokenInterface
@@ -75,7 +75,7 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
             throw new AuthenticationException('There is no active two-factor provider.');
         }
 
-        if (!$this->preparationRecorder->isTwoFactorProviderPrepared($token->getProviderKey(), $providerName)) {
+        if (!$this->preparationRecorder->isTwoFactorProviderPrepared($token->getProviderKey(true), $providerName)) {
             throw new AuthenticationException(sprintf('The two-factor provider "%s" has not been prepared.', $providerName));
         }
 

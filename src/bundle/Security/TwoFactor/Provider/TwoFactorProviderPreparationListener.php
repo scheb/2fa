@@ -124,7 +124,7 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
             return;
         }
 
-        $firewallName = $twoFactorToken->getProviderKey();
+        $firewallName = $twoFactorToken->getProviderKey(true);
 
         if ($this->preparationRecorder->isTwoFactorProviderPrepared($firewallName, $providerName)) {
             $this->logger->info(sprintf('Two-factor provider "%s" was already prepared.', $providerName));
@@ -140,7 +140,7 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
 
     private function supports(TokenInterface $token): bool
     {
-        return $token instanceof TwoFactorTokenInterface && $token->getProviderKey() === $this->firewallName;
+        return $token instanceof TwoFactorTokenInterface && $token->getProviderKey(true) === $this->firewallName;
     }
 
     public static function getSubscribedEvents()

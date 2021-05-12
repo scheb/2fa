@@ -125,7 +125,7 @@ class TwoFactorListener extends AbstractListener
         // When the firewall is lazy, the token is not initialized in the "supports" stage, so this check does only work
         // within the "authenticate" stage.
         $token = $this->tokenStorage->getToken();
-        if (!($token instanceof TwoFactorTokenInterface) || $token->getProviderKey() !== $this->twoFactorFirewallConfig->getFirewallName()) {
+        if (!($token instanceof TwoFactorTokenInterface) || $token->getProviderKey(true) !== $this->twoFactorFirewallConfig->getFirewallName()) {
             // This should only happen when the check path is called outside of a 2fa process and not protected via access_control
             // or when the firewall is configured in an odd way (different firewall name)
             throw new AuthenticationServiceException('Tried to perform two-factor authentication, but two-factor authentication is not in progress.');
@@ -185,7 +185,7 @@ class TwoFactorListener extends AbstractListener
 
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::COMPLETE, $request, $token);
 
-        $firewallName = $previousTwoFactorToken->getProviderKey();
+        $firewallName = $previousTwoFactorToken->getProviderKey(true);
         if ($this->trustedDeviceManager
             && $this->twoFactorFirewallConfig->hasTrustedDeviceParameterInRequest($request)
             && $this->trustedDeviceManager->canSetTrustedDevice($token->getUser(), $request, $firewallName)
