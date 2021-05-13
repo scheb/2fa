@@ -69,7 +69,7 @@ class User implements UserInterface, TwoFactorInterface
     private $email;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $authCode;
 
@@ -87,6 +87,10 @@ class User implements UserInterface, TwoFactorInterface
 
     public function getEmailAuthCode(): string
     {
+        if (null === $this->authCode) {
+            throw new \LogicException('The email authentication code was not set');
+        }
+
         return $this->authCode;
     }
 
