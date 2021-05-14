@@ -7,9 +7,10 @@ assignees: ''
 
 ---
 
-<!--
-Please check the troubleshooting guide first: https://github.com/scheb/2fa/blob/5.x/doc/troubleshooting.md
--->
+<!--------------------------------------------------------------
+PLEASE CHECK THE TROUBLESHOOTING GUIDE FIRST
+https://github.com/scheb/2fa/blob/5.x/doc/troubleshooting.md
+--------------------------------------------------------------->
 
 **Bundle version**: x.y.z
 **Symfony version**: x.y.z
@@ -17,22 +18,27 @@ Please check the troubleshooting guide first: https://github.com/scheb/2fa/blob/
 **Using authenticators** (`enable_authenticator_manager: true`): YES / NO
 
 **Description**
+
 <!--
-A clear and concise description of what the bug is.
+A clear and concise description of what the bug is and why you believe it's a bug.
 -->
 
-<--
-Please provide the content of your security.yaml.
---->
-
 **To Reproduce**
+
 <!--
 Steps to reproduce the behavior:
 1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
+2. Click on '...'
+3. Scroll down to '...'
 4. See error
 -->
 
 **Additional Context**
-<!-- Optional: Any other context to help understanding the problem: your bundle and security configuration, log messages, screenshots, etc. -->
+
+<!--
+Please provide the
+- the bundle configuration
+- content of your security.yaml
+-->
+
+<!-- Optional: Any other context to help understanding the problem: log messages, screenshots, etc. -->
