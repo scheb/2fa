@@ -25,5 +25,7 @@
         <ini name="error_reporting" value="-16385"/>
         <env name="ENABLE_2FA_TRUTHY" value="1"/>
         <env name="ENABLE_2FA_FALSY" value="0"/>
+        <env name="ENABLE_2FA_OFF_STR" value="off"/>
+        <env name="ENABLE_2FA_ON_STR" value="on"/>
     </php>
 </phpunit>

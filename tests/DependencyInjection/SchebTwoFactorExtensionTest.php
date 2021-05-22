@@ -140,6 +140,60 @@ class SchebTwoFactorExtensionTest extends TestCase
     /**
      * @test
      */
+    public function load_offOrFalseStringEnvVarBasedConfig_setConfigValues(): void
+    {
+        $yaml = <<<EOF
+trusted_device:
+    enabled: "%env(ENABLE_2FA_OFF_STR)%"
+backup_codes:
+    enabled: "%env(ENABLE_2FA_OFF_STR)%"
+email:
+    enabled: "%env(ENABLE_2FA_OFF_STR)%"
+google:
+    enabled: "%env(ENABLE_2FA_OFF_STR)%"
+totp:
+    enabled: "%env(ENABLE_2FA_OFF_STR)%"
+EOF;
+        $parser = new Parser();
+        $this->extension->load([$parser->parse($yaml)], $this->container);
+
+        $this->assertHasParameter(false, 'scheb_two_factor.trusted_device.enabled');
+        $this->assertNotHasDefinition('scheb_two_factor.security.email.provider');
+        $this->assertNotHasAlias('scheb_two_factor.backup_code_manager');
+        $this->assertNotHasDefinition('scheb_two_factor.security.google.provider');
+        $this->assertNotHasDefinition('scheb_two_factor.security.totp.provider');
+    }
+
+    /**
+     * @test
+     */
+    public function load_onOrTrueStringEnvVarBasedConfig_setConfigValues(): void
+    {
+        $yaml = <<<EOF
+trusted_device:
+    enabled: "%env(ENABLE_2FA_ON_STR)%"
+backup_codes:
+    enabled: "%env(ENABLE_2FA_ON_STR)%"
+email:
+    enabled: "%env(ENABLE_2FA_ON_STR)%"
+google:
+    enabled: "%env(ENABLE_2FA_ON_STR)%"
+totp:
+    enabled: "%env(ENABLE_2FA_ON_STR)%"
+EOF;
+        $parser = new Parser();
+        $this->extension->load([$parser->parse($yaml)], $this->container);
+
+        $this->assertHasParameter(true, 'scheb_two_factor.trusted_device.enabled');
+        $this->assertHasDefinition('scheb_two_factor.security.email.provider');
+        $this->assertHasAlias('scheb_two_factor.backup_code_manager', 'scheb_two_factor.default_backup_code_manager');
+        $this->assertHasDefinition('scheb_two_factor.security.google.provider');
+        $this->assertHasDefinition('scheb_two_factor.security.totp.provider');
+    }
+
+    /**
+     * @test
+     */
     public function load_noAuthEnabled_notLoadServices(): void
     {
         $config = $this->getEmptyConfig();
