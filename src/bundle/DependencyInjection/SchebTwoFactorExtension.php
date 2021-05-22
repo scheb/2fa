@@ -170,6 +170,24 @@ class SchebTwoFactorExtension extends Extension
      */
     private function resolveFeatureFlag(ContainerBuilder $container, $value): bool
     {
-        return (bool) $container->resolveEnvPlaceholders($value, true);
+        $retValue = $container->resolveEnvPlaceholders($value, true);
+
+        if (\is_bool($retValue)) {
+            return $retValue;
+        }
+
+        if (\is_string($retValue)) {
+            $retValue = trim($retValue);
+
+            if ('false' === $retValue || 'off' === $retValue) {
+                return false;
+            }
+
+            if ('true' === $retValue || 'on' === $retValue) {
+                return true;
+            }
+        }
+
+        return (bool) $retValue;
     }
 }
