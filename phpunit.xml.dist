@@ -23,7 +23,7 @@
         <!-- Disable E_USER_DEPRECATED -->
         <!-- php -r 'echo -1 & ~E_USER_DEPRECATED;' -->
         <ini name="error_reporting" value="-16385"/>
-        <env name="ENABLE_2FA_TRUTHY" value="true"/>
-        <env name="ENABLE_2FA_FALSY" value="false"/>
+        <env name="ENABLE_2FA_TRUTHY" value="1"/>
+        <env name="ENABLE_2FA_FALSY" value="0"/>
     </php>
 </phpunit>
