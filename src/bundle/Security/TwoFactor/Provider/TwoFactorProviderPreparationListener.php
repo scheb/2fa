@@ -106,6 +106,10 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
 
     public function onKernelResponse(ResponseEvent $event): void
     {
+        if (method_exists(KernelEvents::class, 'isMainRequest') && !$event->isMainRequest()) {
+            return;
+        }
+
         if (!$event->isMasterRequest()) {
             return;
         }
