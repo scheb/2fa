@@ -52,7 +52,7 @@ class TwoFactorAccessListener extends AbstractListener implements FirewallListen
         return !$this->twoFactorAccessDecider->isPubliclyAccessible($request);
     }
 
-    public function authenticate(RequestEvent $requestEvent): void
+    public function authenticate(RequestEvent $event): void
     {
         // When the firewall is lazy, the token is not initialized in the "supports" stage, so this check does only work
         // within the "authenticate" stage.
@@ -64,7 +64,7 @@ class TwoFactorAccessListener extends AbstractListener implements FirewallListen
 
         /** @var TwoFactorTokenInterface $token */
         $token = $this->tokenStorage->getToken();
-        $request = $requestEvent->getRequest();
+        $request = $event->getRequest();
         if ($this->twoFactorFirewallConfig->isCheckPathRequest($request)) {
             return;
         }

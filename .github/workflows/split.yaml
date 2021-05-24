@@ -16,6 +16,7 @@ jobs:
                 uses: actions/checkout@v2
                 with:
                     fetch-depth: 0  # Fetch all history
+                    ref: "5.x" # Force checkout the branch to split its commits as well
 
             -
                 name: "Gitsplit"

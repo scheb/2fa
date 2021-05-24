@@ -69,34 +69,34 @@ class TwoFactorFactory implements SecurityFactoryInterface, FirewallListenerFact
         $this->twoFactorServicesFactory = $twoFactorServicesFactory;
     }
 
-    public function addConfiguration(NodeDefinition $node): void
+    public function addConfiguration(NodeDefinition $builder): void
     {
-        /** @var ArrayNodeDefinition $node */
-        $builder = $node->children();
-
         /**
+         * @var ArrayNodeDefinition $builder
          * @psalm-suppress PossiblyNullReference
          * @psalm-suppress PossiblyUndefinedMethod
          */
         $builder
-            ->scalarNode('check_path')->defaultValue(self::DEFAULT_CHECK_PATH)->end()
-            ->booleanNode('post_only')->defaultValue(self::DEFAULT_POST_ONLY)->end()
-            ->scalarNode('auth_form_path')->defaultValue(self::DEFAULT_AUTH_FORM_PATH)->end()
-            ->booleanNode('always_use_default_target_path')->defaultValue(self::DEFAULT_ALWAYS_USE_DEFAULT_TARGET_PATH)->end()
-            ->scalarNode('default_target_path')->defaultValue(self::DEFAULT_TARGET_PATH)->end()
-            ->scalarNode('success_handler')->defaultNull()->end()
-            ->scalarNode('failure_handler')->defaultNull()->end()
-            ->scalarNode('authentication_required_handler')->defaultNull()->end()
-            ->scalarNode('auth_code_parameter_name')->defaultValue(self::DEFAULT_AUTH_CODE_PARAMETER_NAME)->end()
-            ->scalarNode('trusted_parameter_name')->defaultValue(self::DEFAULT_TRUSTED_PARAMETER_NAME)->end()
-            ->booleanNode('multi_factor')->defaultValue(self::DEFAULT_MULTI_FACTOR)->end()
-            ->booleanNode('prepare_on_login')->defaultValue(self::DEFAULT_PREPARE_ON_LOGIN)->end()
-            ->booleanNode('prepare_on_access_denied')->defaultValue(self::DEFAULT_PREPARE_ON_ACCESS_DENIED)->end()
-            ->scalarNode('enable_csrf')->defaultValue(self::DEFAULT_ENABLE_CSRF)->end()
-            ->scalarNode('csrf_parameter')->defaultValue(self::DEFAULT_CSRF_PARAMETER)->end()
-            ->scalarNode('csrf_token_id')->defaultValue(self::DEFAULT_CSRF_TOKEN_ID)->end()
-            // Fake node for SecurityExtension, which requires a provider to be set when multiple user providers are registered
-            ->scalarNode('provider')->defaultNull()->end()
+            ->children()
+                ->scalarNode('check_path')->defaultValue(self::DEFAULT_CHECK_PATH)->end()
+                ->booleanNode('post_only')->defaultValue(self::DEFAULT_POST_ONLY)->end()
+                ->scalarNode('auth_form_path')->defaultValue(self::DEFAULT_AUTH_FORM_PATH)->end()
+                ->booleanNode('always_use_default_target_path')->defaultValue(self::DEFAULT_ALWAYS_USE_DEFAULT_TARGET_PATH)->end()
+                ->scalarNode('default_target_path')->defaultValue(self::DEFAULT_TARGET_PATH)->end()
+                ->scalarNode('success_handler')->defaultNull()->end()
+                ->scalarNode('failure_handler')->defaultNull()->end()
+                ->scalarNode('authentication_required_handler')->defaultNull()->end()
+                ->scalarNode('auth_code_parameter_name')->defaultValue(self::DEFAULT_AUTH_CODE_PARAMETER_NAME)->end()
+                ->scalarNode('trusted_parameter_name')->defaultValue(self::DEFAULT_TRUSTED_PARAMETER_NAME)->end()
+                ->booleanNode('multi_factor')->defaultValue(self::DEFAULT_MULTI_FACTOR)->end()
+                ->booleanNode('prepare_on_login')->defaultValue(self::DEFAULT_PREPARE_ON_LOGIN)->end()
+                ->booleanNode('prepare_on_access_denied')->defaultValue(self::DEFAULT_PREPARE_ON_ACCESS_DENIED)->end()
+                ->scalarNode('enable_csrf')->defaultValue(self::DEFAULT_ENABLE_CSRF)->end()
+                ->scalarNode('csrf_parameter')->defaultValue(self::DEFAULT_CSRF_PARAMETER)->end()
+                ->scalarNode('csrf_token_id')->defaultValue(self::DEFAULT_CSRF_TOKEN_ID)->end()
+                // Fake node for SecurityExtension, which requires a provider to be set when multiple user providers are registered
+                ->scalarNode('provider')->defaultNull()->end()
+            ->end()
         ;
     }
 
