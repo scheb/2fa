@@ -110,7 +110,7 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
             return;
         }
 
-        if (!$event->isMainRequest()) {
+        if (!$event->isMasterRequest()) {
             return;
         }
 
