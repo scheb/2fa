@@ -113,12 +113,14 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
 
     public function onKernelResponse(ResponseEvent $event): void
     {
-        if (method_exists(KernelEvents::class, 'isMainRequest') && !$event->isMainRequest()) {
-            return;
-        }
-
-        if (!$event->isMasterRequest()) {
-            return;
+        if (method_exists(KernelEvents::class, 'isMainRequest')) {
+            if (!$event->isMainRequest()) {
+                return;
+            }
+        } else {
+            if (!$event->isMasterRequest()) {
+                return;
+            }
         }
 
         // Unset the token from context. This is important for environments where this instance of the class is reused
