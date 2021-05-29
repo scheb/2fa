@@ -68,6 +68,7 @@ class AuthenticationProviderDecorator implements AuthenticationProviderInterface
     public function authenticate(TokenInterface $token): TokenInterface
     {
         $wasAlreadyAuthenticated = $token->isAuthenticated();
+        /** @psalm-suppress InternalMethod */
         $token = $this->decoratedAuthenticationProvider->authenticate($token);
 
         // Only trigger two-factor authentication when the provider was called with an unauthenticated token. When we

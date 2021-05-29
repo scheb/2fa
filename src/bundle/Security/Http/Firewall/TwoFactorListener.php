@@ -146,6 +146,7 @@ class TwoFactorListener extends AbstractListener
 
             $token = $beginToken->createWithCredentials($authCode);
             $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::ATTEMPT, $request, $token);
+            /** @psalm-suppress InternalMethod */
             $resultToken = $this->authenticationManager->authenticate($token);
 
             return $this->onSuccess($request, $resultToken, $beginToken);
