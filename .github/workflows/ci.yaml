@@ -9,7 +9,7 @@ jobs:
         name: 'Coding Standards - PHP ${{ matrix.php-version }}'
         runs-on: 'ubuntu-latest'
         # We want to run on external PRs, but not on our own internal PRs as they'll be run by the push to the branch.
-        if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == 'scheb/2fa') }}
+        if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
 
         strategy:
             fail-fast: false
@@ -58,7 +58,7 @@ jobs:
         name: 'Unit Tests - PHP ${{ matrix.php-version }}, Symfony ${{ matrix.symfony-version }}'
         runs-on: ubuntu-latest
         # We want to run on external PRs, but not on our own internal PRs as they'll be run by the push to the branch.
-        if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == 'scheb/2fa') }}
+        if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
 
         strategy:
             fail-fast: false
@@ -114,7 +114,7 @@ jobs:
         name: 'Integration Tests - PHP ${{ matrix.php-version }}, Symfony ${{ matrix.symfony-version }}, Config ${{ matrix.app-config }}'
         runs-on: ubuntu-latest
         # We want to run on external PRs, but not on our own internal PRs as they'll be run by the push to the branch.
-        if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == 'scheb/2fa') }}
+        if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
 
         strategy:
             fail-fast: false
@@ -180,7 +180,7 @@ jobs:
         name: 'Code Coverage - PHP ${{ matrix.php-version }}'
         runs-on: 'ubuntu-latest'
         # We want to run on external PRs, but not on our own internal PRs as they'll be run by the push to the branch.
-        if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == 'scheb/2fa') }}
+        if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
 
         strategy:
             fail-fast: false
