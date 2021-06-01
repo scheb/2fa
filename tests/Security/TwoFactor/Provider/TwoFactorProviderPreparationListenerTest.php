@@ -104,8 +104,15 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $kernel = $this->createMock(HttpKernelInterface::class);
         $response = $this->createMock(Response::class);
 
+        if (\defined('Symfony\Component\HttpKernel\HttpKernelInterface::MAIN_REQUEST')) {
+            // Compatibility for Symfony >= 5.3
+            $requestType = HttpKernelInterface::MAIN_REQUEST;
+        } else {
+            $requestType = HttpKernelInterface::MASTER_REQUEST;
+        }
+
         // Class is final, have to use a real instance instead of a mock
-        return new ResponseEvent($kernel, $this->request, HttpKernelInterface::MASTER_REQUEST, $response);
+        return new ResponseEvent($kernel, $this->request, $requestType, $response);
     }
 
     private function expectPrepareCurrentProvider(): void
