@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
+use Symfony\Component\ErrorHandler\DebugClassLoader;
 
 set_time_limit(0);
 
@@ -31,6 +32,7 @@ if ($debug) {
 
     if (class_exists(Debug::class)) {
         Debug::enable();
+        DebugClassLoader::disable();
     }
 }
 
