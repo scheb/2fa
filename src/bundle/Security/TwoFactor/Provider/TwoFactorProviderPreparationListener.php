@@ -113,6 +113,7 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
 
     public function onKernelResponse(ResponseEvent $event): void
     {
+        // Compatibility for Symfony >= 5.3
         if (method_exists(KernelEvents::class, 'isMainRequest')) {
             if (!$event->isMainRequest()) {
                 return;
