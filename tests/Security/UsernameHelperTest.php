@@ -17,7 +17,7 @@ class UsernameHelperTest extends TestCase
         $this->requireAtLeastSymfony5_3();
     }
 
-    private function createMockWithMethod(string $className, array $addMethods): MockObject
+    private function createMockWithExtraMethod(string $className, array $addMethods): MockObject
     {
         return $this->getMockBuilder($className)->addMethods($addMethods)->getMockForAbstractClass();
     }
@@ -25,20 +25,9 @@ class UsernameHelperTest extends TestCase
     /**
      * @test
      */
-    public function getTokenUsername_missingMethods_throwRuntimeException(): void
-    {
-        $token = $this->createMockWithMethod(TokenInterface::class, []);
-
-        $this->expectException(\RuntimeException::class);
-        UsernameHelper::getTokenUsername($token);
-    }
-
-    /**
-     * @test
-     */
     public function getTokenUsername_getUsernameExists_returnGetUsernameValue(): void
     {
-        $token = $this->createMockWithMethod(TokenInterface::class, ['getUsername']);
+        $token = $this->createMockWithExtraMethod(TokenInterface::class, []);
         $token
             ->expects($this->any())
             ->method('getUsername')
@@ -53,7 +42,7 @@ class UsernameHelperTest extends TestCase
      */
     public function getTokenUsername_getUserIdentifierExists_returnGetUserIdentifierValue(): void
     {
-        $token = $this->createMockWithMethod(TokenInterface::class, ['getUserIdentifier']);
+        $token = $this->createMockWithExtraMethod(TokenInterface::class, ['getUserIdentifier']);
         $token
             ->expects($this->any())
             ->method('getUserIdentifier')
@@ -66,20 +55,9 @@ class UsernameHelperTest extends TestCase
     /**
      * @test
      */
-    public function getUserUsername_missingMethods_throwRuntimeException(): void
-    {
-        $user = $this->createMockWithMethod(UserInterface::class, []);
-
-        $this->expectException(\RuntimeException::class);
-        UsernameHelper::getUserUsername($user);
-    }
-
-    /**
-     * @test
-     */
     public function getUserUsername_getUsernameExists_returnGetUsernameValue(): void
     {
-        $user = $this->createMockWithMethod(UserInterface::class, ['getUsername']);
+        $user = $this->createMockWithExtraMethod(UserInterface::class, []);
         $user
             ->expects($this->any())
             ->method('getUsername')
@@ -94,7 +72,7 @@ class UsernameHelperTest extends TestCase
      */
     public function getUserUsername_getUserIdentifierExists_returnGetUserIdentifierValue(): void
     {
-        $user = $this->createMockWithMethod(UserInterface::class, ['getUserIdentifier']);
+        $user = $this->createMockWithExtraMethod(UserInterface::class, ['getUserIdentifier']);
         $user
             ->expects($this->any())
             ->method('getUserIdentifier')

@@ -24,11 +24,9 @@ class UsernameHelper
         }
 
         // Compatibility with Symfony <= 5.2
-        if (method_exists($token, 'getUsername')) {
-            return (string) $token->getUsername();
-        }
+        /** @psalm-suppress RedundantCastGivenDocblockType */
 
-        throw new \RuntimeException('Security token did not provide a "getUsername" or "getUserIdentifier" method.');
+        return (string) $token->getUsername();
     }
 
     public static function getUserUsername(UserInterface $user): string
@@ -39,10 +37,8 @@ class UsernameHelper
         }
 
         // Compatibility with Symfony <= 5.2
-        if (method_exists($user, 'getUsername')) {
-            return (string) $user->getUsername();
-        }
+        /** @psalm-suppress RedundantCastGivenDocblockType */
 
-        throw new \RuntimeException('User entity did not provide a "getUsername" or "getUserIdentifier" method.');
+        return (string) $user->getUsername();
     }
 }
