@@ -11,6 +11,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\AuthenticationEvents;
@@ -114,7 +115,7 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
     public function onKernelResponse(ResponseEvent $event): void
     {
         // Compatibility for Symfony >= 5.3
-        if (method_exists(KernelEvents::class, 'isMainRequest')) {
+        if (method_exists(KernelEvent::class, 'isMainRequest')) {
             if (!$event->isMainRequest()) {
                 return;
             }
