@@ -84,6 +84,7 @@ security:
         - { path: ^/logout, role: IS_AUTHENTICATED_ANONYMOUSLY }
         # This ensures that the form can only be accessed when two-factor authentication is in progress.
         - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
+        # Other rules may follow here...
 ```
 
 More per-firewall configuration options can be found in the [configuration reference](configuration.md).

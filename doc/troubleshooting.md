@@ -78,7 +78,7 @@ Make sure the rule comes first in the list, since access control rules are evalu
 
 If you have such a rule and it still doesn't work, for some reason the rule is not matching. Make absolutely sure the
 `path` regular expression matches your logout path. If you have additional options, such as `host` or `ip`, check that
-they're matching too.
+they're matching as well.
 
 
 ## Not logged in after completing two-factor authentication
@@ -139,6 +139,7 @@ that are used in `isAccountNonExpired()`, `isAccountNonLocked()`, `isCredentials
 After successful login, the two-factor authentication form is not shown. Instead, you're either logged in or you see
 a different page from your application.
 
+
 ### Basic checks
 
 - Your login page belongs to the firewall, which has two-factor authentication configured.
@@ -149,7 +150,32 @@ a different page from your application.
     - Additional data for the authentication method is returned, e.g. for Google Authenticator to work the
     `getGoogleAuthenticatorSecret()` method must return a secret code.
 
-**Is there something special about your security setup?**
+
+### Is `access_control` configured properly?
+
+To make the two-factor authentication form accessible during the two-factor authentication process, you have to
+configure a `access_control` rule for the 2fa routes:
+
+The configuration should look similar to this:
+
+```yaml
+# config/packages/security.yaml
+security:
+    # IMPORTANT: THE ACCESS CONTROL RULE NEEDS TO BE AT THE VERY TOP OF THE LIST!
+    access_control:
+        # This ensures that the form can only be accessed when two-factor authentication is in progress.
+        # The path may be different, depending on how you've configured the route.
+        - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
+        # Other rules may follow here...
+```
+
+**Make sure the rule comes first in the list**, since access control rules are evaluated in order.
+
+If you already have such a rule at the top of the list, make sure the `path` regular expression matches your two-factor
+authentication form path. If you have additional options, such as `host` or `ip`, check that they're matching as well.
+
+
+### Is there something special about your security setup?
 
 Often issues originate from a customization in the application's security setup, which is usually related to how roles
 are granted. Examples of such issue are:
