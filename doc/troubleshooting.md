@@ -16,15 +16,18 @@ The principle of TOTP/Google Authenticator is that both systems - the server and
 authentication code from a shared secret and the current time. If one of those two components isn't in sync, they'll
 generate a different code. Therefore:
 
-1) Most common cause: Make sure the UTC time on your server and device are in sync
-2) Make sure the secret used in your device matches the secret configured for the account
+1) Most common problem: Make sure the server time and the time on your device are in sync with the actual current time
+2) Make sure the secret used in your device matches the secret configured for the account on the server
+3) If you're using TOTP, make sure the app is actually supporting the specific TOTP configuration you're using. **The
+   Google Authenticator app supports only one specific TOTP configuration (6-digit code, 30sec window, sha1 algorithm)**
 
-The time window for a code is 30 seconds (in Google Authenticator, for TOTP it depends on your configuration). The
-bigger the time difference between server/device, the smaller the time window in which both generate the same code. If
-the time difference becomes too large, it can become impossible to provide the right code.
+The generated authentication code has a time window in which it is valid (30 seconds in Google Authenticator, for TOTP
+it depends on your configuration). The bigger the time difference between server and device, the smaller the time
+window, the higher the chance that the codes generated on server and from the app don't match up. When the time
+difference becomes larger than the time window, it becomes impossible to provide the right code.
 
-To counteract the issue of time differences, you could increase the `window` setting, so accept more codes around the
-current valid code will be accepted:
+To counteract the issue of time differences you could increase the `window` setting, then more codes around the current
+time window will be accepted:
 
 ```yaml
 # config/packages/scheb_two_factor.yaml
@@ -42,7 +45,7 @@ scheb_two_factor:
 You might want to configure a time synchronization service, such as `ntpdate` on your server to make sure your server
 time is always in sync with UTC.
 
-The Google Authenticator app has an option to sync your device time. Open the app and select
+The Google Authenticator app has an option to sync the time your device. Open the app and select
 `Settings > Time correction for codes > Sync now` from the menu. Other apps might have a similar option.
 
 

@@ -8,6 +8,7 @@ compatible with the Google Authenticator app:
 
 - it generates 6-digit codes
 - the code changes every 30 seconds
+- It uses the sha1 hashing algorithm
 
 If you need different settings, please use the [TOTP two-factor provider](totp.md). Be warned that custom TOTP
 configurations likely won't be compatible with the Google Authenticator app.
