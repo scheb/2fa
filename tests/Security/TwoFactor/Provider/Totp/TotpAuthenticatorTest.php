@@ -51,7 +51,7 @@ class TotpAuthenticatorTest extends TestCase
 
     /**
      * @test
-     * @dataProvider getCheckCodeData
+     * @dataProvider provideCheckCodeData
      */
     public function checkCode_validateCode_returnBoolean($code, $expectedReturnValue): void
     {
@@ -65,7 +65,7 @@ class TotpAuthenticatorTest extends TestCase
         $this->assertEquals($expectedReturnValue, $returnValue);
     }
 
-    public function getCheckCodeData(): array
+    public function provideCheckCodeData(): array
     {
         return [
             ['validCode', true],

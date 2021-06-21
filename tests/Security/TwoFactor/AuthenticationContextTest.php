@@ -72,7 +72,7 @@ class AuthenticationContextTest extends TestCase
 
     /**
      * @test
-     * @dataProvider dataProvider_getToken
+     * @dataProvider provideUserObjectAndReturnValue
      */
     public function getUser_objectInitialized_returnValid($userObject, $expectedReturnValue): void
     {
@@ -86,7 +86,7 @@ class AuthenticationContextTest extends TestCase
         $this->assertEquals($expectedReturnValue, $returnValue);
     }
 
-    public function dataProvider_getToken(): array
+    public function provideUserObjectAndReturnValue(): array
     {
         $user = $this->createMock(UserInterface::class);
 

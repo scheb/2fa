@@ -67,7 +67,7 @@ class TotpFactoryTest extends TestCase
 
     /**
      * @test
-     * @dataProvider getHostnameAndIssuerToTest
+     * @dataProvider provideHostnameAndIssuer
      */
     public function getProvisioningUri_hostnameAndIssuerGiven_returnProvisioningUri(?string $hostname, ?string $issuer, array $customParameters, string $expectedUrl): void
     {
@@ -78,7 +78,7 @@ class TotpFactoryTest extends TestCase
         $this->assertEquals($expectedUrl, $returnValue);
     }
 
-    public function getHostnameAndIssuerToTest(): array
+    public function provideHostnameAndIssuer(): array
     {
         return [
             [null, null, [], 'otpauth://totp/User%20Name?algorithm=sha256&digits=8&period=20&secret=SECRET'],

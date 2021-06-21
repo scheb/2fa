@@ -54,7 +54,7 @@ class GoogleTotpFactoryTest extends TestCase
 
     /**
      * @test
-     * @dataProvider getHostnameAndIssuerToTest
+     * @dataProvider provideHostnameAndIssuer
      */
     public function getProvisioningUri_hostnameAndIssuerGiven_returnProvisioningUri(?string $hostname, ?string $issuer, int $digits, string $expectedUrl): void
     {
@@ -65,7 +65,7 @@ class GoogleTotpFactoryTest extends TestCase
         $this->assertEquals($expectedUrl, $returnValue);
     }
 
-    public function getHostnameAndIssuerToTest(): array
+    public function provideHostnameAndIssuer(): array
     {
         return [
             [null, null, self::DEFAULT_DIGITS, 'otpauth://totp/User%20Name?secret=SECRET'],

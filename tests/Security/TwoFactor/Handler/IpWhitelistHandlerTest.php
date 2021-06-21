@@ -53,7 +53,7 @@ class IpWhitelistHandlerTest extends AbstractAuthenticationHandlerTestCase
 
     /**
      * @test
-     * @dataProvider getWhitelistedIps
+     * @dataProvider provideWhitelistedIps
      */
     public function beginTwoFactorAuthentication_ipIsWhitelisted_returnSameToken(string $ip): void
     {
@@ -69,7 +69,7 @@ class IpWhitelistHandlerTest extends AbstractAuthenticationHandlerTestCase
         $this->assertSame($originalToken, $returnValue);
     }
 
-    public function getWhitelistedIps(): array
+    public function provideWhitelistedIps(): array
     {
         return [
             ['127.0.0.1'],
