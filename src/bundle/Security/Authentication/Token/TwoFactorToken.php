@@ -75,13 +75,51 @@ class TwoFactorToken implements TwoFactorTokenInterface
     // Compatibility for Symfony < 5.0
     public function getRoles(): array
     {
+        if (method_exists($this->authenticatedToken, 'getRoles')) {
+            return $this->authenticatedToken->getRoles();
+        }
+
+        if (method_exists($this->authenticatedToken, 'getRoleNames')) {
+            return $this->authenticatedToken->getRoleNames();
+        }
+
         return [];
     }
 
     // Compatibility for Symfony >= 4.3
+    // Must return array of strings
     public function getRoleNames(): array
     {
-        return $this->getRoles();
+        if (method_exists($this->authenticatedToken, 'getRoleNames')) {
+            return $this->authenticatedToken->getRoleNames();
+        }
+
+        if (method_exists($this->authenticatedToken, 'getRoles')) {
+            // Try to convert to string, remove any roles who failed to convert to a string
+            return array_filter(
+                array_map(
+                    /** @param mixed $role */
+                    static function ($role) {
+                        /** @psalm-suppress UndefinedClass */
+                        if (class_exists('Symfony\Component\Security\Core\Role\Role') && is_a($role, 'Symfony\Component\Security\Core\Role\Role')) {
+                            return $role->getRole();
+                        }
+
+                        if (is_scalar($role) || method_exists($role, '__toString')) {
+                            return (string) $role;
+                        }
+
+                        return null;
+                    },
+                    $this->authenticatedToken->getRoles()
+                ),
+                static function ($role) {
+                    return $role !== null;
+                }
+            );
+        }
+
+        return [];
     }
 
     public function createWithCredentials(string $credentials): TwoFactorTokenInterface

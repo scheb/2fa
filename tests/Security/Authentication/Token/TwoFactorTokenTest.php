@@ -26,7 +26,7 @@ class TwoFactorTokenTest extends TestCase
             'provider2',
         ];
         $this->twoFactorToken = new TwoFactorToken(
-            $this->createMock(TokenInterface::class),
+            $this->createConfiguredMock(TokenInterface::class, ['getRoleNames' => ['ROLE_USER']]),
             null,
             self::FIREWALL_NAME,
             $twoFactorProviders
@@ -172,5 +172,115 @@ class TwoFactorTokenTest extends TestCase
         $unserializedToken = unserialize(serialize($twoFactorToken));
 
         $this->assertEquals($twoFactorToken, $unserializedToken);
+    }
+
+    /**
+     * @test
+     */
+    public function getRoles_getRoleNamesExists_rolesReturned(): void
+    {
+        if (!method_exists(TokenInterface::class, 'getRoleNames')) {
+            self::markTestSkipped('TokenInterface::getRoleNames() is required');
+        }
+
+        $twoFactorToken = new TwoFactorToken(
+            $this->createConfiguredMock(TokenInterface::class, ['getRoleNames' => ['ROLE_USER']]),
+            null,
+            self::FIREWALL_NAME,
+            ['2faProvider']
+        );
+        $roles = $twoFactorToken->getRoles();
+        $this->assertIsArray($roles);
+        $this->assertCount(1, $roles);
+        $this->assertContains('ROLE_USER', $roles);
+    }
+
+    /**
+     * @test
+     */
+    public function getRoleNames_getRoleNamesExists_rolesReturned(): void
+    {
+        if (!method_exists(TokenInterface::class, 'getRoleNames')) {
+            self::markTestSkipped('TokenInterface::getRoleNames() is required');
+        }
+
+        $twoFactorToken = new TwoFactorToken(
+            $this->createConfiguredMock(TokenInterface::class, ['getRoleNames' => ['ROLE_USER']]),
+            null,
+            self::FIREWALL_NAME,
+            ['2faProvider']
+        );
+        $roles = $twoFactorToken->getRoleNames();
+        $this->assertIsArray($roles);
+        $this->assertCount(1, $roles);
+        $this->assertContains('ROLE_USER', $roles);
+    }
+
+    /**
+     * @test
+     */
+    public function getRoles_getRolesExists_rolesReturned(): void
+    {
+        if (!method_exists(TokenInterface::class, 'getRoles')) {
+            self::markTestSkipped('TokenInterface::getRoles() is required');
+        }
+
+        $twoFactorToken = new TwoFactorToken(
+            $this->createConfiguredMock(TokenInterface::class, ['getRoles' => ['ROLE_USER']]),
+            null,
+            self::FIREWALL_NAME,
+            ['2faProvider']
+        );
+        $roles = $twoFactorToken->getRoles();
+        $this->assertIsArray($roles);
+        $this->assertCount(1, $roles);
+        $this->assertContains('ROLE_USER', $roles);
+    }
+
+    /**
+     * @test
+     */
+    public function getRoleNames_getRolesExists_rolesReturned(): void
+    {
+        if (!method_exists(TokenInterface::class, 'getRoles')) {
+            self::markTestSkipped('TokenInterface::getRoles() is required');
+        }
+
+        $twoFactorToken = new TwoFactorToken(
+            $this->createConfiguredMock(TokenInterface::class, ['getRoles' => ['ROLE_USER']]),
+            null,
+            self::FIREWALL_NAME,
+            ['2faProvider']
+        );
+        $roles = $twoFactorToken->getRoleNames();
+        $this->assertIsArray($roles);
+        $this->assertCount(1, $roles);
+        $this->assertContains('ROLE_USER', $roles);
+    }
+
+    /**
+     * @test
+     */
+    public function getRoleNames_getRolesReturnsUnknownRoleObjects_nothingReturned(): void
+    {
+        if (!method_exists(TokenInterface::class, 'getRoles')) {
+            self::markTestSkipped('TokenInterface::getRoles() is required');
+        }
+
+        $twoFactorToken = new TwoFactorToken(
+            $this->createConfiguredMock(TokenInterface::class, [
+                'getRoles' => [
+                    new class() {
+                    },
+                ],
+            ]),
+            null,
+            self::FIREWALL_NAME,
+            ['2faProvider']
+        );
+
+        $roles = $twoFactorToken->getRoleNames();
+        $this->assertIsArray($roles);
+        $this->assertEmpty($roles);
     }
 }
