@@ -75,7 +75,12 @@ class AuthenticationTokenListener implements EventSubscriberInterface
 
     private function getRequest(): Request
     {
-        $request = $this->requestStack->getMasterRequest();
+        if (method_exists($this->requestStack, 'getMainRequest')) {
+            $request = $this->requestStack->getMainRequest();
+        } else {
+            // TODO remove in v6
+            $request = $this->requestStack->getMasterRequest();
+        }
         if (null === $request) {
             throw new \RuntimeException('No request available');
         }
