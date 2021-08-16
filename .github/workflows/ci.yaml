@@ -15,7 +15,7 @@ jobs:
             fail-fast: false
             matrix:
                 php-version:
-                    - '8.1'
+                    - '8.0'
 
         steps:
             -   name: 'Checkout code'
@@ -34,6 +34,10 @@ jobs:
                 run: |
                     php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
                     php -i
+
+            -   name: "Composer allow dev dependencies"
+                if: ${{ matrix.composer-allow-dev }}
+                run: composer config minimum-stability dev && composer config prefer-stable true
 
             -   name: 'Install Composer dependencies'
                 uses: ramsey/composer-install@v1
@@ -67,16 +71,15 @@ jobs:
                     # Lowest possible configuration
                     -   php-version: '7.2.5'
                         dependency-versions: 'lowest'
-                        symfony-version: 'lowest'
+                        symfony-version: '^5.4'
 
-                    # Test against latest Symfony 4.4
+                    # Test against upcoming Symfony 5.4
                     -   php-version: '8.0'
-                        symfony-version: '^4.4'
+                        symfony-version: '^5.4'
 
-                    # Test against latest Symfony 5
-                    -   php-version: '8.1'
-                        symfony-version: '^5.0'
-
+                    # Test against upcoming Symfony 6.0
+                    -   php-version: '8.0'
+                        symfony-version: '^6.0'
         steps:
             -   name: 'Checkout code'
                 uses: actions/checkout@v2
@@ -93,6 +96,10 @@ jobs:
                 run: |
                     php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
                     php -i
+
+            -   name: "Composer allow dev dependencies"
+                if: ${{ matrix.composer-allow-dev }}
+                run: composer config minimum-stability dev && composer config prefer-stable true
 
             -   name: "Require Symfony version"
                 if: ${{ matrix.symfony-version != 'lowest' }}
@@ -126,29 +133,19 @@ jobs:
                 include:
                     # DEFAULT configuration (old security system)
 
-                    # Symfony 4.4 on minimum PHP version
+                    # Minimum PHP version
                     -   php-version: '7.2.5'
-                        symfony-version: '^4.4'
-                        app-config: 'default'
-
-                    # Latest Symfony 4.4
-                    -   php-version: '8.0'
-                        symfony-version: '^4.4'
-                        app-config: 'default'
-
-                    # Latest Symfony 5
-                    -   php-version: '8.1'
-                        symfony-version: '^5.0'
-                        app-config: 'default'
-
-                    # AUTHENTICATORS configuration (experimental security system)
-                    -   php-version: '8.0'
-                        symfony-version: '~5.3.0'
+                        symfony-version: '^5.4'
                         app-config: 'authenticators'
 
-                    # AUTHENTICATORS configuration (experimental security system)
-                    -   php-version: '8.1'
-                        symfony-version: '~5.4.0'
+                    # Test against upcoming Symfony 5.4
+                    -   php-version: '8.0'
+                        symfony-version: '^5.4'
+                        app-config: 'authenticators'
+
+                    # Test against upcoming Symfony 6.0
+                    -   php-version: '8.0'
+                        symfony-version: '^6.0'
                         app-config: 'authenticators'
 
         steps:
@@ -167,6 +164,10 @@ jobs:
                 run: |
                     php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
                     php -i
+
+            -   name: "Composer allow dev dependencies"
+                if: ${{ matrix.composer-allow-dev }}
+                run: composer config minimum-stability dev --working-dir=app && composer config prefer-stable true --working-dir=app
 
             -   name: "Require Symfony version"
                 if: ${{ matrix.symfony-version != 'lowest' }}
@@ -199,7 +200,7 @@ jobs:
             fail-fast: false
             matrix:
                 php-version:
-                    - '8.1'
+                    - '8.0'
 
         steps:
             -   name: 'Checkout code'
@@ -217,6 +218,10 @@ jobs:
                 run: |
                     php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
                     php -i
+
+            -   name: "Composer allow dev dependencies"
+                if: ${{ matrix.composer-allow-dev }}
+                run: composer config minimum-stability dev && composer config prefer-stable true
 
             -   name: 'Install Composer dependencies'
                 uses: ramsey/composer-install@v1
