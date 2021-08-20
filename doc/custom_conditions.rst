@@ -36,7 +36,7 @@ Bypassing Two-Factor Authentication
 If you simply wish to bypass 2fa for a specific authenticator, setting the
 ``TwoFactorAuthenticator::FLAG_2FA_COMPLETE`` attribute on the token will achieve this.
 
-For example, if you are building a `custom Authenticator <https://symfony.com/doc/5.2/security/experimental_authenticators.html#creating-a-custom-authenticator>`_
+For example, if you are building a `custom Authenticator <https://symfony.com/doc/5.4/security/experimental_authenticators.html#creating-a-custom-authenticator>`_
 this would bypass 2fa when the authenticator is used:
 
 .. code-block:: php
