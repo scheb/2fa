@@ -46,11 +46,11 @@ Two-factor authentication methods:
 
 Installation
 -------------
-Follow the [installation instructions](doc/installation.md).
+Follow the [installation instructions](doc/installation.rst).
 
 Documentation
 -------------
-Detailed documentation of all features can be found in the [doc](doc/index.md) directory.
+Detailed documentation of all features can be found in the [doc](doc/index.rst) directory.
 
 Demo
 ----
