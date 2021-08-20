@@ -66,7 +66,7 @@ Flagging a device as "trusted"
 ------------------------------
 
 To flag a device as "trusted", in the last step of the 2fa process, you have to pass a parameter ``_trusted`` with a
-``true``\ -like value. The parameter name can be changed in the firewall configuration:
+``true``-like value. The parameter name can be changed in the firewall configuration:
 
 .. code-block:: yaml
 

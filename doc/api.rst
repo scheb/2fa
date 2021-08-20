@@ -7,13 +7,13 @@ but provides API endpoints instead.
 Prerequisites
 -------------
 
-To make two-factor authentication work in an API, your **API has to be stateful** (\ ``stateless: false`` in the firewall
+To make two-factor authentication work in an API, your **API has to be stateful** (``stateless: false`` in the firewall
 configuration or not configured at all, as it's stateful per default). That means the API is starting a session which is
 passed by the client on every call. The session is necessary for two-factor authentication to store the state of the
 login - if the user has already completed two-factor authentication or not.
 
 If you use a custom authenticator (you may have followed Symfony's guide
-`Custom Authentication System with Guard (API Token Example) <https://symfony.com/doc/current/security/guard_authentication.html>`_\ ),
+`Custom Authentication System with Guard (API Token Example) <https://symfony.com/doc/current/security/guard_authentication.html>`_),
 please make sure your authenticator doesn't authenticate on every request, but only when the
 authentication route is called. For an example, have a look at the
 `Avoid Authenticating the Browser on Every Request <https://symfony.com/doc/current/security/guard_authentication.html#avoid-authenticating-the-browser-on-every-request>`_
@@ -233,10 +233,10 @@ To better integrate with JSON-style APIs, the bundle also accepts ``POST`` reque
 send a JSON-encoded payload with a JSON content type, such as ``application/json``.
 
 You can use `symfony/property-access <https://symfony.com/doc/current/components/property_access.html>`_ notation to
-define the parameter names in the `bundle configuration <configuration.rst>`_\ , allowing you to read from complex data
+define the parameter names in the `bundle configuration <configuration.rst>`_, allowing you to read from complex data
 structures.
 
-Please note, since you're dealing with JSON *objects*\ , you have to use the dot ``.`` notation to access object properties.
+Please note, since you're dealing with JSON **objects**, you have to use the dot ``.`` notation to access object properties.
 For example, with the following payload:
 
 .. code-block:: json

@@ -80,7 +80,7 @@ The configuration should look similar to this:
 Make sure the rule comes first in the list, since access control rules are evaluated in order.
 
 If you have such a rule and it still doesn't work, for some reason the rule is not matching. Make absolutely sure the
-``path`` regular expression matches your logout path. If you have additional options, such as ``host`` or ``ip``\ , check that
+``path`` regular expression matches your logout path. If you have additional options, such as ``host`` or ``ip``, check that
 they're matching as well.
 
 Not logged in after completing two-factor authentication
@@ -105,11 +105,11 @@ Troubleshooting
   * **Solution:** Can't exactly tell what's wrong. Continue debugging the login issue. Solve this issue first,
     before you re-enable two-factor authentication.
 
-2) Revert the changes from 1). Debug the security token on the two-factor authentication form page by ``var_dump``\ -ing it
+2) Revert the changes from 1). Debug the security token on the two-factor authentication form page by ``var_dump``-ing it
    or any other suitable method.
 
    The token should be of type ``TwoFactorToken`` and the field ``authenticatedToken`` should contain an authenticated
-   security token. Does that authenticated token have ``authenticated``\ =\ ``false`` set?
+   security token. Does that authenticated token have ``authenticated``=``false`` set?
 
 
 * Yes -> Your authenticated token was flagged as invalid. Follow solution below.
@@ -121,7 +121,7 @@ Troubleshooting
    For each of the requests, go to Logs -> Debug.
 
    Does it say ``Cannot refresh token because user has changed`` or ``Token was deauthenticated after trying to refresh
-   it``\ ?
+   it``?
 
 
 * Yes -> Your authenticated token was flagged as invalid. Follow solution below.
@@ -137,8 +137,8 @@ authentication process are taken by serialize/unserialize. Check which fields ar
 
 It must be at least the fields that are used in the methods from ``Symfony\Component\Security\Core\User\UserInterface``.
 
-If your user entity implements ``Symfony\Component\Security\Core\User\AdvancedUserInterface``\ , you also need the fields
-that are used in ``isAccountNonExpired()``\ , ``isAccountNonLocked()``\ , ``isCredentialsNonExpired()`` and ``isEnabled()``.
+If your user entity implements ``Symfony\Component\Security\Core\User\AdvancedUserInterface``, you also need the fields
+that are used in ``isAccountNonExpired()``, ``isAccountNonLocked()``, ``isCredentialsNonExpired()`` and ``isEnabled()``.
 
 Two-factor authentication form is not shown after login
 -------------------------------------------------------
@@ -181,10 +181,10 @@ The configuration should look similar to this:
            - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
            # Other rules may follow here...
 
-**Make sure the rule comes first in the list**\ , since access control rules are evaluated in order.
+**Make sure the rule comes first in the list**, since access control rules are evaluated in order.
 
 If you already have such a rule at the top of the list, make sure the ``path`` regular expression matches your two-factor
-authentication form path. If you have additional options, such as ``host`` or ``ip``\ , check that they're matching as well.
+authentication form path. If you have additional options, such as ``host`` or ``ip``, check that they're matching as well.
 
 Is there something special about your security setup?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -239,7 +239,7 @@ Troubleshooting
   know what you've already tested.
 
 3) On login, do you reach the end (return statement) of method
-   ``Scheb\TwoFactorBundle\Security\Authentication\Provider\AuthenticationProviderDecorator::authenticate()``\ ?
+   ``Scheb\TwoFactorBundle\Security\Authentication\Provider\AuthenticationProviderDecorator::authenticate()``?
 
 
 * Yes -> Continue with 4)
@@ -284,15 +284,15 @@ Basic checks
 
 
 * 2fa was completed with that call and you've been fully authenticated afterwards.
-* Together with the 2fa code, you have sent the trusted parameter (default ``_trusted``\ ) with a
-  ``true``\ -like value. (Background information: Devices are not automatically flagged as trusted. The user has to choose
+* Together with the 2fa code, you have sent the trusted parameter (default ``_trusted``) with a
+  ``true``-like value. (Background information: Devices are not automatically flagged as trusted. The user has to choose
   if they can trust that device. That's why this extra parameter has to be sent over.)
 
 Troubleshooting
 ^^^^^^^^^^^^^^^
 
 Have a look at the response of the HTTP call when you sent over the 2fa and the trusted parameter. Do you see a cookie
-being set (\ ``Set-Cookie`` header)?
+being set (``Set-Cookie`` header)?
 
 
 * Yes -> Please validate the cookie's parameters. Make sure everything is fine for that cookie: the path, domain, and

@@ -36,7 +36,7 @@ Optionally, install any additional packages to extend the feature set for your n
 Step 2: Enable the bundle
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Enable this bundle in your ``config/bundles.php``\ :
+Enable this bundle in your ``config/bundles.php``:
 
 .. code-block:: php
 
@@ -51,7 +51,7 @@ Step 3: Define routes
 ^^^^^^^^^^^^^^^^^^^^^
 
 In ``config/routes.yaml`` add a route for the two-factor authentication form and another one for checking the
-authentication code. The routes must be **located within the path ``pattern`` of the firewall**\ , the one which uses
+authentication code. The routes must be **located within the path** ``pattern`` **of the firewall**, the one which uses
 two-factor authentication.
 
 .. code-block:: yaml
@@ -127,9 +127,9 @@ If you have installed any of the two-factor authentication methods, you have to 
 this for:
 
 
-* `\ ``scheb/2fa-totp`` TOTP authentication <providers/totp.rst>`_
-* `\ ``scheb/2fa-google-authenticator`` Google Authenticator <providers/google.rst>`_
-* `\ ``scheb/2fa-email`` Email authentication <providers/email.rst>`_
+*  ``scheb/2fa-totp`` `\TOTP authentication <providers/totp.rst>`_
+*  ``scheb/2fa-google-authenticator`` `\Google Authenticator <providers/google.rst>`_
+*  ``scheb/2fa-email`` `\Email authentication <providers/email.rst>`_
 
 Step 7: Detailed configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

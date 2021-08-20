@@ -8,9 +8,9 @@ A good starting point are the Google Authenticator, TOTP and email authenticatio
 available in the codebase. Have a look at the follow files:
 
 
-* `\ ``src/google-authenticator/Security/TwoFactor/Provider/Google/GoogleAuthenticatorTwoFactorProvider.php`` <https://github.com/scheb/2fa/tree/5.x/src/google-authenticator/Security/TwoFactor/Provider/Google/GoogleAuthenticatorTwoFactorProvider.php>`_
-* `\ ``src/totp/Security/TwoFactor/Provider/Totp/TotpAuthenticatorTwoFactorProvider.php`` <https://github.com/scheb/2fa/tree/5.x/src/totp/Security/TwoFactor/Provider/Totp/TotpAuthenticatorTwoFactorProvider.php>`_
-* `\ ``src/email/Security/TwoFactor/Provider/Email/EmailTwoFactorProvider.php`` <https://github.com/scheb/2fa/tree/5.x/src/email/Security/TwoFactor/Provider/Email/EmailTwoFactorProvider.php>`_
+* `src/google-authenticator/Security/TwoFactor/Provider/Google/GoogleAuthenticatorTwoFactorProvider.php <https://github.com/scheb/2fa/tree/5.x/src/google-authenticator/Security/TwoFactor/Provider/Google/GoogleAuthenticatorTwoFactorProvider.php>`_
+* `src/totp/Security/TwoFactor/Provider/Totp/TotpAuthenticatorTwoFactorProvider.php <https://github.com/scheb/2fa/tree/5.x/src/totp/Security/TwoFactor/Provider/Totp/TotpAuthenticatorTwoFactorProvider.php>`_
+* `src/email/Security/TwoFactor/Provider/Email/EmailTwoFactorProvider.php <https://github.com/scheb/2fa/tree/5.x/src/email/Security/TwoFactor/Provider/Email/EmailTwoFactorProvider.php>`_
 
 You will get the basic idea how to implement a custom two-factor method.
 
@@ -28,11 +28,11 @@ beginAuthentication
    public function beginAuthentication(AuthenticationContextInterface $context): bool;
 
 The method is called after successful login. It receives an ``AuthenticationContextInterface`` object as the argument
-(see class ``Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext``\ ) which contains the request object the
+(see class ``Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext``) which contains the request object the
 authentication token, the user entity and other information.
 
 The method has to decide if the user should be asked for two-factor authentication from that provider. In that case
-return ``true``\ , otherwise ``false``.
+return ``true``, otherwise ``false``.
 
 .. code-block:: php
 
@@ -65,7 +65,7 @@ This method has to provide a service for rendering the authentication form. Such
 
    public function renderForm(Request $request, array $templateVars): Response;
 
-How you render the form is totally up to you. The only important thing is to return a ``Response``\ , which could also be a
+How you render the form is totally up to you. The only important thing is to return a ``Response``, which could also be a
 ``RedirectResponse`` redirect to an external service. A default implementation for rendering forms with Twig is available
 as ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer``.
 
@@ -77,10 +77,10 @@ Now you have to register your two-factor provider class as a service.
 A tag named ``scheb_two_factor.provider`` will make your provider available to the bundle. The tag attribute ``alias`` has
 to be set and must be an application-wide unique identifier for the authentication provider.
 
-**Please note**\ : The aliases ``google``\ , ``totp`` and ``email`` are reserved by the authentication methods that are included
+**Please note**: The aliases ``google``, ``totp`` and ``email`` are reserved by the authentication methods that are included
 in the bundle.
 
-**YAML Configuration**\ :
+**YAML Configuration**:
 
 .. code-block:: yaml
 
@@ -92,7 +92,7 @@ in the bundle.
            tags:
                - { name: scheb_two_factor.provider, alias: acme_two_factor_provider }
 
-**XML Configuration (alternatively)**\ :
+**XML Configuration (alternatively)**:
 
 .. code-block:: xml
 

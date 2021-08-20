@@ -198,7 +198,7 @@ authentication on multiple firewalls and you need to
 `render the form differently for each firewall <../firewall_template.rst>`_. In such a case you can implement a form
 renderer to fully customize the rendering logic.
 
-Create a class implementing ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface``\ :
+Create a class implementing ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface``:
 
 .. code-block:: php
 

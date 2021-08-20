@@ -53,5 +53,5 @@ granted.
 
 
 To represent the state between login and a valid two-factor code being entered, the bundle introduces the role-like
-attribute ``IS_AUTHENTICATED_2FA_IN_PROGRESS``\ , which can be used in ``is_granted()`` calls. ``IS_AUTHENTICATED_FULLY`` is,
+attribute ``IS_AUTHENTICATED_2FA_IN_PROGRESS``, which can be used in ``is_granted()`` calls. ``IS_AUTHENTICATED_FULLY`` is,
 just like roles, withhold until the two-factor authentication step has been completed successfully.

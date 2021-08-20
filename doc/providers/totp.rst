@@ -2,15 +2,15 @@ TOTP Authentication
 ===================
 
 TOTP authentication uses the `TOTP algorithm <https://en.wikipedia.org/wiki/Time-based_One-Time_Password>`_ to generate
-authentication codes. Compared to `Google Authenticator two-factor provider <google.rst>`_\ , the TOTP two-factor provider
+authentication codes. Compared to `Google Authenticator two-factor provider <google.rst>`_, the TOTP two-factor provider
 offers more configuration options, but that means your configuration isn't necessarily compatible with the
 `Google Authenticator app <http://code.google.com/p/google-authenticator/>`_.
 
 Several parameters can be customized:
 
 
-* The number of digits (default = ``6``\ )
-* The digest (default = ``sha1``\ )
+* The number of digits (default = ``6``)
+* The digest (default = ``sha1``)
 * The period (default = ``30`` seconds)
 * Custom parameters can be added
 
@@ -142,7 +142,7 @@ authentication on multiple firewalls and you need to
 `render the form differently for each firewall <../firewall_template.rst>`_. In such a case you can implement a form
 renderer to fully customize the rendering logic.
 
-Create a class implementing ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface``\ :
+Create a class implementing ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface``:
 
 .. code-block:: php
 
@@ -193,7 +193,7 @@ To generate a QR code that can be scanned by the authenticator app, retrieve the
 
    $qrCodeContent = $container->get("scheb_two_factor.security.totp_authenticator")->getQRContent($user);
 
-To render the QR code as an image, install ``scheb/2fa-qr-code``\ :
+To render the QR code as an image, install ``scheb/2fa-qr-code``:
 
 .. code-block:: bash
 

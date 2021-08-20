@@ -3,7 +3,7 @@ Google Authenticator
 
 `Google Authenticator <https://en.wikipedia.org/wiki/Google_Authenticator>`_ is a popular implementation of a
 `TOTP algorithm <https://en.wikipedia.org/wiki/Time-based_One-Time_Password>`_ to generate authentication codes. Compared
-to the `TOTP two-factor provider <totp.rst>`_\ , the implementation has a fixed configuration, which is necessary to be
+to the `TOTP two-factor provider <totp.rst>`_, the implementation has a fixed configuration, which is necessary to be
 compatible with the Google Authenticator app:
 
 
@@ -127,7 +127,7 @@ authentication on multiple firewalls and you need to
 `render the form differently for each firewall <../firewall_template.rst>`_. In such a case you can implement a form
 renderer to fully customize the rendering logic.
 
-Create a class implementing ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface``\ :
+Create a class implementing ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface``:
 
 .. code-block:: php
 
@@ -179,7 +179,7 @@ Authenticator service:
 
    $qrCodeContent = $container->get("scheb_two_factor.security.google_authenticator")->getQRContent($user);
 
-To render the QR code as an image, install ``scheb/2fa-qr-code``\ :
+To render the QR code as an image, install ``scheb/2fa-qr-code``:
 
 .. code-block:: bash
 
