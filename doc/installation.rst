@@ -127,9 +127,9 @@ If you have installed any of the two-factor authentication methods, you have to 
 this for:
 
 
-*  ``scheb/2fa-totp`` `\TOTP authentication <providers/totp.rst>`_
-*  ``scheb/2fa-google-authenticator`` `\Google Authenticator <providers/google.rst>`_
-*  ``scheb/2fa-email`` `\Email authentication <providers/email.rst>`_
+*  ``scheb/2fa-totp`` `TOTP authentication <providers/totp.rst>`_
+*  ``scheb/2fa-google-authenticator`` `Google Authenticator <providers/google.rst>`_
+*  ``scheb/2fa-email`` `Code-via-Email authentication <providers/email.rst>`_
 
 Step 7: Detailed configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

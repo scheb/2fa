@@ -1,5 +1,5 @@
-Email Authentication
-====================
+Code-via-Email Authentication
+=============================
 
 A two-factor provider to generate a random numeric code and send it to the user via email.
 

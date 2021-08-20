@@ -34,7 +34,7 @@ The bundle supports the following authentication methods out of the box:
 
 * `Google Authenticator <providers/google.rst>`_
 * `TOTP Authenticator <providers/totp.rst>`_
-* `Email authentication code <providers/email.rst>`_
+* `Code-via-Email authentication <providers/email.rst>`_
 
 See `Providers <providers/index.rst>`_ for more information about custom or third-party provider.
 

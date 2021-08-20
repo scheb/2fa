@@ -146,4 +146,4 @@ For detailed information on the authentication methods see the individual docume
 
 * `TOTP <providers/totp.rst>`_
 * `Google Authenticator <providers/google.rst>`_
-* `Email code <providers/email.rst>`_
+* `Code-via-Email authentication <providers/email.rst>`_
