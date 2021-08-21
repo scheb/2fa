@@ -13,7 +13,7 @@ The number of digits can be configured:
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        email:
            digits: 6
@@ -45,7 +45,7 @@ To enable this authentication method add this to your configuration:
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        email:
            enabled: true
@@ -109,7 +109,7 @@ Configuration Reference
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        email:
            enabled: true                  # If email authentication should be enabled, default false
@@ -151,7 +151,7 @@ Then register it as a service and update your configuration:
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        email:
            mailer: acme.custom_mailer_service
@@ -172,7 +172,7 @@ configuration:
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        email:
            code_generator: acme.custom_code_generator_service
@@ -185,7 +185,7 @@ different template you can simply register it in configuration:
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        email:
            template: security/2fa_form.html.twig
@@ -224,7 +224,7 @@ Then register it as a service and update your configuration:
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        email:
            form_renderer: acme.custom_form_renderer_service

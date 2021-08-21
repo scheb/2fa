@@ -21,7 +21,7 @@ Enable the feature in the configuration:
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        backup_codes:
            enabled: true  # If the backup code feature should be enabled
@@ -97,7 +97,7 @@ configuration:
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        backup_codes:
            manager: acme.custom_backup_code_manager  # Use a custom backup code manager

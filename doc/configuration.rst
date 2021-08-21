@@ -5,7 +5,7 @@ This is an overview of all the configuration options available:
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
 
        # Trusted device feature

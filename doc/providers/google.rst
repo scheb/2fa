@@ -43,7 +43,7 @@ To enable this authentication method add this to your configuration:
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        google:
            enabled: true
@@ -96,7 +96,7 @@ Configuration Reference
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        google:
            enabled: true                  # If Google Authenticator should be enabled, default false
@@ -114,7 +114,7 @@ different template you can simply register it in configuration:
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        google:
            template: security/2fa_form.html.twig
@@ -153,7 +153,7 @@ Then register it as a service and update your configuration:
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        google:
            form_renderer: acme.custom_form_renderer_service

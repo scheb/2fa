@@ -24,7 +24,7 @@ Register it as a service and configure the service name:
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        two_factor_condition: acme.custom_two_factor_condition
 

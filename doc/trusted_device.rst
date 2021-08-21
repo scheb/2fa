@@ -20,7 +20,7 @@ You have to enable this feature in your configuration:
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        trusted_device:
            enabled: false                 # If the trusted device feature should be enabled
@@ -89,7 +89,7 @@ configuration:
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        trusted_device:
            manager: acme.custom_trusted_device_manager  # Use a custom trusted device manager

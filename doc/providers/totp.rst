@@ -168,7 +168,7 @@ Then register it as a service and update your configuration:
 
 .. code-block:: yaml
 
-   # config/packages/scheb_two_factor.yaml
+   # config/packages/scheb_2fa.yaml
    scheb_two_factor:
        totp:
            form_renderer: acme.custom_form_renderer_service
