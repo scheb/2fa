@@ -42,12 +42,17 @@ class AuthenticationTrustResolver implements AuthenticationTrustResolverInterfac
     // Compatibility for Symfony >= 5.4
     public function isAuthenticated(TokenInterface $token = null): bool
     {
-        // When isAuthenticated method is implemented
+        // Must be declared in Symfony >= 6.0
         if (method_exists($this->decoratedTrustResolver, 'isAuthenticated')) {
             return $this->decoratedTrustResolver->isAuthenticated($token);
         }
 
-        // Fallback when it's not implemented
+        // This should never happen on Symfony 5.4 or 6.x versions
+        if (!method_exists($this->decoratedTrustResolver, 'isAnonymous')) {
+            throw new \RuntimeException('Neither method "isAuthenticated" nor "isAnonymous" was declared on the decorated AuthenticationTrustResolverInterface');
+        }
+
+        // Fallback for Symfony 5.4
         return !$this->decoratedTrustResolver->isAnonymous($token);
     }
 
