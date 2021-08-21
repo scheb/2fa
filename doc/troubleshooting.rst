@@ -3,11 +3,11 @@ Troubleshooting
 
 How to debug and solve common issue related to the bundle.
 
-* `TOTP / Google Authenticator code is not accepted <#totp--google-authenticator-code-is-not-accepted>`_
-* `Logout redirects back to the two-factor authentication form <#logout-redirects-back-to-the-two-factor-authentication-form>`_
-* `Not logged in after completing two-factor authentication <#not-logged-in-after-completing-two-factor-authentication>`_
-* `Two-factor authentication form is not shown after login <#two-factor-authentication-form-is-not-shown-after-login>`_
-* `Trusted device cookie is not set <#trusted-device-cookie-is-not-set>`_
+* `TOTP / Google Authenticator code is not accepted`_
+* `Logout redirects back to the two-factor authentication form`_
+* `Not logged in after completing two-factor authentication`_
+* `Two-factor authentication form is not shown after login`_
+* `Trusted device cookie is not set`_
 
 TOTP / Google Authenticator code is not accepted
 ------------------------------------------------
