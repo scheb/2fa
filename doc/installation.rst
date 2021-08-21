@@ -16,13 +16,20 @@ Step 1: Install with Composer
 The bundle is organized into sub-repositories, so you can choose the exact feature set you need and keep installed
 dependencies to a minimum.
 
-Install at least the bundle via Composer:
+If you're using `Symfony Flex <https://flex.symfony.com/>`_, use the following command to install the bundle via
+`Composer <https://getcomposer.org>`_:
+
+.. code-block::
+
+   composer require 2fa
+
+Alternatively, use the following Composer command:
 
 .. code-block::
 
    composer require scheb/2fa-bundle
 
-Optionally, install any additional packages to extend the feature set for your needs:
+Optionally, install any additional packages to extend the bundle's feature according to your needs:
 
 .. code-block::
 
@@ -35,6 +42,8 @@ Optionally, install any additional packages to extend the feature set for your n
 
 Step 2: Enable the bundle
 ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ℹ️ If you're using Symfony Flex, this step happens automatically.
 
 Enable this bundle in your ``config/bundles.php``:
 
@@ -50,13 +59,20 @@ Enable this bundle in your ``config/bundles.php``:
 Step 3: Define routes
 ^^^^^^^^^^^^^^^^^^^^^
 
-In ``config/routes.yaml`` add a route for the two-factor authentication form and another one for checking the
-authentication code. The routes must be **located within the path** ``pattern`` **of the firewall**, the one which uses
-two-factor authentication.
+ℹ️ If you're using Symfony Flex, a default config file is created automatically. Though make sure the preconfigured paths
+are located within your firewall's ``pattern``.
+
+In ``config/routes/scheb_2fa.yaml`` (create the file if it doesn't exist) you need to add two routes:
+
+* a route for the two-factor authentication form
+* another route for checking the two-factor authentication code
+
+The routes must be **located within the path** ``pattern`` **of the firewall**, the one which uses two-factor
+authentication.
 
 .. code-block:: yaml
 
-   # config/routes.yaml
+   # config/routes/scheb_2fa.yaml
    2fa_login:
        path: /2fa
        defaults:
@@ -97,11 +113,11 @@ Enable two-factor authentication **per firewall** and configure ``access_control
 
 More per-firewall configuration options can be found in the `configuration reference <configuration.rst>`_.
 
-Step 5: Configure authentication tokens
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 5: Configure the security tokens
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Your firewall may offer different ways how to login. By default, the bundle is only listening to these tokens:
-
+Your firewall may offer different ways how to login. By default (without any configuration), the bundle is listening
+only to these tokens:
 
 * ``Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken`` (username+password form)
 * ``Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken`` (guard-based security)
@@ -123,13 +139,12 @@ If you want to support two-factor authentication with another login method, you 
 Step 6: Enable two-factor authentication methods
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you have installed any of the two-factor authentication methods, you have to enable these separately. Read how to do
-this for:
+If you have installed any of the two-factor authentication methods provided as sub-packages, you have to enable these
+separately. Read how to do this for:
 
-
-*  ``scheb/2fa-totp`` `TOTP authentication <providers/totp.rst>`_
-*  ``scheb/2fa-google-authenticator`` `Google Authenticator <providers/google.rst>`_
-*  ``scheb/2fa-email`` `Code-via-Email authentication <providers/email.rst>`_
+* ``scheb/2fa-totp`` `TOTP authentication <providers/totp.rst>`_
+* ``scheb/2fa-google-authenticator`` `Google Authenticator <providers/google.rst>`_
+* ``scheb/2fa-email`` `Code-via-Email authentication <providers/email.rst>`_
 
 Step 7: Detailed configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
