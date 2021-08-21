@@ -102,8 +102,8 @@ Register it as a service and configure it as a custom ``success_handler`` for th
 2) Response to require two-factor authentication
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You need a response that is returned when the user requests a path, but it is not accessible (yet), because the user
-has to complete two-factor authentication first. This could be the same as your "access denied" response.
+You need a response that is returned when the user requests a path, but it is not accessible (yet), because the user has
+to complete two-factor authentication first. This could be the same as your "access denied" response.
 
 Create a class which implements ``Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface``
 to return the response.
@@ -236,8 +236,8 @@ You can use `symfony/property-access <https://symfony.com/doc/current/components
 define the parameter names in the :doc:`bundle configuration </configuration>`, allowing you to read from complex data
 structures.
 
-Please note, since you're dealing with JSON **objects**, you have to use the dot ``.`` notation to access object properties.
-For example, with the following payload:
+Please note, since you're dealing with JSON **objects**, you have to use the dot ``.`` notation to access object
+properties. For example, with the following payload:
 
 .. code-block:: json
 

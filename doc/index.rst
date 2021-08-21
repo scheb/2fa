@@ -6,7 +6,6 @@ This bundle provides **two-factor authentication for your Symfony application**.
 Index
 -----
 
-
 * :doc:`Installation </installation>`
 * :doc:`Configuration Reference </configuration>`
 * :doc:`Trusted Devices </trusted_device>`
@@ -17,7 +16,6 @@ Index
 * :doc:`Troubleshooting (common issues) </troubleshooting>`
 
 **How-to's:**
-
 
 * :doc:`How to create a custom two-factor authenticator </providers/custom>`
 * :doc:`How to handle multiple activated authentication methods </multi_authentication>`
@@ -30,7 +28,6 @@ Two-Factor Authentication Methods
 ---------------------------------
 
 The bundle supports the following authentication methods out of the box:
-
 
 * :doc:`Google Authenticator </providers/google>`
 * :doc:`TOTP Authenticator </providers/totp>`
@@ -46,12 +43,10 @@ two-factor authentication enabled, access and privileges are temporary withhold 
 challenged to enter a valid two-factor authentication code. Only when that code is entered correctly, the roles are
 granted.
 
-
 .. image:: authentication-process.png
    :target: authentication-process.png
    :alt: Authentication process
 
-
 To represent the state between login and a valid two-factor code being entered, the bundle introduces the role-like
-attribute ``IS_AUTHENTICATED_2FA_IN_PROGRESS``, which can be used in ``is_granted()`` calls. ``IS_AUTHENTICATED_FULLY`` is,
-just like roles, withhold until the two-factor authentication step has been completed successfully.
+attribute ``IS_AUTHENTICATED_2FA_IN_PROGRESS``, which can be used in ``is_granted()`` calls. ``IS_AUTHENTICATED_FULLY``
+is, just like roles, withhold until the two-factor authentication step has been completed successfully.

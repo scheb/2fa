@@ -2,12 +2,11 @@ TOTP Authentication
 ===================
 
 TOTP authentication uses the `TOTP algorithm <https://en.wikipedia.org/wiki/Time-based_One-Time_Password>`_ to generate
-authentication codes. Compared to :doc:`Google Authenticator two-factor provider </google>`, the TOTP two-factor provider
-offers more configuration options, but that means your configuration isn't necessarily compatible with the
+authentication codes. Compared to :doc:`Google Authenticator two-factor provider </google>`, the TOTP two-factor
+provider offers more configuration options, but that means your configuration isn't necessarily compatible with the
 `Google Authenticator app <http://code.google.com/p/google-authenticator/>`_.
 
 Several parameters can be customized:
-
 
 * The number of digits (default = ``6``)
 * The digest (default = ``sha1``)
@@ -51,8 +50,8 @@ Your user entity has to implement ``Scheb\TwoFactorBundle\Model\Totp\TwoFactorIn
 user, generate a secret and define the TOTP configuration. TOTP let's you configure the number of digits, the algorithm
 and the period of the temporary codes.
 
-**We warned, custom configurations will not be compatible with the defaults of Google Authenticator app any more. You will
-have to use another application (e.g. FreeOTP on Android).**
+**We warned, custom configurations will not be compatible with the defaults of Google Authenticator app any more. You
+will have to use another application (e.g. FreeOTP on Android).**
 
 .. code-block:: php
 
@@ -125,8 +124,8 @@ logo. Some applications, such as FreeOTP, support this parameter and will associ
 Custom Authentication Form Template
 -----------------------------------
 
-The bundle uses ``Resources/views/Authentication/form.html.twig`` to render the authentication form. If you want to use a
-different template you can simply register it in configuration:
+The bundle uses ``Resources/views/Authentication/form.html.twig`` to render the authentication form. If you want to use
+a different template you can simply register it in configuration:
 
 .. code-block:: yaml
 

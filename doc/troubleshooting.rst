@@ -3,7 +3,6 @@ Troubleshooting
 
 How to debug and solve common issue related to the bundle.
 
-
 * `TOTP / Google Authenticator code is not accepted <#totp--google-authenticator-code-is-not-accepted>`_
 * `Logout redirects back to the two-factor authentication form <#logout-redirects-back-to-the-two-factor-authentication-form>`_
 * `Not logged in after completing two-factor authentication <#not-logged-in-after-completing-two-factor-authentication>`_
@@ -27,8 +26,8 @@ it depends on your configuration). The bigger the time difference between server
 window, the higher the chance that the codes generated on server and from the app don't match up. When the time
 difference becomes larger than the time window, it becomes impossible to provide the right code.
 
-To counteract the issue of time differences you could increase the ``window`` setting, then more codes around the current
-time window will be accepted:
+To counteract the issue of time differences you could increase the ``window`` setting, then more codes around the
+current time window will be accepted:
 
 .. code-block:: yaml
 
@@ -80,8 +79,8 @@ The configuration should look similar to this:
 Make sure the rule comes first in the list, since access control rules are evaluated in order.
 
 If you have such a rule and it still doesn't work, for some reason the rule is not matching. Make absolutely sure the
-``path`` regular expression matches your logout path. If you have additional options, such as ``host`` or ``ip``, check that
-they're matching as well.
+``path`` regular expression matches your logout path. If you have additional options, such as ``host`` or ``ip``, check
+that they're matching as well.
 
 Not logged in after completing two-factor authentication
 --------------------------------------------------------
@@ -95,9 +94,8 @@ are redirected back to the login page or the page is shown with the authenticate
 Troubleshooting
 ^^^^^^^^^^^^^^^
 
-1) Disable two-factor authentication by commenting out all ``two_factor`` settings in the security firewall configuration.
-   Try to login. Does it work?
-
+1) Disable two-factor authentication by commenting out all ``two_factor`` settings in the security firewall
+   configuration. Try to login. Does it work?
 
 * Yes, it works -> Continue with 2)
 * No, it does not work -> Your login process is broken.
@@ -105,12 +103,11 @@ Troubleshooting
   * **Solution:** Can't exactly tell what's wrong. Continue debugging the login issue. Solve this issue first,
     before you re-enable two-factor authentication.
 
-2) Revert the changes from 1). Debug the security token on the two-factor authentication form page by ``var_dump``-ing it
-   or any other suitable method.
+2) Revert the changes from 1). Debug the security token on the two-factor authentication form page by ``var_dump``-ing
+   it or any other suitable method.
 
    The token should be of type ``TwoFactorToken`` and the field ``authenticatedToken`` should contain an authenticated
    security token. Does that authenticated token have ``authenticated``=``false`` set?
-
 
 * Yes -> Your authenticated token was flagged as invalid. Follow solution below.
 * No -> Continue with 3)
@@ -122,7 +119,6 @@ Troubleshooting
 
    Does it say ``Cannot refresh token because user has changed`` or ``Token was deauthenticated after trying to refresh
    it``?
-
 
 * Yes -> Your authenticated token was flagged as invalid. Follow solution below.
 * No -> Unknown issue. Try to reach out for help by
@@ -151,7 +147,6 @@ a different page from your application.
 
 Basic checks
 ^^^^^^^^^^^^
-
 
 * Your login page belongs to the firewall, which has two-factor authentication configured.
 * The paths of login page, login check, 2fa and 2fa check are all located with the firewall's path ``pattern``.
@@ -183,8 +178,9 @@ The configuration should look similar to this:
 
 **Make sure the rule comes first in the list**, since access control rules are evaluated in order.
 
-If you already have such a rule at the top of the list, make sure the ``path`` regular expression matches your two-factor
-authentication form path. If you have additional options, such as ``host`` or ``ip``, check that they're matching as well.
+If you already have such a rule at the top of the list, make sure the ``path`` regular expression matches your
+two-factor authentication form path. If you have additional options, such as ``host`` or ``ip``, check that they're
+matching as well.
 
 Is there something special about your security setup?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -192,15 +188,14 @@ Is there something special about your security setup?
 Often issues originate from a customization in the application's security setup, which is usually related to how roles
 are granted. Examples of such issue are:
 
-
 * `Roles are dynamically granted by a voter, which isn't aware of the intermediate 2fa state <https://github.com/scheb/2fa/issues/23>`_
 * `Roles are loaded by replacing the security token after login, effectively skipping 2fa <https://github.com/scheb/two-factor-bundle/issues/289>`_
 * `An exception thrown in a voter <https://github.com/scheb/two-factor-bundle/issues/291>`_
 
-For 2fa to work properly, there must be two things fulfilled: A ``TwoFactorToken`` must be present after login and within
-that intermediate "2fa incomplete" state no roles must be granted. That later one is achieved by ``TwoFactorToken`` not
-returning any roles on the ``getRoleNames()`` call. But if you grant roles differently other than through the token,
-things will break.
+For 2fa to work properly, there must be two things fulfilled: A ``TwoFactorToken`` must be present after login and
+within that intermediate "2fa incomplete" state no roles must be granted. That later one is achieved by
+``TwoFactorToken`` not returning any roles on the ``getRoleNames()`` call. But if you grant roles differently other than
+through the token, things will break.
 
 The solution to this problem is usually to skip any customization for a security token of type
 ``TwoFactorTokenInterface``.
@@ -219,13 +214,11 @@ Troubleshooting
 
 1) Is a ``TwoFactorToken`` present after the login?
 
-
 * Yes -> Continue with 2)
 * No -> Continue with 3)
 
 2) Try accessing a page that requires the user to be authenticated. Does it redirect to the two-factor authentication
    form?
-
 
 * Yes:
 
@@ -241,7 +234,6 @@ Troubleshooting
 3) On login, do you reach the end (return statement) of method
    ``Scheb\TwoFactorBundle\Security\Authentication\Provider\AuthenticationProviderDecorator::authenticate()``?
 
-
 * Yes -> Continue with 4)
 * No -> Something is wrong with the integration of the bundle. Try to reach out for help by
   :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
@@ -249,7 +241,6 @@ Troubleshooting
 
 4) On login, is method
    ``Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderHandler::getActiveTwoFactorProviders()`` called?
-
 
 * Yes, it's called -> Continue with 5)
 * No it's not called:
@@ -260,7 +251,6 @@ Troubleshooting
 
 5) Does ``Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderHandler::getActiveTwoFactorProviders()``
    return any values?
-
 
 * Yes, it returns an array of strings -> Unknown issue. Try to reach out for help by
   :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
@@ -282,7 +272,6 @@ trusted device cookie is not set.
 Basic checks
 ^^^^^^^^^^^^
 
-
 * 2fa was completed with that call and you've been fully authenticated afterwards.
 * Together with the 2fa code, you have sent the trusted parameter (default ``_trusted``) with a
   ``true``-like value. (Background information: Devices are not automatically flagged as trusted. The user has to choose
@@ -293,7 +282,6 @@ Troubleshooting
 
 Have a look at the response of the HTTP call when you sent over the 2fa and the trusted parameter. Do you see a cookie
 being set (``Set-Cookie`` header)?
-
 
 * Yes -> Please validate the cookie's parameters. Make sure everything is fine for that cookie: the path, domain, and
   other cookie options. Did you maybe try to `set it for a top level domain <https://github.com/scheb/two-factor-bundle/issues/242#issuecomment-538735430>`_\ ?

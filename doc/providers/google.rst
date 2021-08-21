@@ -2,10 +2,9 @@ Google Authenticator
 ====================
 
 `Google Authenticator <https://en.wikipedia.org/wiki/Google_Authenticator>`_ is a popular implementation of a
-`TOTP algorithm <https://en.wikipedia.org/wiki/Time-based_One-Time_Password>`_ to generate authentication codes. Compared
-to the :doc:`TOTP two-factor provider </totp>`, the implementation has a fixed configuration, which is necessary to be
-compatible with the Google Authenticator app:
-
+`TOTP algorithm <https://en.wikipedia.org/wiki/Time-based_One-Time_Password>`_ to generate authentication codes.
+Compared to the :doc:`TOTP two-factor provider </totp>`, the implementation has a fixed configuration, which is
+necessary to be compatible with the Google Authenticator app:
 
 * it generates 6-digit codes
 * the code changes every 30 seconds
@@ -109,8 +108,8 @@ Configuration Reference
 Custom Authentication Form Template
 -----------------------------------
 
-The bundle uses ``Resources/views/Authentication/form.html.twig`` to render the authentication form. If you want to use a
-different template you can simply register it in configuration:
+The bundle uses ``Resources/views/Authentication/form.html.twig`` to render the authentication form. If you want to use
+a different template you can simply register it in configuration:
 
 .. code-block:: yaml
 

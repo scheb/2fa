@@ -32,8 +32,8 @@ do the job:
        <input type="hidden" name="{{ csrfParameterName }}" value="{{ csrf_token(csrfTokenId) }}">
    {% endif %}
 
-You can change the name of the field by setting ``csrf_parameter`` and change the token ID by setting ``csrf_token_id`` in
-your configuration:
+You can change the name of the field by setting ``csrf_parameter`` and change the token ID by setting ``csrf_token_id``
+in your configuration:
 
 .. code-block:: yaml
 

@@ -143,7 +143,6 @@ This is an overview of all the configuration options available:
 
 For detailed information on the authentication methods see the individual documentation:
 
-
 * :doc:`TOTP </providers/totp>`
 * :doc:`Google Authenticator </providers/google>`
 * :doc:`Code-via-Email authentication </providers/email>`

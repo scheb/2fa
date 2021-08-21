@@ -4,9 +4,8 @@ Implementing a custom two-factor authenticator
 Getting started
 ---------------
 
-A good starting point are the Google Authenticator, TOTP and email authentication implementations, which are
-available in the codebase. Have a look at the follow files:
-
+A good starting point are the Google Authenticator, TOTP and email authentication implementations, which are available
+in the codebase. Have a look at the follow files:
 
 * `src/google-authenticator/Security/TwoFactor/Provider/Google/GoogleAuthenticatorTwoFactorProvider.php <https://github.com/scheb/2fa/tree/5.x/src/google-authenticator/Security/TwoFactor/Provider/Google/GoogleAuthenticatorTwoFactorProvider.php>`_
 * `src/totp/Security/TwoFactor/Provider/Totp/TotpAuthenticatorTwoFactorProvider.php <https://github.com/scheb/2fa/tree/5.x/src/totp/Security/TwoFactor/Provider/Totp/TotpAuthenticatorTwoFactorProvider.php>`_
@@ -65,20 +64,20 @@ This method has to provide a service for rendering the authentication form. Such
 
    public function renderForm(Request $request, array $templateVars): Response;
 
-How you render the form is totally up to you. The only important thing is to return a ``Response``, which could also be a
-``RedirectResponse`` redirect to an external service. A default implementation for rendering forms with Twig is available
-as ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer``.
+How you render the form is totally up to you. The only important thing is to return a ``Response``, which could also be
+a ``RedirectResponse`` redirect to an external service. A default implementation for rendering forms with Twig is
+available as ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer``.
 
 Register the provider
 ---------------------
 
 Now you have to register your two-factor provider class as a service.
 
-A tag named ``scheb_two_factor.provider`` will make your provider available to the bundle. The tag attribute ``alias`` has
-to be set and must be an application-wide unique identifier for the authentication provider.
+A tag named ``scheb_two_factor.provider`` will make your provider available to the bundle. The tag attribute ``alias``
+has to be set and must be an application-wide unique identifier for the authentication provider.
 
-**Please note**: The aliases ``google``, ``totp`` and ``email`` are reserved by the authentication methods that are included
-in the bundle.
+**Please note**: The aliases ``google``, ``totp`` and ``email`` are reserved by the authentication methods that are
+included in the bundle.
 
 **YAML Configuration**:
 

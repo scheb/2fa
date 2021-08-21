@@ -27,8 +27,8 @@ To make use of this feature, you have to install ``scheb/2fa-email``.
 
    composer require scheb/2fa-email
 
-The bundle's default implementation for sending emails supports both ``symfony/mailer`` and ``symfony/swiftmailer-bundle``.
-Please install one of them.
+The bundle's default implementation for sending emails supports both ``symfony/mailer`` and
+``symfony/swiftmailer-bundle``. Please install one of them.
 
 .. code-block:: bash
 
@@ -160,8 +160,8 @@ Re-send Authentication Code
 ---------------------------
 
 When you're using the default authentication code generator that is coming with the bundle, there's an easy way to
-re-send the email with the authentication code. Get/inject service ``scheb_two_factor.security.email.code_generator`` and
-call method ``reSend(\Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface $user)``.
+re-send the email with the authentication code. Get/inject service ``scheb_two_factor.security.email.code_generator``
+and call method ``reSend(\Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface $user)``.
 
 Custom Code Generator
 ---------------------
@@ -180,8 +180,8 @@ configuration:
 Custom Authentication Form Template
 -----------------------------------
 
-The bundle uses ``Resources/views/Authentication/form.html.twig`` to render the authentication form. If you want to use a
-different template you can simply register it in configuration:
+The bundle uses ``Resources/views/Authentication/form.html.twig`` to render the authentication form. If you want to use
+a different template you can simply register it in configuration:
 
 .. code-block:: yaml
 
