@@ -8,7 +8,7 @@ First, make sure that the CSRF protection is enabled in the main configuration f
 
 .. code-block:: yaml
 
-   # app/config/config.yml
+   # config/packages/framework.yaml
    framework:
        csrf_protection: ~
 
@@ -16,7 +16,7 @@ Then, in the firewall's ``two_factor`` security configuration need to enable CSR
 
 .. code-block:: yaml
 
-   # app/config/security.yml
+   # config/packages/security.yaml
    security:
        firewalls:
            your_firewall_name:
@@ -37,7 +37,7 @@ your configuration:
 
 .. code-block:: yaml
 
-   # app/config/security.yml
+   # config/packages/security.yaml
    security:
        firewalls:
            your_firewall_name:

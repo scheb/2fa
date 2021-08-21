@@ -92,7 +92,7 @@ Register it as a service and configure it as a custom ``success_handler`` for th
 
 .. code-block:: yaml
 
-   # app/config/security.yml
+   # config/packages/security.yaml
    security:
        firewalls:
            your_firewall_name:
@@ -133,7 +133,7 @@ Register it as a service and configure it as the ``required_handler`` of the ``t
 
 .. code-block:: yaml
 
-   # app/config/security.yml
+   # config/packages/security.yaml
    security:
        firewalls:
            your_firewall_name:
@@ -171,7 +171,7 @@ Register it as a service and configure it as the ``success_handler`` of the ``tw
 
 .. code-block:: yaml
 
-   # app/config/security.yml
+   # config/packages/security.yaml
    security:
        firewalls:
            your_firewall_name:
@@ -209,7 +209,7 @@ Register it as a service and configure it as the ``failure_handler`` of the ``tw
 
 .. code-block:: yaml
 
-   # app/config/security.yml
+   # config/packages/security.yaml
    security:
        firewalls:
            your_firewall_name:
