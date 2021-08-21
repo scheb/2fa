@@ -5,7 +5,7 @@ Prerequisites
 -------------
 
 If you're using anything other than Doctrine ORM to manage the user entity you will have to implement a
-`persister service <persister.rst>`_.
+:doc:`persister service </persister>`.
 
 Installation
 ------------
@@ -111,7 +111,7 @@ Enable two-factor authentication **per firewall** and configure ``access_control
            - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
            # Other rules may follow here...
 
-More per-firewall configuration options can be found in the `configuration reference <configuration.rst>`_.
+More per-firewall configuration options can be found in the :doc:`configuration reference </configuration>`.
 
 Step 5: Configure the security tokens
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -142,11 +142,11 @@ Step 6: Enable two-factor authentication methods
 If you have installed any of the two-factor authentication methods provided as sub-packages, you have to enable these
 separately. Read how to do this for:
 
-* ``scheb/2fa-totp`` `TOTP authentication <providers/totp.rst>`_
-* ``scheb/2fa-google-authenticator`` `Google Authenticator <providers/google.rst>`_
-* ``scheb/2fa-email`` `Code-via-Email authentication <providers/email.rst>`_
+* :doc:``scheb/2fa-totp`` `TOTP authentication </providers/totp>`
+* :doc:``scheb/2fa-google-authenticator`` `Google Authenticator </providers/google>`
+* :doc:``scheb/2fa-email`` `Code-via-Email authentication </providers/email>`
 
 Step 7: Detailed configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You probably want to configure some details of the bundle. See the `all configuration options <configuration.rst>`_.
+You probably want to configure some details of the bundle. See the :doc:`all configuration options </configuration>`.

@@ -2,7 +2,7 @@ TOTP Authentication
 ===================
 
 TOTP authentication uses the `TOTP algorithm <https://en.wikipedia.org/wiki/Time-based_One-Time_Password>`_ to generate
-authentication codes. Compared to `Google Authenticator two-factor provider <google.rst>`_, the TOTP two-factor provider
+authentication codes. Compared to :doc:`Google Authenticator two-factor provider </google>`, the TOTP two-factor provider
 offers more configuration options, but that means your configuration isn't necessarily compatible with the
 `Google Authenticator app <http://code.google.com/p/google-authenticator/>`_.
 
@@ -139,7 +139,7 @@ Custom Form Rendering
 
 There are certain cases when it's not enough to just change the template. For example, you're using two-factor
 authentication on multiple firewalls and you need to
-`render the form differently for each firewall <../firewall_template.rst>`_. In such a case you can implement a form
+:doc:`render the form differently for each firewall </../firewall_template>`. In such a case you can implement a form
 renderer to fully customize the rendering logic.
 
 Create a class implementing ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface``:

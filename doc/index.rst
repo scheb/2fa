@@ -7,24 +7,24 @@ Index
 -----
 
 
-* `Installation <installation.rst>`_
-* `Configuration Reference <configuration.rst>`_
-* `Trusted Devices <trusted_device.rst>`_
-* `Backup Codes <backup_codes.rst>`_
-* `Brute Force Protection <brute_force_protection.rst>`_
-* `CSRF Protection <csrf_protection.rst>`_
-* `Events <events.rst>`_
-* `Troubleshooting (common issues) <troubleshooting.rst>`_
+* :doc:`Installation </installation>`
+* :doc:`Configuration Reference </configuration>`
+* :doc:`Trusted Devices </trusted_device>`
+* :doc:`Backup Codes </backup_codes>`
+* :doc:`Brute Force Protection </brute_force_protection>`
+* :doc:`CSRF Protection </csrf_protection>`
+* :doc:`Events </events>`
+* :doc:`Troubleshooting (common issues) </troubleshooting>`
 
 **How-to's:**
 
 
-* `How to create a custom two-factor authenticator <providers/custom.rst>`_
-* `How to handle multiple activated authentication methods <multi_authentication.rst>`_
-* `How to customize conditions when to require two-factor authentication <custom_conditions.rst>`_
-* `How to configure two-factor authentication for an API <api.rst>`_
-* `How to create a custom persister <persister.rst>`_
-* `How to use a different template per firewall <firewall_template.rst>`_
+* :doc:`How to create a custom two-factor authenticator </providers/custom>`
+* :doc:`How to handle multiple activated authentication methods </multi_authentication>`
+* :doc:`How to customize conditions when to require two-factor authentication </custom_conditions>`
+* :doc:`How to configure two-factor authentication for an API </api>`
+* :doc:`How to create a custom persister </persister>`
+* :doc:`How to use a different template per firewall </firewall_template>`
 
 Two-Factor Authentication Methods
 ---------------------------------
@@ -32,11 +32,11 @@ Two-Factor Authentication Methods
 The bundle supports the following authentication methods out of the box:
 
 
-* `Google Authenticator <providers/google.rst>`_
-* `TOTP Authenticator <providers/totp.rst>`_
-* `Code-via-Email authentication <providers/email.rst>`_
+* :doc:`Google Authenticator </providers/google>`
+* :doc:`TOTP Authenticator </providers/totp>`
+* :doc:`Code-via-Email authentication </providers/email>`
 
-See `Providers <providers/index.rst>`_ for more information about custom or third-party provider.
+See :doc:`Providers </providers/index>` for more information about custom or third-party provider.
 
 The Authentication Process
 --------------------------

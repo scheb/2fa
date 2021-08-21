@@ -3,7 +3,7 @@ Google Authenticator
 
 `Google Authenticator <https://en.wikipedia.org/wiki/Google_Authenticator>`_ is a popular implementation of a
 `TOTP algorithm <https://en.wikipedia.org/wiki/Time-based_One-Time_Password>`_ to generate authentication codes. Compared
-to the `TOTP two-factor provider <totp.rst>`_, the implementation has a fixed configuration, which is necessary to be
+to the :doc:`TOTP two-factor provider </totp>`, the implementation has a fixed configuration, which is necessary to be
 compatible with the Google Authenticator app:
 
 
@@ -11,7 +11,7 @@ compatible with the Google Authenticator app:
 * the code changes every 30 seconds
 * It uses the sha1 hashing algorithm
 
-If you need different settings, please use the `TOTP two-factor provider <totp.rst>`_. Be warned that custom TOTP
+If you need different settings, please use the :doc:`TOTP two-factor provider </totp>`. Be warned that custom TOTP
 configurations likely won't be compatible with the Google Authenticator app.
 
 How authentication works
@@ -124,7 +124,7 @@ Custom Form Rendering
 
 There are certain cases when it's not enough to just change the template. For example, you're using two-factor
 authentication on multiple firewalls and you need to
-`render the form differently for each firewall <../firewall_template.rst>`_. In such a case you can implement a form
+:doc:`render the form differently for each firewall </../firewall_template>`. In such a case you can implement a form
 renderer to fully customize the rendering logic.
 
 Create a class implementing ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface``:

@@ -126,7 +126,7 @@ Troubleshooting
 
 * Yes -> Your authenticated token was flagged as invalid. Follow solution below.
 * No -> Unknown issue. Try to reach out for help by
-  `creating an issue <https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request.rst>`_ and let us
+  :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
   know what you've already tested.
 
 **Solution to: Your authenticated token was flagged as invalid**
@@ -235,7 +235,7 @@ Troubleshooting
     authentication.
 
 * No -> Unknown issue. Try to reach out for help by
-  `creating an issue <https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request.rst>`_ and let us
+  :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
   know what you've already tested.
 
 3) On login, do you reach the end (return statement) of method
@@ -244,7 +244,7 @@ Troubleshooting
 
 * Yes -> Continue with 4)
 * No -> Something is wrong with the integration of the bundle. Try to reach out for help by
-  `creating an issue <https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request.rst>`_ and let us
+  :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
   know what you've already tested.
 
 4) On login, is method
@@ -263,7 +263,7 @@ Troubleshooting
 
 
 * Yes, it returns an array of strings -> Unknown issue. Try to reach out for help by
-  `creating an issue <https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request.rst>`_ and let us
+  :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
   know what you've already tested.
 * No, it returns an empty array:
 
@@ -298,5 +298,5 @@ being set (``Set-Cookie`` header)?
 * Yes -> Please validate the cookie's parameters. Make sure everything is fine for that cookie: the path, domain, and
   other cookie options. Did you maybe try to `set it for a top level domain <https://github.com/scheb/two-factor-bundle/issues/242#issuecomment-538735430>`_\ ?
 * No, there's no cookie set: Unknown issue. Try to reach out for help by
-  `creating an issue <https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request.rst>`_ and let us
+  :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
   know what you've already tested.

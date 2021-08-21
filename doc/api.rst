@@ -233,7 +233,7 @@ To better integrate with JSON-style APIs, the bundle also accepts ``POST`` reque
 send a JSON-encoded payload with a JSON content type, such as ``application/json``.
 
 You can use `symfony/property-access <https://symfony.com/doc/current/components/property_access.html>`_ notation to
-define the parameter names in the `bundle configuration <configuration.rst>`_, allowing you to read from complex data
+define the parameter names in the :doc:`bundle configuration </configuration>`, allowing you to read from complex data
 structures.
 
 Please note, since you're dealing with JSON **objects**, you have to use the dot ``.`` notation to access object properties.

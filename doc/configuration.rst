@@ -144,6 +144,6 @@ This is an overview of all the configuration options available:
 For detailed information on the authentication methods see the individual documentation:
 
 
-* `TOTP <providers/totp.rst>`_
-* `Google Authenticator <providers/google.rst>`_
-* `Code-via-Email authentication <providers/email.rst>`_
+* :doc:`TOTP </providers/totp>`
+* :doc:`Google Authenticator </providers/google>`
+* :doc:`Code-via-Email authentication </providers/email>`
