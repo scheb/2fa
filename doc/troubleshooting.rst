@@ -16,9 +16,9 @@ The principle of TOTP/Google Authenticator is that both systems - the server and
 authentication code from a shared secret and the current time. If one of those two components isn't in sync, they'll
 generate a different code. Therefore:
 
-1) Most common problem: Make sure the server time and the time on your device are in sync with the actual current time
-2) Make sure the secret used in your device matches the secret configured for the account on the server
-3) If you're using TOTP, make sure the app is actually supporting the specific TOTP configuration you're using. **The
+#. Most common problem: Make sure the server time and the time on your device are in sync with the actual current time
+#. Make sure the secret used in your device matches the secret configured for the account on the server
+#. If you're using TOTP, make sure the app is actually supporting the specific TOTP configuration you're using. **The
    Google Authenticator app supports only one specific TOTP configuration (6-digit code, 30sec window, sha1 algorithm)**
 
 The generated authentication code has a time window in which it is valid (30 seconds in Google Authenticator, for TOTP
@@ -52,14 +52,14 @@ Logout redirects back to the two-factor authentication form
 -----------------------------------------------------------
 
 Problem
-^^^^^^^
+~~~~~~~
 
 When the two-factor authentication form is shown, you want to cancel the two-factor authentication process. You click
 the "cancel" link, which should execute a logout. It does not execute the logout, but redirects back to the two-factor
 authentication form.
 
 Solution
-^^^^^^^^
+~~~~~~~~
 
 If you see such behavior, the ``access_control`` rules from the security configuration don't allow accessing the logout
 path. Your logout path must be accessible to user with any authentication state, which is usually done by allowing it
@@ -86,33 +86,37 @@ Not logged in after completing two-factor authentication
 --------------------------------------------------------
 
 Problem
-^^^^^^^
+~~~~~~~
 
 After you logged in and have successfully passed the two-factor authentication process, you're not logged in. Either you
 are redirected back to the login page or the page is shown with the authenticated user missing.
 
 Troubleshooting
-^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~
 
-1) Disable two-factor authentication by commenting out all ``two_factor`` settings in the security firewall
+#. Disable two-factor authentication by commenting out all ``two_factor`` settings in the security firewall
    configuration. Try to login. Does it work?
 
-* Yes, it works -> Continue with 2)
-* No, it does not work -> Your login process is broken.
+   Yes, it works
+       Continue with 2)
+   No, it does not work
+       Your login process is broken.
 
-  * **Solution:** Can't exactly tell what's wrong. Continue debugging the login issue. Solve this issue first,
-    before you re-enable two-factor authentication.
+       **Solution:** Can't exactly tell what's wrong. Continue debugging the login issue. Solve this issue first,
+       before you re-enable two-factor authentication.
 
-2) Revert the changes from 1). Debug the security token on the two-factor authentication form page by ``var_dump``-ing
+#. Revert the changes from 1). Debug the security token on the two-factor authentication form page by ``var_dump``-ing
    it or any other suitable method.
 
    The token should be of type ``TwoFactorToken`` and the field ``authenticatedToken`` should contain an authenticated
    security token. Does that authenticated token have ``authenticated``=``false`` set?
 
-* Yes -> Your authenticated token was flagged as invalid. Follow solution below.
-* No -> Continue with 3)
+   Yes
+       Your authenticated token was flagged as invalid. Follow solution below.
+   No
+       Continue with 3)
 
-3) After completing two-factor authentication, when you end up in the unauthenticated state, check the last request few
+#. After completing two-factor authentication, when you end up in the unauthenticated state, check the last request few
    requests in the Symfony profiler.
 
    For each of the requests, go to Logs -> Debug.
@@ -120,10 +124,12 @@ Troubleshooting
    Does it say ``Cannot refresh token because user has changed`` or ``Token was deauthenticated after trying to refresh
    it``?
 
-* Yes -> Your authenticated token was flagged as invalid. Follow solution below.
-* No -> Unknown issue. Try to reach out for help by
-  :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
-  know what you've already tested.
+   Yes
+       Your authenticated token was flagged as invalid. Follow solution below.
+   No
+       Unknown issue. Try to reach out for help by
+      :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
+       know what you've already tested.
 
 **Solution to: Your authenticated token was flagged as invalid**
 
@@ -140,13 +146,13 @@ Two-factor authentication form is not shown after login
 -------------------------------------------------------
 
 Problem
-^^^^^^^
+~~~~~~~
 
 After successful login, the two-factor authentication form is not shown. Instead, you're either logged in or you see
 a different page from your application.
 
 Basic checks
-^^^^^^^^^^^^
+~~~~~~~~~~~~
 
 * Your login page belongs to the firewall, which has two-factor authentication configured.
 * The paths of login page, login check, 2fa and 2fa check are all located with the firewall's path ``pattern``.
@@ -158,7 +164,7 @@ Basic checks
     ``getGoogleAuthenticatorSecret()`` method must return a secret code.
 
 Is ``access_control`` configured properly?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To make the two-factor authentication form accessible during the two-factor authentication process, you have to
 configure a ``access_control`` rule for the 2fa routes:
@@ -183,7 +189,7 @@ two-factor authentication form path. If you have additional options, such as ``h
 matching as well.
 
 Is there something special about your security setup?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Often issues originate from a customization in the application's security setup, which is usually related to how roles
 are granted. Examples of such issue are:
@@ -210,55 +216,58 @@ The solution to this problem is usually to skip any customization for a security
    }
 
 Troubleshooting
-^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~
 
-1) Is a ``TwoFactorToken`` present after the login?
+#. Is a ``TwoFactorToken`` present after the login?
 
-* Yes -> Continue with 2)
-* No -> Continue with 3)
+   Yes
+       Continue with 2)
+   No
+       Continue with 3)
 
-2) Try accessing a page that requires the user to be authenticated. Does it redirect to the two-factor authentication
+#. Try accessing a page that requires the user to be authenticated. Does it redirect to the two-factor authentication
    form?
 
-* Yes:
+   Yes
+       **Solution:** The page you've seen after login doesn't require a fully authenticated user. Most likely that
+       path is accessible to ``IS_AUTHENTICATED_ANONYMOUSLY`` via your security ``access_control`` configuration. Either
+       change your ``access_control`` configuration or after login force-redirect to user to a page that requires full
+       authentication.
+   No
+       Unknown issue. Try to reach out for help by
+       :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
+       know what you've already tested.
 
-  * **Solution:** The page you've seen after login doesn't require a fully authenticated user. Most likely that
-    path is accessible to ``IS_AUTHENTICATED_ANONYMOUSLY`` via your security ``access_control`` configuration. Either
-    change your ``access_control`` configuration or after login force-redirect to user to a page that requires full
-    authentication.
-
-* No -> Unknown issue. Try to reach out for help by
-  :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
-  know what you've already tested.
-
-3) On login, do you reach the end (return statement) of method
+#. On login, do you reach the end (return statement) of method
    ``Scheb\TwoFactorBundle\Security\Authentication\Provider\AuthenticationProviderDecorator::authenticate()``?
 
-* Yes -> Continue with 4)
-* No -> Something is wrong with the integration of the bundle. Try to reach out for help by
-  :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
-  know what you've already tested.
+   Yes
+       Continue with 4)
+   No
+       Something is wrong with the integration of the bundle. Try to reach out for help by
+      :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
+      know what you've already tested.
 
-4) On login, is method
+#. On login, is method
    ``Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderHandler::getActiveTwoFactorProviders()`` called?
 
-* Yes, it's called -> Continue with 5)
-* No it's not called:
-
-  * **Solution:** Two-factor authentication is skipped, either because of the IP whitelist or because of a trusted
-    device token. IP whitelist is part of the bundle's configuration. Maybe you have whitelisted "localhost" or
-    "127.0.0.1"? The trusted device cookie can be removed with your browser's developer tools.
+   Yes, it's called
+       Continue with 5)
+   No it's not called
+       **Solution:** Two-factor authentication is skipped, either because of the IP whitelist or because of a trusted
+       device token. IP whitelist is part of the bundle's configuration. Maybe you have whitelisted "localhost" or
+       "127.0.0.1"? The trusted device cookie can be removed with your browser's developer tools.
 
 5) Does ``Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderHandler::getActiveTwoFactorProviders()``
    return any values?
 
-* Yes, it returns an array of strings -> Unknown issue. Try to reach out for help by
-  :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
-  know what you've already tested.
-* No, it returns an empty array:
-
-  * **Solution:** our user doesn't have an active two-factor authentication method. Either the ``is*Enabled`` method
-    returns ``false`` or an essential piece of data (e.g. Google Authenticator secret) is missing.
+   Yes, it returns an array of strings
+       Unknown issue. Try to reach out for help by
+       :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
+       know what you've already tested.
+   No, it returns an empty array
+       **Solution:** our user doesn't have an active two-factor authentication method. Either the ``is*Enabled`` method
+       returns ``false`` or an essential piece of data (e.g. Google Authenticator secret) is missing.
 
 Trusted device cookie is not set
 --------------------------------
@@ -283,8 +292,10 @@ Troubleshooting
 Have a look at the response of the HTTP call when you sent over the 2fa and the trusted parameter. Do you see a cookie
 being set (``Set-Cookie`` header)?
 
-* Yes -> Please validate the cookie's parameters. Make sure everything is fine for that cookie: the path, domain, and
-  other cookie options. Did you maybe try to `set it for a top level domain <https://github.com/scheb/two-factor-bundle/issues/242#issuecomment-538735430>`_\ ?
-* No, there's no cookie set: Unknown issue. Try to reach out for help by
-  :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
-  know what you've already tested.
+Yes
+    Please validate the cookie's parameters. Make sure everything is fine for that cookie: the path, domain, and
+    other cookie options. Did you maybe try to `set it for a top level domain <https://github.com/scheb/two-factor-bundle/issues/242#issuecomment-538735430>`_\ ?
+No, there's no cookie set
+    Unknown issue. Try to reach out for help by
+    :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
+    know what you've already tested.

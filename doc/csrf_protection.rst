@@ -26,7 +26,7 @@ Then, in the firewall's ``two_factor`` security configuration need to enable CSR
 Make sure you add the extra field for the CSRF token in the authentication form. The code from the default template will
 do the job:
 
-.. code-block:: html
+.. code-block:: html+twig
 
    {% if isCsrfProtectionEnabled %}
        <input type="hidden" name="{{ csrfParameterName }}" value="{{ csrf_token(csrfTokenId) }}">

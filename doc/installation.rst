@@ -11,7 +11,7 @@ Installation
 ------------
 
 Step 1: Install with Composer
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The bundle is organized into sub-repositories, so you can choose the exact feature set you need and keep installed
 dependencies to a minimum.
@@ -19,19 +19,19 @@ dependencies to a minimum.
 If you're using `Symfony Flex <https://flex.symfony.com/>`_, use the following command to install the bundle via
 `Composer <https://getcomposer.org>`_:
 
-.. code-block::
+.. code-block:: terminal
 
    composer require 2fa
 
 Alternatively, use the following Composer command:
 
-.. code-block::
+.. code-block:: terminal
 
    composer require scheb/2fa-bundle
 
 Optionally, install any additional packages to extend the bundle's feature according to your needs:
 
-.. code-block::
+.. code-block:: terminal
 
    composer require scheb/2fa-backup-code            # Add backup code feature
    composer require scheb/2fa-trusted-device         # Add trusted devices feature
@@ -41,9 +41,11 @@ Optionally, install any additional packages to extend the bundle's feature accor
    composer require scheb/2fa-qr-code                # Add to render QR-codes for Google Authenticator / TOTP
 
 Step 2: Enable the bundle
-^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ℹ️ If you're using Symfony Flex, this step happens automatically.
+.. note::
+
+    If you're using Symfony Flex, this step happens automatically.
 
 Enable this bundle in your ``config/bundles.php``:
 
@@ -59,8 +61,10 @@ Enable this bundle in your ``config/bundles.php``:
 Step 3: Define routes
 ^^^^^^^^^^^^^^^^^^^^^
 
-ℹ️ If you're using Symfony Flex, a default config file is created automatically. Though make sure the preconfigured paths
-are located within your firewall's ``pattern``.
+.. note::
+
+    If you're using Symfony Flex, a default config file is created automatically. Though make sure the
+    preconfigured paths are located within your firewall's ``pattern``.
 
 In ``config/routes/scheb_2fa.yaml`` (create the file if it doesn't exist) you need to add two routes:
 
@@ -87,7 +91,7 @@ If you have multiple firewalls with two-factor authentication, each one needs it
 check routes that must be located within the associated firewall's path ``pattern``.
 
 Step 4: Configure the firewall
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Enable two-factor authentication **per firewall** and configure ``access_control`` for the 2fa routes:
 
@@ -114,7 +118,7 @@ Enable two-factor authentication **per firewall** and configure ``access_control
 More per-firewall configuration options can be found in the :doc:`configuration reference </configuration>`.
 
 Step 5: Configure the security tokens
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Your firewall may offer different ways how to login. By default (without any configuration), the bundle is listening
 only to these tokens:
@@ -137,16 +141,16 @@ If you want to support two-factor authentication with another login method, you 
            - Acme\AuthenticationBundle\Token\CustomAuthenticationToken
 
 Step 6: Enable two-factor authentication methods
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you have installed any of the two-factor authentication methods provided as sub-packages, you have to enable these
 separately. Read how to do this for:
 
-* :doc:``scheb/2fa-totp`` `TOTP authentication </providers/totp>`
-* :doc:``scheb/2fa-google-authenticator`` `Google Authenticator </providers/google>`
-* :doc:``scheb/2fa-email`` `Code-via-Email authentication </providers/email>`
+* :doc:`scheb/2fa-totp TOTP authentication </providers/totp>`
+* :doc:`scheb/2fa-google-authenticator Google Authenticator </providers/google>`
+* :doc:`scheb/2fa-email Code-via-Email authentication </providers/email>`
 
 Step 7: Detailed configuration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You probably want to configure some details of the bundle. See the :doc:`all configuration options </configuration>`.

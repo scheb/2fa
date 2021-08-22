@@ -28,13 +28,13 @@ least similar, as long as it lets you configure a custom success handler.
 
 You need to implement 4 classes:
 
-1) A custom success handler for the authentication mechanism
-2) A custom "two-factor authentication required" handler for the two-factor authentication
-3) A custom success handler for the two-factor authentication
-4) A custom failure handler for the two-factor authentication
+#. A custom success handler for the authentication mechanism
+#. A custom "two-factor authentication required" handler for the two-factor authentication
+#. A custom success handler for the two-factor authentication
+#. A custom failure handler for the two-factor authentication
 
 Configuration
-^^^^^^^^^^^^^
+~~~~~~~~~~~~~
 
 Please make sure the following configuration options are set on your firewall:
 
@@ -50,7 +50,7 @@ Please make sure the following configuration options are set on your firewall:
                    prepare_on_access_denied: true
 
 1) Response on login
-^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~
 
 This first response is returned after the user logged in. Without two-factor authentication, it would either return
 a "login success" or "login failure" response. With two-factor authentication, you eventually need to return a third
@@ -100,7 +100,7 @@ Register it as a service and configure it as a custom ``success_handler`` for th
                    success_handler: your_api_success_handler
 
 2) Response to require two-factor authentication
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You need a response that is returned when the user requests a path, but it is not accessible (yet), because the user has
 to complete two-factor authentication first. This could be the same as your "access denied" response.
@@ -141,7 +141,7 @@ Register it as a service and configure it as the ``required_handler`` of the ``t
                    authentication_required_handler: your_api_2fa_required_handler
 
 3) Response when two-factor authentication was successful
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You need a response that is returned when two-factor authentication was completed successfully and the user is now
 fully authenticated. Implement another success handler for it:
@@ -179,7 +179,7 @@ Register it as a service and configure it as the ``success_handler`` of the ``tw
                    success_handler: your_api_2fa_success_handler
 
 4) Response when two-factor authentication failed
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You need a response that is returned when two-factor authentication was tried, but authentication failed for some
 reason. Implement a failure handler for it:
@@ -220,14 +220,14 @@ Sending the 2fa code
 --------------------
 
 POST data
-^^^^^^^^^
+~~~~~~~~~
 
 In the API use-case, you'd usually send the two-factor authentication code to the "2fa check" path that you have
 configured in your firewall settings. The code is sent over the same way as if you'd send it from the 2fa form - a
 ``POST`` request with post data in the payload.
 
 JSON data
-^^^^^^^^^
+~~~~~~~~~
 
 To better integrate with JSON-style APIs, the bundle also accepts ``POST`` requests with a JSON payload. Make sure you
 send a JSON-encoded payload with a JSON content type, such as ``application/json``.

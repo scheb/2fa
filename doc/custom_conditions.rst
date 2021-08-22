@@ -29,7 +29,7 @@ Register it as a service and configure the service name:
        two_factor_condition: acme.custom_two_factor_condition
 
 Bypassing Two-Factor Authentication
-===================================
+-----------------------------------
 
 ℹ️ This approach only works when you're using Symfony's authenticator-based security system.
 

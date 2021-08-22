@@ -44,7 +44,6 @@ challenged to enter a valid two-factor authentication code. Only when that code 
 granted.
 
 .. image:: authentication-process.png
-   :target: authentication-process.png
    :alt: Authentication process
 
 To represent the state between login and a valid two-factor code being entered, the bundle introduces the role-like

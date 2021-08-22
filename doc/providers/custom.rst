@@ -20,7 +20,7 @@ You have to create a service, which implements the
 ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface`` interface. It requires these methods:
 
 beginAuthentication
-^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: php
 
@@ -41,7 +41,7 @@ This method is where you should to the preparation work for your two-factor prov
 generating a code and sending it to the user.
 
 validateAuthenticationCode
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: php
 
@@ -51,7 +51,7 @@ This method is responsible for validating the authentication code entered by the
 correct or ``false`` when it was wrong.
 
 getFormRenderer
-^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~
 
 .. code-block:: php
 
@@ -76,25 +76,25 @@ Now you have to register your two-factor provider class as a service.
 A tag named ``scheb_two_factor.provider`` will make your provider available to the bundle. The tag attribute ``alias``
 has to be set and must be an application-wide unique identifier for the authentication provider.
 
-**Please note**: The aliases ``google``, ``totp`` and ``email`` are reserved by the authentication methods that are
-included in the bundle.
+.. note::
 
-**YAML Configuration**:
+    The aliases ``google``, ``totp`` and ``email`` are reserved by the authentication methods that are
+    included in the bundle.
 
-.. code-block:: yaml
+.. configuration-block::
 
-   # config/services.yaml
-   services:
-       # ...
-       acme.custom_two_factor_provider:
-           class: Acme\Demo\MyTwoFactorProvider
-           tags:
-               - { name: scheb_two_factor.provider, alias: acme_two_factor_provider }
+    .. code-block:: yaml
 
-**XML Configuration (alternatively)**:
+       # config/services.yaml
+       services:
+           # ...
+           acme.custom_two_factor_provider:
+               class: Acme\Demo\MyTwoFactorProvider
+               tags:
+                   - { name: scheb_two_factor.provider, alias: acme_two_factor_provider }
 
-.. code-block:: xml
+    .. code-block:: xml
 
-   <service id="acme.custom_two_factor_provider" class="Acme\Demo\MyTwoFactorProvider">
-       <tag name="scheb_two_factor.provider" alias="acme_two_factor_provider" />
-   </service>
+       <service id="acme.custom_two_factor_provider" class="Acme\Demo\MyTwoFactorProvider">
+           <tag name="scheb_two_factor.provider" alias="acme_two_factor_provider" />
+       </service>
