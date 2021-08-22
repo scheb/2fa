@@ -6,7 +6,7 @@ Prerequisites
 
 To make use of this feature, you have to install ``scheb/2fa-backup-code``.
 
-.. code-block:: bash
+.. code-block:: terminal
 
    composer require scheb/2fa-backup-code
 

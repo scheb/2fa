@@ -195,7 +195,7 @@ Custom Form Rendering
 
 There are certain cases when it's not enough to just change the template. For example, you're using two-factor
 authentication on multiple firewalls and you need to
-:doc:`render the form differently for each firewall </../firewall_template>`. In such a case you can implement a form
+:doc:`render the form differently for each firewall </firewall_template>`. In such a case you can implement a form
 renderer to fully customize the rendering logic.
 
 Create a class implementing ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface``:

@@ -13,8 +13,10 @@ Several parameters can be customized:
 * The period (default = ``30`` seconds)
 * Custom parameters can be added
 
-ℹ️ Use the default values to configure TOTP compatible with Google Authenticator (6 digits, sha1 algorithm, 30 seconds
-period).
+.. tip::
+
+    Use the default values to configure TOTP compatible with Google Authenticator (6 digits, sha1 algorithm, 30 seconds
+    period).
 
 How authentication works
 ------------------------
@@ -50,8 +52,10 @@ Your user entity has to implement ``Scheb\TwoFactorBundle\Model\Totp\TwoFactorIn
 user, generate a secret and define the TOTP configuration. TOTP let's you configure the number of digits, the algorithm
 and the period of the temporary codes.
 
-**We warned, custom configurations will not be compatible with the defaults of Google Authenticator app any more. You
-will have to use another application (e.g. FreeOTP on Android).**
+.. caution::
+
+    We warned, custom configurations will not be compatible with the defaults of Google Authenticator app any more. You
+    will have to use another application (e.g. FreeOTP on Android).
 
 .. code-block:: php
 
@@ -138,7 +142,7 @@ Custom Form Rendering
 
 There are certain cases when it's not enough to just change the template. For example, you're using two-factor
 authentication on multiple firewalls and you need to
-:doc:`render the form differently for each firewall </../firewall_template>`. In such a case you can implement a form
+:doc:`render the form differently for each firewall </firewall_template>`. In such a case you can implement a form
 renderer to fully customize the rendering logic.
 
 Create a class implementing ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface``:
