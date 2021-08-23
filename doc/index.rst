@@ -1,10 +1,13 @@
 SchebTwoFactorBundle
 ====================
 
-This bundle provides **two-factor authentication for your Symfony application**.
+This bundle provides **two-factor authentication (2FA) for Symfony applications**.
 
-Index
------
+.. image:: 2fa-logo.svg
+   :alt: SchebTwoFactorBundle Logo
+
+Documentation Index
+-------------------
 
 * :doc:`Installation </installation>`
 * :doc:`Configuration Reference </configuration>`
@@ -15,7 +18,8 @@ Index
 * :doc:`Events </events>`
 * :doc:`Troubleshooting (common issues) </troubleshooting>`
 
-**How-to's:**
+How-to's
+~~~~~~~~
 
 * :doc:`How to create a custom two-factor authenticator </providers/custom>`
 * :doc:`How to handle multiple activated authentication methods </multi_authentication>`
@@ -25,7 +29,7 @@ Index
 * :doc:`How to use a different template per firewall </firewall_template>`
 
 Two-Factor Authentication Methods
----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The bundle supports the following authentication methods out of the box:
 
@@ -33,19 +37,33 @@ The bundle supports the following authentication methods out of the box:
 * :doc:`TOTP Authenticator </providers/totp>`
 * :doc:`Code-via-Email authentication </providers/email>`
 
-See :doc:`Providers </providers/index>` for more information about custom or third-party provider.
+The Authentication Process with Two-Factor Authentication
+---------------------------------------------------------
 
-The Authentication Process
---------------------------
+**What changes when you add two-factor authentication to your application?**
 
-The bundle hocks into security layer and listens for authentication events. When a login happens and the user has
-two-factor authentication enabled, access and privileges are temporary withhold from the user. Instead, the user is
-challenged to enter a valid two-factor authentication code. Only when that code is entered correctly, the roles are
-granted.
+The bundle hocks into security layer and listens for authentication events. When a user login appears and the user has
+two-factor authentication enabled, access and privileges are temporarily withheld, putting the authentication status
+into an intermediate state. The user is challenged to enter a valid two-factor authentication code. Only when that code
+is entered correctly, the associated roles are granted.
 
 .. image:: authentication-process.png
    :alt: Authentication process
 
 To represent the state between login and a valid two-factor code being entered, the bundle introduces the role-like
 attribute ``IS_AUTHENTICATED_2FA_IN_PROGRESS``, which can be used in ``is_granted()`` calls. ``IS_AUTHENTICATED_FULLY``
-is, just like roles, withhold until the two-factor authentication step has been completed successfully.
+is - just like roles - withheld until the two-factor authentication step has been completed successfully.
+
+Contributing
+------------
+Want to contribute to this project? See
+`CONTRIBUTING.md <https://github.com/scheb/2fa/blob/5.x/CONTRIBUTING.md>`_ in the repository.
+
+Security
+--------
+For information about the security policy and know security issues, see
+`SECURITY.md <https://github.com/scheb/2fa/blob/5.x/SECURITY.md>`_ in the repository.
+
+License
+-------
+**SchebTwoFactorBundle** is available under the `MIT license <https://github.com/scheb/2fa/blob/5.x/LICENSE>`_.

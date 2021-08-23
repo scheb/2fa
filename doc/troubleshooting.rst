@@ -13,7 +13,7 @@ generate a different code. Therefore:
 #. Most common problem: Make sure the server time and the time on your device are in sync with the actual current time
 #. Make sure the secret used in your device matches the secret configured for the account on the server
 #. If you're using TOTP, make sure the app is actually supporting the specific TOTP configuration you're using. **The
-   Google Authenticator app supports only one specific TOTP configuration (6-digit code, 30sec window, sha1 algorithm)**
+   Google Authenticator app supports only one specific TOTP configuration** (6-digit code, 30sec window, sha1 algorithm)
 
 The generated authentication code has a time window in which it is valid (30 seconds in Google Authenticator, for TOTP
 it depends on your configuration). The bigger the time difference between server and device, the smaller the time
@@ -93,6 +93,7 @@ Troubleshooting
 
    Yes, it works
        Continue with 2)
+
    No, it does not work
        Your login process is broken.
 
@@ -107,6 +108,7 @@ Troubleshooting
 
    Yes
        Your authenticated token was flagged as invalid. Follow solution below.
+
    No
        Continue with 3)
 
@@ -115,15 +117,15 @@ Troubleshooting
 
    For each of the requests, go to Logs -> Debug.
 
-   Does it say ``Cannot refresh token because user has changed`` or ``Token was deauthenticated after trying to refresh
-   it``?
+   Does it say ``Cannot refresh token because user has changed`` or ``Token was deauthenticated after trying to refresh it``?
 
    Yes
        Your authenticated token was flagged as invalid. Follow solution below.
+
    No
        Unknown issue. Try to reach out for help by
-      :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
-       know what you've already tested.
+       :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and
+       let us know what you've already tested.
 
 **Solution to: Your authenticated token was flagged as invalid**
 
@@ -216,6 +218,7 @@ Troubleshooting
 
    Yes
        Continue with 2)
+
    No
        Continue with 3)
 
@@ -227,6 +230,7 @@ Troubleshooting
        path is accessible to ``IS_AUTHENTICATED_ANONYMOUSLY`` via your security ``access_control`` configuration. Either
        change your ``access_control`` configuration or after login force-redirect to user to a page that requires full
        authentication.
+
    No
        Unknown issue. Try to reach out for help by
        :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
@@ -237,6 +241,7 @@ Troubleshooting
 
    Yes
        Continue with 4)
+
    No
        Something is wrong with the integration of the bundle. Try to reach out for help by
       :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
@@ -247,18 +252,20 @@ Troubleshooting
 
    Yes, it's called
        Continue with 5)
+
    No it's not called
        **Solution:** Two-factor authentication is skipped, either because of the IP whitelist or because of a trusted
        device token. IP whitelist is part of the bundle's configuration. Maybe you have whitelisted "localhost" or
        "127.0.0.1"? The trusted device cookie can be removed with your browser's developer tools.
 
-5) Does ``Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderHandler::getActiveTwoFactorProviders()``
+#. Does ``Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderHandler::getActiveTwoFactorProviders()``
    return any values?
 
    Yes, it returns an array of strings
        Unknown issue. Try to reach out for help by
        :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
        know what you've already tested.
+
    No, it returns an empty array
        **Solution:** our user doesn't have an active two-factor authentication method. Either the ``is*Enabled`` method
        returns ``false`` or an essential piece of data (e.g. Google Authenticator secret) is missing.
@@ -289,6 +296,7 @@ being set (``Set-Cookie`` header)?
 Yes
     Please validate the cookie's parameters. Make sure everything is fine for that cookie: the path, domain, and
     other cookie options. Did you maybe try to `set it for a top level domain <https://github.com/scheb/two-factor-bundle/issues/242#issuecomment-538735430>`_\ ?
+
 No, there's no cookie set
     Unknown issue. Try to reach out for help by
     :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us

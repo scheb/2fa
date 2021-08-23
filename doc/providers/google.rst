@@ -214,5 +214,7 @@ controller to display the image in your application.
        }
    }
 
-**Security note:** Keep the QR code content within your application. Render the image yourself. Do not pass the content
-to an external service, because this is exposing the secret code to that service.
+.. caution::
+
+    **Security note:** Keep the QR code content within your application. Render the image yourself. Do not pass the
+    content to an external service, because this is exposing the secret code to that service.

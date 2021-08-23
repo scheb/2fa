@@ -3,6 +3,9 @@ Configuration
 
 This is an overview of all the configuration options available:
 
+Bundle Configuration
+--------------------
+
 .. code-block:: yaml
 
    # config/packages/scheb_2fa.yaml
@@ -95,6 +98,9 @@ This is an overview of all the configuration options available:
        # Must implement Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionInterface
        two_factor_condition: acme.custom_two_factor_condition
 
+Firewall Configuration
+----------------------
+
 .. code-block:: yaml
 
    # config/packages/security.yaml
@@ -140,6 +146,9 @@ This is an overview of all the configuration options available:
                    # a user provider. You're forced to configure this node, although it doesn't have any effect on the
                    # TwoFactorBundle. So set this to any of your user providers, it doesn't matter which one.
                    provider: any_user_provider
+
+Two-Factor Authentication Provider Configuration
+------------------------------------------------
 
 For detailed information on the authentication methods see the individual documentation:
 

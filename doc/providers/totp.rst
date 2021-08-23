@@ -54,7 +54,7 @@ and the period of the temporary codes.
 
 .. caution::
 
-    We warned, custom configurations will not be compatible with the defaults of Google Authenticator app any more. You
+    Be warned, custom configurations will not be compatible with the defaults of Google Authenticator app any more. You
     will have to use another application (e.g. FreeOTP on Android).
 
 .. code-block:: php
@@ -232,5 +232,7 @@ controller to display the image in your application.
        }
    }
 
-**Security note:** Keep the QR code content within your application. Render the image yourself. Do not pass the content
-to an external service, because this is exposing the secret code to that service.
+.. caution::
+
+    **Security note:** Keep the QR code content within your application. Render the image yourself. Do not pass the
+    content to an external service, because this is exposing the secret code to that service.

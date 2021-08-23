@@ -4,6 +4,9 @@ Installation
 Prerequisites
 -------------
 
+You're currently looking at the documentation of **SchebTwoFactorBundle version 5**. This bundle version is
+**compatible with Symfony 4.4 or Symfony 5.x**.
+
 If you're using anything other than Doctrine ORM to manage the user entity you will have to implement a
 :doc:`persister service </persister>`.
 
@@ -146,9 +149,9 @@ Step 6: Enable two-factor authentication methods
 If you have installed any of the two-factor authentication methods provided as sub-packages, you have to enable these
 separately. Read how to do this for:
 
-* :doc:`scheb/2fa-totp TOTP authentication </providers/totp>`
-* :doc:`scheb/2fa-google-authenticator Google Authenticator </providers/google>`
-* :doc:`scheb/2fa-email Code-via-Email authentication </providers/email>`
+* ``scheb/2fa-totp`` :doc:`TOTP authentication </providers/totp>`
+* ``scheb/2fa-google-authenticator`` :doc:`Google Authenticator </providers/google>`
+* ``scheb/2fa-email`` :doc:`Code-via-Email authentication </providers/email>`
 
 Step 7: Detailed configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

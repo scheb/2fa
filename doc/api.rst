@@ -22,9 +22,11 @@ section in the Symfony guide.
 Setup
 -----
 
-ℹ️ For simplicity of this guide, it is assumed that you're building a JSON API and you're using the ``json_login``
-authentication mechanism, which comes with Symfony. For any other authentication mechanism it should work the same or at
-least similar, as long as it lets you configure a custom success handler.
+.. note::
+
+    For simplicity, this guide assumes that you're building a JSON API and you're using the ``json_login``
+    authentication mechanism, which comes with Symfony. For any other authentication mechanism it should work the same
+    or at least similar, as long as it lets you configure a custom success handler.
 
 You need to implement 4 classes:
 
