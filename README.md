@@ -46,11 +46,12 @@ Two-factor authentication methods:
 
 Installation
 -------------
-Follow the [installation instructions](doc/installation.rst).
+Follow the [installation instructions](https://symfony.com/bundles/SchebTwoFactorBundle/5.x/installation.html).
 
 Documentation
 -------------
-Detailed documentation of all features can be found in the [doc](doc/index.rst) directory.
+Detailed documentation of all features can be found on the
+[Symfony Bundles Documentation](https://symfony.com/bundles/SchebTwoFactorBundle/5.x/index.html) website.
 
 Demo
 ----
