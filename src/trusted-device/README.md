@@ -19,11 +19,12 @@ This repository is a sub-repository of [scheb/2fa](https://github.com/scheb/2fa)
 
 Installation
 ------------
-Please follow the [installation instructions in the main repository](https://github.com/scheb/2fa/blob/5.x/doc/installation.rst).
+Please follow the [bundle's installation instructions](https://symfony.com/bundles/SchebTwoFactorBundle/5.x/installation.html).
 
 Documentation
 -------------
-Documentation can be found in the [main repository](https://github.com/scheb/2fa/blob/5.x/doc/index.rst).
+Documentation can be found on the
+[Symfony Bundles Documentation](https://symfony.com/bundles/SchebTwoFactorBundle/5.x/index.html) website.
 
 License
 -------
