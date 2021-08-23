@@ -14,7 +14,8 @@ This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki
 
 <p align="center"><img alt="Logo" src="doc/2fa-logo.svg" /></p>
 
-ℹ️ The repository contains bundle versions ≥ 5, versions 1-4 are located in [scheb/two-factor-bundle](https://github.com/scheb/two-factor-bundle).
+ℹ️ The repository contains bundle versions ≥ 5, which are compatible with Symfony 4.4 or later. The older (unsupported)
+   versions are located in the [scheb/two-factor-bundle](https://github.com/scheb/two-factor-bundle) repository.
 
 ---
 
