@@ -204,7 +204,6 @@ The solution to this problem is usually to skip any customization for a security
 
 .. code-block:: php
 
-   <?php
    use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 
    if (!($token instanceof TwoFactorTokenInterface)) {

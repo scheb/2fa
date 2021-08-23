@@ -104,8 +104,6 @@ decision logic you need.
 
 .. code-block:: php
 
-   <?php
-
    public function canSetTrustedDevice($user, Request $request, string $firewallName): bool
    {
        return true; // Always allow trusted device feature

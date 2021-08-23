@@ -54,8 +54,6 @@ Enable this bundle in your ``config/bundles.php``:
 
 .. code-block:: php
 
-   <?php
-
    return [
        // ...
        Scheb\TwoFactorBundle\SchebTwoFactorBundle::class => ['all' => true],
