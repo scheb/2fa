@@ -260,59 +260,6 @@ EOF;
     /**
      * @test
      */
-    public function create_createForFirewall_createServices(): void
-    {
-        $this->expectDependingServicesCreated();
-        $this->expectCsrfManagerIdRetrieved();
-
-        $this->callCreate();
-    }
-
-    /**
-     * @test
-     */
-    public function create_createForFirewall_returnServiceIds(): void
-    {
-        $this->stubServicesFactory();
-        $returnValue = $this->callCreate();
-        $this->assertEquals('security.authentication.provider.two_factor.firewallName', $returnValue[0]);
-        $this->assertEquals('security.authentication.listener.two_factor.firewallName', $returnValue[1]);
-        $this->assertEquals(self::DEFAULT_ENTRY_POINT, $returnValue[2]);
-    }
-
-    /**
-     * @test
-     */
-    public function create_createForFirewall_createAuthenticationProviderDefinition(): void
-    {
-        $this->stubServicesFactory();
-        $this->callCreate();
-
-        $this->assertTrue($this->container->hasDefinition('security.authentication.provider.two_factor.firewallName'));
-        $definition = $this->container->getDefinition('security.authentication.provider.two_factor.firewallName');
-        $this->assertEquals(new Reference(self::TWO_FACTOR_FIREWALL_CONFIG_ID), $definition->getArgument(0));
-    }
-
-    /**
-     * @test
-     */
-    public function create_createForFirewall_createAuthenticationListenerDefinition(): void
-    {
-        $this->stubServicesFactory();
-        $this->callCreate();
-
-        $this->assertTrue($this->container->hasDefinition('security.authentication.listener.two_factor.firewallName'));
-        $definition = $this->container->getDefinition('security.authentication.listener.two_factor.firewallName');
-        $this->assertEquals(new Reference(self::TWO_FACTOR_FIREWALL_CONFIG_ID), $definition->getArgument(2));
-        $this->assertEquals(new Reference(self::SUCCESS_HANDLER_ID), (string) $definition->getArgument(3));
-        $this->assertEquals(new Reference(self::FAILURE_HANDLER_ID), (string) $definition->getArgument(4));
-        $this->assertEquals(new Reference(self::AUTH_REQUIRED_HANDLER_ID), (string) $definition->getArgument(5));
-        $this->assertEquals(new Reference(self::CSRF_TOKEN_MANAGER_ID), (string) $definition->getArgument(6));
-    }
-
-    /**
-     * @test
-     */
     public function createAuthenticator_createForFirewall_createServices(): void
     {
         $this->expectDependingServicesCreated();

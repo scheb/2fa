@@ -103,7 +103,7 @@ class ExceptionListenerTest extends TestCase
         $token = $this->createMock(TwoFactorTokenInterface::class);
         $token
             ->expects($this->any())
-            ->method('getProviderKey')
+            ->method('getFirewallName')
             ->willReturn($firewallName);
 
         return $token;

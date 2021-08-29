@@ -9,7 +9,6 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\AccessMapInterface;
-use Symfony\Component\Security\Http\Firewall\AccessListener;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
 
@@ -71,8 +70,8 @@ class TwoFactorAccessDecider
             return true;
         }
 
-        // Compatibility for Symfony <= 5.1
-        // From Symfony 5.2 on, the bundle's TwoFactorAccessListener is injected after the LogoutListener, so letting
+        // Compatibility for Symfony < 6.0
+        // From Symfony 6.0 on, the bundle's TwoFactorAccessListener is injected after the LogoutListener, so letting
         // the logout route pass is no longer necessary.
         $logoutPath = $this->removeQueryParameters(
             $this->makeRelativeToBaseUrl($this->logoutUrlGenerator->getLogoutPath(), $request)
@@ -91,17 +90,14 @@ class TwoFactorAccessDecider
             return false;
         }
 
-        if ([AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY] === $attributes) {
+        if ([AuthenticatedVoter::PUBLIC_ACCESS] === $attributes) {
             return true;
         }
 
-        // Compatibility for Symfony 5.1
-        if (\defined(AccessListener::class.'::PUBLIC_ACCESS') && [AccessListener::PUBLIC_ACCESS] === $attributes) {
-            return true;
-        }
-
-        // Compatibility for Symfony 5.2+
-        if (\defined(AuthenticatedVoter::class.'::PUBLIC_ACCESS') && [AuthenticatedVoter::PUBLIC_ACCESS] === $attributes) {
+        // Compatibility for Symfony < 6.0
+        if (\defined(AuthenticatedVoter::class.'::IS_AUTHENTICATED_ANONYMOUSLY')
+            && [AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY] === $attributes
+        ) {
             return true;
         }
 
@@ -116,7 +112,7 @@ class TwoFactorAccessDecider
         }
 
         $pathInfo = substr($logoutPath, \strlen($baseUrl));
-        if (false === $pathInfo || '' === $pathInfo) {
+        if ('' === $pathInfo) {
             return '/';
         }
 

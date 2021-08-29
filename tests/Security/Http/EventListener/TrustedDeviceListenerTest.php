@@ -14,7 +14,7 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
 class TrustedDeviceListenerTest extends TestCase
@@ -49,6 +49,10 @@ class TrustedDeviceListenerTest extends TestCase
             ->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->request);
+        $this->loginSuccessEvent
+            ->expects($this->any())
+            ->method('getFirewallName')
+            ->willReturn(self::FIREWALL_NAME);
 
         $this->trustedDeviceManager = $this->createMock(TrustedDeviceManagerInterface::class);
         $this->trustedDeviceListener = new TrustedDeviceListener($this->trustedDeviceManager);
@@ -62,7 +66,7 @@ class TrustedDeviceListenerTest extends TestCase
             ->willReturn($authenticatedToken);
     }
 
-    private function stubPassport(PassportInterface $passport): void
+    private function stubPassport(Passport $passport): void
     {
         $this->loginSuccessEvent
             ->expects($this->any())
@@ -103,7 +107,7 @@ class TrustedDeviceListenerTest extends TestCase
      */
     public function onSuccessfulLogin_noTwoFactorPassport(): void
     {
-        $passport = $this->createMock(PassportInterface::class);
+        $passport = $this->createMock(Passport::class);
         $authenticatedToken = $this->createMock(TokenInterface::class);
 
         $this->stubAuthenticatedToken($authenticatedToken);
@@ -148,11 +152,6 @@ class TrustedDeviceListenerTest extends TestCase
         $this->stubPassport($passport);
         $this->stubPassportHasTrustedDeviceBadge($passport);
 
-        $passport
-            ->expects($this->any())
-            ->method('getFirewallName')
-            ->willReturn(self::FIREWALL_NAME);
-
         $authenticatedToken
             ->expects($this->any())
             ->method('getUser')
@@ -183,11 +182,6 @@ class TrustedDeviceListenerTest extends TestCase
         $this->stubAuthenticatedToken($authenticatedToken);
         $this->stubPassport($passport);
         $this->stubPassportHasTrustedDeviceBadge($passport);
-
-        $passport
-            ->expects($this->any())
-            ->method('getFirewallName')
-            ->willReturn(self::FIREWALL_NAME);
 
         $authenticatedToken
             ->expects($this->any())

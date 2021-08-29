@@ -93,7 +93,6 @@ class AuthenticationContextTest extends TestCase
         return [
             [$user, $user],
             [null, null],
-            ['anon.', null],
         ];
     }
 

@@ -43,7 +43,7 @@ class TrustedDeviceListener implements EventSubscriberInterface
         }
 
         $user = $loginSuccessEvent->getAuthenticatedToken()->getUser();
-        $firewallName = $passport->getFirewallName();
+        $firewallName = $loginSuccessEvent->getFirewallName();
 
         if ($this->trustedDeviceManager->canSetTrustedDevice($user, $loginSuccessEvent->getRequest(), $firewallName)) {
             $this->trustedDeviceManager->addTrustedDevice($user, $firewallName);

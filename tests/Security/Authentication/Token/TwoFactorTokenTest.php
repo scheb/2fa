@@ -9,6 +9,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactor
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class TwoFactorTokenTest extends TestCase
 {
@@ -25,8 +26,15 @@ class TwoFactorTokenTest extends TestCase
             'provider1',
             'provider2',
         ];
+
+        $authenticatedToken = $this->createMock(TokenInterface::class);
+        $authenticatedToken
+            ->expects($this->any())
+            ->method('getUser')
+            ->willReturn($this->createMock(UserInterface::class));
+
         $this->twoFactorToken = new TwoFactorToken(
-            $this->createMock(TokenInterface::class),
+            $authenticatedToken,
             null,
             self::FIREWALL_NAME,
             $twoFactorProviders
@@ -165,7 +173,7 @@ class TwoFactorTokenTest extends TestCase
      */
     public function serialize_tokenGiven_unserializeIdenticalToken(): void
     {
-        $innerToken = new UsernamePasswordToken('username', 'credentials', self::FIREWALL_NAME, ['ROLE']);
+        $innerToken = new UsernamePasswordToken($this->createMock(UserInterface::class), self::FIREWALL_NAME, ['ROLE']);
         $twoFactorToken = new TwoFactorToken($innerToken, 'twoFactorCode', self::FIREWALL_NAME, ['2faProvider']);
         $twoFactorToken->setTwoFactorProviderPrepared('2faProvider');
 

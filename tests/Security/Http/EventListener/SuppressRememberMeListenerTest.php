@@ -10,7 +10,7 @@ use Scheb\TwoFactorBundle\Security\Http\EventListener\SuppressRememberMeListener
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
 class SuppressRememberMeListenerTest extends TestCase
@@ -41,11 +41,11 @@ class SuppressRememberMeListenerTest extends TestCase
     }
 
     /**
-     * @return MockObject|PassportInterface
+     * @return MockObject|Passport
      */
     private function createPassportWithRememberMeBadge(?RememberMeBadge $badge): MockObject
     {
-        $passport = $this->createMock(PassportInterface::class);
+        $passport = $this->createMock(Passport::class);
         $passport
             ->expects($this->any())
             ->method('hasBadge')

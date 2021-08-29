@@ -13,7 +13,6 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\AccessMapInterface;
-use Symfony\Component\Security\Http\Firewall\AccessListener;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
 
@@ -121,16 +120,11 @@ class TwoFactorAccessDeciderTest extends TestCase
 
     public function providePublicAccessAttributes(): iterable
     {
-        yield [AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY];
+        yield [AuthenticatedVoter::PUBLIC_ACCESS];
 
-        // Compatibility with Symfony 5.1
-        if (\defined(AccessListener::class.'::PUBLIC_ACCESS')) {
-            yield [AccessListener::PUBLIC_ACCESS];
-        }
-
-        // Compatibility for Symfony 5.2+
-        if (\defined(AuthenticatedVoter::class.'::PUBLIC_ACCESS')) {
-            yield [AuthenticatedVoter::PUBLIC_ACCESS];
+        // Compatibility with Symfony < 6.0
+        if (\defined(AuthenticatedVoter::class.'::IS_AUTHENTICATED_ANONYMOUSLY')) {
+            yield [AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY];
         }
     }
 

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\Utils;
 
 use PHPUnit\Framework\TestCase;
-use Scheb\TwoFactorBundle\Security\Http\Utils\BadRequestException;
 use Scheb\TwoFactorBundle\Security\Http\Utils\RequestDataReader;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 
 class RequestDataReaderTest extends TestCase

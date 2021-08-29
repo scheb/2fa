@@ -30,10 +30,17 @@ class TrustedDeviceManagerTest extends TestCase
 
     private function stubUsername(MockObject $userMock, string $username): void
     {
-        $userMock
-            ->expects($this->any())
-            ->method('getUsername')
-            ->willReturn($username);
+        if (method_exists(UserInterface::class, 'getUserIdentifier')) {
+            $userMock
+                ->expects($this->any())
+                ->method('getUserIdentifier')
+                ->willReturn($username);
+        } else {
+            $userMock
+                ->expects($this->any())
+                ->method('getUsername')
+                ->willReturn($username);
+        }
     }
 
     private function stubTrustedTokenVersion(MockObject $user, int $version): void

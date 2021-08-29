@@ -9,6 +9,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticatedTokenHandler;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class AuthenticatedTokenHandlerTest extends AbstractAuthenticationHandlerTestCase
 {
@@ -30,7 +31,7 @@ class AuthenticatedTokenHandlerTest extends AbstractAuthenticationHandlerTestCas
 
     private function createSupportedSecurityToken(): UsernamePasswordToken
     {
-        return new UsernamePasswordToken('user', [], 'firewallName');
+        return new UsernamePasswordToken($this->createMock(UserInterface::class), 'firewallName');
     }
 
     /**

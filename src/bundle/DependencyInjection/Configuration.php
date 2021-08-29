@@ -13,7 +13,6 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
 
 /**
@@ -37,7 +36,6 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('security_tokens')
                     ->defaultValue([
                         UsernamePasswordToken::class,
-                        PostAuthenticationGuardToken::class,
                         PostAuthenticationToken::class,
                     ])
                     ->prototype('scalar')->end()

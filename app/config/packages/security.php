@@ -7,6 +7,7 @@ use App\Kernel;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 $config = [
+    'enable_authenticator_manager' => true,
     'providers' => [
         'our_db_provider' => [
             'entity' => [
@@ -15,15 +16,13 @@ $config = [
             ],
         ],
     ],
-    'encoders' => [
-        User::class => ['algorithm' => 'sha1'],
-    ],
     'firewalls' => [
         'dev' => [
             'pattern' => '^/(_(profiler|wdt)|css|images|js)/',
             'security' => false,
         ],
         'main' => [
+            'lazy' => true,
             'pattern' => '^/',
             'provider' => 'our_db_provider',
             'form_login' => [
@@ -54,36 +53,26 @@ $config = [
         ],
     ],
     'access_control' => [
-        ['path' => '^/login', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY'],
-        ['path' => '^/alwaysAccessible', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY'],
+        ['path' => '^/login', 'role' => 'PUBLIC_ACCESS'],
+        ['path' => '^/alwaysAccessible', 'role' => 'PUBLIC_ACCESS'],
         ['path' => '^/2fa', 'role' => 'IS_AUTHENTICATED_2FA_IN_PROGRESS'],
         ['path' => '^/members', 'role' => ['ROLE_USER', 'ROLE_ADMIN']],
     ],
 ];
 
-if ('authenticators' === $configVariant) {
-    // AUTHENTICATORS config
+// Symfony 5.4
+if (Kernel::VERSION_ID < 60000) {
     $config = array_replace_recursive($config, [
-        'enable_authenticator_manager' => true,
-        'firewalls' => [
-            'main' => [
-                'lazy' => true,
-            ],
+        'encoders' => [
+            User::class => ['algorithm' => 'sha1'],
         ],
     ]);
-} elseif ('default' === $configVariant) {
-    // DEFAULT config
-    // Make the firewall lazy and anonymous
-    if (Kernel::VERSION_ID < 50100) {
-        // Compatibility for Symfony < 5.1
-        $config['firewalls']['main']['anonymous'] = 'lazy';
-    } else {
-        // Compatibility for Symfony >= 5.1
-        $config['firewalls']['main']['lazy'] = true;
-        $config['firewalls']['main']['anonymous'] = null;
-    }
 } else {
-    throw new \LogicException(sprintf('Invalid config variant "%s" requested.', $configVariant));
+    $config = array_replace_recursive($config, [
+        'password_hashers' => [
+            User::class => ['algorithm' => 'sha1'],
+        ],
+    ]);
 }
 
 /** @var ContainerBuilder $container */

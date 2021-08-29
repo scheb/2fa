@@ -14,7 +14,6 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
@@ -184,7 +183,7 @@ abstract class TestCase extends WebTestCase
 
     protected function submit2faCode(Crawler $currentPage, string $code, bool $trustedDevice = false, ?string $csrfToken = null): Crawler
     {
-        $twoFactorForm = $currentPage->filter('input#_auth_code')->parents()->filter('form')->form();
+        $twoFactorForm = $currentPage->filter('input#_auth_code')->ancestors()->filter('form')->form();
         $twoFactorForm['_auth_code'] = $code;
         if ($trustedDevice && $currentPage->filter('input#_trusted')->count() > 0) {
             $twoFactorForm['_trusted'] = 'on';
@@ -271,17 +270,7 @@ abstract class TestCase extends WebTestCase
     protected function assertNotAuthenticated(): void
     {
         $token = $this->getSecurityToken();
-
-        if ('authenticators' === getenv('TEST_CONFIG')) {
-            // When authenticators are used, there is no AnonymousToken but null instead
-            $this->assertNull($token, 'The token has to be null');
-        } else {
-            $this->assertInstanceOf(
-                AnonymousToken::class,
-                $this->getSecurityToken(),
-                'The token has to be an AnonymousToken'
-            );
-        }
+        $this->assertNull($token, 'The token has to be null');
     }
 
     protected function assertIsAlwaysAccessiblePage(Crawler $page): void

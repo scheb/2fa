@@ -29,7 +29,7 @@ class TwoFactorInProgressVoterTest extends TestCase
     public function vote_isNotTwoFactorToken_returnAbstain(): void
     {
         $token = $this->createMock(TokenInterface::class);
-        $returnValue = $this->voter->vote($token, null, [AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY]);
+        $returnValue = $this->voter->vote($token, null, [AuthenticatedVoter::PUBLIC_ACCESS]);
         $this->assertEquals(VoterInterface::ACCESS_ABSTAIN, $returnValue);
     }
 
@@ -54,7 +54,7 @@ class TwoFactorInProgressVoterTest extends TestCase
             [AuthenticatedVoter::IS_AUTHENTICATED_FULLY, VoterInterface::ACCESS_ABSTAIN],
 
             // Granted
-            [AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY, VoterInterface::ACCESS_GRANTED],
+            [AuthenticatedVoter::PUBLIC_ACCESS, VoterInterface::ACCESS_GRANTED],
             [TwoFactorInProgressVoter::IS_AUTHENTICATED_2FA_IN_PROGRESS, VoterInterface::ACCESS_GRANTED],
         ];
     }

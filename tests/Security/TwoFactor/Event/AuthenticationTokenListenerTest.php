@@ -45,15 +45,9 @@ class AuthenticationTokenListenerTest extends TestCase
         $this->authenticationContextFactory = $this->createMock(AuthenticationContextFactoryInterface::class);
 
         $this->requestStack = $this->createMock(RequestStack::class);
-        // Compatibility for Symfony >= 5.3
-        if (method_exists(RequestStack::class, 'getMainRequest')) {
-            $method = 'getMainRequest';
-        } else {
-            $method = 'getMasterRequest';
-        }
         $this->requestStack
             ->expects($this->any())
-            ->method($method)
+            ->method('getMainRequest')
             ->willReturn($this->createMock(Request::class));
 
         $this->listener = new AuthenticationTokenListener(

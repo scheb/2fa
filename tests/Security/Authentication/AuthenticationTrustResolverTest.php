@@ -43,6 +43,8 @@ class AuthenticationTrustResolverTest extends TestCase
      */
     public function isAnonymous_tokenGiven_returnResultFromDecoratedTrustResolver($returnedResult): void
     {
+        $this->requireAtMostSymfony5_4();
+
         $this->decoratedTrustResolver
             ->expects($this->once())
             ->method('isAnonymous')

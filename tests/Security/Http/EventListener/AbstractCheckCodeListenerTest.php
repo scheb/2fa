@@ -13,7 +13,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\PreparationRecorderInterfa
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
 
 abstract class AbstractCheckCodeListenerTest extends TestCase
@@ -89,7 +89,7 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
         $token = $this->createMock(TwoFactorTokenInterface::class);
         $token
             ->expects($this->any())
-            ->method('getProviderKey')
+            ->method('getFirewallName')
             ->willReturn(self::FIREWALL_NAME);
         $token
             ->expects($this->any())
@@ -103,7 +103,7 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
         return $token;
     }
 
-    private function stubPassport(PassportInterface $passport): void
+    private function stubPassport(Passport $passport): void
     {
         $this->checkPassportEvent
             ->expects($this->any())
@@ -162,7 +162,7 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
      */
     public function checkPassport_noTwoFactorPassport_doNothing(): void
     {
-        $passport = $this->createMock(PassportInterface::class);
+        $passport = $this->createMock(Passport::class);
 
         $this->stubPassport($passport);
         $this->stubPassportHasCredentialsBadge($passport, false);

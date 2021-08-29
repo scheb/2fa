@@ -30,15 +30,14 @@ class ParameterBagUtils
     public static function getRequestParameterValue(Request $request, string $path): ?string
     {
         if (false === $pos = strpos($path, '[')) {
-            /** @psalm-suppress InternalMethod */
+            $value = ($request->query->all()[$path] ?? null) ?? ($request->request->all()[$path] ?? null);
 
-            return $request->get($path);
+            return null === $value ? null : (string) $value;
         }
 
         $root = substr($path, 0, $pos);
-
-        /** @psalm-suppress InternalMethod */
-        if (null === $value = $request->get($root)) {
+        $value = ($request->query->all()[$root] ?? null) ?? ($request->request->all()[$root] ?? null);
+        if (null === $value) {
             return null;
         }
 
@@ -48,7 +47,7 @@ class ParameterBagUtils
 
         try {
             return self::$propertyAccessor->getValue($value, substr($path, $pos));
-        } catch (AccessException $e) {
+        } catch (AccessException) {
             return null;
         }
     }

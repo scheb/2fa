@@ -3,6 +3,15 @@ Upgrading
 
 Here's an overview if you have to do any work when upgrading.
 
+5.x to 6.x
+----------
+
+If you use a custom implementation of `Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface`,
+method `getProviderKey()` was removed, please implement `getFirewallName()` instead.
+
+Internal constant `Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface::ATTRIBUTE_NAME_REMEMBER_ME_COOKIE`
+has been removed.
+
 4.x to 5.x
 ----------
 

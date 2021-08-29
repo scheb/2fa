@@ -66,7 +66,6 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasNotParameter('scheb_two_factor.trusted_device.cookie_path');
         $this->assertHasParameter([
             'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken',
-            'Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken',
             'Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken',
         ], 'scheb_two_factor.security_tokens');
         $this->assertHasParameter([], 'scheb_two_factor.ip_whitelist');

@@ -27,6 +27,7 @@ use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\InteractiveAuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -95,10 +96,7 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         return $this->twoFactorFirewallConfig->isCheckPathRequest($request);
     }
 
-    /**
-     * @psalm-suppress InvalidReturnType
-     */
-    public function authenticate(Request $request): PassportInterface
+    public function authenticate(Request $request): Passport
     {
         // When the firewall is lazy, the token is not initialized in the "supports" stage, so this check does only work
         // within the "authenticate" stage.
@@ -130,8 +128,6 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
             $passport->addBadge(new TrustedDeviceBadge());
         }
 
-        /** @psalm-suppress InvalidReturnStatement */
-
         return $passport;
     }
 
@@ -144,7 +140,22 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
             );
     }
 
+    /**
+     * Compatibility with Symfony < 6.0.
+     *
+     * @deprecated Use createToken() instead
+     *
+     * @psalm-suppress UndefinedClass
+     */
     public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface
+    {
+        /** @psalm-suppress InvalidArgument */
+        $token = $this->createToken($passport, $firewallName);
+
+        return $token;
+    }
+
+    public function createToken(Passport $passport, string $firewallName): TokenInterface
     {
         /** @var TwoFactorPassport $passport */
         $twoFactorToken = $passport->getTwoFactorToken();

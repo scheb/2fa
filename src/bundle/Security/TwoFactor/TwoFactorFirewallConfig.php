@@ -38,13 +38,12 @@ class TwoFactorFirewallConfig
         array $options,
         string $firewallName,
         HttpUtils $httpUtils,
-        ?RequestDataReader $requestDataReader = null
+        RequestDataReader $requestDataReader
     ) {
         $this->options = $options;
         $this->firewallName = $firewallName;
         $this->httpUtils = $httpUtils;
-        // Compatibility for bundle version <= 5.4
-        $this->requestDataReader = $requestDataReader ?? new RequestDataReader();
+        $this->requestDataReader = $requestDataReader;
     }
 
     public function getFirewallName(): string

@@ -22,6 +22,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
@@ -34,6 +35,7 @@ class TwoFactorAuthenticatorTest extends TestCase
     private const CODE = '2faCode';
     private const CSRF_TOKEN = 'csrfToken';
     private const CSRF_TOKEN_ID = 'csrfTokenId';
+    private const USERNAME = 'username';
 
     /**
      * @var MockObject|TwoFactorFirewallConfig
@@ -151,7 +153,20 @@ class TwoFactorAuthenticatorTest extends TestCase
      */
     private function createTwoFactorToken(?TokenInterface $authenticatedToken = null, bool $allProvidersAuthenticated = false): MockObject
     {
+        $user = $this->createMock(UserInterface::class);
+        // Compatibility for Symfony < 6.0
+        if (method_exists(UserInterface::class, 'getUserIdentifier')) {
+            $user
+                ->expects($this->any())
+                ->method('getUserIdentifier')
+                ->willReturn(self::USERNAME);
+        }
+
         $token = $this->createMock(TwoFactorTokenInterface::class);
+        $token
+            ->expects($this->any())
+            ->method('getUser')
+            ->willReturn($user);
         $token
             ->expects($this->any())
             ->method('getAuthenticatedToken')
@@ -381,21 +396,21 @@ class TwoFactorAuthenticatorTest extends TestCase
     /**
      * @test
      */
-    public function createAuthenticatedToken_multiFactorAuthenticationNotComplete_returnTwoFactorToken(): void
+    public function createToken_multiFactorAuthenticationNotComplete_returnTwoFactorToken(): void
     {
         $this->stubIsMultiFactorFirewall(true);
         $authenticatedToken = $this->createMock(TokenInterface::class);
         $twoFactorToken = $this->createTwoFactorToken($authenticatedToken, false);
         $passport = $this->createTwoFactorPassport($twoFactorToken);
 
-        $returnValue = $this->authenticator->createAuthenticatedToken($passport, self::FIREWALL_NAME);
+        $returnValue = $this->authenticator->createToken($passport, self::FIREWALL_NAME);
         $this->assertSame($twoFactorToken, $returnValue);
     }
 
     /**
      * @test
      */
-    public function createAuthenticatedToken_multiFactorAuthenticationIsComplete_returnAuthenticatedToken(): void
+    public function createToken_multiFactorAuthenticationIsComplete_returnAuthenticatedToken(): void
     {
         $this->stubIsMultiFactorFirewall(true);
         $authenticatedToken = $this->createMock(TokenInterface::class);
@@ -404,14 +419,14 @@ class TwoFactorAuthenticatorTest extends TestCase
 
         $this->expect2faCompleteFlagSet($authenticatedToken);
 
-        $returnValue = $this->authenticator->createAuthenticatedToken($passport, self::FIREWALL_NAME);
+        $returnValue = $this->authenticator->createToken($passport, self::FIREWALL_NAME);
         $this->assertSame($authenticatedToken, $returnValue);
     }
 
     /**
      * @test
      */
-    public function createAuthenticatedToken_noMultiFactorAuthentication_returnAuthenticatedToken(): void
+    public function createToken_noMultiFactorAuthentication_returnAuthenticatedToken(): void
     {
         $this->stubIsMultiFactorFirewall(false);
         $authenticatedToken = $this->createMock(TokenInterface::class);
@@ -420,7 +435,7 @@ class TwoFactorAuthenticatorTest extends TestCase
 
         $this->expect2faCompleteFlagSet($authenticatedToken);
 
-        $returnValue = $this->authenticator->createAuthenticatedToken($passport, self::FIREWALL_NAME);
+        $returnValue = $this->authenticator->createToken($passport, self::FIREWALL_NAME);
         $this->assertSame($authenticatedToken, $returnValue);
     }
 

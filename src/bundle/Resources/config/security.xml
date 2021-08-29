@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 	<services>
-		<service id="scheb_two_factor.security.authentication.provider.decorator" class="Scheb\TwoFactorBundle\Security\Authentication\Provider\AuthenticationProviderDecorator" abstract="true">
-			<argument /> <!-- Decorated authentication provider -->
-			<argument type="service" id="scheb_two_factor.first_two_factor_handler" />
-			<argument type="service" id="scheb_two_factor.authentication_context_factory" />
-			<argument type="service" id="security.firewall.map" />
-			<argument type="service" id="request_stack" />
-		</service>
-
-		<service id="scheb_two_factor.security.authentication.provider" class="Scheb\TwoFactorBundle\Security\Authentication\Provider\TwoFactorAuthenticationProvider" abstract="true">
+		<service id="scheb_two_factor.security.authenticator" class="Scheb\TwoFactorBundle\Security\Http\Authenticator\TwoFactorAuthenticator" abstract="true">
 			<argument /> <!-- Two-factor firewall config -->
-			<argument type="service" id="scheb_two_factor.provider_registry" />
-			<argument type="service" id="scheb_two_factor.backup_code_manager" on-invalid="null" />
-			<argument type="service" id="scheb_two_factor.provider_preparation_recorder" />
+			<argument type="service" id="security.token_storage"/>
+			<argument /> <!-- Success handler -->
+			<argument /> <!-- Failure handler -->
+			<argument /> <!-- Authentication required handler -->
+			<argument type="service" id="event_dispatcher" />
+			<argument type="service" id="logger" on-invalid="null" />
+			<tag name="monolog.logger" channel="security" />
 		</service>
 
 		<service id="scheb_two_factor.security.authentication.trust_resolver" class="Scheb\TwoFactorBundle\Security\Authentication\AuthenticationTrustResolver" decorates="security.authentication.trust_resolver">
@@ -31,23 +27,21 @@
 			<argument type="service" id="security.logout_url_generator" />
 		</service>
 
-		<service id="scheb_two_factor.security.authentication.listener" class="Scheb\TwoFactorBundle\Security\Http\Firewall\TwoFactorListener" abstract="true">
-			<argument type="service" id="security.token_storage"/>
-			<argument type="service" id="security.authentication.manager"/>
-			<argument /> <!-- Two-factor firewall config -->
-			<argument /> <!-- Success handler -->
-			<argument /> <!-- Failure handler -->
-			<argument /> <!-- Authentication required handler -->
-			<argument /> <!-- CSRF token manager -->
-			<argument type="service" id="scheb_two_factor.trusted_device_manager" on-invalid="null" />
-			<argument type="service" id="event_dispatcher" />
-			<argument type="service" id="scheb_two_factor.token_factory" />
-			<argument type="service" id="logger" on-invalid="null" />
-			<tag name="monolog.logger" channel="security" />
+		<service id="scheb_two_factor.security.listener.token_created" class="Scheb\TwoFactorBundle\Security\TwoFactor\Event\AuthenticationTokenListener" abstract="true">
+			<argument type="string" /> <!-- Firewall name -->
+			<argument type="service" id="scheb_two_factor.first_two_factor_handler" />
+			<argument type="service" id="scheb_two_factor.authentication_context_factory" />
+			<argument type="service" id="request_stack" />
 		</service>
 
-		<service id="scheb_two_factor.security.rememberme_services_decorator" class="Scheb\TwoFactorBundle\Security\Authentication\RememberMe\RememberMeServicesDecorator" abstract="true">
-			<argument /> <!-- Decorated remember-me services instance -->
+		<service id="scheb_two_factor.security.listener.check_two_factor_code" class="\Scheb\TwoFactorBundle\Security\Http\EventListener\CheckTwoFactorCodeListener">
+			<argument type="service" id="scheb_two_factor.provider_preparation_recorder" />
+			<argument type="service" id="scheb_two_factor.provider_registry" />
+			<tag name="kernel.event_subscriber" />
+		</service>
+
+		<service id="scheb_two_factor.security.listener.suppress_remember_me" class="\Scheb\TwoFactorBundle\Security\Http\EventListener\SuppressRememberMeListener">
+			<tag name="kernel.event_subscriber" />
 		</service>
 
 		<service id="scheb_two_factor.security.provider_preparation_listener" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationListener" abstract="true">

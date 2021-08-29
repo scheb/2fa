@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\DependencyInjection;
 
-use Scheb\TwoFactorBundle\Security\TwoFactor\QrCode\QrCodeGenerator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
@@ -27,7 +26,6 @@ class SchebTwoFactorExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('security.xml');
-        $loader->load('security_authenticator.xml');
         $loader->load('persistence.xml');
         $loader->load('two_factor.xml');
 

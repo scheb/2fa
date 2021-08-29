@@ -104,11 +104,7 @@ class TwoFactorServicesFactory
         $firewallConfigId = TwoFactorFactory::KERNEL_ACCESS_LISTENER_ID_PREFIX.$firewallName;
         $container
             ->setDefinition($firewallConfigId, new ChildDefinition(TwoFactorFactory::KERNEL_ACCESS_LISTENER_DEFINITION_ID))
-            ->replaceArgument(0, new Reference($twoFactorFirewallConfigId))
-            // The SecurityFactory doesn't have access to the service definitions from the security bundle. Therefore we
-            // tag the definition so we can find it in a compiler pass inject it into the firewall context.
-            // Compatibility for Symfony <= 5.1
-            ->addTag('scheb_two_factor.access_listener', ['firewall' => $firewallName]);
+            ->replaceArgument(0, new Reference($twoFactorFirewallConfigId));
     }
 
     public function createFormListener(ContainerBuilder $container, string $firewallName, string $twoFactorFirewallConfigId): void

@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class TwoFactorProviderPreparationListenerTest extends TestCase
 {
@@ -58,11 +59,11 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
     protected function setUp(): void
     {
         $this->request = $this->createMock(Request::class);
-        $this->user = new \stdClass();
+        $this->user = $this->createMock(UserInterface::class);
         $this->token = $this->createMock(TwoFactorToken::class);
         $this->token
             ->expects($this->any())
-            ->method('getProviderKey')
+            ->method('getFirewallName')
             ->willReturn(self::FIREWALL_NAME);
         $this->token
             ->expects($this->any())
@@ -105,15 +106,8 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $kernel = $this->createMock(HttpKernelInterface::class);
         $response = $this->createMock(Response::class);
 
-        if (\defined('Symfony\Component\HttpKernel\HttpKernelInterface::MAIN_REQUEST')) {
-            // Compatibility for Symfony >= 5.3
-            $requestType = HttpKernelInterface::MAIN_REQUEST;
-        } else {
-            $requestType = HttpKernelInterface::MASTER_REQUEST;
-        }
-
         // Class is final, have to use a real instance instead of a mock
-        return new ResponseEvent($kernel, $this->request, $requestType, $response);
+        return new ResponseEvent($kernel, $this->request, HttpKernelInterface::MAIN_REQUEST, $response);
     }
 
     private function expectPrepareCurrentProvider(): void

@@ -238,9 +238,6 @@ class TwoFactorServicesFactoryTest extends TestCase
         $this->assertTrue($this->container->hasDefinition('security.authentication.access_listener.two_factor.firewallName'));
         $definition = $this->container->getDefinition('security.authentication.access_listener.two_factor.firewallName');
         $this->assertEquals(new Reference(self::TWO_FACTOR_FIREWALL_CONFIG_ID), $definition->getArgument(0));
-        $this->assertTrue($definition->hasTag('scheb_two_factor.access_listener'));
-        $tag = $definition->getTag('scheb_two_factor.access_listener');
-        $this->assertEquals(['firewall' => 'firewallName'], $tag[0]);
     }
 
     /**

@@ -92,8 +92,7 @@ class FormController
 
     protected function setPreferredProvider(Request $request, TwoFactorTokenInterface $token): void
     {
-        /** @psalm-suppress InternalMethod */
-        $preferredProvider = $request->get('preferProvider');
+        $preferredProvider = (string) $request->query->get('preferProvider');
         if ($preferredProvider) {
             try {
                 $token->preferTwoFactorProvider($preferredProvider);
@@ -105,7 +104,7 @@ class FormController
 
     protected function getTemplateVars(Request $request, TwoFactorTokenInterface $token): array
     {
-        $config = $this->twoFactorFirewallContext->getFirewallConfig($token->getProviderKey(true));
+        $config = $this->twoFactorFirewallContext->getFirewallConfig($token->getFirewallName());
         $pendingTwoFactorProviders = $token->getTwoFactorProviders();
         $displayTrustedOption = $this->canSetTrustedDevice($token, $request, $config);
         $authenticationException = $this->getLastAuthenticationException($request->getSession());

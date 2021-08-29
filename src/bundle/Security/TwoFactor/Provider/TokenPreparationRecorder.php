@@ -32,7 +32,7 @@ class TokenPreparationRecorder implements PreparationRecorderInterface
             throw new UnexpectedTokenException('The security token has to be an instance of TwoFactorTokenInterface.');
         }
 
-        $providerKey = $token->getProviderKey(true);
+        $providerKey = $token->getFirewallName();
         if ($providerKey !== $firewallName) {
             throw new \LogicException(sprintf('Cannot store preparation state for firewall "%s" in a TwoFactorToken belonging to "%s".', $firewallName, $providerKey));
         }
@@ -47,7 +47,7 @@ class TokenPreparationRecorder implements PreparationRecorderInterface
             throw new UnexpectedTokenException('The security token has to be an instance of TwoFactorTokenInterface.');
         }
 
-        $providerKey = $token->getProviderKey(true);
+        $providerKey = $token->getFirewallName();
         if ($providerKey !== $firewallName) {
             throw new \LogicException(sprintf('Cannot store preparation state for firewall "%s" in a TwoFactorToken belonging to "%s".', $firewallName, $providerKey));
         }

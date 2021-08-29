@@ -26,7 +26,14 @@ class TwoFactorInProgressVoter implements VoterInterface
             if (self::IS_AUTHENTICATED_2FA_IN_PROGRESS === $attribute) {
                 return VoterInterface::ACCESS_GRANTED;
             }
-            if (AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY === $attribute) {
+            if (AuthenticatedVoter::PUBLIC_ACCESS === $attribute) {
+                return VoterInterface::ACCESS_GRANTED;
+            }
+
+            // Compatibility for Symfony < 6.0
+            if (\defined(AuthenticatedVoter::class.'::IS_AUTHENTICATED_ANONYMOUSLY')
+                && AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY === $attribute
+            ) {
                 return VoterInterface::ACCESS_GRANTED;
             }
         }

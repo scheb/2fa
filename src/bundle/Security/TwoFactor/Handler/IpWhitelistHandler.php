@@ -35,7 +35,8 @@ class IpWhitelistHandler implements AuthenticationHandlerInterface
         $request = $context->getRequest();
 
         // Skip two-factor authentication for whitelisted IPs
-        if (IpUtils::checkIp($request->getClientIp(), $this->ipWhitelistProvider->getWhitelistedIps($context))) {
+        $requestIp = $request->getClientIp();
+        if (null !== $requestIp && IpUtils::checkIp($requestIp, $this->ipWhitelistProvider->getWhitelistedIps($context))) {
             return $context->getToken();
         }
 

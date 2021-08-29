@@ -152,12 +152,7 @@ class TrustedDeviceTokenStorage
 
     private function getRequest(): Request
     {
-        // Compatibility for Symfony >= 5.3
-        if (method_exists(RequestStack::class, 'getMainRequest')) {
-            $request = $this->requestStack->getMainRequest();
-        } else {
-            $request = $this->requestStack->getMasterRequest();
-        }
+        $request = $this->requestStack->getMainRequest();
         if (null === $request) {
             throw new \RuntimeException('No request available');
         }

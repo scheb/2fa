@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\DependencyInjection\Factory\Security;
 
-use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AuthenticatorFactoryInterface;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\FirewallListenerFactoryInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -13,9 +14,9 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Security\Http\RememberMe\RememberMeHandlerInterface;
 
 /**
- * @internal Technically this class is final, but the compatibility layer needs to extend it
+ * @final
  */
-class TwoFactorFactory implements SecurityFactoryInterface, FirewallListenerFactoryInterface
+class TwoFactorFactory implements FirewallListenerFactoryInterface, AuthenticatorFactoryInterface
 {
     public const AUTHENTICATION_PROVIDER_KEY = 'two_factor';
 
@@ -100,38 +101,6 @@ class TwoFactorFactory implements SecurityFactoryInterface, FirewallListenerFact
                 ->scalarNode('provider')->defaultNull()->end()
             ->end()
         ;
-    }
-
-    /**
-     * @param string $id
-     * @param array $config
-     * @param string $userProviderId
-     * @param string|null $defaultEntryPointId
-     */
-    public function create(ContainerBuilder $container, $id, $config, $userProviderId, $defaultEntryPointId): array
-    {
-        $csrfTokenManagerId = $this->twoFactorServicesFactory->getCsrfTokenManagerId($config);
-        $twoFactorFirewallConfigId = $this->twoFactorServicesFactory->createTwoFactorFirewallConfig($container, $id, $config);
-        $successHandlerId = $this->twoFactorServicesFactory->createSuccessHandler($container, $id, $config, $twoFactorFirewallConfigId);
-        $failureHandlerId = $this->twoFactorServicesFactory->createFailureHandler($container, $id, $config, $twoFactorFirewallConfigId);
-        $authRequiredHandlerId = $this->twoFactorServicesFactory->createAuthenticationRequiredHandler($container, $id, $config, $twoFactorFirewallConfigId);
-        $this->twoFactorServicesFactory->createKernelExceptionListener($container, $id, $authRequiredHandlerId);
-        $this->twoFactorServicesFactory->createAccessListener($container, $id, $twoFactorFirewallConfigId);
-        $this->twoFactorServicesFactory->createFormListener($container, $id, $twoFactorFirewallConfigId);
-        $this->twoFactorServicesFactory->createProviderPreparationListener($container, $id, $config);
-
-        $providerId = $this->createAuthenticationProvider($container, $id, $twoFactorFirewallConfigId);
-        $listenerId = $this->createAuthenticationListener(
-            $container,
-            $id,
-            $twoFactorFirewallConfigId,
-            $successHandlerId,
-            $failureHandlerId,
-            $authRequiredHandlerId,
-            $csrfTokenManagerId
-        );
-
-        return [$providerId, $listenerId, $defaultEntryPointId];
     }
 
     public function createAuthenticator(ContainerBuilder $container, string $firewallName, array $config, string $userProviderId): string
@@ -220,8 +189,6 @@ class TwoFactorFactory implements SecurityFactoryInterface, FirewallListenerFact
         return $listenerId;
     }
 
-    // Compatibility for Symfony >= 5.2
-    // Uses this interface to inject TwoFactorAccessListener, instead of using the compiler pass.
     public function createListeners(ContainerBuilder $container, string $firewallName, array $config): array
     {
         $accessListenerId = TwoFactorFactory::KERNEL_ACCESS_LISTENER_ID_PREFIX.$firewallName;
@@ -237,5 +204,10 @@ class TwoFactorFactory implements SecurityFactoryInterface, FirewallListenerFact
     public function getKey(): string
     {
         return self::AUTHENTICATION_PROVIDER_KEY;
+    }
+
+    public function getPriority(): int
+    {
+        return 0;
     }
 }
