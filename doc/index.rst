@@ -47,7 +47,7 @@ two-factor authentication enabled, access and privileges are temporarily withhel
 into an intermediate state. The user is challenged to enter a valid two-factor authentication code. Only when that code
 is entered correctly, the associated roles are granted.
 
-.. image:: authentication-process.png
+.. image:: authentication-process.svg
    :alt: Authentication process
 
 To represent the state between login and a valid two-factor code being entered, the bundle introduces the role-like
