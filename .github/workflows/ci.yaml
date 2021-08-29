@@ -69,7 +69,7 @@ jobs:
             matrix:
                 include:
                     # Lowest possible configuration
-                    -   php-version: '7.2.5'
+                    -   php-version: '8.0'
                         dependency-versions: 'lowest'
                         symfony-version: '^5.4'
 
@@ -134,7 +134,7 @@ jobs:
                     # DEFAULT configuration (old security system)
 
                     # Minimum PHP version
-                    -   php-version: '7.2.5'
+                    -   php-version: '8.0'
                         symfony-version: '^5.4'
                         app-config: 'authenticators'
 

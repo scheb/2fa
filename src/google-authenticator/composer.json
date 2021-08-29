@@ -12,6 +12,7 @@
         }
     ],
     "require": {
+        "php": ">=8.0",
         "scheb/2fa-bundle": "self.version",
         "spomky-labs/otphp": "^9.1|^10.0",
         "paragonie/constant_time_encoding": "^2.2"
