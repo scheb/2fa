@@ -41,7 +41,6 @@ Optionally, install any additional packages to extend the bundle's feature accor
    composer require scheb/2fa-totp                   # Add two-factor authentication using TOTP
    composer require scheb/2fa-google-authenticator   # Add two-factor authentication with Google Authenticator
    composer require scheb/2fa-email                  # Add two-factor authentication using email
-   composer require scheb/2fa-qr-code                # Add to render QR-codes for Google Authenticator / TOTP
 
 Step 2: Enable the bundle
 ~~~~~~~~~~~~~~~~~~~~~~~~~

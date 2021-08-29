@@ -11,8 +11,6 @@ splits:
       target: "https://${GH_TOKEN}@github.com/scheb/2fa-backup-code.git"
     - prefix: "src/trusted-device"
       target: "https://${GH_TOKEN}@github.com/scheb/2fa-trusted-device.git"
-    - prefix: "src/qr-code"
-      target: "https://${GH_TOKEN}@github.com/scheb/2fa-qr-code.git"
 
 origins:
     - ^[0-9]+\.x$

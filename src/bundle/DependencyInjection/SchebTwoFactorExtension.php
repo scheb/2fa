@@ -31,10 +31,6 @@ class SchebTwoFactorExtension extends Extension
         $loader->load('persistence.xml');
         $loader->load('two_factor.xml');
 
-        if (class_exists(QrCodeGenerator::class)) {
-            $loader->load('qr_code.xml');
-        }
-
         // Load two-factor modules
         if (isset($config['email']['enabled']) && $this->resolveFeatureFlag($container, $config['email']['enabled'])) {
             $this->configureEmailAuthenticationProvider($container, $config);
