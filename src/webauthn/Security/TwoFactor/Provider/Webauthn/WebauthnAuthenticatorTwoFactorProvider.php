@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
 use Webauthn\PublicKeyCredentialSource;
-use Webauthn\PublicKeyCredentialSourceRepository;
 use Webauthn\PublicKeyCredentialUserEntity;
 
 /**
@@ -44,19 +43,13 @@ class WebauthnAuthenticatorTwoFactorProvider implements TwoFactorProviderInterfa
      */
     private $messageConverter;
 
-    /**
-     * @var PublicKeyCredentialSourceRepository
-     */
-    private $publicKeyCredentialSourceRepository;
-
-    public function __construct(WebauthnAuthenticatorInterface $authenticator, TwoFactorFormRendererInterface $formRenderer, RequestStack $requestStack, PublicKeyCredentialSourceRepository $publicKeyCredentialSourceRepository)
+    public function __construct(WebauthnAuthenticatorInterface $authenticator, TwoFactorFormRendererInterface $formRenderer, RequestStack $requestStack)
     {
         $this->authenticator = $authenticator;
         $this->formRenderer = $formRenderer;
         $this->requestStack = $requestStack;
         $psr17Factory = new Psr17Factory();
         $this->messageConverter = new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
-        $this->publicKeyCredentialSourceRepository = $publicKeyCredentialSourceRepository;
     }
 
     public function beginAuthentication(AuthenticationContextInterface $context): bool
@@ -71,9 +64,7 @@ class WebauthnAuthenticatorTwoFactorProvider implements TwoFactorProviderInterfa
         if (!($user instanceof WebauthnTwoFactorInterface)) {
             throw new \LogicException('Invalid user');
         }
-        $userEntity = $this->createUserEntity($user);
-
-        $credentialSources = $this->publicKeyCredentialSourceRepository->findAllForUserEntity($userEntity);
+        $credentialSources = $user->getWebauthnCredentialSources();
         $allowedCredentials = array_map(static function (PublicKeyCredentialSource $credential) {
             return $credential->getPublicKeyCredentialDescriptor();
         }, $credentialSources);

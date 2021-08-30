@@ -24,7 +24,6 @@
 			<argument type="service" id="scheb_two_factor.security.webauthn_authenticator" />
 			<argument type="service" id="scheb_two_factor.security.webauthn.form_renderer" />
 			<argument type="service" id="request_stack" />
-			<argument type="service" id="scheb_two_factor.webauthn.public_key_credential_source_repository" />
 		</service>
 
 		<!-- Aliases for auto-wiring -->
