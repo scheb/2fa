@@ -14,19 +14,23 @@
     "require": {
         "php": ">=7.2.5",
         "ext-json": "*",
+        "nyholm/psr7": "^1.1",
         "symfony/config": "^4.4|^5.0",
         "symfony/dependency-injection": "^4.4|^5.0",
         "symfony/event-dispatcher": "^4.4|^5.0",
         "symfony/framework-bundle": "^4.4|^5.0",
+        "symfony/http-client": "^4.4|^5.0",
         "symfony/http-foundation": "^4.4|^5.0",
         "symfony/http-kernel": "^4.4|^5.0",
         "symfony/property-access": "^4.4|^5.0",
+        "symfony/psr-http-message-bridge": "^1.2|^2.0",
         "symfony/security-bundle": "^4.4.1|^5.0",
         "symfony/twig-bundle": "^4.4|^5.0",
         "lcobucci/jwt": "^3.4|^4.0",
         "spomky-labs/otphp": "^9.1|^10.0",
         "paragonie/constant_time_encoding": "^2.2",
-        "endroid/qr-code": "^3.0"
+        "endroid/qr-code": "^3.0",
+        "web-auth/webauthn-lib": "^3.3"
     },
     "require-dev": {
         "doctrine/persistence": "^1.3|^2.0",
@@ -48,6 +52,7 @@
                 "src/google-authenticator",
                 "src/qr-code",
                 "src/totp",
+                "src/webauthn",
                 "src/trusted-device"
             ]
         }
@@ -64,6 +69,7 @@
         "scheb/2fa-google-authenticator": "^5.0",
         "scheb/2fa-qr-code": "^5.0",
         "scheb/2fa-totp": "^5.0",
+        "scheb/2fa-webauthn": "^5.0",
         "scheb/2fa-trusted-device": "^5.0"
     },
     "conflict": {

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+	<services>
+		<service id="scheb_two_factor.security.webauthn_factory" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Webauthn\WebauthnFactory" public="true">
+			<argument type="service" id="scheb_two_factor.webauthn.public_key_credential_source_repository" />
+			<argument>%scheb_two_factor.webauthn.rp_id%</argument>
+			<argument>%scheb_two_factor.webauthn.rp_name%</argument>
+			<argument>%scheb_two_factor.webauthn.rp_icon%</argument>
+		</service>
+
+		<service id="scheb_two_factor.security.webauthn_authenticator" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Webauthn\WebauthnAuthenticator" public="true">
+			<argument type="service" id="scheb_two_factor.security.webauthn_factory" />
+		</service>
+
+		<service id="scheb_two_factor.security.webauthn.default_form_renderer" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer" lazy="true">
+			<argument type="service" id="twig" />
+			<argument>%scheb_two_factor.webauthn.template%</argument>
+		</service>
+
+		<service id="scheb_two_factor.security.webauthn.form_renderer" alias="scheb_two_factor.security.webauthn.default_form_renderer" />
+
+		<service id="scheb_two_factor.security.webauthn.provider" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Webauthn\WebauthnAuthenticatorTwoFactorProvider">
+			<tag name="scheb_two_factor.provider" alias="webauthn" />
+			<argument type="service" id="scheb_two_factor.security.webauthn_authenticator" />
+			<argument type="service" id="scheb_two_factor.security.webauthn.form_renderer" />
+			<argument type="service" id="request_stack" />
+			<argument type="service" id="scheb_two_factor.webauthn.public_key_credential_source_repository" />
+		</service>
+
+		<!-- Aliases for auto-wiring -->
+		<service id="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Webauthn\WebauthnAuthenticatorInterface" alias="scheb_two_factor.security.webauthn_authenticator" public="true" />
+		<service id="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Webauthn\WebauthnAuthenticator" alias="scheb_two_factor.security.webauthn_authenticator" public="true" />
+	</services>
+</container>

@@ -1,0 +1,26 @@
+{
+    "name": "scheb/2fa-webauthn",
+    "type": "library",
+    "description": "Extends scheb/2fa-bundle with two-factor authentication using Webauthn",
+    "keywords": ["2fa", "two-factor", "two-step", "authentication", "symfony", "webauthn"],
+    "homepage": "https://github.com/scheb/2fa",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Scheb",
+            "email": "me@christianscheb.de"
+        }
+    ],
+    "require": {
+        "scheb/2fa-bundle": "self.version",
+        "nyholm/psr7": "^1.1",
+        "symfony/http-client": "^4.4|^5.0",
+        "symfony/psr-http-message-bridge": "^1.2|^2.0",
+        "web-auth/webauthn-lib": "^3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Scheb\\TwoFactorBundle\\": ""
+        }
+    }
+}

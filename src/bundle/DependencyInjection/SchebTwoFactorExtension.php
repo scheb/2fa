@@ -48,6 +48,10 @@ class SchebTwoFactorExtension extends Extension
             $this->configureTotpAuthenticationProvider($container, $config);
         }
 
+        if (isset($config['webauthn']['enabled']) && $this->resolveFeatureFlag($container, $config['webauthn']['enabled'])) {
+            $this->configureWebauthnAuthenticationProvider($container, $config);
+        }
+
         // Configure custom services
         $this->configurePersister($container, $config);
         $this->configureTwoFactorCondition($container, $config);
@@ -162,6 +166,22 @@ class SchebTwoFactorExtension extends Extension
 
         if (null !== $config['totp']['form_renderer']) {
             $container->setAlias('scheb_two_factor.security.totp.form_renderer', $config['totp']['form_renderer']);
+        }
+    }
+
+    private function configureWebauthnAuthenticationProvider(ContainerBuilder $container, array $config): void
+    {
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('two_factor_provider_webauthn.xml');
+
+        $container->setAlias('scheb_two_factor.webauthn.public_key_credential_source_repository', $config['webauthn']['public_key_credential_source_repository']);
+        $container->setParameter('scheb_two_factor.webauthn.rp_id', $config['webauthn']['rp_id']);
+        $container->setParameter('scheb_two_factor.webauthn.rp_name', $config['webauthn']['rp_name']);
+        $container->setParameter('scheb_two_factor.webauthn.rp_icon', $config['webauthn']['rp_icon']);
+        $container->setParameter('scheb_two_factor.webauthn.template', $config['webauthn']['template']);
+
+        if (null !== $config['webauthn']['form_renderer']) {
+            $container->setAlias('scheb_two_factor.security.webauthn.form_renderer', $config['webauthn']['form_renderer']);
         }
     }
 

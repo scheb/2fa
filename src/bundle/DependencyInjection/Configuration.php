@@ -188,6 +188,33 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
+    private function addWebauthnConfiguration(ArrayNodeDefinition $rootNode): void
+    {
+        if (!interface_exists(WebauthnTwoFactorInterface::class)) {
+            return;
+        }
+
+        /**
+         * @psalm-suppress PossiblyNullReference
+         * @psalm-suppress PossiblyUndefinedMethod
+         */
+        $rootNode
+            ->children()
+                ->arrayNode('webauthn')
+                    ->canBeEnabled()
+                    ->children()
+                        ->scalarNode('enabled')->defaultValue(false)->end()
+                        ->scalarNode('form_renderer')->defaultNull()->end()
+                        ->scalarNode('rp_id')->isRequired()->end()
+                        ->scalarNode('rp_name')->isRequired()->end()
+                        ->integerNode('rp_icon')->defaultNull()->end()
+                        ->scalarNode('template')->defaultValue('@SchebTwoFactor/Authentication/form.html.twig')->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
     private function addGoogleAuthenticatorConfiguration(ArrayNodeDefinition $rootNode): void
     {
         if (!interface_exists(GoogleTwoFactorInterface::class)) {
