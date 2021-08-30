@@ -59,9 +59,15 @@ class AuthenticationProviderDecoratorTest extends TestCase
         $this->firewallMap = $this->createMock(FirewallMap::class);
 
         $this->requestStack = $this->createMock(RequestStack::class);
+        // Compatibility for Symfony >= 5.3
+        if (method_exists(RequestStack::class, 'getMainRequest')) {
+            $method = 'getMainRequest';
+        } else {
+            $method = 'getMasterRequest';
+        }
         $this->requestStack
             ->expects($this->any())
-            ->method('getMasterRequest')
+            ->method($method)
             ->willReturn($this->createMock(Request::class));
 
         $this->decorator = new AuthenticationProviderDecorator(

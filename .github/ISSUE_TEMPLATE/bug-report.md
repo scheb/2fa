@@ -9,7 +9,7 @@ assignees: ''
 
 <!--------------------------------------------------------------
 PLEASE CHECK THE TROUBLESHOOTING GUIDE FIRST
-https://github.com/scheb/2fa/blob/5.x/doc/troubleshooting.md
+https://symfony.com/bundles/SchebTwoFactorBundle/current/troubleshooting.html
 --------------------------------------------------------------->
 
 **Bundle version**: x.y.z

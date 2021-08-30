@@ -5,7 +5,7 @@ Contributing
 Submitting a Bug Report
 -----------------------
 
-Before you report a bug, please check the [troubleshooting guide](doc/troubleshooting.md) first.
+Before you report a bug, please check the [troubleshooting guide](doc/troubleshooting.rst) first.
 
 When creating the bug report, please follow the bug template and provide the details requested.
 

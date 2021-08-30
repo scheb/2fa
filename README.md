@@ -12,9 +12,10 @@ This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki
 [![Total Downloads](https://img.shields.io/packagist/dt/scheb/2fa-bundle)](https://packagist.org/packages/scheb/2fa-bundle/stats)
 [![License](https://poser.pugx.org/scheb/2fa/license.svg)](https://packagist.org/packages/scheb/2fa)
 
-<p align="center"><img alt="Logo" src="doc/2fa-logo.svg" /></p>
+<p align="center"><img alt="SchebTwoFactorBundle Logo" src="doc/2fa-logo.svg" /></p>
 
-ℹ️ The repository contains bundle versions ≥ 5, versions 1-4 are located in [scheb/two-factor-bundle](https://github.com/scheb/two-factor-bundle).
+ℹ️ The repository contains bundle versions ≥ 5, which are compatible with Symfony 4.4 or later. The older (unsupported)
+   versions are located in the [scheb/two-factor-bundle](https://github.com/scheb/two-factor-bundle) repository.
 
 ---
 
@@ -46,11 +47,12 @@ Two-factor authentication methods:
 
 Installation
 -------------
-Follow the [installation instructions](doc/installation.md).
+Follow the [installation instructions](https://symfony.com/bundles/SchebTwoFactorBundle/5.x/installation.html).
 
 Documentation
 -------------
-Detailed documentation of all features can be found in the [doc](doc/index.md) directory.
+Detailed documentation of all features can be found on the
+[Symfony Bundles Documentation](https://symfony.com/bundles/SchebTwoFactorBundle/5.x/index.html) website.
 
 Demo
 ----
