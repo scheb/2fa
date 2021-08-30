@@ -174,7 +174,7 @@ class SchebTwoFactorExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('two_factor_provider_webauthn.xml');
 
-        $container->setAlias('scheb_two_factor.webauthn.public_key_credential_source_repository', $config['webauthn']['public_key_credential_source_repository']);
+        $container->setAlias('scheb_two_factor.webauthn.public_key_credential_source_repository', $config['webauthn']['credential_source_repository']);
         $container->setParameter('scheb_two_factor.webauthn.rp_id', $config['webauthn']['rp_id']);
         $container->setParameter('scheb_two_factor.webauthn.rp_name', $config['webauthn']['rp_name']);
         $container->setParameter('scheb_two_factor.webauthn.rp_icon', $config['webauthn']['rp_icon']);

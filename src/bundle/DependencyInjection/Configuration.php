@@ -204,6 +204,7 @@ class Configuration implements ConfigurationInterface
                     ->canBeEnabled()
                     ->children()
                         ->scalarNode('enabled')->defaultValue(false)->end()
+                        ->scalarNode('credential_source_repository')->isRequired()->end()
                         ->scalarNode('form_renderer')->defaultNull()->end()
                         ->scalarNode('rp_id')->isRequired()->end()
                         ->scalarNode('rp_name')->isRequired()->end()
