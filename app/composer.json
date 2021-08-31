@@ -4,7 +4,10 @@
     "require": {
         "php": ">=7.2.5",
         "ext-json": "*",
+        "nyholm/psr7": "^1.1",
+        "symfony/http-client": "^4.4|^5.0",
         "symfony/monolog-bundle": "^3.1",
+        "symfony/psr-http-message-bridge": "^1.2|^2.0",
         "symfony/symfony": "^4.4|^5.0",
         "symfony/swiftmailer-bundle": "^3.1.1",
         "doctrine/doctrine-bundle": "^2.0.3",
@@ -12,7 +15,8 @@
         "lcobucci/jwt": "^3.4|^4.0",
         "spomky-labs/otphp": "^9.1|^10.0",
         "paragonie/constant_time_encoding": "^2.2",
-        "endroid/qr-code": "^3.0"
+        "endroid/qr-code": "^3.0",
+        "web-auth/webauthn-lib": "^3.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0|^9.0"
@@ -33,6 +37,7 @@
                 "../src/google-authenticator",
                 "../src/qr-code",
                 "../src/totp",
+                "../src/webauthn",
                 "../src/trusted-device"
             ]
         }

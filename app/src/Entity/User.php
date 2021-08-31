@@ -12,13 +12,14 @@ use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfigurationInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface as TotpTwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\TrustedDeviceInterface;
+use Scheb\TwoFactorBundle\Model\Webauthn\WebauthnTwoFactorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
  */
-class User implements UserInterface, \Serializable, EmailTwoFactorInterface, GoogleTwoFactorInterface, TotpTwoFactorInterface, TrustedDeviceInterface, BackupCodeInterface
+class User implements UserInterface, \Serializable, EmailTwoFactorInterface, GoogleTwoFactorInterface, TotpTwoFactorInterface, TrustedDeviceInterface, BackupCodeInterface, WebauthnTwoFactorInterface
 {
     private const BACKUP_CODES = [111, 222];
     public const TRUSTED_TOKEN_VERSION = 1;
@@ -77,6 +78,11 @@ class User implements UserInterface, \Serializable, EmailTwoFactorInterface, Goo
      * @ORM\Column(type="boolean")
      */
     private $isActive;
+
+    public function getUserIdentifier(): string
+    {
+        return hash('sha256', sprintf('%s-%d', $this->getUsername(), $this->getId()));
+    }
 
     public function getId()
     {
@@ -237,5 +243,35 @@ class User implements UserInterface, \Serializable, EmailTwoFactorInterface, Goo
     public function isEnabled()
     {
         return $this->isActive;
+    }
+
+    public function isWebauthnAuthenticationEnabled(): bool
+    {
+        // TODO: Implement isWebauthnAuthenticationEnabled() method.
+    }
+
+    public function getWebauthnCredentialSources(): array
+    {
+        // TODO: Implement getWebauthnCredentialSources() method.
+    }
+
+    public function getWebauthnUsername(): string
+    {
+        return $this->getUsername();
+    }
+
+    public function getWebauthnUserId(): string
+    {
+        return $this->getUserIdentifier();
+    }
+
+    public function getWebauthnDisplayName(): string
+    {
+        return $this->getUsername();
+    }
+
+    public function getWebauthnIcon(): ?string
+    {
+        return null;
     }
 }
