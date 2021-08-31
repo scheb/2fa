@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface as EmailTwoFactorInterface;
@@ -78,6 +80,17 @@ class User implements UserInterface, \Serializable, EmailTwoFactorInterface, Goo
      * @ORM\Column(type="boolean")
      */
     private $isActive;
+
+    /**
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="PublicKeyCredentialSource", mappedBy="userHandle")
+     */
+    private $webauthnSources;
+
+    public function __construct()
+    {
+        $this->webauthnSources = new ArrayCollection();
+    }
 
     public function getUserIdentifier(): string
     {
@@ -247,12 +260,12 @@ class User implements UserInterface, \Serializable, EmailTwoFactorInterface, Goo
 
     public function isWebauthnAuthenticationEnabled(): bool
     {
-        // TODO: Implement isWebauthnAuthenticationEnabled() method.
+        return $this->webauthnSources->isEmpty();
     }
 
     public function getWebauthnCredentialSources(): array
     {
-        // TODO: Implement getWebauthnCredentialSources() method.
+        return $this->webauthnSources->toArray();
     }
 
     public function getWebauthnUsername(): string
@@ -265,11 +278,19 @@ class User implements UserInterface, \Serializable, EmailTwoFactorInterface, Goo
         return $this->getUserIdentifier();
     }
 
+    /**
+     * Not used in this example.
+     * Should be something like "John Doe" or "Skywalker-1977".
+     */
     public function getWebauthnDisplayName(): string
     {
         return $this->getUsername();
     }
 
+    /**
+     * Not used in this example.
+     * Should be a secured image that uses the data: scheme.
+     */
     public function getWebauthnIcon(): ?string
     {
         return null;
