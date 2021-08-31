@@ -9,6 +9,7 @@ use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface as EMailTwoFactorInterf
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface as GoogleTwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface as TotpTwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\TrustedDeviceInterface;
+use Scheb\TwoFactorBundle\Model\Webauthn\WebauthnTwoFactorInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -68,6 +69,7 @@ class Configuration implements ConfigurationInterface
         $this->addEmailConfiguration($rootNode);
         $this->addGoogleAuthenticatorConfiguration($rootNode);
         $this->addTotpConfiguration($rootNode);
+        $this->addWebauthnConfiguration($rootNode);
     }
 
     private function addBackupCodeConfiguration(ArrayNodeDefinition $rootNode): void

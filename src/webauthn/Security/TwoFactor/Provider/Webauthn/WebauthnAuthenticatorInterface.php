@@ -5,20 +5,18 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Webauthn;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Scheb\TwoFactorBundle\Model\Webauthn\WebauthnTwoFactorInterface;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialRequestOptions;
 use Webauthn\PublicKeyCredentialSource;
+use Webauthn\PublicKeyCredentialUserEntity;
 
 interface WebauthnAuthenticatorInterface
 {
-    /**
-     * Generate the Credential Request Options for the user.
-     */
     public function getCredentialRequestOptions(array $allowedPublicKeyDescriptors = []): PublicKeyCredentialRequestOptions;
 
-    /**
-     * Load and Check the Attestation Response.
-     */
     public function loadAndCheckAttestationResponse(string $data, PublicKeyCredentialCreationOptions $publicKeyCredentialCreationOptions, ServerRequestInterface $serverRequest): PublicKeyCredentialSource;
+
+    public function getCredentialCreationOptions(PublicKeyCredentialUserEntity $userEntity, array $excludedPublicKeyDescriptors = []): PublicKeyCredentialCreationOptions;
+
+    public function loadAndCheckAssertionResponse(string $data, PublicKeyCredentialRequestOptions $publicKeyCredentialRequestOptions, PublicKeyCredentialUserEntity $userEntity, ServerRequestInterface $serverRequest): PublicKeyCredentialSource;
 }

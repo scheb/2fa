@@ -90,7 +90,7 @@ class WebauthnAuthenticatorTwoFactorProvider implements TwoFactorProviderInterfa
         $userEntity = $this->createUserEntity($user);
 
         try {
-            $this->authenticator->loadAndCheckAssertionResponse($authenticationCode,$publicKeyCredentialRequestOptions, $userEntity, $psrRequest);
+            $this->authenticator->loadAndCheckAssertionResponse($authenticationCode, $publicKeyCredentialRequestOptions, $userEntity, $psrRequest);
         } catch (Throwable $e) {
             //Log the error here
             return false;
