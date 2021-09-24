@@ -30,7 +30,7 @@ class TrustedCookieResponseListener implements EventSubscriberInterface
     private $cookieName;
 
     /**
-     * @var bool
+     * @var bool|null
      */
     private $cookieSecure;
 
@@ -53,7 +53,7 @@ class TrustedCookieResponseListener implements EventSubscriberInterface
         TrustedDeviceTokenStorage $trustedTokenStorage,
         int $trustedTokenLifetime,
         string $cookieName,
-        bool $cookieSecure,
+        ?bool $cookieSecure,
         ?string $cookieSameSite,
         ?string $cookiePath,
         ?string $cookieDomain
@@ -88,7 +88,7 @@ class TrustedCookieResponseListener implements EventSubscriberInterface
                 $this->getValidUntil(),
                 $this->cookiePath,
                 $domain,
-                $this->cookieSecure,
+                null === $this->cookieSecure ? $event->getRequest()->isSecure() : $this->cookieSecure,
                 true,
                 false,
                 $this->cookieSameSite

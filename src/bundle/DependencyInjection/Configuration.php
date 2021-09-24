@@ -113,7 +113,7 @@ class Configuration implements ConfigurationInterface
                         ->integerNode('lifetime')->defaultValue(60 * 24 * 3600)->min(1)->end()
                         ->booleanNode('extend_lifetime')->defaultFalse()->end()
                         ->scalarNode('cookie_name')->defaultValue('trusted_device')->end()
-                        ->booleanNode('cookie_secure')->defaultFalse()->end()
+                        ->enumNode('cookie_secure')->values([true, false, 'auto'])->defaultValue('auto')->end()
                         ->scalarNode('cookie_domain')->defaultNull()->end()
                         ->scalarNode('cookie_path')->defaultValue('/')->end()
                         ->scalarNode('cookie_same_site')
