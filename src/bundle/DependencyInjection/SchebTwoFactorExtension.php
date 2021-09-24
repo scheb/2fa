@@ -90,7 +90,7 @@ class SchebTwoFactorExtension extends Extension
         $container->setParameter('scheb_two_factor.trusted_device.cookie_name', $config['trusted_device']['cookie_name']);
         $container->setParameter('scheb_two_factor.trusted_device.lifetime', $config['trusted_device']['lifetime']);
         $container->setParameter('scheb_two_factor.trusted_device.extend_lifetime', $config['trusted_device']['extend_lifetime']);
-        $container->setParameter('scheb_two_factor.trusted_device.cookie_secure', $config['trusted_device']['cookie_secure']);
+        $container->setParameter('scheb_two_factor.trusted_device.cookie_secure', 'auto' === $config['trusted_device']['cookie_secure'] ? null : $config['trusted_device']['cookie_secure']);
         $container->setParameter('scheb_two_factor.trusted_device.cookie_same_site', $config['trusted_device']['cookie_same_site']);
         $container->setParameter('scheb_two_factor.trusted_device.cookie_domain', $config['trusted_device']['cookie_domain']);
         $container->setParameter('scheb_two_factor.trusted_device.cookie_path', $config['trusted_device']['cookie_path']);

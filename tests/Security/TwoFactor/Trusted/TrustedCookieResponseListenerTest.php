@@ -38,13 +38,13 @@ class TrustedCookieResponseListenerTest extends TestCase
         $this->response = new Response();
     }
 
-    private function createTrustedCookieResponseListener(?string $domain = null): TrustedCookieResponseListener
+    private function createTrustedCookieResponseListener(?string $domain = null, ?bool $cookieSecure = true): TrustedCookieResponseListener
     {
         $cookieResponseListener = new TestableTrustedCookieResponseListener(
             $this->trustedTokenStorage,
             3600,
             'cookieName',
-            true,
+            $cookieSecure,
             Cookie::SAMESITE_LAX,
             '/cookie-path',
             $domain
@@ -54,24 +54,15 @@ class TrustedCookieResponseListenerTest extends TestCase
         return $cookieResponseListener;
     }
 
-    /**
-     * @return MockObject|Request
-     */
-    private function createRequestWithHost(string $host = 'example.org'): MockObject
+    private function createRequestWithHost(string $host = 'example.org'): Request
     {
-        $request = $this->createMock(Request::class);
-        $request
-            ->expects($this->any())
-            ->method('getHost')
-            ->willReturn($host);
+        $request = Request::create('/');
+        $request->headers->set('HOST', $host);
 
         return $request;
     }
 
-    /**
-     * @param MockObject|Request $request
-     */
-    private function createEventWithRequest(MockObject $request): ResponseEvent
+    private function createEventWithRequest(Request $request): ResponseEvent
     {
         return new ResponseEvent(
             $this->createMock(HttpKernelInterface::class),
@@ -199,6 +190,59 @@ class TrustedCookieResponseListenerTest extends TestCase
             ['123.0.0.1'],
             ['2001:0db8:85a3:0000:0000:8a2e:0370:7334'],
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function onKernelResponse_cookieSecureAutoOnSecureRequest_setSecureCookie(): void
+    {
+        $this->trustedTokenStorage
+            ->expects($this->any())
+            ->method('hasUpdatedCookie')
+            ->willReturn(true);
+
+        $this->trustedTokenStorage
+            ->expects($this->any())
+            ->method('getCookieValue')
+            ->willReturn('cookieValue');
+
+        $request = $this->createRequestWithHost();
+        $request->server->set('HTTPS', 'On');
+
+        $event = $this->createEventWithRequest($request);
+        $this->cookieResponseListener = $this->createTrustedCookieResponseListener(null, null);
+        $this->cookieResponseListener->onKernelResponse($event);
+
+        $cookies = $this->response->headers->getCookies();
+        $this->assertCount(1, $cookies, 'Response must have a cookie set.');
+        $this->assertTrue($cookies[0]->isSecure());
+    }
+
+    /**
+     * @test
+     */
+    public function onKernelResponse_cookieSecureAutoOnUnsecureRequest_setUnsecureCookie(): void
+    {
+        $this->trustedTokenStorage
+            ->expects($this->any())
+            ->method('hasUpdatedCookie')
+            ->willReturn(true);
+
+        $this->trustedTokenStorage
+            ->expects($this->any())
+            ->method('getCookieValue')
+            ->willReturn('cookieValue');
+
+        $request = $this->createRequestWithHost();
+
+        $event = $this->createEventWithRequest($request);
+        $this->cookieResponseListener = $this->createTrustedCookieResponseListener(null, null);
+        $this->cookieResponseListener->onKernelResponse($event);
+
+        $cookies = $this->response->headers->getCookies();
+        $this->assertCount(1, $cookies, 'Response must have a cookie set.');
+        $this->assertFalse($cookies[0]->isSecure());
     }
 }
 
