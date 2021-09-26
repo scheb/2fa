@@ -18,7 +18,7 @@ Bundle Configuration
            lifetime: 5184000              # Lifetime of the trusted device token
            extend_lifetime: false         # Automatically extend lifetime of the trusted cookie on re-login
            cookie_name: trusted_device    # Name of the trusted device cookie
-           cookie_secure: false           # Set the 'Secure' (HTTPS Only) flag on the trusted device cookie
+           cookie_secure: false           # true|false|auto Set the 'Secure' (HTTPS Only) flag on the trusted device cookie
            cookie_same_site: "lax"        # The same-site option of the cookie, can be "lax", "strict" or null
            cookie_domain: ".example.com"  # Domain to use when setting the cookie, fallback to the request domain if not set
            cookie_path: "/"               # Path to use when setting the cookie
