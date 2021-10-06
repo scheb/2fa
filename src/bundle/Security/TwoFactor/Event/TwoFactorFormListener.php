@@ -44,6 +44,10 @@ class TwoFactorFormListener implements EventSubscriberInterface
 
     public function onKernelRequest(RequestEvent $requestEvent): void
     {
+        if(!$requestEvent->getRequest()->hasSession()) {
+            return;
+        }
+        
         $token = $this->tokenStorage->getToken();
         if (!($token instanceof TwoFactorTokenInterface)) {
             return;
