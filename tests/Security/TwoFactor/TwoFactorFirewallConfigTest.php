@@ -133,7 +133,7 @@ class TwoFactorFirewallConfigTest extends TestCase
     /**
      * @test
      */
-    public function isCsrfProtectionEnabled_configuredCsrfTokenGeneratorIsNull_returnFalse(): void
+    public function isCsrfProtectionEnabled_csrfOptionIsNotSet_returnFalse(): void
     {
         $returnValue = $this->createConfig([])->isCsrfProtectionEnabled();
         $this->assertFalse($returnValue);
@@ -144,7 +144,7 @@ class TwoFactorFirewallConfigTest extends TestCase
      */
     public function isCsrfProtectionEnabled_csrfDisabled_returnTrue(): void
     {
-        $returnValue = $this->createConfig(['enable_csrf'])->isCsrfProtectionEnabled();
+        $returnValue = $this->createConfig(['enable_csrf' => false])->isCsrfProtectionEnabled();
         $this->assertFalse($returnValue);
     }
 
