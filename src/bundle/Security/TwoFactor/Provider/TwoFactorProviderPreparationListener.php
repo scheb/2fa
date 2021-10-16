@@ -9,6 +9,7 @@ use Psr\Log\NullLogger;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnexpectedTokenException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -141,16 +142,20 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
 
         $firewallName = $twoFactorToken->getProviderKey(true);
 
-        if ($this->preparationRecorder->isTwoFactorProviderPrepared($firewallName, $providerName)) {
-            $this->logger->info(sprintf('Two-factor provider "%s" was already prepared.', $providerName));
+        try {
+            if ($this->preparationRecorder->isTwoFactorProviderPrepared($firewallName, $providerName)) {
+                $this->logger->info(sprintf('Two-factor provider "%s" was already prepared.', $providerName));
 
-            return;
+                return;
+            }
+
+            $user = $twoFactorToken->getUser();
+            $this->providerRegistry->getProvider($providerName)->prepareAuthentication($user);
+            $this->preparationRecorder->setTwoFactorProviderPrepared($firewallName, $providerName);
+            $this->logger->info(sprintf('Two-factor provider "%s" prepared.', $providerName));
+        } catch (UnexpectedTokenException $e) {
+            $this->logger->info(sprintf('Two-factor provider "%s" was not prepared, security token was change within the request.', $providerName));
         }
-
-        $user = $twoFactorToken->getUser();
-        $this->providerRegistry->getProvider($providerName)->prepareAuthentication($user);
-        $this->preparationRecorder->setTwoFactorProviderPrepared($firewallName, $providerName);
-        $this->logger->info(sprintf('Two-factor provider "%s" prepared.', $providerName));
     }
 
     private function supports(TokenInterface $token): bool

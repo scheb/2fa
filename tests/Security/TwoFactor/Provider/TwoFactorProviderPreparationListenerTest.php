@@ -8,6 +8,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnexpectedTokenException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\PreparationRecorderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationListener;
@@ -246,6 +247,27 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $this->providerRegistry
             ->expects($this->never())
             ->method('getProvider');
+
+        $this->listener->onTwoFactorForm($event);
+        $this->listener->onKernelResponse($this->createResponseEvent());
+    }
+
+    /**
+     * @test
+     */
+    public function onKernelResponse_recorderThrowsUnexpectedTokenException_doNothing(): void
+    {
+        $this->initTwoFactorProviderPreparationListener(false, false);
+        $event = $this->createTwoFactorAuthenticationEvent();
+
+        $this->preparationRecorder
+            ->expects($this->any())
+            ->method('isTwoFactorProviderPrepared')
+            ->willThrowException(new UnexpectedTokenException());
+
+        $this->preparationRecorder
+            ->expects($this->never())
+            ->method('setTwoFactorProviderPrepared');
 
         $this->listener->onTwoFactorForm($event);
         $this->listener->onKernelResponse($this->createResponseEvent());

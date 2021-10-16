@@ -6,6 +6,7 @@ namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnexpectedTokenException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TokenPreparationRecorder;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -57,11 +58,11 @@ class TokenPreparationRecorderTest extends TestCase
     /**
      * @test
      */
-    public function isTwoFactorProviderPrepared_invalidToken_throwRuntimeException(): void
+    public function isTwoFactorProviderPrepared_invalidToken_throwUnexpectedTokenException(): void
     {
         $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(UnexpectedTokenException::class);
         $this->recorder->isTwoFactorProviderPrepared(self::FIREWALL_NAME, self::PROVIDER_NAME);
     }
 
@@ -107,11 +108,11 @@ class TokenPreparationRecorderTest extends TestCase
     /**
      * @test
      */
-    public function setTwoFactorProviderPrepared_invalidToken_throwRuntimeException(): void
+    public function setTwoFactorProviderPrepared_invalidToken_throwUnexpectedTokenException(): void
     {
         $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(UnexpectedTokenException::class);
         $this->recorder->setTwoFactorProviderPrepared(self::FIREWALL_NAME, self::PROVIDER_NAME);
     }
 

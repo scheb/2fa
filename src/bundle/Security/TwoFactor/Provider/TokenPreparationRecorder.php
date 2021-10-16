@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider;
 
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnexpectedTokenException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
@@ -28,7 +29,7 @@ class TokenPreparationRecorder implements PreparationRecorderInterface
     {
         $token = $this->tokenStorage->getToken();
         if (!($token instanceof TwoFactorTokenInterface)) {
-            throw new \RuntimeException('The security token has to be an instance of TwoFactorTokenInterface.');
+            throw new UnexpectedTokenException('The security token has to be an instance of TwoFactorTokenInterface.');
         }
 
         $providerKey = $token->getProviderKey(true);
@@ -43,7 +44,7 @@ class TokenPreparationRecorder implements PreparationRecorderInterface
     {
         $token = $this->tokenStorage->getToken();
         if (!($token instanceof TwoFactorTokenInterface)) {
-            throw new \RuntimeException('The security token has to be an instance of TwoFactorTokenInterface.');
+            throw new UnexpectedTokenException('The security token has to be an instance of TwoFactorTokenInterface.');
         }
 
         $providerKey = $token->getProviderKey(true);
