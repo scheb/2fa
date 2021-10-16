@@ -26,6 +26,7 @@ class TwoFactorFactory implements SecurityFactoryInterface, FirewallListenerFact
     public const DEFAULT_TARGET_PATH = '/';
     public const DEFAULT_AUTH_CODE_PARAMETER_NAME = '_auth_code';
     public const DEFAULT_TRUSTED_PARAMETER_NAME = '_trusted';
+    public const DEFAULT_REMEMBER_ME_SETS_TRUSTED = false;
     public const DEFAULT_MULTI_FACTOR = false;
     public const DEFAULT_PREPARE_ON_LOGIN = false;
     public const DEFAULT_PREPARE_ON_ACCESS_DENIED = false;
@@ -88,6 +89,7 @@ class TwoFactorFactory implements SecurityFactoryInterface, FirewallListenerFact
                 ->scalarNode('authentication_required_handler')->defaultNull()->end()
                 ->scalarNode('auth_code_parameter_name')->defaultValue(self::DEFAULT_AUTH_CODE_PARAMETER_NAME)->end()
                 ->scalarNode('trusted_parameter_name')->defaultValue(self::DEFAULT_TRUSTED_PARAMETER_NAME)->end()
+                ->scalarNode('remember_me_sets_trusted')->defaultValue(self::DEFAULT_REMEMBER_ME_SETS_TRUSTED)->end()
                 ->booleanNode('multi_factor')->defaultValue(self::DEFAULT_MULTI_FACTOR)->end()
                 ->booleanNode('prepare_on_login')->defaultValue(self::DEFAULT_PREPARE_ON_LOGIN)->end()
                 ->booleanNode('prepare_on_access_denied')->defaultValue(self::DEFAULT_PREPARE_ON_ACCESS_DENIED)->end()

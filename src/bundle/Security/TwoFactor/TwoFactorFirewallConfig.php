@@ -67,6 +67,11 @@ class TwoFactorFirewallConfig
         return $this->options['trusted_parameter_name'] ?? TwoFactorFactory::DEFAULT_TRUSTED_PARAMETER_NAME;
     }
 
+    public function isRememberMeSetsTrusted(): bool
+    {
+        return $this->options['remember_me_sets_trusted'] ?? TwoFactorFactory::DEFAULT_REMEMBER_ME_SETS_TRUSTED;
+    }
+
     public function isCsrfProtectionEnabled(): bool
     {
         return $this->options['enable_csrf'] ?? TwoFactorFactory::DEFAULT_ENABLE_CSRF;

@@ -118,6 +118,7 @@ Firewall Configuration
                                                          # (supports symfony/property-access notation for nested values)
                    trusted_parameter_name: _trusted      # Name of the parameter for the trusted device option
                                                          # (supports symfony/property-access notation for nested values)
+                   remember_me_sets_trusted: false       # If remember-me option should also set the trusted device cookie
                    multi_factor: false                   # If ALL active two-factor methods need to be fulfilled
                                                          # (multi-factor authentication)
                    success_handler: acme.custom_success_handler  # Use a custom success handler instead of the default one

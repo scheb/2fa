@@ -140,6 +140,14 @@ class TwoFactorAuthenticatorTest extends TestCase
             ->willReturn($hasTrustedDeviceParam);
     }
 
+    private function stubRememberMeSetsTrusted(bool $rememberMeSetsTrusted): void
+    {
+        $this->twoFactorFirewallConfig
+            ->expects($this->any())
+            ->method('isRememberMeSetsTrusted')
+            ->willReturn($rememberMeSetsTrusted);
+    }
+
     /**
      * @return MockObject|TwoFactorTokenInterface
      */
@@ -331,6 +339,7 @@ class TwoFactorAuthenticatorTest extends TestCase
     public function authenticate_trustedDeviceParameterNotSet_noTrustedDeviceBadge(): void
     {
         $this->stubRequestHasTrustedDeviceParameter(false);
+        $this->stubRememberMeSetsTrusted(false);
         $this->stubTokenStorageHasTwoFactorToken();
 
         $returnValue = $this->authenticator->authenticate($this->request);
@@ -344,7 +353,27 @@ class TwoFactorAuthenticatorTest extends TestCase
     public function authenticate_trustedDeviceParameterSet_addTrustedDeviceBadge(): void
     {
         $this->stubRequestHasTrustedDeviceParameter(true);
+        $this->stubRememberMeSetsTrusted(false);
         $this->stubTokenStorageHasTwoFactorToken();
+
+        $returnValue = $this->authenticator->authenticate($this->request);
+        $this->assertInstanceOf(TwoFactorPassport::class, $returnValue);
+        $this->assertTrue($returnValue->hasBadge(TrustedDeviceBadge::class));
+    }
+
+    /**
+     * @test
+     */
+    public function authenticate_rememberMeSetsTrustedWithRememberMeEnabled_addTrustedDeviceBadge(): void
+    {
+        $this->stubRequestHasTrustedDeviceParameter(false);
+        $this->stubRememberMeSetsTrusted(true);
+        $twoFactorToken = $this->stubTokenStorageHasTwoFactorToken();
+        $twoFactorToken
+            ->expects($this->any())
+            ->method('hasAttribute')
+            ->with(TwoFactorTokenInterface::ATTRIBUTE_NAME_USE_REMEMBER_ME)
+            ->willReturn(true);
 
         $returnValue = $this->authenticator->authenticate($this->request);
         $this->assertInstanceOf(TwoFactorPassport::class, $returnValue);

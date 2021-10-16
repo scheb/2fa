@@ -122,13 +122,21 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
             $passport->addBadge(new CsrfTokenBadge($tokenId, $tokenValue));
         }
 
-        if ($this->twoFactorFirewallConfig->hasTrustedDeviceParameterInRequest($request)
-            && class_exists(TrustedDeviceBadge::class) // Make sure the package is installed
-        ) {
+        // Make sure the trusted device package is installed
+        if (class_exists(TrustedDeviceBadge::class) && $this->shouldSetTrustedDevice($request, $passport)) {
             $passport->addBadge(new TrustedDeviceBadge());
         }
 
         return $passport;
+    }
+
+    private function shouldSetTrustedDevice(Request $request, TwoFactorPassport $passport): bool
+    {
+        return $this->twoFactorFirewallConfig->hasTrustedDeviceParameterInRequest($request)
+            || (
+                $this->twoFactorFirewallConfig->isRememberMeSetsTrusted()
+                && $passport->hasBadge(RememberMeBadge::class)
+            );
     }
 
     public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface

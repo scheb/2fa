@@ -201,6 +201,30 @@ class TwoFactorListenerTest extends TestCase
         return $twoFactorToken;
     }
 
+    /**
+     * @return MockObject|TokenInterface
+     */
+    private function createTwoFactorTokenWithRememberMeCookie(Cookie $rememberMeCookie): MockObject
+    {
+        $attributes = [TwoFactorTokenInterface::ATTRIBUTE_NAME_REMEMBER_ME_COOKIE => [$rememberMeCookie]];
+
+        return $this->createTwoFactorToken(self::FIREWALL_NAME, null, $attributes);
+    }
+
+    /**
+     * @return MockObject|TokenInterface
+     */
+    private function createAuthenticatedToken(string $user): MockObject
+    {
+        $authenticatedToken = $this->createMock(TokenInterface::class);
+        $authenticatedToken
+            ->expects($this->any())
+            ->method('getUser')
+            ->willReturn($user);
+
+        return $authenticatedToken;
+    }
+
     private function stubTokenStorageHasToken(TokenInterface $token): void
     {
         $this->tokenStorage
@@ -225,6 +249,14 @@ class TwoFactorListenerTest extends TestCase
             ->method('hasTrustedDeviceParameterInRequest')
             ->with($this->request)
             ->willReturn($hasTrustedParam);
+    }
+
+    private function stubRememberMeSetsTrusted(bool $rememberMeSetsTrusted): void
+    {
+        $this->twoFactorFirewallConfig
+            ->expects($this->any())
+            ->method('isRememberMeSetsTrusted')
+            ->willReturn($rememberMeSetsTrusted);
     }
 
     private function stubHandlersReturnResponse(): Response
@@ -537,15 +569,38 @@ class TwoFactorListenerTest extends TestCase
      */
     public function authenticate_twoFactorProcessCompleteWithTrustedEnabled_setTrustedDevice(): void
     {
-        $authenticatedToken = $this->createMock(TokenInterface::class);
-        $authenticatedToken
-            ->expects($this->any())
-            ->method('getUser')
-            ->willReturn('user');
+        $authenticatedToken = $this->createAuthenticatedToken('user');
 
         $this->stubTokenStorageHasToken($this->createTwoFactorToken());
         $this->stubCsrfTokenIsValid();
         $this->stubRequestHasTrustedParameter(true);
+        $this->stubRememberMeSetsTrusted(false);
+        $this->stubCanSetTrustedDevice(true);
+        $this->stubAuthenticationManagerReturnsToken($authenticatedToken); // Not a TwoFactorToken
+        $this->stubHandlersReturnResponse();
+
+        $this->trustedDeviceManager
+            ->expects($this->once())
+            ->method('addTrustedDevice')
+            ->with('user', 'firewallName');
+
+        $this->listener->authenticate($this->requestEvent);
+    }
+
+    /**
+     * @test
+     */
+    public function authenticate_twoFactorProcessCompleteWithRememberMeSetsTrusted_setTrustedDevice(): void
+    {
+        $authenticatedToken = $this->createAuthenticatedToken('user');
+
+        $rememberMeCookie = new Cookie('remember_me', 'value');
+        $twoFactorToken = $this->createTwoFactorTokenWithRememberMeCookie($rememberMeCookie);
+
+        $this->stubTokenStorageHasToken($twoFactorToken);
+        $this->stubCsrfTokenIsValid();
+        $this->stubRequestHasTrustedParameter(false);
+        $this->stubRememberMeSetsTrusted(true);
         $this->stubCanSetTrustedDevice(true);
         $this->stubAuthenticationManagerReturnsToken($authenticatedToken); // Not a TwoFactorToken
         $this->stubHandlersReturnResponse();
@@ -572,6 +627,7 @@ class TwoFactorListenerTest extends TestCase
         $this->stubTokenStorageHasToken($this->createTwoFactorToken());
         $this->stubCsrfTokenIsValid();
         $this->stubRequestHasTrustedParameter(true);
+        $this->stubRememberMeSetsTrusted(false);
         $this->stubCanSetTrustedDevice(false);
         $this->stubAuthenticationManagerReturnsToken($authenticatedToken); // Not a TwoFactorToken
         $this->stubHandlersReturnResponse();
@@ -591,6 +647,8 @@ class TwoFactorListenerTest extends TestCase
         $this->stubTokenStorageHasToken($this->createTwoFactorToken());
         $this->stubCsrfTokenIsValid();
         $this->stubRequestHasTrustedParameter(false);
+        $this->stubRememberMeSetsTrusted(false);
+        $this->stubCanSetTrustedDevice(true);
         $this->stubAuthenticationManagerReturnsToken($this->createMock(TokenInterface::class)); // Not a TwoFactorToken
         $this->stubHandlersReturnResponse();
 
@@ -613,8 +671,7 @@ class TwoFactorListenerTest extends TestCase
             ->willReturn('user');
 
         $rememberMeCookie = new Cookie('remember_me', 'value');
-        $attributes = [TwoFactorTokenInterface::ATTRIBUTE_NAME_REMEMBER_ME_COOKIE => [$rememberMeCookie]];
-        $twoFactorToken = $this->createTwoFactorToken(self::FIREWALL_NAME, null, $attributes);
+        $twoFactorToken = $this->createTwoFactorTokenWithRememberMeCookie($rememberMeCookie);
 
         $this->stubTokenStorageHasToken($twoFactorToken);
         $this->stubCsrfTokenIsValid();

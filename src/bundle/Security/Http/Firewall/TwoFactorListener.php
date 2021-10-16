@@ -188,8 +188,8 @@ class TwoFactorListener extends AbstractListener
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::COMPLETE, $request, $token);
 
         $firewallName = $previousTwoFactorToken->getProviderKey(true);
-        if ($this->trustedDeviceManager
-            && $this->twoFactorFirewallConfig->hasTrustedDeviceParameterInRequest($request)
+        if ($this->trustedDeviceManager // Make sure the trusted device package is installed
+            && $this->shouldSetTrustedDevice($request, $previousTwoFactorToken)
             && $this->trustedDeviceManager->canSetTrustedDevice($token->getUser(), $request, $firewallName)
         ) {
             $this->trustedDeviceManager->addTrustedDevice($token->getUser(), $firewallName);
@@ -199,6 +199,15 @@ class TwoFactorListener extends AbstractListener
         $this->addRememberMeCookies($previousTwoFactorToken, $response);
 
         return $response;
+    }
+
+    private function shouldSetTrustedDevice(Request $request, TwoFactorTokenInterface $previousTwoFactorToken): bool
+    {
+        return $this->twoFactorFirewallConfig->hasTrustedDeviceParameterInRequest($request)
+            || (
+                $this->twoFactorFirewallConfig->isRememberMeSetsTrusted()
+                && $previousTwoFactorToken->hasAttribute(TwoFactorTokenInterface::ATTRIBUTE_NAME_REMEMBER_ME_COOKIE)
+            );
     }
 
     private function dispatchTwoFactorAuthenticationEvent(string $eventType, Request $request, TokenInterface $token): void

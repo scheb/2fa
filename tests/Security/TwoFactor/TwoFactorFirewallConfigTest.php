@@ -21,6 +21,7 @@ class TwoFactorFirewallConfigTest extends TestCase
         'multi_factor' => true,
         'auth_code_parameter_name' => 'auth_code_param',
         'trusted_parameter_name' => 'trusted_param',
+        'remember_me_sets_trusted' => true,
         'enable_csrf' => true,
         'csrf_parameter' => 'parameter_name',
         'csrf_token_id' => 'token_id',
@@ -110,6 +111,33 @@ class TwoFactorFirewallConfigTest extends TestCase
     {
         $returnValue = $this->createConfig()->getTrustedParameterName();
         $this->assertEquals('trusted_param', $returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function isRememberMeSetsTrusted_optionIsNotSet_returnFalse(): void
+    {
+        $returnValue = $this->createConfig([])->isRememberMeSetsTrusted();
+        $this->assertFalse($returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function isRememberMeSetsTrusted_optionDisabled_returnTrue(): void
+    {
+        $returnValue = $this->createConfig(['remember_me_sets_trusted' => false])->isRememberMeSetsTrusted();
+        $this->assertFalse($returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function isRememberMeSetsTrusted_optionEnabled_returnTrue(): void
+    {
+        $returnValue = $this->createConfig(self::FULL_OPTIONS)->isRememberMeSetsTrusted();
+        $this->assertTrue($returnValue);
     }
 
     /**

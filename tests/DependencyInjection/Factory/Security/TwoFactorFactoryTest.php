@@ -73,6 +73,7 @@ two_factor:
     authentication_required_handler: my_authentication_required_handler
     auth_code_parameter_name: auth_code_param_name
     trusted_parameter_name: trusted_param_name
+    remember_me_sets_trusted: true
     multi_factor: true
     prepare_on_login: true
     prepare_on_access_denied: true
@@ -220,6 +221,7 @@ EOF;
         $this->assertNull($processedConfiguration['authentication_required_handler']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_AUTH_CODE_PARAMETER_NAME, $processedConfiguration['auth_code_parameter_name']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_TRUSTED_PARAMETER_NAME, $processedConfiguration['trusted_parameter_name']);
+        $this->assertEquals(TwoFactorFactory::DEFAULT_REMEMBER_ME_SETS_TRUSTED, $processedConfiguration['remember_me_sets_trusted']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_MULTI_FACTOR, $processedConfiguration['multi_factor']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_PREPARE_ON_LOGIN, $processedConfiguration['prepare_on_login']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_PREPARE_ON_ACCESS_DENIED, $processedConfiguration['prepare_on_access_denied']);
@@ -246,6 +248,7 @@ EOF;
         $this->assertEquals('my_authentication_required_handler', $processedConfiguration['authentication_required_handler']);
         $this->assertEquals('auth_code_param_name', $processedConfiguration['auth_code_parameter_name']);
         $this->assertEquals('trusted_param_name', $processedConfiguration['trusted_parameter_name']);
+        $this->assertEquals(true, $processedConfiguration['remember_me_sets_trusted']);
         $this->assertTrue($processedConfiguration['multi_factor']);
         $this->assertTrue($processedConfiguration['prepare_on_login']);
         $this->assertTrue($processedConfiguration['prepare_on_access_denied']);
