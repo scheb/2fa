@@ -80,6 +80,15 @@ To flag a device as "trusted", in the last step of the 2fa process, you have to 
 Please have a look at the `default authentication form template <https://github.com/scheb/2fa/blob/5.x/src/bundle/Resources/views/Authentication/form.html.twig#L38-L40>`_
 how it's implemented.
 
+Clearing the trusted cookie
+---------------------------
+
+To clear all trusted cookies for a specific user (e.g. in case of an security issue), increase the version returned by
+``getTrustedTokenVersion`` on the user entity.
+
+If you need to programmatically clear the trusted cookie on a device for a specific user and firewall combination, you
+can use the ``clearTrustedToken`` method on the ``scheb_two_factor.trusted_token_storage`` service.
+
 Custom trusted device manager
 -----------------------------
 

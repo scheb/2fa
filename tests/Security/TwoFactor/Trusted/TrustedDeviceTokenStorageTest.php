@@ -166,6 +166,40 @@ class TrustedDeviceTokenStorageTest extends TestCase
     /**
      * @test
      */
+    public function clearTrustedToken_removeExistingToken_removeTokenAndHasUpdatedCookie(): void
+    {
+        $this->stubCookieHasToken('serializedToken');
+        $this->stubDecodeToken(
+            // Realm matches, version doesn't need to match
+            $this->createTokenWithProperties('serializedToken', true, false, false)
+        );
+
+        $this->tokenStorage->clearTrustedToken('username', 'firewallName');
+
+        $returnValue = $this->tokenStorage->hasUpdatedCookie();
+        $this->assertTrue($returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function clearTrustedToken_removeNonExistingToken_doNothing(): void
+    {
+        $this->stubCookieHasToken('serializedToken');
+        $this->stubDecodeToken(
+            // Realm doesn't match, version doesn't need to match
+            $this->createTokenWithProperties('serializedToken', false, false, false)
+        );
+
+        $this->tokenStorage->clearTrustedToken('username', 'firewallName');
+
+        $returnValue = $this->tokenStorage->hasUpdatedCookie();
+        $this->assertFalse($returnValue);
+    }
+
+    /**
+     * @test
+     */
     public function hasUpdatedCookie_noTokenCookie_returnFalse(): void
     {
         $returnValue = $this->tokenStorage->hasUpdatedCookie();

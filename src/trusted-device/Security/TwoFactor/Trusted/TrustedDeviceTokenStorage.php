@@ -90,6 +90,23 @@ class TrustedDeviceTokenStorage
         $this->updateCookie = true;
     }
 
+    public function clearTrustedToken(string $username, string $firewall): void
+    {
+        $found = false;
+        foreach ($this->getTrustedTokenList() as $key => $token) {
+            if ($token->authenticatesRealm($username, $firewall)) {
+                // Remove the trusted token, because it is to be replaced with a newer one
+                /** @psalm-suppress PossiblyNullArrayAccess */
+                unset($this->trustedTokenList[$key]);
+                $found = true;
+            }
+        }
+
+        if ($found) {
+            $this->updateCookie = true;
+        }
+    }
+
     /**
      * @return TrustedDeviceToken[]
      */
