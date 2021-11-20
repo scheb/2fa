@@ -315,7 +315,6 @@ EOF;
      */
     public function createAuthenticator_createForFirewall_createServices(): void
     {
-        $this->requireAtLeastSymfony5_3();
         $this->expectDependingServicesCreated();
         $this->callCreateAuthenticator();
     }
@@ -325,8 +324,6 @@ EOF;
      */
     public function createAuthenticator_createForFirewall_returnServiceIds(): void
     {
-        $this->requireAtLeastSymfony5_3();
-
         $this->stubServicesFactory();
         $returnValue = $this->callCreateAuthenticator();
 
@@ -338,8 +335,6 @@ EOF;
      */
     public function createAuthenticator_createForFirewall_createAuthenticatorDefinition(): void
     {
-        $this->requireAtLeastSymfony5_3();
-
         $this->stubServicesFactory();
         $this->callCreateAuthenticator();
 
@@ -356,8 +351,6 @@ EOF;
      */
     public function createAuthenticator_createForFirewall_createAuthenticationTokenCreatedListener(): void
     {
-        $this->requireAtLeastSymfony5_3();
-
         $this->stubServicesFactory();
         $this->callCreateAuthenticator();
 

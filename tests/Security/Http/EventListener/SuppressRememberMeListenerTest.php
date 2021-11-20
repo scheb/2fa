@@ -22,7 +22,6 @@ class SuppressRememberMeListenerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requireAtLeastSymfony5_3();
         $this->suppressRememberMeListener = new SuppressRememberMeListener();
     }
 

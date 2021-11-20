@@ -41,8 +41,6 @@ class AuthenticationTokenListenerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requireAtLeastSymfony5_3();
-
         $this->twoFactorAuthenticationHandler = $this->createMock(AuthenticationHandlerInterface::class);
         $this->authenticationContextFactory = $this->createMock(AuthenticationContextFactoryInterface::class);
 

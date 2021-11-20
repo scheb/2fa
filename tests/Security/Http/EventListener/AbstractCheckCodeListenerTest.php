@@ -49,7 +49,6 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requireAtLeastSymfony5_3();
         $this->user = $this->createMock(UserInterface::class);
         $this->checkPassportEvent = $this->createMock(CheckPassportEvent::class);
         $this->preparationRecorder = $this->createMock(PreparationRecorderInterface::class);
