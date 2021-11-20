@@ -24,7 +24,7 @@ On successful authentication the bundle checks if there is a secret stored in th
 will ask for the authentication code. The user must enter the code currently shown in the Google Authenticator app to
 gain access.
 
-For more information see the `Google Authenticator website <http://code.google.com/p/google-authenticator/>`_.
+For more information see the `Google Authenticator website <https://github.com/google/google-authenticator/wiki>`_.
 
 Installation
 ------------
