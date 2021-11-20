@@ -48,7 +48,7 @@ abstract class TestCase extends WebTestCase
         $this->followRedirects(true);
 
         // Workaround for Symfony >= 5.3 to retrieve the security token after request
-        self::$container->get('security.token_storage')->disableUsageTracking();
+        self::getContainer()->get('security.token_storage')->disableUsageTracking();
     }
 
     protected function tearDown(): void
@@ -88,7 +88,7 @@ abstract class TestCase extends WebTestCase
     protected function addTrustedDeviceCookie(): void
     {
         /** @var TrustedDeviceTokenEncoder $tokenEncoder */
-        $tokenEncoder = self::$container->get('scheb_two_factor.trusted_token_encoder');
+        $tokenEncoder = self::getContainer()->get('scheb_two_factor.trusted_token_encoder');
         $token = $tokenEncoder->generateToken(self::USER_NAME, self::FIREWALL_NAME, User::TRUSTED_TOKEN_VERSION);
 
         $this->client->getCookieJar()->set(new Cookie(
@@ -107,7 +107,7 @@ abstract class TestCase extends WebTestCase
         $user = $this->getTestUser($this->getEntityManager());
 
         /** @var GoogleTotpFactory $totpFactory */
-        $totpFactory = self::$container->get('scheb_two_factor.security.google_totp_factory');
+        $totpFactory = self::getContainer()->get('scheb_two_factor.security.google_totp_factory');
         $totp = $totpFactory->createTotpForUser($user);
 
         return $totp->at(time());
@@ -118,7 +118,7 @@ abstract class TestCase extends WebTestCase
         $user = $this->getTestUser($this->getEntityManager());
 
         /** @var GoogleTotpFactory $totpFactory */
-        $totpFactory = self::$container->get('scheb_two_factor.security.totp_factory');
+        $totpFactory = self::getContainer()->get('scheb_two_factor.security.totp_factory');
         $totp = $totpFactory->createTotpForUser($user);
 
         return $totp->at(time());
@@ -136,7 +136,7 @@ abstract class TestCase extends WebTestCase
 
     private function getEntityManager(): EntityManager
     {
-        $em = self::$container->get('doctrine')->getManager();
+        $em = self::getContainer()->get('doctrine')->getManager();
 
         return $em;
     }
@@ -231,7 +231,7 @@ abstract class TestCase extends WebTestCase
     protected function assertLoggerHasInfo(string $message): void
     {
         $logHandler = null;
-        foreach (self::$container->get('logger')->getHandlers() as $handler) {
+        foreach (self::getContainer()->get('logger')->getHandlers() as $handler) {
             if ($handler instanceof TestHandler) {
                 $logHandler = $handler;
                 break;
@@ -361,8 +361,8 @@ abstract class TestCase extends WebTestCase
     private function getSecurityToken(): ?TokenInterface
     {
         // Workaround for Symfony >= 5.3 to retrieve the security token after request
-        self::$container->get('security.token_storage')->disableUsageTracking();
+        self::getContainer()->get('security.token_storage')->disableUsageTracking();
 
-        return self::$container->get('security.token_storage')->getToken();
+        return self::getContainer()->get('security.token_storage')->getToken();
     }
 }
