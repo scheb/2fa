@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Event;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use Scheb\TwoFactorBundle\Security\Authentication\Provider\AuthenticationProviderDecorator;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
@@ -36,7 +35,7 @@ class TwoFactorFormListenerTest extends TestCase
     private $eventDispatcher;
 
     /**
-     * @var AuthenticationProviderDecorator
+     * @var TwoFactorFormListener
      */
     private $listener;
 
