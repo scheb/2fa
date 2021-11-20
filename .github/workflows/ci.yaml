@@ -122,7 +122,7 @@ jobs:
                 run: vendor/bin/phpunit
 
     integration-tests:
-        name: 'Integration Tests - PHP ${{ matrix.php-version }}, Symfony ${{ matrix.symfony-version }}, Config ${{ matrix.app-config }}'
+        name: 'Integration Tests - PHP ${{ matrix.php-version }}, Symfony ${{ matrix.symfony-version }}'
         runs-on: ubuntu-latest
         # We want to run on external PRs, but not on our own internal PRs as they'll be run by the push to the branch.
         if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
@@ -187,8 +187,6 @@ jobs:
 
             -   name: 'Run tests'
                 run: app/vendor/bin/phpunit -c app
-                env:
-                    TEST_CONFIG: '${{ matrix.app-config }}'
 
     code-coverage:
         name: 'Code Coverage - PHP ${{ matrix.php-version }}'
