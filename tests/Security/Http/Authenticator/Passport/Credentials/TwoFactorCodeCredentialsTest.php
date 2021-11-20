@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\Authenticator\Passport\Credentials;
 
+use PHPUnit\Framework\MockObject\MockObject;
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 
@@ -12,13 +14,19 @@ class TwoFactorCodeCredentialsTest extends TestCase
     private const CODE = 'theCode';
 
     /**
+     * @var MockObject|TwoFactorTokenInterface
+     */
+    private $twoFactorToken;
+
+    /**
      * @var TwoFactorCodeCredentials
      */
     private $credentials;
 
     protected function setUp(): void
     {
-        $this->credentials = new TwoFactorCodeCredentials(self::CODE);
+        $this->twoFactorToken = $this->createMock(TwoFactorTokenInterface::class);
+        $this->credentials = new TwoFactorCodeCredentials($this->twoFactorToken, self::CODE);
     }
 
     /**

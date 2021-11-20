@@ -12,6 +12,10 @@ method `getProviderKey()` was removed, please implement `getFirewallName()` inst
 Internal constant `Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface::ATTRIBUTE_NAME_REMEMBER_ME_COOKIE`
 has been removed.
 
+`Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\TwoFactorPassport` was removed, using
+`Symfony\Component\Security\Http\Authenticator\Passport\Passport` with a
+`Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials` instead.
+
 4.x to 5.x
 ----------
 

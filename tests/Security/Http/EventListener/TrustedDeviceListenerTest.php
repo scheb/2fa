@@ -7,7 +7,7 @@ namespace Scheb\TwoFactorBundle\Tests\Security\Http\EventListener;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Badge\TrustedDeviceBadge;
-use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\TwoFactorPassport;
+use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials;
 use Scheb\TwoFactorBundle\Security\Http\EventListener\TrustedDeviceListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -20,6 +20,11 @@ use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 class TrustedDeviceListenerTest extends TestCase
 {
     private const FIREWALL_NAME = 'firewallName';
+
+    /**
+     * @var string[]
+     */
+    private $availableBadges = [];
 
     /**
      * @var MockObject|LoginSuccessEvent
@@ -58,6 +63,27 @@ class TrustedDeviceListenerTest extends TestCase
         $this->trustedDeviceListener = new TrustedDeviceListener($this->trustedDeviceManager);
     }
 
+    /**
+     * @return MockObject|Passport
+     */
+    private function createPassportMock(): MockObject
+    {
+        $passport = $this->createMock(Passport::class);
+        $passport
+            ->expects($this->any())
+            ->method('hasBadge')
+            ->willReturnCallback(function (string $badgeClass) {
+                return \in_array($badgeClass, $this->availableBadges);
+            });
+
+        return $passport;
+    }
+
+    private function stubPassportHasBadge(string $badgeClass): void
+    {
+        $this->availableBadges[] = $badgeClass;
+    }
+
     private function stubAuthenticatedToken(TokenInterface $authenticatedToken): void
     {
         $this->loginSuccessEvent
@@ -74,26 +100,17 @@ class TrustedDeviceListenerTest extends TestCase
             ->willReturn($passport);
     }
 
-    private function stubPassportHasTrustedDeviceBadge(MockObject $passport): void
-    {
-        $passport
-            ->expects($this->any())
-            ->method('hasBadge')
-            ->with(TrustedDeviceBadge::class)
-            ->willReturn(true);
-    }
-
     /**
      * @test
      */
-    public function onSuccessfulLogin_isTwoFactorToken_doNothing(): void
+    public function onSuccessfulLogin_noTwoFactorPassportCredentials_doNothing(): void
     {
-        $passport = $this->createMock(TwoFactorPassport::class);
-        $authenticatedToken = $this->createMock(TwoFactorTokenInterface::class);
+        $passport = $this->createPassportMock();
+        $authenticatedToken = $this->createMock(TokenInterface::class);
 
         $this->stubAuthenticatedToken($authenticatedToken);
         $this->stubPassport($passport);
-        $this->stubPassportHasTrustedDeviceBadge($passport);
+        $this->stubPassportHasBadge(TrustedDeviceBadge::class);
 
         $this->trustedDeviceManager
             ->expects($this->never())
@@ -105,14 +122,15 @@ class TrustedDeviceListenerTest extends TestCase
     /**
      * @test
      */
-    public function onSuccessfulLogin_noTwoFactorPassport(): void
+    public function onSuccessfulLogin_hasTwoFactorCredentials_doNothing(): void
     {
         $passport = $this->createMock(Passport::class);
-        $authenticatedToken = $this->createMock(TokenInterface::class);
+        $authenticatedToken = $this->createMock(TwoFactorTokenInterface::class);
 
         $this->stubAuthenticatedToken($authenticatedToken);
         $this->stubPassport($passport);
-        $this->stubPassportHasTrustedDeviceBadge($passport);
+        $this->stubPassportHasBadge(TwoFactorCodeCredentials::class);
+        $this->stubPassportHasBadge(TrustedDeviceBadge::class);
 
         $this->trustedDeviceManager
             ->expects($this->never())
@@ -126,11 +144,12 @@ class TrustedDeviceListenerTest extends TestCase
      */
     public function onSuccessfulLogin_noTrustedDeviceBadge_doNothing(): void
     {
-        $passport = $this->createMock(TwoFactorPassport::class);
+        $passport = $this->createPassportMock();
         $authenticatedToken = $this->createMock(TokenInterface::class);
 
         $this->stubAuthenticatedToken($authenticatedToken);
         $this->stubPassport($passport);
+        $this->stubPassportHasBadge(TwoFactorCodeCredentials::class);
 
         $this->trustedDeviceManager
             ->expects($this->never())
@@ -144,13 +163,14 @@ class TrustedDeviceListenerTest extends TestCase
      */
     public function onSuccessfulLogin_cannotSetTrustedDevice_notSetTrustedDevice(): void
     {
-        $passport = $this->createMock(TwoFactorPassport::class);
+        $passport = $this->createPassportMock();
         $authenticatedToken = $this->createMock(TokenInterface::class);
         $user = $this->createMock(UserInterface::class);
 
         $this->stubAuthenticatedToken($authenticatedToken);
         $this->stubPassport($passport);
-        $this->stubPassportHasTrustedDeviceBadge($passport);
+        $this->stubPassportHasBadge(TwoFactorCodeCredentials::class);
+        $this->stubPassportHasBadge(TrustedDeviceBadge::class);
 
         $authenticatedToken
             ->expects($this->any())
@@ -175,13 +195,14 @@ class TrustedDeviceListenerTest extends TestCase
      */
     public function onSuccessfulLogin_canSetTrustedDevice_setTrustedDevice(): void
     {
-        $passport = $this->createMock(TwoFactorPassport::class);
+        $passport = $this->createPassportMock();
         $authenticatedToken = $this->createMock(TokenInterface::class);
         $user = $this->createMock(UserInterface::class);
 
         $this->stubAuthenticatedToken($authenticatedToken);
         $this->stubPassport($passport);
-        $this->stubPassportHasTrustedDeviceBadge($passport);
+        $this->stubPassportHasBadge(TwoFactorCodeCredentials::class);
+        $this->stubPassportHasBadge(TrustedDeviceBadge::class);
 
         $authenticatedToken
             ->expects($this->any())

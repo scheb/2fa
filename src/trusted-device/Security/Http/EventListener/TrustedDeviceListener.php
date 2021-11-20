@@ -6,7 +6,7 @@ namespace Scheb\TwoFactorBundle\Security\Http\EventListener;
 
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Badge\TrustedDeviceBadge;
-use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\TwoFactorPassport;
+use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
@@ -34,7 +34,7 @@ class TrustedDeviceListener implements EventSubscriberInterface
         }
 
         $passport = $loginSuccessEvent->getPassport();
-        if (!($passport instanceof TwoFactorPassport)) {
+        if (!$passport->hasBadge(TwoFactorCodeCredentials::class)) {
             return;
         }
 

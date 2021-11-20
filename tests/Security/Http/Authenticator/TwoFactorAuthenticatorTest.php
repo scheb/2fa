@@ -10,7 +10,6 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Badge\TrustedDeviceBadge;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials;
-use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\TwoFactorPassport;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\TwoFactorAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
@@ -27,6 +26,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerI
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class TwoFactorAuthenticatorTest extends TestCase
@@ -199,15 +199,22 @@ class TwoFactorAuthenticatorTest extends TestCase
     }
 
     /**
-     * @return MockObject|TwoFactorPassport
+     * @return MockObject|Passport
      */
-    private function createTwoFactorPassport($twoFactorToken): MockObject
+    private function createPassportWithTwoFactorCredentials($twoFactorToken): MockObject
     {
-        $passport = $this->createMock(TwoFactorPassport::class);
-        $passport
+        $credentials = $this->createMock(TwoFactorCodeCredentials::class);
+        $credentials
             ->expects($this->any())
             ->method('getTwoFactorToken')
             ->willReturn($twoFactorToken);
+
+        $passport = $this->createMock(Passport::class);
+        $passport
+            ->expects($this->any())
+            ->method('getBadge')
+            ->with(TwoFactorCodeCredentials::class)
+            ->willReturn($credentials);
 
         return $passport;
     }
@@ -289,7 +296,6 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->stubTokenStorageHasTwoFactorToken();
 
         $returnValue = $this->authenticator->authenticate($this->request);
-        $this->assertInstanceOf(TwoFactorPassport::class, $returnValue);
         $this->assertTrue($returnValue->hasBadge(TwoFactorCodeCredentials::class));
         $this->assertFalse($returnValue->hasBadge(RememberMeBadge::class));
 
@@ -311,7 +317,6 @@ class TwoFactorAuthenticatorTest extends TestCase
             ->willReturn(true);
 
         $returnValue = $this->authenticator->authenticate($this->request);
-        $this->assertInstanceOf(TwoFactorPassport::class, $returnValue);
         $this->assertTrue($returnValue->hasBadge(RememberMeBadge::class));
     }
 
@@ -324,7 +329,6 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->stubTokenStorageHasTwoFactorToken();
 
         $returnValue = $this->authenticator->authenticate($this->request);
-        $this->assertInstanceOf(TwoFactorPassport::class, $returnValue);
         $this->assertFalse($returnValue->hasBadge(CsrfTokenBadge::class));
     }
 
@@ -337,7 +341,6 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->stubTokenStorageHasTwoFactorToken();
 
         $returnValue = $this->authenticator->authenticate($this->request);
-        $this->assertInstanceOf(TwoFactorPassport::class, $returnValue);
         $this->assertTrue($returnValue->hasBadge(CsrfTokenBadge::class));
 
         /** @var CsrfTokenBadge $credentials */
@@ -356,7 +359,6 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->stubTokenStorageHasTwoFactorToken();
 
         $returnValue = $this->authenticator->authenticate($this->request);
-        $this->assertInstanceOf(TwoFactorPassport::class, $returnValue);
         $this->assertFalse($returnValue->hasBadge(TrustedDeviceBadge::class));
     }
 
@@ -370,7 +372,6 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->stubTokenStorageHasTwoFactorToken();
 
         $returnValue = $this->authenticator->authenticate($this->request);
-        $this->assertInstanceOf(TwoFactorPassport::class, $returnValue);
         $this->assertTrue($returnValue->hasBadge(TrustedDeviceBadge::class));
     }
 
@@ -389,7 +390,6 @@ class TwoFactorAuthenticatorTest extends TestCase
             ->willReturn(true);
 
         $returnValue = $this->authenticator->authenticate($this->request);
-        $this->assertInstanceOf(TwoFactorPassport::class, $returnValue);
         $this->assertTrue($returnValue->hasBadge(TrustedDeviceBadge::class));
     }
 
@@ -401,7 +401,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->stubIsMultiFactorFirewall(true);
         $authenticatedToken = $this->createMock(TokenInterface::class);
         $twoFactorToken = $this->createTwoFactorToken($authenticatedToken, false);
-        $passport = $this->createTwoFactorPassport($twoFactorToken);
+        $passport = $this->createPassportWithTwoFactorCredentials($twoFactorToken);
 
         $returnValue = $this->authenticator->createToken($passport, self::FIREWALL_NAME);
         $this->assertSame($twoFactorToken, $returnValue);
@@ -415,7 +415,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->stubIsMultiFactorFirewall(true);
         $authenticatedToken = $this->createMock(TokenInterface::class);
         $twoFactorToken = $this->createTwoFactorToken($authenticatedToken, true);
-        $passport = $this->createTwoFactorPassport($twoFactorToken);
+        $passport = $this->createPassportWithTwoFactorCredentials($twoFactorToken);
 
         $this->expect2faCompleteFlagSet($authenticatedToken);
 
@@ -431,7 +431,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->stubIsMultiFactorFirewall(false);
         $authenticatedToken = $this->createMock(TokenInterface::class);
         $twoFactorToken = $this->createTwoFactorToken($authenticatedToken, false);
-        $passport = $this->createTwoFactorPassport($twoFactorToken);
+        $passport = $this->createPassportWithTwoFactorCredentials($twoFactorToken);
 
         $this->expect2faCompleteFlagSet($authenticatedToken);
 

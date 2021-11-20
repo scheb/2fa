@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\Http\EventListener;
 
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials;
-use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\TwoFactorPassport;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\PreparationRecorderInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -29,7 +28,7 @@ abstract class AbstractCheckCodeListener implements EventSubscriberInterface
     public function checkPassport(CheckPassportEvent $event): void
     {
         $passport = $event->getPassport();
-        if (!($passport instanceof TwoFactorPassport && $passport->hasBadge(TwoFactorCodeCredentials::class))) {
+        if (!$passport->hasBadge(TwoFactorCodeCredentials::class)) {
             return;
         }
 
@@ -39,7 +38,9 @@ abstract class AbstractCheckCodeListener implements EventSubscriberInterface
             return;
         }
 
-        $token = $passport->getTwoFactorToken();
+        /** @var TwoFactorCodeCredentials $credentialsBadge */
+        $credentialsBadge = $passport->getBadge(TwoFactorCodeCredentials::class);
+        $token = $credentialsBadge->getTwoFactorToken();
         $providerName = $token->getCurrentTwoFactorProvider();
         if (!$providerName) {
             throw new AuthenticationException('There is no active two-factor provider.');

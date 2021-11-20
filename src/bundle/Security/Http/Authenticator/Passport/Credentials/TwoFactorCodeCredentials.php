@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials;
 
+use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CredentialsInterface;
 
 /**
@@ -11,6 +12,11 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\Credentia
  */
 class TwoFactorCodeCredentials implements CredentialsInterface
 {
+    /**
+     * @var TwoFactorTokenInterface
+     */
+    private $twoFactorToken;
+
     /**
      * @var string|null
      */
@@ -21,9 +27,15 @@ class TwoFactorCodeCredentials implements CredentialsInterface
      */
     private $resolved = false;
 
-    public function __construct(string $code)
+    public function __construct(TwoFactorTokenInterface $twoFactorToken, string $code)
     {
+        $this->twoFactorToken = $twoFactorToken;
         $this->code = $code;
+    }
+
+    public function getTwoFactorToken(): TwoFactorTokenInterface
+    {
+        return $this->twoFactorToken;
     }
 
     public function getCode(): string

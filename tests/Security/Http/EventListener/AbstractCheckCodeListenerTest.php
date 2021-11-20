@@ -7,10 +7,10 @@ namespace Scheb\TwoFactorBundle\Tests\Security\Http\EventListener;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials;
-use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\TwoFactorPassport;
 use Scheb\TwoFactorBundle\Security\Http\EventListener\AbstractCheckCodeListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\PreparationRecorderInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
@@ -72,12 +72,11 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
 
     protected function stubAllPreconditionsFulfilled(): void
     {
-        $passport = $this->createMock(TwoFactorPassport::class);
+        $passport = $this->createMock(Passport::class);
         $token = $this->createTwoFactorToken(self::TWO_FACTOR_PROVIDER_ID);
 
         $this->stubPassport($passport);
-        $this->stubPassportHasCredentialsBadge($passport, false);
-        $this->stubPassportHasToken($passport, $token);
+        $this->stubPassportHasCredentialsBadge($passport, $token, false);
         $this->stubPreparationPrepared(true);
     }
 
@@ -122,7 +121,7 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
     /**
      * @return MockObject|TwoFactorCodeCredentials
      */
-    private function stubPassportHasCredentialsBadge(MockObject $passport, bool $isResolved): void
+    private function stubPassportHasCredentialsBadge(MockObject $passport, TokenInterface $token, bool $isResolved): void
     {
         $this->credentialsBadge = $this->createMock(TwoFactorCodeCredentials::class);
         $this->credentialsBadge
@@ -134,6 +133,11 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
             ->expects($this->any())
             ->method('getCode')
             ->willReturn(self::CODE);
+
+        $this->credentialsBadge
+            ->expects($this->any())
+            ->method('getTwoFactorToken')
+            ->willReturn($token);
 
         $passport
             ->expects($this->any())
@@ -160,26 +164,9 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
     /**
      * @test
      */
-    public function checkPassport_noTwoFactorPassport_doNothing(): void
-    {
-        $passport = $this->createMock(Passport::class);
-
-        $this->stubPassport($passport);
-        $this->stubPassportHasCredentialsBadge($passport, false);
-        $this->stubPreparationPrepared(true);
-
-        $this->expectDoNothing();
-        $this->expectCredentialsUnresolved();
-
-        $this->listener->checkPassport($this->checkPassportEvent);
-    }
-
-    /**
-     * @test
-     */
     public function checkPassport_noTwoFactorCodeCredentials_doNothing(): void
     {
-        $passport = $this->createMock(TwoFactorPassport::class);
+        $passport = $this->createMock(Passport::class);
 
         $this->stubPassport($passport);
         $this->stubPreparationPrepared(true);
@@ -194,10 +181,11 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
      */
     public function checkPassport_credentialsResolved_doNothing()
     {
-        $passport = $this->createMock(TwoFactorPassport::class);
+        $passport = $this->createMock(Passport::class);
+        $token = $this->createTwoFactorToken(null);
 
         $this->stubPassport($passport);
-        $this->stubPassportHasCredentialsBadge($passport, true);
+        $this->stubPassportHasCredentialsBadge($passport, $token, true);
         $this->stubPreparationPrepared(true);
 
         $this->expectDoNothing();
@@ -211,12 +199,11 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
      */
     public function checkPassport_noActiveTwoFactorProvider_throwAuthenticationException()
     {
-        $passport = $this->createMock(TwoFactorPassport::class);
+        $passport = $this->createMock(Passport::class);
         $token = $this->createTwoFactorToken(null);
 
         $this->stubPassport($passport);
-        $this->stubPassportHasCredentialsBadge($passport, false);
-        $this->stubPassportHasToken($passport, $token);
+        $this->stubPassportHasCredentialsBadge($passport, $token, false);
         $this->stubPreparationPrepared(true);
 
         $this->expectDoNothing();
@@ -232,12 +219,11 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
      */
     public function checkPassport_providerNotPrepared_throwAuthenticationException()
     {
-        $passport = $this->createMock(TwoFactorPassport::class);
+        $passport = $this->createMock(Passport::class);
         $token = $this->createTwoFactorToken(self::TWO_FACTOR_PROVIDER_ID);
 
         $this->stubPassport($passport);
-        $this->stubPassportHasCredentialsBadge($passport, false);
-        $this->stubPassportHasToken($passport, $token);
+        $this->stubPassportHasCredentialsBadge($passport, $token, false);
         $this->stubPreparationPrepared(false);
 
         $this->expectDoNothing();

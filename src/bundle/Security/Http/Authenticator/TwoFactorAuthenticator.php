@@ -10,7 +10,6 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Badge\TrustedDeviceBadge;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials;
-use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\TwoFactorPassport;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
@@ -21,12 +20,14 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\InteractiveAuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -109,8 +110,12 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
 
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::ATTEMPT, $request, $currentToken);
 
-        $credentials = new TwoFactorCodeCredentials($this->twoFactorFirewallConfig->getAuthCodeFromRequest($request));
-        $passport = new TwoFactorPassport($currentToken, $credentials, []);
+        $credentials = new TwoFactorCodeCredentials($currentToken, $this->twoFactorFirewallConfig->getAuthCodeFromRequest($request));
+        $userLoader = function () use ($currentToken): UserInterface {
+            return $currentToken->getUser();
+        };
+        $userBadge = new UserBadge(UsernameHelper::getTokenUsername($currentToken), $userLoader);
+        $passport = new Passport($userBadge, $credentials, []);
         if ($currentToken->hasAttribute(TwoFactorTokenInterface::ATTRIBUTE_NAME_USE_REMEMBER_ME)) {
             $rememberMeBadge = new RememberMeBadge();
             $rememberMeBadge->enable();
@@ -131,7 +136,7 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         return $passport;
     }
 
-    private function shouldSetTrustedDevice(Request $request, TwoFactorPassport $passport): bool
+    private function shouldSetTrustedDevice(Request $request, Passport $passport): bool
     {
         return $this->twoFactorFirewallConfig->hasTrustedDeviceParameterInRequest($request)
             || (
@@ -157,8 +162,9 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
 
     public function createToken(Passport $passport, string $firewallName): TokenInterface
     {
-        /** @var TwoFactorPassport $passport */
-        $twoFactorToken = $passport->getTwoFactorToken();
+        /** @var TwoFactorCodeCredentials $credentialsBadge */
+        $credentialsBadge = $passport->getBadge(TwoFactorCodeCredentials::class);
+        $twoFactorToken = $credentialsBadge->getTwoFactorToken();
 
         if ($this->isAuthenticationComplete($twoFactorToken)) {
             $authenticatedToken = $twoFactorToken->getAuthenticatedToken(); // Authentication complete, unwrap the token
