@@ -16,6 +16,10 @@ has been removed.
 `Symfony\Component\Security\Http\Authenticator\Passport\Passport` with a
 `Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials` instead.
 
+Out-of-the-box support for `symfony/swiftmailer-bundle` was removed, respectively
+`Scheb\TwoFactorBundle\Mailer\SwiftAuthCodeMailer` was removed. Please migrate to `symfony/mailer` or use a
+[custom mailer implementation](https://symfony.com/bundles/SchebTwoFactorBundle/6.x/providers/email.html#custom-mailer).
+
 4.x to 5.x
 ----------
 

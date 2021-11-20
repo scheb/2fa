@@ -29,13 +29,8 @@ class MailerCompilerPass implements CompilerPassInterface
 
         if ($container->hasDefinition('mailer.mailer')) {
             $container->setAlias('scheb_two_factor.security.email.auth_code_mailer', 'scheb_two_factor.security.email.symfony_auth_code_mailer');
-        } elseif ($container->hasDefinition('swiftmailer.mailer.default')) {
-            $container->setAlias('scheb_two_factor.security.email.auth_code_mailer', 'scheb_two_factor.security.email.swift_auth_code_mailer');
         } else {
-            $message = 'Could not determine default mailer service to use. '.
-                'Please install one of symfony/swiftmailer-bundle or symfony/mailer. '.
-                'Or create your own mailer and configure it under "scheb_two_factor.email.mailer".';
-            throw new LogicException($message);
+            throw new LogicException('Could not determine default mailer service to use. Please install symfony/mailer or create your own mailer and configure it under "scheb_two_factor.email.mailer.');
         }
     }
 }

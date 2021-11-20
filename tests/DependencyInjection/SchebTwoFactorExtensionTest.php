@@ -207,7 +207,6 @@ EOF;
         $this->assertNotHasDefinition('scheb_two_factor.security.totp.provider');
 
         //Email
-        $this->assertNotHasDefinition('scheb_two_factor.security.email.swift_auth_code_mailer');
         $this->assertNotHasDefinition('scheb_two_factor.security.email.symfony_auth_code_mailer');
         $this->assertNotHasDefinition('scheb_two_factor.security.email.code_generator');
         $this->assertNotHasDefinition('scheb_two_factor.security.email.provider');
@@ -295,7 +294,6 @@ EOF;
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
 
-        $this->assertHasDefinition('scheb_two_factor.security.email.swift_auth_code_mailer');
         $this->assertHasDefinition('scheb_two_factor.security.email.symfony_auth_code_mailer');
         $this->assertHasDefinition('scheb_two_factor.security.email.default_code_generator');
         $this->assertHasDefinition('scheb_two_factor.security.email.default_form_renderer');

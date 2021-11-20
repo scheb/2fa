@@ -74,29 +74,6 @@ class MailerCompilerPassTest extends TestCase
     /**
      * @test
      */
-    public function process_swiftMailerAvailable_useIt(): void
-    {
-        $this->container->setDefinition('scheb_two_factor.security.email.provider', new Definition());
-        $this->container->setDefinition('swiftmailer.mailer.default', new Definition());
-        $this->compilerPass->process($this->container);
-        $this->assertHasAlias('scheb_two_factor.security.email.auth_code_mailer', 'scheb_two_factor.security.email.swift_auth_code_mailer');
-    }
-
-    /**
-     * @test
-     */
-    public function process_bothMailersAvailable_useSymfonyMailer(): void
-    {
-        $this->container->setDefinition('scheb_two_factor.security.email.provider', new Definition());
-        $this->container->setDefinition('mailer.mailer', new Definition());
-        $this->container->setDefinition('swiftmailer.mailer.default', new Definition());
-        $this->compilerPass->process($this->container);
-        $this->assertHasAlias('scheb_two_factor.security.email.auth_code_mailer', 'scheb_two_factor.security.email.symfony_auth_code_mailer');
-    }
-
-    /**
-     * @test
-     */
     public function process_noMailerAvailable_throwLogicException(): void
     {
         $this->container->setDefinition('scheb_two_factor.security.email.provider', new Definition());

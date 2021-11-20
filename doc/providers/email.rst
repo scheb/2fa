@@ -27,13 +27,11 @@ To make use of this feature, you have to install ``scheb/2fa-email``.
 
    composer require scheb/2fa-email
 
-The bundle's default implementation for sending emails supports both ``symfony/mailer`` and
-``symfony/swiftmailer-bundle``. Please install one of them.
+The bundle's default implementation for sending emails assumes you're using ``symfony/mailer``. To install the package:
 
 .. code-block:: bash
 
-   composer require symfony/mailer              # Either
-   composer require symfony/swiftmailer-bundle  # Or
+   composer require symfony/mailer
 
 You're free to use any other mail-sending library you like, but then you *have* to implement a custom mailer class
 (instructions below).
