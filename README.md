@@ -62,14 +62,14 @@ in a real Symfony environment. Check out the readme file in the [`app` folder](a
 Version Guidance
 ----------------
 
-| Version            | Status                   | Symfony Version  |
-|--------------------|--------------------------|------------------|
-| [1.x][v1-repo]     | EOL                      | >= 2.1, < 2.7    |
-| [2.x][v2-repo]     | EOL                      | ^2.6, ^3.0, ^4.0 |
-| [3.x][v3-repo]     | EOL                      | 3.4, ^4.0, ^5.0  |
-| [4.x][v4-repo]     | EOL                      | 3.4, ^4.0, ^5.0  |
-| **[5.x][v5-repo]** | Bug & security fixes     | 4.4, ^5.0        |
-| [6.x][v6-repo]     | New features + Bug fixes | 5.4, ^6.0        |
+| Version            | Status                        | Symfony Version  |
+|--------------------|-------------------------------|------------------|
+| [1.x][v1-repo]     | EOL                           | >= 2.1, < 2.7    |
+| [2.x][v2-repo]     | EOL                           | ^2.6, ^3.0, ^4.0 |
+| [3.x][v3-repo]     | EOL                           | 3.4, ^4.0, ^5.0  |
+| [4.x][v4-repo]     | EOL                           | 3.4, ^4.0, ^5.0  |
+| [5.x][v5-repo]     | Bug & security fixes          | 4.4, ^5.0        |
+| **[6.x][v6-repo]** | New features + Bug fixes      | 5.4, ^6.0        |
 
 [v1-repo]: https://github.com/scheb/two-factor-bundle/tree/1.x
 [v2-repo]: https://github.com/scheb/two-factor-bundle/tree/2.x
