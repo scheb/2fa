@@ -28,9 +28,6 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
     // Execute right before ContextListener, which is serializing the security token into the session
     public const RESPONSE_LISTENER_PRIORITY = 1;
 
-    /** @deprecated */
-    public const LISTENER_PRIORITY = self::AUTHENTICATION_SUCCESS_LISTENER_PRIORITY;
-
     /**
      * @var TwoFactorProviderRegistry
      */

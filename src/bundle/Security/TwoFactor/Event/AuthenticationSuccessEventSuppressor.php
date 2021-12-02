@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 class AuthenticationSuccessEventSuppressor implements EventSubscriberInterface
 {
     // Must trigger after TwoFactorProviderPreparationListener::onLogin to stop event propagation immediately
-    public const LISTENER_PRIORITY = TwoFactorProviderPreparationListener::LISTENER_PRIORITY - 1;
+    public const LISTENER_PRIORITY = TwoFactorProviderPreparationListener::AUTHENTICATION_SUCCESS_LISTENER_PRIORITY - 1;
 
     public function onLogin(AuthenticationEvent $event): void
     {

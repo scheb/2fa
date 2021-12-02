@@ -16,6 +16,9 @@ has been removed.
 `Symfony\Component\Security\Http\Authenticator\Passport\Passport` with a
 `Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials` instead.
 
+`Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationListener::LISTENER_PRIORITY` was removed,
+use `AUTHENTICATION_SUCCESS_LISTENER_PRIORITY` instead.
+
 ### `scheb/2fa-email`
 
 Out-of-the-box support for `symfony/swiftmailer-bundle` was removed, respectively
