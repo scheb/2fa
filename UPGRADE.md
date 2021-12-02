@@ -16,9 +16,17 @@ has been removed.
 `Symfony\Component\Security\Http\Authenticator\Passport\Passport` with a
 `Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials` instead.
 
+### `scheb/2fa-email`
+
 Out-of-the-box support for `symfony/swiftmailer-bundle` was removed, respectively
 `Scheb\TwoFactorBundle\Mailer\SwiftAuthCodeMailer` was removed. Please migrate to `symfony/mailer` or use a
 [custom mailer implementation](https://symfony.com/bundles/SchebTwoFactorBundle/6.x/providers/email.html#custom-mailer).
+
+### `scheb/2fa-qr-code`
+
+The package `scheb/2fa-qr-code` was discontinued. Please migrate to get QR code content from service
+`scheb_two_factor.security.google_authenticator` or `scheb_two_factor.security.totp_authenticator` and use the
+`endroid/qr-code` package (or any alternative) to render an QR code image.
 
 4.x to 5.x
 ----------
