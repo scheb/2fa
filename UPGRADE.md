@@ -6,6 +6,9 @@ Here's an overview if you have to do any work when upgrading.
 5.x to 6.x
 ----------
 
+The bundle now **requires the authenticator-based security system to be used**. Please make sure
+`enable_authenticator_manager` is enabled in the security configuration.
+
 If you use a custom implementation of `Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface`,
 method `getProviderKey()` was removed, please implement `getFirewallName()` instead.
 
