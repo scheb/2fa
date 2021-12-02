@@ -57,13 +57,13 @@ is – just like roles – withheld until the two-factor authentication step has
 Contributing
 ------------
 Want to contribute to this project? See
-`CONTRIBUTING.md <https://github.com/scheb/2fa/blob/5.x/CONTRIBUTING.md>`_ in the repository.
+`CONTRIBUTING.md <https://github.com/scheb/2fa/blob/6.x/CONTRIBUTING.md>`_ in the repository.
 
 Security
 --------
 For information about the security policy and know security issues, see
-`SECURITY.md <https://github.com/scheb/2fa/blob/5.x/SECURITY.md>`_ in the repository.
+`SECURITY.md <https://github.com/scheb/2fa/blob/6.x/SECURITY.md>`_ in the repository.
 
 License
 -------
-**SchebTwoFactorBundle** is available under the `MIT license <https://github.com/scheb/2fa/blob/5.x/LICENSE>`_.
+**SchebTwoFactorBundle** is available under the `MIT license <https://github.com/scheb/2fa/blob/6.x/LICENSE>`_.

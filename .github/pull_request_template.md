@@ -2,7 +2,7 @@
 👍🎉 First off, thanks for taking the time to contribute! 🎉👍
 
 Here are some tips for you:
- - Please follow the PR contribution guidelines: https://github.com/scheb/2fa/blob/5.x/CONTRIBUTING.md#creating-a-pull-request
+ - Please follow the PR contribution guidelines: https://github.com/scheb/2fa/blob/6.x/CONTRIBUTING.md#creating-a-pull-request
  - Don't break backwards compatibility. If you have to, let's discuss! :)
  - Always add/update tests and ensure the build passes
 -->

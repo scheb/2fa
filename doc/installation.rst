@@ -4,8 +4,8 @@ Installation
 Prerequisites
 -------------
 
-You're currently looking at the documentation of **SchebTwoFactorBundle version 5**. This bundle version is
-**compatible with Symfony 4.4 or Symfony 5.x**.
+You're currently looking at the documentation of **SchebTwoFactorBundle version 6**. This bundle version is
+**compatible with Symfony 5.4 or Symfony 6.x**.
 
 If you're using anything other than Doctrine ORM to manage the user entity you will have to implement a
 :doc:`persister service </persister>`.
