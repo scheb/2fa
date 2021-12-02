@@ -11,20 +11,8 @@ use Lcobucci\JWT\Token\Plain;
  */
 class TrustedDeviceTokenEncoder
 {
-    /**
-     * @var JwtTokenEncoder
-     */
-    private $jwtTokenEncoder;
-
-    /**
-     * @var int
-     */
-    private $trustedTokenLifetime;
-
-    public function __construct(JwtTokenEncoder $jwtTokenEncoder, int $trustedTokenLifetime)
+    public function __construct(private JwtTokenEncoder $jwtTokenEncoder, private int $trustedTokenLifetime)
     {
-        $this->jwtTokenEncoder = $jwtTokenEncoder;
-        $this->trustedTokenLifetime = $trustedTokenLifetime;
     }
 
     public function generateToken(string $username, string $firewall, int $version): TrustedDeviceToken

@@ -13,20 +13,8 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class ConditionAuthenticationHandler implements AuthenticationHandlerInterface
 {
-    /**
-     * @var AuthenticationHandlerInterface
-     */
-    private $authenticationHandler;
-
-    /**
-     * @var TwoFactorConditionInterface
-     */
-    private $condition;
-
-    public function __construct(AuthenticationHandlerInterface $authenticationHandler, TwoFactorConditionInterface $condition)
+    public function __construct(private AuthenticationHandlerInterface $authenticationHandler, private TwoFactorConditionInterface $condition)
     {
-        $this->authenticationHandler = $authenticationHandler;
-        $this->condition = $condition;
     }
 
     public function beginTwoFactorAuthentication(AuthenticationContextInterface $context): TokenInterface

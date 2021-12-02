@@ -13,29 +13,8 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class TrustedDeviceHandler implements AuthenticationHandlerInterface
 {
-    /**
-     * @var AuthenticationHandlerInterface
-     */
-    private $authenticationHandler;
-
-    /**
-     * @var TrustedDeviceManagerInterface
-     */
-    private $trustedDeviceManager;
-
-    /**
-     * @var bool
-     */
-    private $extendTrustedToken;
-
-    public function __construct(
-        AuthenticationHandlerInterface $authenticationHandler,
-        TrustedDeviceManagerInterface $trustedDeviceManager,
-        bool $extendTrustedToken
-    ) {
-        $this->authenticationHandler = $authenticationHandler;
-        $this->trustedDeviceManager = $trustedDeviceManager;
-        $this->extendTrustedToken = $extendTrustedToken;
+    public function __construct(private AuthenticationHandlerInterface $authenticationHandler, private TrustedDeviceManagerInterface $trustedDeviceManager, private bool $extendTrustedToken)
+    {
     }
 
     public function beginTwoFactorAuthentication(AuthenticationContextInterface $context): TokenInterface

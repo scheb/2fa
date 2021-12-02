@@ -13,14 +13,8 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class TestableFactoryConfiguration implements ConfigurationInterface
 {
-    /**
-     * @var TwoFactorFactory
-     */
-    private $factory;
-
-    public function __construct(TwoFactorFactory $factory)
+    public function __construct(private TwoFactorFactory $factory)
     {
-        $this->factory = $factory;
     }
 
     public function getConfigTreeBuilder(): TreeBuilder

@@ -9,11 +9,8 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor;
  */
 class TwoFactorFirewallContext
 {
-    private $firewallConfigs = [];
-
-    public function __construct(array $firewallConfigs)
+    public function __construct(private array $firewallConfigs)
     {
-        $this->firewallConfigs = $firewallConfigs;
     }
 
     public function getFirewallConfig(string $firewallName): TwoFactorFirewallConfig

@@ -20,7 +20,7 @@ class ComposerJsonTest extends TestCase
             $packageDependencies = $this->getComposerDependencies(self::SRC_DIR.'/'.$package.'/composer.json');
             foreach ($packageDependencies as $dependency => $version) {
                 // Skip scheb/2fa-* dependencies
-                if (0 === strpos($dependency, 'scheb/2fa-')) {
+                if (str_starts_with($dependency, 'scheb/2fa-')) {
                     continue;
                 }
 
@@ -49,7 +49,7 @@ class ComposerJsonTest extends TestCase
 
         foreach ($rootDependencies as $dependency => $version) {
             // Skip symfony/* dependencies as they're replaced by symfony/symfony
-            if (0 === strpos($dependency, 'symfony/')) {
+            if (str_starts_with($dependency, 'symfony/')) {
                 continue;
             }
 

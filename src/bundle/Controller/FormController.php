@@ -21,50 +21,8 @@ use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
 
 class FormController
 {
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @var TwoFactorProviderRegistry
-     */
-    private $providerRegistry;
-
-    /**
-     * @var TwoFactorFirewallContext
-     */
-    private $twoFactorFirewallContext;
-
-    /**
-     * @var LogoutUrlGenerator
-     */
-    private $logoutUrlGenerator;
-
-    /**
-     * @var TrustedDeviceManagerInterface|null
-     */
-    private $trustedDeviceManager;
-
-    /**
-     * @var bool
-     */
-    private $trustedFeatureEnabled;
-
-    public function __construct(
-        TokenStorageInterface $tokenStorage,
-        TwoFactorProviderRegistry $providerRegistry,
-        TwoFactorFirewallContext $twoFactorFirewallContext,
-        LogoutUrlGenerator $logoutUrlGenerator,
-        ?TrustedDeviceManagerInterface $trustedDeviceManager,
-        bool $trustedFeatureEnabled
-    ) {
-        $this->tokenStorage = $tokenStorage;
-        $this->providerRegistry = $providerRegistry;
-        $this->twoFactorFirewallContext = $twoFactorFirewallContext;
-        $this->logoutUrlGenerator = $logoutUrlGenerator;
-        $this->trustedDeviceManager = $trustedDeviceManager;
-        $this->trustedFeatureEnabled = $trustedFeatureEnabled;
+    public function __construct(private TokenStorageInterface $tokenStorage, private TwoFactorProviderRegistry $providerRegistry, private TwoFactorFirewallContext $twoFactorFirewallContext, private LogoutUrlGenerator $logoutUrlGenerator, private ?TrustedDeviceManagerInterface $trustedDeviceManager, private bool $trustedFeatureEnabled)
+    {
     }
 
     public function form(Request $request): Response
@@ -96,7 +54,7 @@ class FormController
         if ($preferredProvider) {
             try {
                 $token->preferTwoFactorProvider($preferredProvider);
-            } catch (UnknownTwoFactorProviderException $e) {
+            } catch (UnknownTwoFactorProviderException) {
                 // Bad user input
             }
         }
@@ -109,7 +67,7 @@ class FormController
         $displayTrustedOption = $this->canSetTrustedDevice($token, $request, $config);
         $authenticationException = $this->getLastAuthenticationException($request->getSession());
         $checkPath = $config->getCheckPath();
-        $isRoute = false === strpos($checkPath, '/');
+        $isRoute = !str_contains($checkPath, '/');
 
         return [
             'twoFactorProvider' => $token->getCurrentTwoFactorProvider(),

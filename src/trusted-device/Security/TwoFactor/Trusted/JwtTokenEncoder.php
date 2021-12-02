@@ -22,10 +22,7 @@ class JwtTokenEncoder
     public const CLAIM_FIREWALL = 'fwl';
     public const CLAIM_VERSION = 'vsn';
 
-    /**
-     * @var Configuration
-     */
-    private $configuration;
+    private Configuration $configuration;
 
     public function __construct(string $applicationSecret)
     {
@@ -49,7 +46,7 @@ class JwtTokenEncoder
     {
         try {
             $token = $this->configuration->parser()->parse($token);
-        } catch (Exception $e) {
+        } catch (Exception) {
             return null; // Could not decode token
         }
 

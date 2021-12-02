@@ -17,14 +17,11 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  */
 class JsonRequestUtils
 {
-    /**
-     * @var PropertyAccessor|null
-     */
-    private static $propertyAccessor;
+    private static ?PropertyAccessor $propertyAccessor = null;
 
     public static function isJsonRequest(Request $request): bool
     {
-        return false !== strpos((string) $request->getContentType(), 'json');
+        return str_contains((string) $request->getContentType(), 'json');
     }
 
     /**
@@ -46,7 +43,7 @@ class JsonRequestUtils
 
         try {
             $value = self::$propertyAccessor->getValue($data, $parameterName);
-        } catch (AccessException $e) {
+        } catch (AccessException) {
             return null;
         }
 

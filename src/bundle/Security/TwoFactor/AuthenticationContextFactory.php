@@ -12,14 +12,8 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class AuthenticationContextFactory implements AuthenticationContextFactoryInterface
 {
-    /**
-     * @var string
-     */
-    private $authenticationContextClass;
-
-    public function __construct(string $authenticationContextClass)
+    public function __construct(private string $authenticationContextClass)
     {
-        $this->authenticationContextClass = $authenticationContextClass;
     }
 
     public function create(Request $request, TokenInterface $token, string $firewallName): AuthenticationContextInterface

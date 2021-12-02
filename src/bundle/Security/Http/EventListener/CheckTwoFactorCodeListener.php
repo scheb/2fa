@@ -17,17 +17,11 @@ class CheckTwoFactorCodeListener extends AbstractCheckCodeListener
 {
     public const LISTENER_PRIORITY = 0;
 
-    /**
-     * @var TwoFactorProviderRegistry
-     */
-    private $providerRegistry;
-
     public function __construct(
         PreparationRecorderInterface $preparationRecorder,
-        TwoFactorProviderRegistry $providerRegistry
+        private TwoFactorProviderRegistry $providerRegistry
     ) {
         parent::__construct($preparationRecorder);
-        $this->providerRegistry = $providerRegistry;
     }
 
     /**
@@ -37,7 +31,7 @@ class CheckTwoFactorCodeListener extends AbstractCheckCodeListener
     {
         try {
             $authenticationProvider = $this->providerRegistry->getProvider($providerName);
-        } catch (\InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException) {
             $exception = new TwoFactorProviderNotFoundException('Two-factor provider "'.$providerName.'" not found.');
             $exception->setProvider($providerName);
             throw $exception;

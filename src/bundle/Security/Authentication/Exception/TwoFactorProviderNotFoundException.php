@@ -13,10 +13,8 @@ class TwoFactorProviderNotFoundException extends AuthenticationException
 {
     public const MESSAGE_KEY = 'Two-factor provider not found.';
 
-    /**
-     * @var string|null
-     */
-    private $provider;
+    /** @psalm-suppress PropertyNotSetInConstructor */
+    private ?string $provider;
 
     public function getMessageKey(): string
     {

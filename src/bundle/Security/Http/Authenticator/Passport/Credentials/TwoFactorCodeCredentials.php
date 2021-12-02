@@ -12,25 +12,10 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\Credentia
  */
 class TwoFactorCodeCredentials implements CredentialsInterface
 {
-    /**
-     * @var TwoFactorTokenInterface
-     */
-    private $twoFactorToken;
+    private bool $resolved = false;
 
-    /**
-     * @var string|null
-     */
-    private $code;
-
-    /**
-     * @var bool
-     */
-    private $resolved = false;
-
-    public function __construct(TwoFactorTokenInterface $twoFactorToken, string $code)
+    public function __construct(private TwoFactorTokenInterface $twoFactorToken, private ?string $code)
     {
-        $this->twoFactorToken = $twoFactorToken;
-        $this->code = $code;
     }
 
     public function getTwoFactorToken(): TwoFactorTokenInterface

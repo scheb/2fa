@@ -10,26 +10,8 @@ use Twig\Environment;
 
 class DefaultTwoFactorFormRenderer implements TwoFactorFormRendererInterface
 {
-    /**
-     * @var Environment
-     */
-    private $twigEnvironment;
-
-    /**
-     * @var string
-     */
-    private $template;
-
-    /**
-     * @var array
-     */
-    private $templateVars;
-
-    public function __construct(Environment $twigRenderer, string $template, array $templateVars = [])
+    public function __construct(private Environment $twigEnvironment, private string $template, private array $templateVars = [])
     {
-        $this->template = $template;
-        $this->twigEnvironment = $twigRenderer;
-        $this->templateVars = $templateVars;
     }
 
     public function renderForm(Request $request, array $templateVars): Response

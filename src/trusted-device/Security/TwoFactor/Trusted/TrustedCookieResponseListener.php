@@ -14,57 +14,8 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 class TrustedCookieResponseListener implements EventSubscriberInterface
 {
-    /**
-     * @var TrustedDeviceTokenStorage
-     */
-    private $trustedTokenStorage;
-
-    /**
-     * @var int
-     */
-    private $trustedTokenLifetime;
-
-    /**
-     * @var string
-     */
-    private $cookieName;
-
-    /**
-     * @var bool|null
-     */
-    private $cookieSecure;
-
-    /**
-     * @var string|null
-     */
-    private $cookieSameSite;
-
-    /**
-     * @var string|null
-     */
-    private $cookiePath;
-
-    /**
-     * @var string|null
-     */
-    private $cookieDomain;
-
-    public function __construct(
-        TrustedDeviceTokenStorage $trustedTokenStorage,
-        int $trustedTokenLifetime,
-        string $cookieName,
-        ?bool $cookieSecure,
-        ?string $cookieSameSite,
-        ?string $cookiePath,
-        ?string $cookieDomain
-    ) {
-        $this->trustedTokenStorage = $trustedTokenStorage;
-        $this->trustedTokenLifetime = $trustedTokenLifetime;
-        $this->cookieName = $cookieName;
-        $this->cookieSecure = $cookieSecure;
-        $this->cookieSameSite = $cookieSameSite;
-        $this->cookiePath = $cookiePath;
-        $this->cookieDomain = $cookieDomain;
+    public function __construct(private TrustedDeviceTokenStorage $trustedTokenStorage, private int $trustedTokenLifetime, private string $cookieName, private ?bool $cookieSecure, private ?string $cookieSameSite, private ?string $cookiePath, private ?string $cookieDomain)
+    {
     }
 
     public function onKernelResponse(ResponseEvent $event): void

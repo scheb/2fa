@@ -23,36 +23,8 @@ class ExceptionListener implements EventSubscriberInterface
     // Just before the firewall's Symfony\Component\Security\Http\Firewall\ExceptionListener
     private const LISTENER_PRIORITY = 2;
 
-    /**
-     * @var string
-     */
-    private $firewallName;
-
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @var AuthenticationRequiredHandlerInterface
-     */
-    private $authenticationRequiredHandler;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    public function __construct(
-        string $firewallName,
-        TokenStorageInterface $tokenStorage,
-        AuthenticationRequiredHandlerInterface $authenticationRequiredHandler,
-        EventDispatcherInterface $eventDispatcher
-    ) {
-        $this->firewallName = $firewallName;
-        $this->tokenStorage = $tokenStorage;
-        $this->authenticationRequiredHandler = $authenticationRequiredHandler;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(private string $firewallName, private TokenStorageInterface $tokenStorage, private AuthenticationRequiredHandlerInterface $authenticationRequiredHandler, private EventDispatcherInterface $eventDispatcher)
+    {
     }
 
     public function onKernelException(ExceptionEvent $event): void

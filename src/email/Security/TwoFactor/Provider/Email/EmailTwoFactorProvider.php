@@ -15,20 +15,8 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface
  */
 class EmailTwoFactorProvider implements TwoFactorProviderInterface
 {
-    /**
-     * @var CodeGeneratorInterface
-     */
-    private $codeGenerator;
-
-    /**
-     * @var TwoFactorFormRendererInterface
-     */
-    private $formRenderer;
-
-    public function __construct(CodeGeneratorInterface $codeGenerator, TwoFactorFormRendererInterface $formRenderer)
+    public function __construct(private CodeGeneratorInterface $codeGenerator, private TwoFactorFormRendererInterface $formRenderer)
     {
-        $this->codeGenerator = $codeGenerator;
-        $this->formRenderer = $formRenderer;
     }
 
     public function beginAuthentication(AuthenticationContextInterface $context): bool

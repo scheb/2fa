@@ -159,10 +159,7 @@ class SchebTwoFactorExtension extends Extension
         }
     }
 
-    /**
-     * @param bool|string $value
-     */
-    private function resolveFeatureFlag(ContainerBuilder $container, $value): bool
+    private function resolveFeatureFlag(ContainerBuilder $container, bool|string $value): bool
     {
         $retValue = $container->resolveEnvPlaceholders($value, true);
 

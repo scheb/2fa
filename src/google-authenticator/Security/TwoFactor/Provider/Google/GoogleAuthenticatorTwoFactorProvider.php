@@ -14,20 +14,8 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface
  */
 class GoogleAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
 {
-    /**
-     * @var GoogleAuthenticatorInterface
-     */
-    private $authenticator;
-
-    /**
-     * @var TwoFactorFormRendererInterface
-     */
-    private $formRenderer;
-
-    public function __construct(GoogleAuthenticatorInterface $authenticator, TwoFactorFormRendererInterface $formRenderer)
+    public function __construct(private GoogleAuthenticatorInterface $authenticator, private TwoFactorFormRendererInterface $formRenderer)
     {
-        $this->authenticator = $authenticator;
-        $this->formRenderer = $formRenderer;
     }
 
     public function beginAuthentication(AuthenticationContextInterface $context): bool

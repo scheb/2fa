@@ -13,26 +13,8 @@ use Scheb\TwoFactorBundle\Model\PersisterInterface;
  */
 class CodeGenerator implements CodeGeneratorInterface
 {
-    /**
-     * @var PersisterInterface
-     */
-    private $persister;
-
-    /**
-     * @var AuthCodeMailerInterface
-     */
-    private $mailer;
-
-    /**
-     * @var int
-     */
-    private $digits;
-
-    public function __construct(PersisterInterface $persister, AuthCodeMailerInterface $mailer, int $digits)
+    public function __construct(private PersisterInterface $persister, private AuthCodeMailerInterface $mailer, private int $digits)
     {
-        $this->persister = $persister;
-        $this->mailer = $mailer;
-        $this->digits = $digits;
     }
 
     public function generateAndSend(TwoFactorInterface $user): void

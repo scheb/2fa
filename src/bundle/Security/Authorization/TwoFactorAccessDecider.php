@@ -17,36 +17,8 @@ use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
  */
 class TwoFactorAccessDecider
 {
-    /**
-     * @var AccessMapInterface
-     */
-    private $accessMap;
-
-    /**
-     * @var AccessDecisionManagerInterface
-     */
-    private $accessDecisionManager;
-
-    /**
-     * @var HttpUtils
-     */
-    private $httpUtils;
-
-    /**
-     * @var LogoutUrlGenerator
-     */
-    private $logoutUrlGenerator;
-
-    public function __construct(
-        AccessMapInterface $accessMap,
-        AccessDecisionManagerInterface $accessDecisionManager,
-        HttpUtils $httpUtils,
-        LogoutUrlGenerator $logoutUrlGenerator
-    ) {
-        $this->accessMap = $accessMap;
-        $this->accessDecisionManager = $accessDecisionManager;
-        $this->httpUtils = $httpUtils;
-        $this->logoutUrlGenerator = $logoutUrlGenerator;
+    public function __construct(private AccessMapInterface $accessMap, private AccessDecisionManagerInterface $accessDecisionManager, private HttpUtils $httpUtils, private LogoutUrlGenerator $logoutUrlGenerator)
+    {
     }
 
     public function isPubliclyAccessible(Request $request): bool

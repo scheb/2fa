@@ -13,26 +13,8 @@ use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
  */
 class TotpFactory
 {
-    /**
-     * @var string|null
-     */
-    private $server;
-
-    /**
-     * @var string|null
-     */
-    private $issuer;
-
-    /**
-     * @var string[]
-     */
-    private $customParameters;
-
-    public function __construct(?string $server, ?string $issuer, array $customParameters)
+    public function __construct(private ?string $server, private ?string $issuer, private array $customParameters)
     {
-        $this->server = $server;
-        $this->issuer = $issuer;
-        $this->customParameters = $customParameters;
     }
 
     public function createTotpForUser(TwoFactorInterface $user): TOTPInterface

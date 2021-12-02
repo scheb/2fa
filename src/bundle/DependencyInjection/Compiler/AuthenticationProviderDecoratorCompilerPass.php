@@ -40,7 +40,7 @@ class AuthenticationProviderDecoratorCompilerPass implements CompilerPassInterfa
 
         try {
             return $container->getDefinition('security.authentication.manager')->getArgument(0)->getValues();
-        } catch (OutOfBoundsException $e) {
+        } catch (OutOfBoundsException) {
             // Authentication providers are not set, so the authenticator system is used
             return [];
         }
@@ -57,6 +57,6 @@ class AuthenticationProviderDecoratorCompilerPass implements CompilerPassInterfa
 
     private function isTwoFactorProvider(string $authenticationProviderId): bool
     {
-        return false !== strpos($authenticationProviderId, TwoFactorFactory::PROVIDER_ID_PREFIX);
+        return str_contains($authenticationProviderId, TwoFactorFactory::PROVIDER_ID_PREFIX);
     }
 }

@@ -17,29 +17,8 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class TwoFactorFormListener implements EventSubscriberInterface
 {
-    /**
-     * @var TwoFactorFirewallConfig
-     */
-    private $twoFactorFirewallConfig;
-
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    public function __construct(
-        TwoFactorFirewallConfig $twoFactorFirewallConfig,
-        TokenStorageInterface $tokenStorage,
-        EventDispatcherInterface $eventDispatcher
-    ) {
-        $this->twoFactorFirewallConfig = $twoFactorFirewallConfig;
-        $this->tokenStorage = $tokenStorage;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(private TwoFactorFirewallConfig $twoFactorFirewallConfig, private TokenStorageInterface $tokenStorage, private EventDispatcherInterface $eventDispatcher)
+    {
     }
 
     public function onKernelRequest(RequestEvent $requestEvent): void

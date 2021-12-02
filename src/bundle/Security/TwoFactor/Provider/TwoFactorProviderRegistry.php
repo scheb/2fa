@@ -11,14 +11,8 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactor
  */
 class TwoFactorProviderRegistry
 {
-    /**
-     * @var iterable|TwoFactorProviderInterface[]
-     */
-    private $providers;
-
-    public function __construct(iterable $providers)
+    public function __construct(private iterable $providers)
     {
-        $this->providers = $providers;
     }
 
     /**

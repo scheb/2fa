@@ -11,14 +11,8 @@ use Lcobucci\JWT\Token\Plain;
  */
 class TrustedDeviceToken
 {
-    /**
-     * @var Plain
-     */
-    private $jwtToken;
-
-    public function __construct(Plain $jwtToken)
+    public function __construct(private Plain $jwtToken)
     {
-        $this->jwtToken = $jwtToken;
     }
 
     public function authenticatesRealm(string $username, string $firewallName): bool

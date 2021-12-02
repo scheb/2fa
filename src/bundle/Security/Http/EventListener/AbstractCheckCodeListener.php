@@ -15,14 +15,8 @@ use Symfony\Component\Security\Http\Event\CheckPassportEvent;
  */
 abstract class AbstractCheckCodeListener implements EventSubscriberInterface
 {
-    /**
-     * @var PreparationRecorderInterface
-     */
-    private $preparationRecorder;
-
-    public function __construct(PreparationRecorderInterface $preparationRecorder)
+    public function __construct(private PreparationRecorderInterface $preparationRecorder)
     {
-        $this->preparationRecorder = $preparationRecorder;
     }
 
     public function checkPassport(CheckPassportEvent $event): void

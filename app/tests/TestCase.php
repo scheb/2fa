@@ -29,10 +29,7 @@ abstract class TestCase extends WebTestCase
     private const TRUSTED_DEVICE_COOKIE_NAME = 'trusted_device';
     private const REMEMBER_ME_COOKIE_NAME = 'REMEMBERME';
 
-    /**
-     * @var KernelBrowser
-     */
-    private $client;
+    private KernelBrowser $client;
 
     ////////////////////// CONFIGURATION
 

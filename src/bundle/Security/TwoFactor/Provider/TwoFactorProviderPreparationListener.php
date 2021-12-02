@@ -28,55 +28,18 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
     // Execute right before ContextListener, which is serializing the security token into the session
     public const RESPONSE_LISTENER_PRIORITY = 1;
 
-    /**
-     * @var TwoFactorProviderRegistry
-     */
-    private $providerRegistry;
-
-    /**
-     * @var PreparationRecorderInterface
-     */
-    private $preparationRecorder;
-
-    /**
-     * @var TwoFactorTokenInterface|null
-     */
-    private $twoFactorToken;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var string
-     */
-    private $firewallName;
-
-    /**
-     * @var bool
-     */
-    private $prepareOnLogin;
-
-    /**
-     * @var bool
-     */
-    private $prepareOnAccessDenied;
+    private ?TwoFactorTokenInterface $twoFactorToken = null;
+    private LoggerInterface $logger;
 
     public function __construct(
-        TwoFactorProviderRegistry $providerRegistry,
-        PreparationRecorderInterface $preparationRecorder,
+        private TwoFactorProviderRegistry $providerRegistry,
+        private PreparationRecorderInterface $preparationRecorder,
         ?LoggerInterface $logger,
-        string $firewallName,
-        bool $prepareOnLogin,
-        bool $prepareOnAccessDenied
+        private string $firewallName,
+        private bool $prepareOnLogin,
+        private bool $prepareOnAccessDenied
     ) {
-        $this->providerRegistry = $providerRegistry;
-        $this->preparationRecorder = $preparationRecorder;
         $this->logger = $logger ?? new NullLogger();
-        $this->firewallName = $firewallName;
-        $this->prepareOnLogin = $prepareOnLogin;
-        $this->prepareOnAccessDenied = $prepareOnAccessDenied;
     }
 
     public function onLogin(AuthenticationEvent $event): void
@@ -142,7 +105,7 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
             $this->providerRegistry->getProvider($providerName)->prepareAuthentication($user);
             $this->preparationRecorder->setTwoFactorProviderPrepared($firewallName, $providerName);
             $this->logger->info(sprintf('Two-factor provider "%s" prepared.', $providerName));
-        } catch (UnexpectedTokenException $e) {
+        } catch (UnexpectedTokenException) {
             $this->logger->info(sprintf('Two-factor provider "%s" was not prepared, security token was change within the request.', $providerName));
         }
     }

@@ -53,10 +53,7 @@ class TwoFactorFirewallConfigTest extends TestCase
         );
     }
 
-    /**
-     * @param MockObject|Request $request
-     */
-    private function stubRequestMethod(MockObject $request, string $method): void
+    private function stubRequestMethod(MockObject|Request $request, string $method): void
     {
         $request
             ->expects($this->any())
@@ -66,10 +63,7 @@ class TwoFactorFirewallConfigTest extends TestCase
             });
     }
 
-    /**
-     * @param MockObject|Request $request
-     */
-    private function stubCheckRequestPath(MockObject $request, string $pathToCheck, bool $result): void
+    private function stubCheckRequestPath(MockObject|Request $request, string $pathToCheck, bool $result): void
     {
         $this->httpUtils
             ->expects($this->any())

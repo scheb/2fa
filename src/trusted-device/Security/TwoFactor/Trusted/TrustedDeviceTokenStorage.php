@@ -15,35 +15,15 @@ class TrustedDeviceTokenStorage
     private const TOKEN_DELIMITER = ';';
 
     /**
-     * @var RequestStack
+     * @var TrustedDeviceToken[]
      */
-    private $requestStack;
+    private ?array $trustedTokenList;
 
-    /**
-     * @var TrustedDeviceTokenEncoder
-     */
-    private $tokenGenerator;
+    private bool $updateCookie = false;
 
-    /**
-     * @var string
-     */
-    private $cookieName;
-
-    /**
-     * @var TrustedDeviceToken[]|null
-     */
-    private $trustedTokenList;
-
-    /**
-     * @var bool
-     */
-    private $updateCookie = false;
-
-    public function __construct(RequestStack $requestStack, TrustedDeviceTokenEncoder $tokenGenerator, string $cookieName)
+    public function __construct(private RequestStack $requestStack, private TrustedDeviceTokenEncoder $tokenGenerator, private string $cookieName)
     {
-        $this->requestStack = $requestStack;
-        $this->tokenGenerator = $tokenGenerator;
-        $this->cookieName = $cookieName;
+        $this->trustedTokenList = null;
     }
 
     public function hasUpdatedCookie(): bool

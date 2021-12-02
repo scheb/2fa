@@ -13,26 +13,8 @@ use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
  */
 class GoogleTotpFactory
 {
-    /**
-     * @var string|null
-     */
-    private $server;
-
-    /**
-     * @var string|null
-     */
-    private $issuer;
-
-    /**
-     * @var int
-     */
-    private $digits;
-
-    public function __construct(?string $server, ?string $issuer, int $digits)
+    public function __construct(private ?string $server, private ?string $issuer, private int $digits)
     {
-        $this->server = $server;
-        $this->issuer = $issuer;
-        $this->digits = $digits;
     }
 
     public function createTotpForUser(TwoFactorInterface $user): TOTPInterface

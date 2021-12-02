@@ -12,20 +12,8 @@ use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
  */
 class TotpAuthenticator implements TotpAuthenticatorInterface
 {
-    /**
-     * @var TotpFactory
-     */
-    private $totpFactory;
-
-    /**
-     * @var int
-     */
-    private $window;
-
-    public function __construct(TotpFactory $totpFactory, int $window)
+    public function __construct(private TotpFactory $totpFactory, private int $window)
     {
-        $this->totpFactory = $totpFactory;
-        $this->window = $window;
     }
 
     public function checkCode(TwoFactorInterface $user, string $code): bool

@@ -17,20 +17,8 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class TwoFactorProviderHandler implements AuthenticationHandlerInterface
 {
-    /**
-     * @var TwoFactorProviderRegistry
-     */
-    private $providerRegistry;
-
-    /**
-     * @var TwoFactorTokenFactoryInterface
-     */
-    private $twoFactorTokenFactory;
-
-    public function __construct(TwoFactorProviderRegistry $providerRegistry, TwoFactorTokenFactoryInterface $twoFactorTokenFactory)
+    public function __construct(private TwoFactorProviderRegistry $providerRegistry, private TwoFactorTokenFactoryInterface $twoFactorTokenFactory)
     {
-        $this->providerRegistry = $providerRegistry;
-        $this->twoFactorTokenFactory = $twoFactorTokenFactory;
     }
 
     private function getActiveTwoFactorProviders(AuthenticationContextInterface $context): array
@@ -71,7 +59,7 @@ class TwoFactorProviderHandler implements AuthenticationHandlerInterface
             if ($preferredProvider = $user->getPreferredTwoFactorProvider()) {
                 try {
                     $token->preferTwoFactorProvider($preferredProvider);
-                } catch (UnknownTwoFactorProviderException $e) {
+                } catch (UnknownTwoFactorProviderException) {
                     // Bad user input
                 }
             }

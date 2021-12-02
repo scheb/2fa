@@ -9,47 +9,28 @@ use Scheb\TwoFactorBundle\Security\UsernameHelper;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class TwoFactorToken implements TwoFactorTokenInterface
+class TwoFactorToken implements TwoFactorTokenInterface, \Stringable
 {
-    /**
-     * @var TokenInterface
-     */
-    private $authenticatedToken;
-
-    /**
-     * @var string|null
-     */
-    private $credentials;
-
-    /**
-     * @var string
-     */
-    private $firewallName;
-
-    /**
-     * @var array
-     */
-    private $attributes = [];
+    private TokenInterface $authenticatedToken;
+    private array $attributes = [];
 
     /**
      * @var string[]
      */
-    private $twoFactorProviders;
+    private array $twoFactorProviders;
 
     /**
      * @var bool[]
      */
-    private $preparedProviders = [];
+    private array $preparedProviders = [];
 
-    public function __construct(TokenInterface $authenticatedToken, ?string $credentials, string $firewallName, array $twoFactorProviders)
+    public function __construct(TokenInterface $authenticatedToken, private ?string $credentials, private string $firewallName, array $twoFactorProviders)
     {
         if (null === $authenticatedToken->getUser()) {
             throw new \InvalidArgumentException('The authenticated token must have a user object set.');
         }
 
         $this->authenticatedToken = $authenticatedToken;
-        $this->credentials = $credentials;
-        $this->firewallName = $firewallName;
         $this->twoFactorProviders = $twoFactorProviders;
     }
 

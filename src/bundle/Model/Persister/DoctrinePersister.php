@@ -12,14 +12,8 @@ use Scheb\TwoFactorBundle\Model\PersisterInterface;
  */
 class DoctrinePersister implements PersisterInterface
 {
-    /**
-     * @var ObjectManager
-     */
-    private $om;
-
-    public function __construct(ObjectManager $om)
+    public function __construct(private ObjectManager $om)
     {
-        $this->om = $om;
     }
 
     /**

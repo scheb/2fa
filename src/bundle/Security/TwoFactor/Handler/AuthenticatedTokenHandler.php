@@ -12,20 +12,8 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class AuthenticatedTokenHandler implements AuthenticationHandlerInterface
 {
-    /**
-     * @var AuthenticationHandlerInterface
-     */
-    private $authenticationHandler;
-
-    /**
-     * @var string[]
-     */
-    private $supportedTokens;
-
-    public function __construct(AuthenticationHandlerInterface $authenticationHandler, array $supportedTokens)
+    public function __construct(private AuthenticationHandlerInterface $authenticationHandler, private array $supportedTokens)
     {
-        $this->authenticationHandler = $authenticationHandler;
-        $this->supportedTokens = $supportedTokens;
     }
 
     public function beginTwoFactorAuthentication(AuthenticationContextInterface $context): TokenInterface
@@ -42,6 +30,6 @@ class AuthenticatedTokenHandler implements AuthenticationHandlerInterface
 
     private function isTwoFactorAuthenticationEnabledForToken(TokenInterface $token): bool
     {
-        return \in_array(\get_class($token), $this->supportedTokens, true);
+        return \in_array($token::class, $this->supportedTokens, true);
     }
 }

@@ -17,17 +17,11 @@ class CheckBackupCodeListener extends AbstractCheckCodeListener
     // when the code is wrong.
     public const LISTENER_PRIORITY = CheckTwoFactorCodeListener::LISTENER_PRIORITY + 16;
 
-    /**
-     * @var BackupCodeManagerInterface
-     */
-    private $backupCodeManager;
-
     public function __construct(
         PreparationRecorderInterface $preparationRecorder,
-        BackupCodeManagerInterface $backupCodeManager
+        private BackupCodeManagerInterface $backupCodeManager
     ) {
         parent::__construct($preparationRecorder);
-        $this->backupCodeManager = $backupCodeManager;
     }
 
     /**

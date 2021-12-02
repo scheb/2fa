@@ -14,20 +14,8 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class IpWhitelistHandler implements AuthenticationHandlerInterface
 {
-    /**
-     * @var AuthenticationHandlerInterface
-     */
-    private $authenticationHandler;
-
-    /**
-     * @var IpWhitelistProviderInterface
-     */
-    private $ipWhitelistProvider;
-
-    public function __construct(AuthenticationHandlerInterface $authenticationHandler, IpWhitelistProviderInterface $ipWhitelistProvider)
+    public function __construct(private AuthenticationHandlerInterface $authenticationHandler, private IpWhitelistProviderInterface $ipWhitelistProvider)
     {
-        $this->authenticationHandler = $authenticationHandler;
-        $this->ipWhitelistProvider = $ipWhitelistProvider;
     }
 
     public function beginTwoFactorAuthentication(AuthenticationContextInterface $context): TokenInterface

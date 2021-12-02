@@ -13,14 +13,8 @@ class TrustedDeviceManager implements TrustedDeviceManagerInterface
 {
     private const DEFAULT_TOKEN_VERSION = 0;
 
-    /**
-     * @var TrustedDeviceTokenStorage
-     */
-    private $trustedTokenStorage;
-
-    public function __construct(TrustedDeviceTokenStorage $trustedTokenStorage)
+    public function __construct(private TrustedDeviceTokenStorage $trustedTokenStorage)
     {
-        $this->trustedTokenStorage = $trustedTokenStorage;
     }
 
     public function canSetTrustedDevice($user, Request $request, string $firewallName): bool

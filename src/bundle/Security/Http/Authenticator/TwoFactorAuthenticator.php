@@ -39,56 +39,17 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
 {
     public const FLAG_2FA_COMPLETE = '2fa_complete';
 
-    /**
-     * @var TwoFactorFirewallConfig
-     */
-    private $twoFactorFirewallConfig;
-
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @var AuthenticationSuccessHandlerInterface
-     */
-    private $successHandler;
-
-    /**
-     * @var AuthenticationFailureHandlerInterface
-     */
-    private $failureHandler;
-
-    /**
-     * @var AuthenticationRequiredHandlerInterface
-     */
-    private $authenticationRequiredHandler;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(
-        TwoFactorFirewallConfig $twoFactorFirewallConfig,
-        TokenStorageInterface $tokenStorage,
-        AuthenticationSuccessHandlerInterface $successHandler,
-        AuthenticationFailureHandlerInterface $failureHandler,
-        AuthenticationRequiredHandlerInterface $authenticationRequiredHandler,
-        EventDispatcherInterface $eventDispatcher,
+        private TwoFactorFirewallConfig $twoFactorFirewallConfig,
+        private TokenStorageInterface $tokenStorage,
+        private AuthenticationSuccessHandlerInterface $successHandler,
+        private AuthenticationFailureHandlerInterface $failureHandler,
+        private AuthenticationRequiredHandlerInterface $authenticationRequiredHandler,
+        private EventDispatcherInterface $eventDispatcher,
         ?LoggerInterface $logger = null
     ) {
-        $this->twoFactorFirewallConfig = $twoFactorFirewallConfig;
-        $this->tokenStorage = $tokenStorage;
-        $this->successHandler = $successHandler;
-        $this->failureHandler = $failureHandler;
-        $this->authenticationRequiredHandler = $authenticationRequiredHandler;
-        $this->eventDispatcher = $eventDispatcher;
         $this->logger = $logger ?? new NullLogger();
     }
 

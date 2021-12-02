@@ -12,20 +12,8 @@ use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
  */
 class GoogleAuthenticator implements GoogleAuthenticatorInterface
 {
-    /**
-     * @var GoogleTotpFactory
-     */
-    private $totpFactory;
-
-    /**
-     * @var int
-     */
-    private $window;
-
-    public function __construct(GoogleTotpFactory $totpFactory, int $window)
+    public function __construct(private GoogleTotpFactory $totpFactory, private int $window)
     {
-        $this->totpFactory = $totpFactory;
-        $this->window = $window;
     }
 
     public function checkCode(TwoFactorInterface $user, string $code): bool

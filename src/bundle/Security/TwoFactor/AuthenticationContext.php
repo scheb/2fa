@@ -10,26 +10,8 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class AuthenticationContext implements AuthenticationContextInterface
 {
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var TokenInterface
-     */
-    private $token;
-
-    /**
-     * @var string
-     */
-    private $firewallName;
-
-    public function __construct(Request $request, TokenInterface $token, string $firewallName)
+    public function __construct(private Request $request, private TokenInterface $token, private string $firewallName)
     {
-        $this->request = $request;
-        $this->token = $token;
-        $this->firewallName = $firewallName;
     }
 
     public function getToken(): TokenInterface

@@ -38,10 +38,7 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTest
             ->method($this->anything());
     }
 
-    /**
-     * @return MockObject|TwoFactorProviderInterface
-     */
-    private function stubTwoFactorAuthenticationProvider()
+    private function stubTwoFactorAuthenticationProvider(): MockObject|TwoFactorProviderInterface
     {
         $authenticationProvider = $this->createMock(TwoFactorProviderInterface::class);
         $this->providerRegistry

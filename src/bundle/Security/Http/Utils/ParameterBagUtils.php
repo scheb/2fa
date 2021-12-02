@@ -16,10 +16,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  */
 class ParameterBagUtils
 {
-    /**
-     * @var PropertyAccessor|null
-     */
-    private static $propertyAccessor;
+    private static ?PropertyAccessor $propertyAccessor = null;
 
     /**
      * @see \Symfony\Component\Security\Http\ParameterBagUtils

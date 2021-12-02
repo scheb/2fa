@@ -29,57 +29,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=25, unique=true)
      */
-    private $username;
+    private string $username;
 
     /**
      * @ORM\Column(type="string", length=64)
      */
-    private $password;
+    private string $password;
 
     /**
      * @ORM\Column(type="string", length=60, unique=true)
      */
-    private $email;
+    private string $email;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $emailAuthenticationEnabled = true;
+    private bool $emailAuthenticationEnabled = true;
 
     /**
-     * @var string
      * @ORM\Column(type="integer")
      */
-    private $emailAuthenticationCode;
+    private ?string $emailAuthenticationCode;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $googleAuthenticatorEnabled = true;
+    private bool $googleAuthenticatorEnabled = true;
 
     /**
-     * @var string
      * @ORM\Column(type="string")
      */
-    private $googleAuthenticatorSecret;
+    private ?string $googleAuthenticatorSecret;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $totpAuthenticationEnabled = true;
+    private bool $totpAuthenticationEnabled = true;
 
     /**
-     * @var string
      * @ORM\Column(type="boolean")
      */
-    private $isActive;
+    private bool $isActive = true;
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -99,7 +96,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
         return $this->email;
     }
 
-    public function getSalt()
+    public function getSalt(): ?string
     {
         return null;
     }
@@ -114,11 +111,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
         return ['ROLE_USER'];
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 
-    public function serialize()
+    public function serialize(): string
     {
         return serialize([
             $this->id,
@@ -130,7 +127,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
         ]);
     }
 
-    public function unserialize($serialized)
+    public function unserialize(string $serialized): void
     {
         list(
             $this->id,
@@ -173,7 +170,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
 
     public function isGoogleAuthenticatorEnabled(): bool
     {
-        return $this->googleAuthenticatorEnabled && (bool) $this->googleAuthenticatorSecret;
+        return $this->googleAuthenticatorEnabled && $this->googleAuthenticatorSecret;
     }
 
     public function getGoogleAuthenticatorUsername(): string
