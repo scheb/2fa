@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Model\Persister;
 
-use Doctrine\Common\Persistence\ObjectManager as LegacyObjectManager;
 use Doctrine\Persistence\ObjectManager;
 use Scheb\TwoFactorBundle\Model\PersisterInterface;
 
@@ -14,16 +13,11 @@ use Scheb\TwoFactorBundle\Model\PersisterInterface;
 class DoctrinePersister implements PersisterInterface
 {
     /**
-     * @var ObjectManager|LegacyObjectManager
+     * @var ObjectManager
      */
     private $om;
 
-    /**
-     * Initialize a persister for doctrine entities.
-     *
-     * @param ObjectManager|LegacyObjectManager $om
-     */
-    public function __construct($om)
+    public function __construct(ObjectManager $om)
     {
         $this->om = $om;
     }
