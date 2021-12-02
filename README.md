@@ -68,15 +68,15 @@ Version Guidance
 | [2.x][v2-repo]     | EOL                           | ^2.6, ^3.0, ^4.0 |
 | [3.x][v3-repo]     | EOL                           | 3.4, ^4.0, ^5.0  |
 | [4.x][v4-repo]     | EOL                           | 3.4, ^4.0, ^5.0  |
-| **[5.x][v5-repo]** | New features + Bug fixes      | 4.4, ^5.0        |
-| 6.x                | [Planned for Nov 2021][v6-i]  | 5.4, ^6.0        |
+| **[5.x][v5-repo]** | Bug & security fixes          | 4.4, ^5.0        |
+| [6.x][v6-repo]     | Soon™                         | 5.4, ^6.0        |
 
 [v1-repo]: https://github.com/scheb/two-factor-bundle/tree/1.x
 [v2-repo]: https://github.com/scheb/two-factor-bundle/tree/2.x
 [v3-repo]: https://github.com/scheb/two-factor-bundle/tree/3.x
 [v4-repo]: https://github.com/scheb/two-factor-bundle/tree/4.x
 [v5-repo]: https://github.com/scheb/2fa/tree/5.x
-[v6-i]: https://github.com/scheb/2fa/issues/62
+[v6-repo]: https://github.com/scheb/2fa/tree/6.x
 
 License
 -------
