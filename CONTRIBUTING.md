@@ -20,9 +20,10 @@ For pull requests, please follow these guidelines:
 
 - Do not use any PHP language features above the minimum supported version (see `composer.json`)
 - Symfony code style (use `php_cs.xml` to configure PHP Code Sniffer checks in your IDE)
-- PHP 8.0 level type hints for everything (including: return types, `void`, nullable types)
+- PHP 8.0 level type hints for everything (parameter types, return types, nullable types, union types, `void`),
+  including test cases
 - `declare(strict_types=1)` must be used
-- Methods/variables/constants must declare visibility
+- Methods/properties/constants must declare visibility
 - Please add/update test cases
 - Test methods should be named `[method]_[scenario]_[expectedResult]`
 
