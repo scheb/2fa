@@ -67,7 +67,7 @@ Version Guidance
 | [1.x][v1-repo]     | EOL                           | >= 2.1, < 2.7    |
 | [2.x][v2-repo]     | EOL                           | ^2.6, ^3.0, ^4.0 |
 | [3.x][v3-repo]     | EOL                           | 3.4, ^4.0, ^5.0  |
-| [4.x][v4-repo]     | Security fixes until Nov 2021 | 3.4, ^4.0, ^5.0  |
+| [4.x][v4-repo]     | EOL                           | 3.4, ^4.0, ^5.0  |
 | **[5.x][v5-repo]** | New features + Bug fixes      | 4.4, ^5.0        |
 | 6.x                | [Planned for Nov 2021][v6-i]  | 5.4, ^6.0        |
 
