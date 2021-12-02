@@ -14,7 +14,7 @@
     "require": {
         "php": ">=8.0",
         "scheb/2fa-bundle": "self.version",
-        "lcobucci/jwt": "^3.4|^4.0"
+        "lcobucci/jwt": "^4.0"
     },
     "autoload": {
         "psr-4": {
