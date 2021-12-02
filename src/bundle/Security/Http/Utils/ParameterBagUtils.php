@@ -30,11 +30,14 @@ class ParameterBagUtils
     public static function getRequestParameterValue(Request $request, string $path): ?string
     {
         if (false === $pos = strpos($path, '[')) {
+            /** @psalm-suppress InternalMethod */
+
             return $request->get($path);
         }
 
         $root = substr($path, 0, $pos);
 
+        /** @psalm-suppress InternalMethod */
         if (null === $value = $request->get($root)) {
             return null;
         }

@@ -95,6 +95,9 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         return $this->twoFactorFirewallConfig->isCheckPathRequest($request);
     }
 
+    /**
+     * @psalm-suppress InvalidReturnType
+     */
     public function authenticate(Request $request): PassportInterface
     {
         // When the firewall is lazy, the token is not initialized in the "supports" stage, so this check does only work
@@ -126,6 +129,8 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         if (class_exists(TrustedDeviceBadge::class) && $this->shouldSetTrustedDevice($request, $passport)) {
             $passport->addBadge(new TrustedDeviceBadge());
         }
+
+        /** @psalm-suppress InvalidReturnStatement */
 
         return $passport;
     }

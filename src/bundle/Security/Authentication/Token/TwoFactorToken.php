@@ -59,6 +59,7 @@ class TwoFactorToken implements TwoFactorTokenInterface
      */
     public function setUser($user): void
     {
+        /** @psalm-suppress PossiblyInvalidArgument */
         $this->authenticatedToken->setUser($user);
     }
 

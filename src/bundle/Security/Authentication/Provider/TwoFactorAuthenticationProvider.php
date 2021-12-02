@@ -96,6 +96,10 @@ class TwoFactorAuthenticationProvider implements AuthenticationProviderInterface
     private function isValidAuthenticationCode(string $providerName, TwoFactorTokenInterface $token): bool
     {
         $user = $token->getUser();
+        if (null === $user) {
+            throw new \RuntimeException('Security token must provide a user.');
+        }
+
         $authenticationCode = $token->getCredentials();
 
         if ($this->isValidTwoFactorCode($user, $providerName, $authenticationCode)) {

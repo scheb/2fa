@@ -92,6 +92,7 @@ class FormController
 
     protected function setPreferredProvider(Request $request, TwoFactorTokenInterface $token): void
     {
+        /** @psalm-suppress InternalMethod */
         $preferredProvider = $request->get('preferProvider');
         if ($preferredProvider) {
             try {

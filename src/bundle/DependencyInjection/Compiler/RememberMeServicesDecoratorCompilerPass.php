@@ -34,6 +34,7 @@ class RememberMeServicesDecoratorCompilerPass implements CompilerPassInterface
         // Find all remember-me listener definitions
         foreach ($container->getDefinitions() as $definitionId => $definition) {
             // Classic security system
+            /** @psalm-suppress RedundantCastGivenDocblockType */
             if (0 === strpos((string) $definitionId, self::REMEMBER_ME_AUTHENTICATION_LISTENER_ID_PREFIX)) {
                 $this->decorateRememberMeServices($container, $definition, 1);
             }

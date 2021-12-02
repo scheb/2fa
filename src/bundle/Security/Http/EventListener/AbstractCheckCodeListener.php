@@ -49,7 +49,12 @@ abstract class AbstractCheckCodeListener implements EventSubscriberInterface
             throw new AuthenticationException(sprintf('The two-factor provider "%s" has not been prepared.', $providerName));
         }
 
-        if ($this->isValidCode($providerName, $token->getUser(), $credentialsBadge->getCode())) {
+        $user = $token->getUser();
+        if (null === $user) {
+            throw new \RuntimeException('Security token must provide a user.');
+        }
+
+        if ($this->isValidCode($providerName, $user, $credentialsBadge->getCode())) {
             $token->setTwoFactorProviderComplete($providerName);
             $credentialsBadge->markResolved();
         }
