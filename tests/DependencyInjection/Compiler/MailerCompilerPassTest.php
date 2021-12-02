@@ -12,15 +12,8 @@ use Symfony\Component\DependencyInjection\Exception\LogicException;
 
 class MailerCompilerPassTest extends TestCase
 {
-    /**
-     * @var MailerCompilerPass
-     */
-    private $compilerPass;
-
-    /**
-     * @var ContainerBuilder
-     */
-    private $container;
+    private MailerCompilerPass $compilerPass;
+    private ContainerBuilder $container;
 
     protected function setUp(): void
     {

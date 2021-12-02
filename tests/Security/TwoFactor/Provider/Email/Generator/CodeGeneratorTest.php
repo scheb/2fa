@@ -13,20 +13,9 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class CodeGeneratorTest extends TestCase
 {
-    /**
-     * @var MockObject|PersisterInterface
-     */
-    private $persister;
-
-    /**
-     * @var MockObject|AuthCodeMailerInterface
-     */
-    private $mailer;
-
-    /**
-     * @var TestableCodeGenerator
-     */
-    private $authCodeManager;
+    private MockObject|PersisterInterface $persister;
+    private MockObject|AuthCodeMailerInterface $mailer;
+    private TestableCodeGenerator $authCodeManager;
 
     protected function setUp(): void
     {
@@ -132,9 +121,9 @@ class CodeGeneratorTest extends TestCase
 //Make the AuthCodeManager class testable
 class TestableCodeGenerator extends CodeGenerator
 {
-    public $testCode;
-    public $lastMin;
-    public $lastMax;
+    public int $testCode;
+    public int $lastMin;
+    public int $lastMax;
 
     protected function generateCode(int $min, int $max): int
     {

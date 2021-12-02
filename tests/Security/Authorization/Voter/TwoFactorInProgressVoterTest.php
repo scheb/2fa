@@ -13,10 +13,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 class TwoFactorInProgressVoterTest extends TestCase
 {
-    /**
-     * @var TwoFactorInProgressVoter
-     */
-    private $voter;
+    private TwoFactorInProgressVoter $voter;
 
     protected function setUp(): void
     {

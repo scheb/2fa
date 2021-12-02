@@ -22,30 +22,11 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
     protected const TWO_FACTOR_PROVIDER_ID = 'providerId';
     protected const CODE = '2faCode';
 
-    /**
-     * @var MockObject|CheckPassportEvent
-     */
-    protected $checkPassportEvent;
-
-    /**
-     * @var MockObject|PreparationRecorderInterface
-     */
-    protected $preparationRecorder;
-
-    /**
-     * @var MockObject|TwoFactorCodeCredentials
-     */
-    protected $credentialsBadge;
-
-    /**
-     * @var MockObject|UserInterface
-     */
-    protected $user;
-
-    /**
-     * @var AbstractCheckCodeListener
-     */
-    protected $listener;
+    protected MockObject|CheckPassportEvent $checkPassportEvent;
+    protected MockObject|PreparationRecorderInterface $preparationRecorder;
+    protected MockObject|TwoFactorCodeCredentials $credentialsBadge;
+    protected MockObject|UserInterface $user;
+    protected AbstractCheckCodeListener $listener;
 
     protected function setUp(): void
     {
@@ -80,10 +61,7 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
         $this->stubPreparationPrepared(true);
     }
 
-    /**
-     * @return MockObject|TwoFactorTokenInterface
-     */
-    private function createTwoFactorToken(?string $currentProvider): MockObject
+    private function createTwoFactorToken(?string $currentProvider): MockObject|TwoFactorTokenInterface
     {
         $token = $this->createMock(TwoFactorTokenInterface::class);
         $token
@@ -118,9 +96,6 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
             ->willReturn($token);
     }
 
-    /**
-     * @return MockObject|TwoFactorCodeCredentials
-     */
     private function stubPassportHasCredentialsBadge(MockObject $passport, TokenInterface $token, bool $isResolved): void
     {
         $this->credentialsBadge = $this->createMock(TwoFactorCodeCredentials::class);

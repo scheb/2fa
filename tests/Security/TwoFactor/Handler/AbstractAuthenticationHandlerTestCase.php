@@ -18,15 +18,12 @@ abstract class AbstractAuthenticationHandlerTestCase extends TestCase
 {
     protected const FIREWALL_NAME = 'firewallName';
 
-    protected function getAuthenticationHandlerMock(): MockObject
+    protected function getAuthenticationHandlerMock(): AuthenticationHandlerInterface|MockObject
     {
         return $this->createMock(AuthenticationHandlerInterface::class);
     }
 
-    /**
-     * @return MockObject|AuthenticationContextInterface
-     */
-    protected function createAuthenticationContext($request = null, $token = null, $user = null): MockObject
+    protected function createAuthenticationContext($request = null, $token = null, $user = null): MockObject|AuthenticationContextInterface
     {
         $context = $this->createMock(AuthenticationContextInterface::class);
         $context

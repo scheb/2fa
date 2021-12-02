@@ -50,8 +50,5 @@ abstract class AbstractCheckCodeListener implements EventSubscriberInterface
         }
     }
 
-    /**
-     * @param object|string $user
-     */
-    abstract protected function isValidCode(string $providerName, $user, string $code): bool;
+    abstract protected function isValidCode(string $providerName, mixed $user, string $code): bool;
 }

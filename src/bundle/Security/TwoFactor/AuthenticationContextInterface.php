@@ -17,10 +17,8 @@ interface AuthenticationContextInterface
 
     /**
      * Return the user object.
-     *
-     * @return mixed
      */
-    public function getUser();
+    public function getUser(): ?object;
 
     /**
      * Return the request.

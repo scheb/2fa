@@ -49,7 +49,6 @@ class TwoFactorToken implements TwoFactorTokenInterface, \Stringable
      */
     public function setUser($user): void
     {
-        /** @psalm-suppress PossiblyInvalidArgument */
         $this->authenticatedToken->setUser($user);
     }
 
@@ -162,10 +161,7 @@ class TwoFactorToken implements TwoFactorTokenInterface, \Stringable
         return true;
     }
 
-    /**
-     * @param bool $isAuthenticated
-     */
-    public function setAuthenticated($isAuthenticated): void
+    public function setAuthenticated(bool $isAuthenticated): void
     {
         throw new \RuntimeException('Cannot change authenticated once initialized.');
     }
@@ -190,10 +186,8 @@ class TwoFactorToken implements TwoFactorTokenInterface, \Stringable
 
     /**
      * Compatibility for Symfony < 6.0.
-     *
-     * @param string $serialized
      */
-    public function unserialize($serialized): void
+    public function unserialize(string $serialized): void
     {
         $this->__unserialize(unserialize($serialized));
     }

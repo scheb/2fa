@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\DependencyInjection\Compiler;
 
 use Scheb\TwoFactorBundle\DependencyInjection\Compiler\TwoFactorFirewallConfigCompilerPass;
-use Scheb\TwoFactorBundle\DependencyInjection\Compiler\TwoFactorProviderCompilerPass;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallContext;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,29 +14,17 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class TwoFactorFirewallConfigCompilerPassTest extends TestCase
 {
-    /**
-     * @var TwoFactorProviderCompilerPass
-     */
-    private $compilerPass;
-
-    /**
-     * @var ContainerBuilder
-     */
-    private $container;
-
-    /**
-     * @var Definition
-     */
-    private $firewallContextDefinition;
+    private TwoFactorFirewallConfigCompilerPass $compilerPass;
+    private ContainerBuilder $container;
 
     protected function setUp(): void
     {
         $this->container = new ContainerBuilder();
         $this->compilerPass = new TwoFactorFirewallConfigCompilerPass();
 
-        $this->firewallContextDefinition = new Definition(TwoFactorFirewallContext::class);
-        $this->firewallContextDefinition->setArguments([null]);
-        $this->container->setDefinition('scheb_two_factor.firewall_context', $this->firewallContextDefinition);
+        $firewallContextDefinition = new Definition(TwoFactorFirewallContext::class);
+        $firewallContextDefinition->setArguments([null]);
+        $this->container->setDefinition('scheb_two_factor.firewall_context', $firewallContextDefinition);
     }
 
     private function stubTaggedContainerService(array $taggedServices): void

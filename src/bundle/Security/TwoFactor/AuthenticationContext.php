@@ -7,6 +7,7 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class AuthenticationContext implements AuthenticationContextInterface
 {
@@ -19,13 +20,9 @@ class AuthenticationContext implements AuthenticationContextInterface
         return $this->token;
     }
 
-    public function getUser()
+    public function getUser(): ?UserInterface
     {
-        if (\is_object($user = $this->token->getUser())) {
-            return $user;
-        }
-
-        return null;
+        return $this->token->getUser();
     }
 
     public function getRequest(): Request

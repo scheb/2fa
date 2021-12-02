@@ -14,39 +14,23 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TotpAuthenticatorTest extends TestCase
 {
-    /**
-     * @var MockObject|TwoFactorInterface
-     */
-    private $user;
-
-    /**
-     * @var MockObject|TotpFactory
-     */
-    private $totpFactory;
-
-    /**
-     * @var MockObject|TOTP
-     */
-    private $totp;
-
-    /**
-     * @var TotpAuthenticator
-     */
-    private $authenticator;
+    private MockObject|TwoFactorInterface $user;
+    private MockObject|TOTP $totp;
+    private TotpAuthenticator $authenticator;
 
     protected function setUp(): void
     {
         $this->user = $this->createMock(TwoFactorInterface::class);
         $this->totp = $this->createMock(TOTPInterface::class);
 
-        $this->totpFactory = $this->createMock(TotpFactory::class);
-        $this->totpFactory
+        $totpFactory = $this->createMock(TotpFactory::class);
+        $totpFactory
             ->expects($this->any())
             ->method('createTotpForUser')
             ->with($this->user)
             ->willReturn($this->totp);
 
-        $this->authenticator = new TotpAuthenticator($this->totpFactory, 123);
+        $this->authenticator = new TotpAuthenticator($totpFactory, 123);
     }
 
     /**

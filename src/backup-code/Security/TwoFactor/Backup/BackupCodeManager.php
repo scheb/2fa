@@ -16,7 +16,7 @@ class BackupCodeManager implements BackupCodeManagerInterface
     {
     }
 
-    public function isBackupCode($user, string $code): bool
+    public function isBackupCode(mixed $user, string $code): bool
     {
         if ($user instanceof BackupCodeInterface) {
             return $user->isBackupCode($code);
@@ -25,7 +25,7 @@ class BackupCodeManager implements BackupCodeManagerInterface
         return false;
     }
 
-    public function invalidateBackupCode($user, string $code): void
+    public function invalidateBackupCode(mixed $user, string $code): void
     {
         if ($user instanceof BackupCodeInterface) {
             $user->invalidateBackupCode($code);

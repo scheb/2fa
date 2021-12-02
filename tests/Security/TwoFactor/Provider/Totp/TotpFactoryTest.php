@@ -26,10 +26,7 @@ class TotpFactoryTest extends TestCase
     private const DIGITS = 8;
     private const ALGORITHM = TotpConfiguration::ALGORITHM_SHA256;
 
-    /**
-     * @return MockObject|TwoFactorInterface
-     */
-    private function createUserMock(): MockObject
+    private function createUserMock(): MockObject|TwoFactorInterface
     {
         $config = new TotpConfiguration(self::SECRET, self::ALGORITHM, self::PERIOD, self::DIGITS);
 

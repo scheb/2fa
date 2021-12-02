@@ -11,10 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ParameterBagUtilsTest extends TestCase
 {
-    /**
-     * @var MockObject|Request
-     */
-    private $request;
+    private MockObject|Request $request;
 
     protected function setUp(): void
     {

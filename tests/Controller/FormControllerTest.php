@@ -34,60 +34,17 @@ class FormControllerTest extends TestCase
     private const CSRF_TOKEN_ID = 'csrf_token_id';
     private const LOGOUT_PATH = '/logout';
 
-    /**
-     * @var MockObject|TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @var MockObject|TwoFactorProviderRegistry
-     */
-    private $providerRegistry;
-
-    /**
-     * @var MockObject|SessionInterface
-     */
-    private $session;
-
-    /**
-     * @var MockObject|Request
-     */
-    private $request;
-
-    /**
-     * @var MockObject|TwoFactorFormRendererInterface
-     */
-    private $formRenderer;
-
-    /**
-     * @var MockObject|TwoFactorTokenInterface
-     */
-    private $twoFactorToken;
-
-    /**
-     * @var MockObject|TwoFactorFirewallConfig
-     */
-    private $firewallConfig;
-
-    /**
-     * @var MockObject|TwoFactorFirewallContext
-     */
-    private $twoFactorFirewallContext;
-
-    /**
-     * @var MockObject|LogoutUrlGenerator
-     */
-    private $logoutUrlGenerator;
-
-    /**
-     * @var MockObject|TrustedDeviceManagerInterface
-     */
-    private $trustedDeviceManager;
-
-    /**
-     * @var FormController
-     */
-    private $controller;
+    private MockObject|TokenStorageInterface $tokenStorage;
+    private MockObject|TwoFactorProviderRegistry $providerRegistry;
+    private MockObject|SessionInterface $session;
+    private MockObject|Request $request;
+    private MockObject|TwoFactorFormRendererInterface $formRenderer;
+    private MockObject|TwoFactorTokenInterface $twoFactorToken;
+    private MockObject|TwoFactorFirewallConfig $firewallConfig;
+    private MockObject|TwoFactorFirewallContext $twoFactorFirewallContext;
+    private MockObject|LogoutUrlGenerator $logoutUrlGenerator;
+    private MockObject|TrustedDeviceManagerInterface $trustedDeviceManager;
+    private FormController $controller;
 
     protected function setUp(): void
     {

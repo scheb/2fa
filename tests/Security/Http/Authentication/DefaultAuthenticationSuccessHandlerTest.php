@@ -21,30 +21,11 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
     private const DEFAULT_TARGET_PATH = '/defaultTargetPath';
     private const SESSION_TARGET_PATH = '/sessionTargetPath';
 
-    /**
-     * @var MockObject|HttpUtils
-     */
-    private $httpUtils;
-
-    /**
-     * @var MockObject|TwoFactorFirewallConfig
-     */
-    private $twoFactorFirewallConfig;
-
-    /**
-     * @var DefaultAuthenticationSuccessHandler
-     */
-    private $successHandler;
-
-    /**
-     * @var MockObject|Request
-     */
-    private $request;
-
-    /**
-     * @var MockObject|SessionInterface
-     */
-    private $session;
+    private MockObject|HttpUtils $httpUtils;
+    private MockObject|TwoFactorFirewallConfig $twoFactorFirewallConfig;
+    private DefaultAuthenticationSuccessHandler $successHandler;
+    private MockObject|Request $request;
+    private MockObject|SessionInterface $session;
 
     protected function setUp(): void
     {

@@ -27,15 +27,8 @@ class TwoFactorFirewallConfigTest extends TestCase
         'csrf_token_id' => 'token_id',
     ];
 
-    /**
-     * @var MockObject|HttpUtils
-     */
-    private $httpUtils;
-
-    /**
-     * @var MockObject|RequestDataReader
-     */
-    private $requestDataReader;
+    private MockObject|HttpUtils $httpUtils;
+    private MockObject|RequestDataReader $requestDataReader;
 
     protected function setUp(): void
     {

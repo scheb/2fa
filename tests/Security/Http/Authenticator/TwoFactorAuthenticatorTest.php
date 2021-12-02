@@ -37,45 +37,14 @@ class TwoFactorAuthenticatorTest extends TestCase
     private const CSRF_TOKEN_ID = 'csrfTokenId';
     private const USERNAME = 'username';
 
-    /**
-     * @var MockObject|TwoFactorFirewallConfig
-     */
-    private $twoFactorFirewallConfig;
-
-    /**
-     * @var MockObject|TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @var MockObject|AuthenticationSuccessHandlerInterface
-     */
-    private $successHandler;
-
-    /**
-     * @var MockObject|AuthenticationFailureHandlerInterface
-     */
-    private $failureHandler;
-
-    /**
-     * @var MockObject|AuthenticationRequiredHandlerInterface
-     */
-    private $authenticationRequiredHandler;
-
-    /**
-     * @var MockObject|EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @var MockObject|Request
-     */
-    private $request;
-
-    /**
-     * @var TwoFactorAuthenticator
-     */
-    private $authenticator;
+    private MockObject|TwoFactorFirewallConfig $twoFactorFirewallConfig;
+    private MockObject|TokenStorageInterface $tokenStorage;
+    private MockObject|AuthenticationSuccessHandlerInterface $successHandler;
+    private MockObject|AuthenticationFailureHandlerInterface $failureHandler;
+    private MockObject|AuthenticationRequiredHandlerInterface $authenticationRequiredHandler;
+    private MockObject|EventDispatcherInterface $eventDispatcher;
+    private MockObject|Request $request;
+    private TwoFactorAuthenticator $authenticator;
 
     protected function setUp(): void
     {
@@ -148,10 +117,7 @@ class TwoFactorAuthenticatorTest extends TestCase
             ->willReturn($rememberMeSetsTrusted);
     }
 
-    /**
-     * @return MockObject|TwoFactorTokenInterface
-     */
-    private function createTwoFactorToken(?TokenInterface $authenticatedToken = null, bool $allProvidersAuthenticated = false): MockObject
+    private function createTwoFactorToken(?TokenInterface $authenticatedToken = null, bool $allProvidersAuthenticated = false): MockObject|TwoFactorTokenInterface
     {
         $user = $this->createMock(UserInterface::class);
         // Compatibility for Symfony < 6.0
@@ -187,10 +153,7 @@ class TwoFactorAuthenticatorTest extends TestCase
             ->willReturn($token);
     }
 
-    /**
-     * @return MockObject|TwoFactorTokenInterface
-     */
-    private function stubTokenStorageHasTwoFactorToken(): MockObject
+    private function stubTokenStorageHasTwoFactorToken(): MockObject|TwoFactorTokenInterface
     {
         $token = $this->createTwoFactorToken();
         $this->stubTokenStorageHasToken($token);
@@ -198,10 +161,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         return $token;
     }
 
-    /**
-     * @return MockObject|Passport
-     */
-    private function createPassportWithTwoFactorCredentials($twoFactorToken): MockObject
+    private function createPassportWithTwoFactorCredentials($twoFactorToken): MockObject|Passport
     {
         $credentials = $this->createMock(TwoFactorCodeCredentials::class);
         $credentials

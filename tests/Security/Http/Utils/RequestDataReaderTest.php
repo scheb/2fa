@@ -11,10 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RequestDataReaderTest extends TestCase
 {
-    /**
-     * @var RequestDataReader
-     */
-    private $requestDataReader;
+    private RequestDataReader $requestDataReader;
 
     protected function setUp(): void
     {

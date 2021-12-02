@@ -13,15 +13,8 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class AuthenticationTrustResolverTest extends TestCase
 {
-    /**
-     * @var MockObject|AuthenticationTrustResolverInterface
-     */
-    private $decoratedTrustResolver;
-
-    /**
-     * @var AuthenticationTrustResolver
-     */
-    private $trustResolver;
+    private MockObject|AuthenticationTrustResolverInterface $decoratedTrustResolver;
+    private AuthenticationTrustResolver $trustResolver;
 
     protected function setUp(): void
     {

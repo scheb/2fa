@@ -28,20 +28,9 @@ class TwoFactorFactoryTest extends TestCase
     private const CSRF_TOKEN_MANAGER_ID = 'csrf_token_manager_id';
     private const TWO_FACTOR_FIREWALL_CONFIG_ID = 'firewall_config_id';
 
-    /**
-     * @var MockObject|TwoFactorServicesFactory
-     */
-    private $servicesFactory;
-
-    /**
-     * @var TwoFactorFactory
-     */
-    private $factory;
-
-    /**
-     * @var ContainerBuilder
-     */
-    private $container;
+    private MockObject|TwoFactorServicesFactory $servicesFactory;
+    private TwoFactorFactory $factory;
+    private ContainerBuilder $container;
 
     public function setUp(): void
     {

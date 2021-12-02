@@ -12,10 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class JsonRequestUtilsTest extends TestCase
 {
-    /**
-     * @var MockObject|Request
-     */
-    private $request;
+    private MockObject|Request $request;
 
     protected function setUp(): void
     {

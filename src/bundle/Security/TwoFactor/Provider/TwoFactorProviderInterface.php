@@ -15,17 +15,13 @@ interface TwoFactorProviderInterface
 
     /**
      * Do all steps necessary to prepare authentication, e.g. generate & send a code.
-     *
-     * @param mixed $user
      */
-    public function prepareAuthentication($user): void;
+    public function prepareAuthentication(mixed $user): void;
 
     /**
      * Validate the two-factor authentication code.
-     *
-     * @param mixed $user
      */
-    public function validateAuthenticationCode($user, string $authenticationCode): bool;
+    public function validateAuthenticationCode(mixed $user, string $authenticationCode): bool;
 
     /**
      * Return the form renderer for two-factor authentication.

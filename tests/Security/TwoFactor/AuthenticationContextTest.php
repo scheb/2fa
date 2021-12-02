@@ -14,20 +14,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class AuthenticationContextTest extends TestCase
 {
-    /**
-     * @var MockObject|Request
-     */
-    private $request;
-
-    /**
-     * @var MockObject|TokenInterface
-     */
-    private $token;
-
-    /**
-     * @var AuthenticationContext
-     */
-    private $authContext;
+    private MockObject|Request $request;
+    private MockObject|TokenInterface $token;
+    private AuthenticationContext $authContext;
 
     protected function setUp(): void
     {

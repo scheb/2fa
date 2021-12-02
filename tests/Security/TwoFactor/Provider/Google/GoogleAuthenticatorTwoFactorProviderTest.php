@@ -14,15 +14,8 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
 {
-    /**
-     * @var MockObject|GoogleAuthenticatorInterface
-     */
-    private $authenticator;
-
-    /**
-     * @var GoogleAuthenticatorTwoFactorProvider
-     */
-    private $provider;
+    private MockObject|GoogleAuthenticatorInterface $authenticator;
+    private GoogleAuthenticatorTwoFactorProvider $provider;
 
     protected function setUp(): void
     {

@@ -43,16 +43,12 @@ Backup codes have to be provided from the user object. The user entity has to im
        /**
         * @ORM\Column(type="json")
         */
-       private $backupCodes = [];
+       private array $backupCodes = [];
 
        // [...]
 
        /**
         * Check if it is a valid backup code.
-        *
-        * @param string $code
-        *
-        * @return bool
         */
        public function isBackupCode(string $code): bool
        {
@@ -61,8 +57,6 @@ Backup codes have to be provided from the user object. The user entity has to im
 
        /**
         * Invalidate a backup code
-        *
-        * @param string $code
         */
        public function invalidateBackupCode(string $code): void
        {
@@ -74,8 +68,6 @@ Backup codes have to be provided from the user object. The user entity has to im
 
        /**
         * Add a backup code
-        *
-        * @param string $backUpCode
         */
        public function addBackUpCode(string $backUpCode): void
        {

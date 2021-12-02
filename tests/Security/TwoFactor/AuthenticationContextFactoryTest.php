@@ -13,20 +13,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class AuthenticationContextFactoryTest extends TestCase
 {
-    /**
-     * @var MockObject|Request
-     */
-    private $request;
-
-    /**
-     * @var MockObject|TokenInterface
-     */
-    private $token;
-
-    /**
-     * @var AuthenticationContextFactory
-     */
-    private $authenticationContextFactory;
+    private MockObject|Request $request;
+    private MockObject|TokenInterface $token;
+    private AuthenticationContextFactory $authenticationContextFactory;
 
     protected function setUp(): void
     {

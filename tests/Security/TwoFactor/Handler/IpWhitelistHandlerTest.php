@@ -11,15 +11,8 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist\IpWhitelistProviderInte
 
 class IpWhitelistHandlerTest extends AbstractAuthenticationHandlerTestCase
 {
-    /**
-     * @var MockObject|AuthenticationHandlerInterface
-     */
-    private $innerAuthenticationHandler;
-
-    /**
-     * @var IpWhitelistHandler
-     */
-    private $ipWhitelistHandler;
+    private MockObject|AuthenticationHandlerInterface $innerAuthenticationHandler;
+    private IpWhitelistHandler $ipWhitelistHandler;
 
     protected function setUp(): void
     {

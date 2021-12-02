@@ -18,15 +18,8 @@ class EmailTwoFactorProviderTest extends TestCase
     private const INVALID_AUTH_CODE = 'invalidCode';
     private const VALID_AUTH_CODE_WITH_SPACES = ' valid Code ';
 
-    /**
-     * @var MockObject|CodeGeneratorInterface
-     */
-    private $generator;
-
-    /**
-     * @var EmailTwoFactorProvider
-     */
-    private $provider;
+    private MockObject|CodeGeneratorInterface $generator;
+    private EmailTwoFactorProvider $provider;
 
     protected function setUp(): void
     {

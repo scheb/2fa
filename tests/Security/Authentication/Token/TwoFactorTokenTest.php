@@ -15,10 +15,7 @@ class TwoFactorTokenTest extends TestCase
 {
     private const FIREWALL_NAME = 'firewallName';
 
-    /**
-     * @var TwoFactorToken
-     */
-    private $twoFactorToken;
+    private TwoFactorToken $twoFactorToken;
 
     protected function setUp(): void
     {

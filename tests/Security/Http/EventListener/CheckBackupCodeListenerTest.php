@@ -8,17 +8,12 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Http\EventListener\CheckBackupCodeListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 
+/**
+ * @property CheckBackupCodeListener $listener
+ */
 class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTest
 {
-    /**
-     * @var MockObject|BackupCodeManagerInterface
-     */
-    private $backupCodeManager;
-
-    /**
-     * @var CheckBackupCodeListener
-     */
-    protected $listener;
+    private MockObject|BackupCodeManagerInterface $backupCodeManager;
 
     protected function setUp(): void
     {

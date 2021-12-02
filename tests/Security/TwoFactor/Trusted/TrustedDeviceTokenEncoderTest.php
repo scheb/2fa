@@ -15,15 +15,8 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TrustedDeviceTokenEncoderTest extends TestCase
 {
-    /**
-     * @var MockObject|JwtTokenEncoder
-     */
-    private $jwtEncoder;
-
-    /**
-     * @var TestableTrustedDeviceTokenEncoder
-     */
-    private $tokenEncoder;
+    private MockObject|JwtTokenEncoder $jwtEncoder;
+    private TestableTrustedDeviceTokenEncoder $tokenEncoder;
 
     protected function setUp(): void
     {
@@ -79,7 +72,7 @@ class TrustedDeviceTokenEncoderTest extends TestCase
 // Make the current DateTime testable
 class TestableTrustedDeviceTokenEncoder extends TrustedDeviceTokenEncoder
 {
-    public $now;
+    public \DateTimeImmutable $now;
 
     protected function getDateTimeNow(): \DateTimeImmutable
     {

@@ -11,20 +11,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManager;
 
 class TrustedDeviceHandlerTest extends AbstractAuthenticationHandlerTestCase
 {
-    /**
-     * @var MockObject|AuthenticationHandlerInterface
-     */
-    private $innerAuthenticationHandler;
-
-    /**
-     * @var MockObject|TrustedDeviceManager
-     */
-    private $trustedDeviceManager;
-
-    /**
-     * @var TrustedDeviceHandler
-     */
-    private $trustedHandler;
+    private MockObject|AuthenticationHandlerInterface $innerAuthenticationHandler;
+    private MockObject|TrustedDeviceManager $trustedDeviceManager;
+    private TrustedDeviceHandler $trustedHandler;
 
     protected function setUp(): void
     {

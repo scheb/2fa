@@ -13,15 +13,8 @@ use Symfony\Component\Yaml\Parser;
 
 class SchebTwoFactorExtensionTest extends TestCase
 {
-    /**
-     * @var ContainerBuilder
-     */
-    private $container;
-
-    /**
-     * @var SchebTwoFactorExtension
-     */
-    private $extension;
+    private ContainerBuilder $container;
+    private SchebTwoFactorExtension $extension;
 
     protected function setUp(): void
     {

@@ -15,20 +15,14 @@ use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
 class SuppressRememberMeListenerTest extends TestCase
 {
-    /**
-     * @var SuppressRememberMeListener
-     */
-    private $suppressRememberMeListener;
+    private SuppressRememberMeListener $suppressRememberMeListener;
 
     protected function setUp(): void
     {
         $this->suppressRememberMeListener = new SuppressRememberMeListener();
     }
 
-    /**
-     * @return MockObject|RememberMeBadge
-     */
-    private function createRememberMeBadge(bool $isEnabled): MockObject
+    private function createRememberMeBadge(bool $isEnabled): MockObject|RememberMeBadge
     {
         $badge = $this->createMock(RememberMeBadge::class);
         $badge
@@ -40,10 +34,7 @@ class SuppressRememberMeListenerTest extends TestCase
         return $badge;
     }
 
-    /**
-     * @return MockObject|Passport
-     */
-    private function createPassportWithRememberMeBadge(?RememberMeBadge $badge): MockObject
+    private function createPassportWithRememberMeBadge(?RememberMeBadge $badge): MockObject|Passport
     {
         $passport = $this->createMock(Passport::class);
         $passport
@@ -60,18 +51,12 @@ class SuppressRememberMeListenerTest extends TestCase
         return $passport;
     }
 
-    /**
-     * @return MockObject|TwoFactorTokenInterface
-     */
-    private function createTwoFactorToken(): MockObject
+    private function createTwoFactorToken(): MockObject|TwoFactorTokenInterface
     {
         return $this->createMock(TwoFactorTokenInterface::class);
     }
 
-    /**
-     * @return MockObject|LoginSuccessEvent
-     */
-    private function createLoginSuccessEvent(MockObject $passport, TokenInterface $token): MockObject
+    private function createLoginSuccessEvent(MockObject $passport, TokenInterface $token): MockObject|LoginSuccessEvent
     {
         $event = $this->createMock(LoginSuccessEvent::class);
         $event

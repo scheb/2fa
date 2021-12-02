@@ -17,15 +17,8 @@ class TokenPreparationRecorderTest extends TestCase
     private const FIREWALL_NAME = 'firewallName';
     private const PROVIDER_NAME = 'providerName';
 
-    /**
-     * @var MockObject|TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @var TokenPreparationRecorder
-     */
-    private $recorder;
+    private MockObject|TokenStorageInterface $tokenStorage;
+    private TokenPreparationRecorder $recorder;
 
     protected function setUp(): void
     {
@@ -41,10 +34,7 @@ class TokenPreparationRecorderTest extends TestCase
             ->willReturn($token);
     }
 
-    /**
-     * @return MockObject|TwoFactorTokenInterface
-     */
-    private function createTwoFactorTokenWithFirewallName(): MockObject
+    private function createTwoFactorTokenWithFirewallName(): MockObject|TwoFactorTokenInterface
     {
         $token = $this->createMock(TwoFactorTokenInterface::class);
         $token

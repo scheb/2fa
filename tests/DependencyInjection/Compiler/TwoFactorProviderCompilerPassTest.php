@@ -15,29 +15,17 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class TwoFactorProviderCompilerPassTest extends TestCase
 {
-    /**
-     * @var TwoFactorProviderCompilerPass
-     */
-    private $compilerPass;
-
-    /**
-     * @var ContainerBuilder
-     */
-    private $container;
-
-    /**
-     * @var Definition
-     */
-    private $providerRegistryDefinition;
+    private TwoFactorProviderCompilerPass $compilerPass;
+    private ContainerBuilder $container;
 
     protected function setUp(): void
     {
         $this->container = new ContainerBuilder();
         $this->compilerPass = new TwoFactorProviderCompilerPass();
 
-        $this->providerRegistryDefinition = new Definition(TwoFactorProviderRegistry::class);
-        $this->providerRegistryDefinition->setArguments([null]);
-        $this->container->setDefinition('scheb_two_factor.provider_registry', $this->providerRegistryDefinition);
+        $providerRegistryDefinition = new Definition(TwoFactorProviderRegistry::class);
+        $providerRegistryDefinition->setArguments([null]);
+        $this->container->setDefinition('scheb_two_factor.provider_registry', $providerRegistryDefinition);
     }
 
     private function stubTaggedContainerService(array $taggedServices): void

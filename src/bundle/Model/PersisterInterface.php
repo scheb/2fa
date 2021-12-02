@@ -8,8 +8,6 @@ interface PersisterInterface
 {
     /**
      * Persist the user entity.
-     *
-     * @param object $user
      */
-    public function persist($user): void;
+    public function persist(object $user): void;
 }

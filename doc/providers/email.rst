@@ -68,12 +68,12 @@ be persisted, so make sure that it is stored in a persisted field.
        /**
         * @ORM\Column(type="string")
         */
-       private $email;
+       private string $email;
 
        /**
         * @ORM\Column(type="string", nullable=true)
         */
-       private $authCode;
+       private string $authCode;
 
        // [...]
 

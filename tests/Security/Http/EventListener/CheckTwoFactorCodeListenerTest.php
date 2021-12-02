@@ -12,17 +12,12 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 
+/**
+ * @property CheckTwoFactorCodeListener $listener
+ */
 class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTest
 {
-    /**
-     * @var MockObject|BackupCodeManagerInterface
-     */
-    private $providerRegistry;
-
-    /**
-     * @var CheckTwoFactorCodeListener
-     */
-    protected $listener;
+    private MockObject|BackupCodeManagerInterface $providerRegistry;
 
     protected function setUp(): void
     {

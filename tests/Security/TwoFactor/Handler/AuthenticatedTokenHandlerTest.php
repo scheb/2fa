@@ -13,15 +13,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class AuthenticatedTokenHandlerTest extends AbstractAuthenticationHandlerTestCase
 {
-    /**
-     * @var MockObject|AuthenticationHandlerInterface
-     */
-    private $innerAuthenticationHandler;
-
-    /**
-     * @var AuthenticatedTokenHandler
-     */
-    private $authenticatedTokenHandler;
+    private MockObject|AuthenticationHandlerInterface $innerAuthenticationHandler;
+    private AuthenticatedTokenHandler $authenticatedTokenHandler;
 
     protected function setUp(): void
     {

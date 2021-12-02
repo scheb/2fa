@@ -23,45 +23,18 @@ class TwoFactorAccessDeciderTest extends TestCase
     private const LOGOUT_PATH_WITH_BASE_URL = self::BASE_URL.self::LOGOUT_PATH;
     private const ACCESS_MAP_ATTRIBUTES = [TwoFactorInProgressVoter::IS_AUTHENTICATED_2FA_IN_PROGRESS];
 
-    /**
-     * @var MockObject|Request
-     */
-    private $request;
+    private MockObject|Request $request;
+    private MockObject|TokenInterface $token;
+    private MockObject|AccessMapInterface $accessMap;
+    private MockObject|AccessDecisionManagerInterface $accessDecisionManager;
+    private MockObject|HttpUtils $httpUtils;
+    private MockObject|LogoutUrlGenerator $logoutUrlGenerator;
+    private TwoFactorAccessDecider $accessDecider;
 
     /**
-     * @var MockObject|TokenInterface
+     * @var string[]|null
      */
-    private $token;
-
-    /**
-     * @var MockObject|AccessMapInterface
-     */
-    private $accessMap;
-
-    /**
-     * @var string[]
-     */
-    private $attributes;
-
-    /**
-     * @var MockObject|AccessDecisionManagerInterface
-     */
-    private $accessDecisionManager;
-
-    /**
-     * @var MockObject|HttpUtils
-     */
-    private $httpUtils;
-
-    /**
-     * @var MockObject|LogoutUrlGenerator
-     */
-    private $logoutUrlGenerator;
-
-    /**
-     * @var TwoFactorAccessDecider
-     */
-    private $accessDecider;
+    private ?array $attributes = null;
 
     protected function setUp(): void
     {

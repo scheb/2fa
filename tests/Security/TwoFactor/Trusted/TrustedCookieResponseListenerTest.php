@@ -16,20 +16,9 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class TrustedCookieResponseListenerTest extends TestCase
 {
-    /**
-     * @var MockObject|TrustedDeviceTokenStorage
-     */
-    private $trustedTokenStorage;
-
-    /**
-     * @var TrustedCookieResponseListener
-     */
-    private $cookieResponseListener;
-
-    /**
-     * @var Response
-     */
-    private $response;
+    private MockObject|TrustedDeviceTokenStorage $trustedTokenStorage;
+    private TrustedCookieResponseListener $cookieResponseListener;
+    private Response $response;
 
     protected function setUp(): void
     {
@@ -249,7 +238,7 @@ class TrustedCookieResponseListenerTest extends TestCase
 // Make the current DateTime testable
 class TestableTrustedCookieResponseListener extends TrustedCookieResponseListener
 {
-    public $now;
+    public \DateTime $now;
 
     protected function getDateTimeNow(): \DateTime
     {

@@ -12,10 +12,7 @@ use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
 class AuthenticationSuccessEventSuppressorTest extends TestCase
 {
-    /**
-     * @var AuthenticationSuccessEventSuppressor
-     */
-    private $suppressor;
+    private AuthenticationSuccessEventSuppressor $suppressor;
 
     protected function setUp(): void
     {

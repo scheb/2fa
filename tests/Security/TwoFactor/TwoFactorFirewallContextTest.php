@@ -12,10 +12,7 @@ class TwoFactorFirewallContextTest extends TestCase
 {
     private const FIREWALL_NAME = 'firewallName';
 
-    /**
-     * @var TwoFactorFirewallContext
-     */
-    private $firewallContext;
+    private TwoFactorFirewallContext $firewallContext;
 
     protected function setUp(): void
     {

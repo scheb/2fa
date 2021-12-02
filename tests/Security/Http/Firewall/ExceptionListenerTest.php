@@ -24,35 +24,12 @@ class ExceptionListenerTest extends TestCase
 {
     private const FIREWALL_NAME = 'firewallName';
 
-    /**
-     * @var MockObject|TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @var MockObject|AuthenticationRequiredHandlerInterface
-     */
-    private $authenticationRequiredHandler;
-
-    /**
-     * @var MockObject|EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @var MockObject|Request
-     */
-    private $request;
-
-    /**
-     * @var MockObject|Response
-     */
-    private $response;
-
-    /**
-     * @var ExceptionListener
-     */
-    private $listener;
+    private MockObject|TokenStorageInterface $tokenStorage;
+    private MockObject|AuthenticationRequiredHandlerInterface $authenticationRequiredHandler;
+    private MockObject|EventDispatcherInterface $eventDispatcher;
+    private MockObject|Request $request;
+    private MockObject|Response $response;
+    private ExceptionListener $listener;
 
     protected function setUp(): void
     {
@@ -95,10 +72,7 @@ class ExceptionListenerTest extends TestCase
             ->willReturn($response);
     }
 
-    /**
-     * @return MockObject|TwoFactorTokenInterface
-     */
-    private function createTwoFactorToken(string $firewallName): MockObject
+    private function createTwoFactorToken(string $firewallName): MockObject|TwoFactorTokenInterface
     {
         $token = $this->createMock(TwoFactorTokenInterface::class);
         $token

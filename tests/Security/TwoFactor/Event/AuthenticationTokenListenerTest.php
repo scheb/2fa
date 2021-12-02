@@ -19,33 +19,17 @@ use Symfony\Component\Security\Http\Event\AuthenticationTokenCreatedEvent;
 
 class AuthenticationTokenListenerTest extends TestCase
 {
-    /**
-     * @var MockObject|AuthenticationHandlerInterface
-     */
-    private $twoFactorAuthenticationHandler;
-
-    /**
-     * @var MockObject|AuthenticationContextFactoryInterface
-     */
-    private $authenticationContextFactory;
-
-    /**
-     * @var MockObject|RequestStack
-     */
-    private $requestStack;
-
-    /**
-     * @var AuthenticationTokenListener
-     */
-    private $listener;
+    private MockObject|AuthenticationHandlerInterface $twoFactorAuthenticationHandler;
+    private MockObject|AuthenticationContextFactoryInterface $authenticationContextFactory;
+    private AuthenticationTokenListener $listener;
 
     protected function setUp(): void
     {
         $this->twoFactorAuthenticationHandler = $this->createMock(AuthenticationHandlerInterface::class);
         $this->authenticationContextFactory = $this->createMock(AuthenticationContextFactoryInterface::class);
 
-        $this->requestStack = $this->createMock(RequestStack::class);
-        $this->requestStack
+        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack
             ->expects($this->any())
             ->method('getMainRequest')
             ->willReturn($this->createMock(Request::class));
@@ -54,14 +38,11 @@ class AuthenticationTokenListenerTest extends TestCase
             'firewallName',
             $this->twoFactorAuthenticationHandler,
             $this->authenticationContextFactory,
-            $this->requestStack
+            $requestStack
         );
     }
 
-    /**
-     * @return MockObject|AuthenticationTokenCreatedEvent
-     */
-    private function createEvent(MockObject $token): MockObject
+    private function createEvent(MockObject $token): MockObject|AuthenticationTokenCreatedEvent
     {
         $event = $this->createMock(AuthenticationTokenCreatedEvent::class);
         $event

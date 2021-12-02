@@ -50,10 +50,7 @@ class TwoFactorProviderHandler implements AuthenticationHandlerInterface
         return $authenticatedToken;
     }
 
-    /**
-     * @param string|object $user
-     */
-    private function setPreferredProvider(TwoFactorTokenInterface $token, $user): void
+    private function setPreferredProvider(TwoFactorTokenInterface $token, mixed $user): void
     {
         if ($user instanceof PreferredProviderInterface) {
             if ($preferredProvider = $user->getPreferredTwoFactorProvider()) {

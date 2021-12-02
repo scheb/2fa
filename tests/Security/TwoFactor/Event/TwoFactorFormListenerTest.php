@@ -19,30 +19,11 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class TwoFactorFormListenerTest extends TestCase
 {
-    /**
-     * @var MockObject|TwoFactorFirewallConfig
-     */
-    private $twoFactorFirewallConfig;
-
-    /**
-     * @var MockObject|TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @var MockObject|EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @var TwoFactorFormListener
-     */
-    private $listener;
-
-    /**
-     * @var MockObject|Request
-     */
-    private $request;
+    private MockObject|TwoFactorFirewallConfig $twoFactorFirewallConfig;
+    private MockObject|TokenStorageInterface $tokenStorage;
+    private MockObject|EventDispatcherInterface $eventDispatcher;
+    private MockObject|Request $request;
+    private TwoFactorFormListener $listener;
 
     protected function setUp(): void
     {

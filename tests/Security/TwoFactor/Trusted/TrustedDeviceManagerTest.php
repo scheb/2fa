@@ -12,15 +12,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class TrustedDeviceManagerTest extends TestCase
 {
-    /**
-     * @var MockObject|TrustedDeviceTokenStorage
-     */
-    private $trustedTokenStorage;
-
-    /**
-     * @var TrustedDeviceManager
-     */
-    private $trustedDeviceManager;
+    private MockObject|TrustedDeviceTokenStorage $trustedTokenStorage;
+    private TrustedDeviceManager $trustedDeviceManager;
 
     protected function setUp(): void
     {

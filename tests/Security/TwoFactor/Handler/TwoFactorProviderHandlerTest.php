@@ -15,38 +15,18 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 
 class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
 {
-    /**
-     * @var MockObject|TwoFactorProviderRegistry
-     */
-    private $providerRegistry;
-
-    /**
-     * @var MockObject|TwoFactorTokenFactoryInterface
-     */
-    private $twoFactorTokenFactory;
-
-    /**
-     * @var MockObject|TwoFactorProviderInterface
-     */
-    private $provider1;
-
-    /**
-     * @var MockObject|TwoFactorProviderInterface
-     */
-    private $provider2;
-
-    /**
-     * @var TwoFactorProviderHandler
-     */
-    private $handler;
+    private MockObject|TwoFactorTokenFactoryInterface $twoFactorTokenFactory;
+    private MockObject|TwoFactorProviderInterface $provider1;
+    private MockObject|TwoFactorProviderInterface $provider2;
+    private TwoFactorProviderHandler $handler;
 
     protected function setUp(): void
     {
         $this->provider1 = $this->createMock(TwoFactorProviderInterface::class);
         $this->provider2 = $this->createMock(TwoFactorProviderInterface::class);
 
-        $this->providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
-        $this->providerRegistry
+        $providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
+        $providerRegistry
             ->expects($this->any())
             ->method('getAllProviders')
             ->willReturn([
@@ -56,7 +36,7 @@ class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
 
         $this->twoFactorTokenFactory = $this->createMock(TwoFactorTokenFactory::class);
 
-        $this->handler = new TwoFactorProviderHandler($this->providerRegistry, $this->twoFactorTokenFactory);
+        $this->handler = new TwoFactorProviderHandler($providerRegistry, $this->twoFactorTokenFactory);
     }
 
     private function createTwoFactorToken(): MockObject

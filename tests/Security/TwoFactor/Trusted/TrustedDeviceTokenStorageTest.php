@@ -15,20 +15,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class TrustedDeviceTokenStorageTest extends TestCase
 {
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var MockObject|TrustedDeviceTokenEncoder
-     */
-    private $tokenEncoder;
-
-    /**
-     * @var TrustedDeviceTokenStorage
-     */
-    private $tokenStorage;
+    private Request $request;
+    private MockObject|TrustedDeviceTokenEncoder $tokenEncoder;
+    private TrustedDeviceTokenStorage $tokenStorage;
 
     protected function setUp(): void
     {

@@ -12,20 +12,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\ConditionAuthenticationHand
 
 class ConditionAuthenticationHandlerTest extends AbstractAuthenticationHandlerTestCase
 {
-    /**
-     * @var MockObject|AuthenticationHandlerInterface
-     */
-    private $innerAuthenticationHandler;
-
-    /**
-     * @var MockObject|TwoFactorConditionInterface
-     */
-    private $condition;
-
-    /**
-     * @var ConditionAuthenticationHandler
-     */
-    private $conditionAuthenticationHandler;
+    private MockObject|AuthenticationHandlerInterface $innerAuthenticationHandler;
+    private MockObject|TwoFactorConditionInterface $condition;
+    private ConditionAuthenticationHandler $conditionAuthenticationHandler;
 
     protected function setUp(): void
     {

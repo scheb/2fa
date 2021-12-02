@@ -17,15 +17,8 @@ class JwtTokenEncoderTest extends TestCase
     private const TOKEN_ID = 'tokenId';
     private const APPLICATION_SECRET = 'applicationSecret';
 
-    /**
-     * @var JwtTokenEncoder
-     */
-    private $encoder;
-
-    /**
-     * @var Configuration
-     */
-    private $configuration;
+    private JwtTokenEncoder $encoder;
+    private Configuration $configuration;
 
     protected function setUp(): void
     {

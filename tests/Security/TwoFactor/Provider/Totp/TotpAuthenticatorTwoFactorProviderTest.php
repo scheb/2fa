@@ -15,15 +15,8 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TotpAuthenticatorTwoFactorProviderTest extends TestCase
 {
-    /**
-     * @var MockObject|TotpAuthenticatorInterface
-     */
-    private $authenticator;
-
-    /**
-     * @var TotpAuthenticatorTwoFactorProvider
-     */
-    private $provider;
+    private MockObject|TotpAuthenticatorInterface $authenticator;
+    private TotpAuthenticatorTwoFactorProvider $provider;
 
     protected function setUp(): void
     {
@@ -32,10 +25,7 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
         $this->provider = new TotpAuthenticatorTwoFactorProvider($this->authenticator, $formRenderer);
     }
 
-    /**
-     * @return MockObject|TwoFactorInterface
-     */
-    private function createUser(bool $enabled = true, bool $hasTotpConfiguration = true): MockObject
+    private function createUser(bool $enabled = true, bool $hasTotpConfiguration = true): MockObject|TwoFactorInterface
     {
         $user = $this->createMock(TwoFactorInterface::class);
         $user
@@ -52,10 +42,7 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
         return $user;
     }
 
-    /**
-     * @return MockObject|AuthenticationContextInterface
-     */
-    private function createAuthenticationContext($user = null): MockObject
+    private function createAuthenticationContext($user = null): MockObject|AuthenticationContextInterface
     {
         $authContext = $this->createMock(AuthenticationContextInterface::class);
         $authContext

@@ -16,15 +16,8 @@ use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProvid
 
 class AuthenticationProviderDecoratorCompilerPassTest extends TestCase
 {
-    /**
-     * @var ContainerBuilder
-     */
-    private $container;
-
-    /**
-     * @var AuthenticationProviderDecoratorCompilerPass
-     */
-    private $compilerPass;
+    private ContainerBuilder $container;
+    private AuthenticationProviderDecoratorCompilerPass $compilerPass;
 
     protected function setUp(): void
     {

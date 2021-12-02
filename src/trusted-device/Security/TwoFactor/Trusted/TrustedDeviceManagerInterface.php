@@ -10,22 +10,16 @@ interface TrustedDeviceManagerInterface
 {
     /**
      * Check if it's allowed to set a trusted device token.
-     *
-     * @param mixed $user
      */
-    public function canSetTrustedDevice($user, Request $request, string $firewallName): bool;
+    public function canSetTrustedDevice(mixed $user, Request $request, string $firewallName): bool;
 
     /**
      * Add a trusted device token for a user.
-     *
-     * @param mixed $user
      */
-    public function addTrustedDevice($user, string $firewallName): void;
+    public function addTrustedDevice(mixed $user, string $firewallName): void;
 
     /**
      * Validate a device device token for a user.
-     *
-     * @param mixed $user
      */
-    public function isTrustedDevice($user, string $firewallName): bool;
+    public function isTrustedDevice(mixed $user, string $firewallName): bool;
 }

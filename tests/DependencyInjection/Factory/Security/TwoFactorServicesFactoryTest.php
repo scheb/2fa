@@ -17,15 +17,8 @@ class TwoFactorServicesFactoryTest extends TestCase
     private const AUTH_REQUIRED_HANDLER_ID = 'auth_required_handler_id';
     private const TWO_FACTOR_FIREWALL_CONFIG_ID = 'firewall_config_id';
 
-    /**
-     * @var TwoFactorServicesFactory
-     */
-    private $servicesFactory;
-
-    /**
-     * @var ContainerBuilder
-     */
-    private $container;
+    private TwoFactorServicesFactory $servicesFactory;
+    private ContainerBuilder $container;
 
     protected function setUp(): void
     {

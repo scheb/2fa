@@ -50,7 +50,7 @@ cookies at once, e.g. in case of a security breach. To make use of this feature,
        /**
         * @ORM\Column(type="integer")
         */
-       private $trustedVersion;
+       private int $trustedVersion;
 
        // [...]
 

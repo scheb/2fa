@@ -13,15 +13,8 @@ use Symfony\Component\Mime\Email;
 
 class SymfonyAuthCodeMailerTest extends TestCase
 {
-    /**
-     * @var MockObject|MailerInterface
-     */
-    private $symfonyMailer;
-
-    /**
-     * @var SymfonyAuthCodeMailer
-     */
-    private $mailer;
+    private MockObject|MailerInterface $symfonyMailer;
+    private SymfonyAuthCodeMailer $mailer;
 
     protected function setUp(): void
     {

@@ -19,10 +19,7 @@ class GoogleTotpFactoryTest extends TestCase
     private const CUSTOM_DIGITS = 8;
     private const DEFAULT_DIGITS = 6;
 
-    /**
-     * @return MockObject|TwoFactorInterface
-     */
-    private function createUserMock(): MockObject
+    private function createUserMock(): MockObject|TwoFactorInterface
     {
         $user = $this->createMock(TwoFactorInterface::class);
         $user

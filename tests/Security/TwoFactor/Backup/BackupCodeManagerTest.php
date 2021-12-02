@@ -13,15 +13,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class BackupCodeManagerTest extends TestCase
 {
-    /**
-     * @var MockObject|PersisterInterface
-     */
-    private $persister;
-
-    /**
-     * @var BackupCodeManager
-     */
-    private $backupCodeManager;
+    private MockObject|PersisterInterface $persister;
+    private BackupCodeManager $backupCodeManager;
 
     protected function setUp(): void
     {
@@ -29,10 +22,7 @@ class BackupCodeManagerTest extends TestCase
         $this->backupCodeManager = new BackupCodeManager($this->persister);
     }
 
-    /**
-     * @return MockObject|BackupCodeInterface
-     */
-    private function createUserWithBackupCodeInterface(): MockObject
+    private function createUserWithBackupCodeInterface(): MockObject|BackupCodeInterface
     {
         return $this->createMock(BackupCodeInterface::class);
     }

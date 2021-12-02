@@ -65,7 +65,7 @@ Authenticator for a user, generate a secret code and persist it with the user en
        /**
         * @ORM\Column(name="googleAuthenticatorSecret", type="string", nullable=true)
         */
-       private $googleAuthenticatorSecret;
+       private ?string $googleAuthenticatorSecret;
 
        // [...]
 
@@ -204,7 +204,7 @@ controller to display the image in your application.
        /**
         * @Route("/qr-code", name="qr_code")
         */
-       public function displayGoogleAuthenticatorQrCode(QrCodeGenerator $qrCodeGenerator)
+       public function displayGoogleAuthenticatorQrCode(QrCodeGenerator $qrCodeGenerator): Response
        {
            // $qrCode is provided by the endroid/qr-code library. See the docs how to customize the look of the QR code:
            // https://github.com/endroid/qr-code

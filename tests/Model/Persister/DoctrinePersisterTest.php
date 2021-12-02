@@ -11,15 +11,8 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class DoctrinePersisterTest extends TestCase
 {
-    /**
-     * @var MockObject|ObjectManager
-     */
-    private $objectManager;
-
-    /**
-     * @var DoctrinePersister
-     */
-    private $persister;
+    private MockObject|ObjectManager $objectManager;
+    private DoctrinePersister $persister;
 
     protected function setUp(): void
     {

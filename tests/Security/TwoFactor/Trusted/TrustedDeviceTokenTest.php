@@ -13,10 +13,7 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TrustedDeviceTokenTest extends TestCase
 {
-    /**
-     * @var TrustedDeviceToken
-     */
-    private $trustedToken;
+    private TrustedDeviceToken $trustedToken;
 
     protected function setUp(): void
     {

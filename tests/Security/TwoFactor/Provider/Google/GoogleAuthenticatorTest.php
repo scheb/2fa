@@ -14,25 +14,10 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class GoogleAuthenticatorTest extends TestCase
 {
-    /**
-     * @var MockObject|TwoFactorInterface
-     */
-    private $user;
-
-    /**
-     * @var MockObject|GoogleTotpFactory
-     */
-    private $totpFactory;
-
-    /**
-     * @var MockObject|TOTP
-     */
-    private $totp;
-
-    /**
-     * @var GoogleAuthenticator
-     */
-    private $authenticator;
+    private MockObject|TwoFactorInterface $user;
+    private MockObject|GoogleTotpFactory $totpFactory;
+    private MockObject|TOTP $totp;
+    private GoogleAuthenticator $authenticator;
 
     protected function setUp(): void
     {
