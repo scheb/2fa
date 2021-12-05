@@ -28,6 +28,9 @@ Out-of-the-box support for `symfony/swiftmailer-bundle` was removed, respectivel
 `Scheb\TwoFactorBundle\Mailer\SwiftAuthCodeMailer` was removed. Please migrate to `symfony/mailer` or use a
 [custom mailer implementation](https://symfony.com/bundles/SchebTwoFactorBundle/6.x/providers/email.html#custom-mailer).
 
+Signature of `Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface::getEmailAuthCode()` has changed to be nullable,
+please update your implementation accordingly.
+
 ### `scheb/2fa-qr-code`
 
 The package `scheb/2fa-qr-code` was discontinued. Please migrate to get QR code content from service

@@ -95,7 +95,7 @@ abstract class TestCase extends WebTestCase
 
     protected function getEmailCode(): string
     {
-        return $this->getTestUser($this->getEntityManager())->getEmailAuthCode();
+        return $this->getTestUser($this->getEntityManager())->getEmailAuthCode() ?? '';
     }
 
     protected function getGoogleAuthenticatorCode(): string

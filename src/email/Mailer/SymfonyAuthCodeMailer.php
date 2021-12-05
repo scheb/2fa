@@ -27,12 +27,17 @@ class SymfonyAuthCodeMailer implements AuthCodeMailerInterface
 
     public function sendAuthCode(TwoFactorInterface $user): void
     {
+        $authCode = $user->getEmailAuthCode();
+        if (null === $authCode) {
+            return;
+        }
+
         $message = new Email();
         $message
             ->to($user->getEmailAuthRecipient())
             ->from($this->senderAddress)
             ->subject('Authentication Code')
-            ->text($user->getEmailAuthCode())
+            ->text($authCode)
         ;
         $this->mailer->send($message);
     }
