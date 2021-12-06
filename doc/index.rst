@@ -42,7 +42,7 @@ The Authentication Process with Two-Factor Authentication
 
 **What changes when you add two-factor authentication to your application?**
 
-The bundle hocks into security layer and listens for authentication events. When a user login appears and the user has
+The bundle hooks into the security layer and listens for authentication events. When a user login appears and the user has
 two-factor authentication enabled, access and privileges are temporarily withheld, putting the authentication status
 into an intermediate state. The user is challenged to enter a valid two-factor authentication code. Only when that code
 is entered correctly, the associated roles are granted.
