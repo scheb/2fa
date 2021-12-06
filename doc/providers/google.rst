@@ -71,7 +71,7 @@ Authenticator for a user, generate a secret code and persist it with the user en
 
        public function isGoogleAuthenticatorEnabled(): bool
        {
-           return $this->googleAuthenticatorSecret ? true : false;
+           return (bool) $this->googleAuthenticatorSecret;
        }
 
        public function getGoogleAuthenticatorUsername(): string
