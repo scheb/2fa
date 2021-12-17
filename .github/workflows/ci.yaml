@@ -15,7 +15,7 @@ jobs:
             fail-fast: false
             matrix:
                 php-version:
-                    - '8.0'
+                    - '8.1'
 
         steps:
             -   name: 'Checkout code'
@@ -69,16 +69,16 @@ jobs:
             matrix:
                 include:
                     # Lowest possible configuration
-                    -   php-version: '8.0'
+                    -   php-version: '8.1'
                         dependency-versions: 'lowest'
                         symfony-version: '^5.4'
 
                     # Test against upcoming Symfony 5.4
-                    -   php-version: '8.0'
+                    -   php-version: '8.1'
                         symfony-version: '^5.4'
 
                     # Test against upcoming Symfony 6.0
-                    -   php-version: '8.0'
+                    -   php-version: '8.1'
                         symfony-version: '^6.0'
         steps:
             -   name: 'Checkout code'
@@ -132,17 +132,17 @@ jobs:
             matrix:
                 include:
                     # Minimum PHP version
-                    -   php-version: '8.0'
+                    -   php-version: '8.1'
                         symfony-version: '^5.4'
                         app-config: 'authenticators'
 
                     # Test against upcoming Symfony 5.4
-                    -   php-version: '8.0'
+                    -   php-version: '8.1'
                         symfony-version: '^5.4'
                         app-config: 'authenticators'
 
                     # Test against upcoming Symfony 6.0
-                    -   php-version: '8.0'
+                    -   php-version: '8.1'
                         symfony-version: '^6.0'
                         app-config: 'authenticators'
 
@@ -196,7 +196,7 @@ jobs:
             fail-fast: false
             matrix:
                 php-version:
-                    - '8.0'
+                    - '8.1'
 
         steps:
             -   name: 'Checkout code'
