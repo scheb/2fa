@@ -23,6 +23,7 @@ class AuthenticationTrustResolver implements AuthenticationTrustResolverInterfac
         $this->decoratedTrustResolver = $decoratedTrustResolver;
     }
 
+    // Compatibility for Symfony <= 5.4
     public function isAnonymous(TokenInterface $token = null): bool
     {
         return $this->decoratedTrustResolver->isAnonymous($token);
@@ -36,6 +37,18 @@ class AuthenticationTrustResolver implements AuthenticationTrustResolverInterfac
     public function isFullFledged(TokenInterface $token = null): bool
     {
         return !$this->isTwoFactorToken($token) && $this->decoratedTrustResolver->isFullFledged($token);
+    }
+
+    // Compatibility for Symfony >= 5.4
+    public function isAuthenticated(TokenInterface $token = null): bool
+    {
+        // When isAuthenticated method is implemented
+        if (method_exists($this->decoratedTrustResolver, 'isAuthenticated')) {
+            return $this->decoratedTrustResolver->isAuthenticated($token);
+        }
+
+        // Fallback when it's not implemented
+        return !$this->decoratedTrustResolver->isAnonymous($token);
     }
 
     private function isTwoFactorToken(?TokenInterface $token): bool
