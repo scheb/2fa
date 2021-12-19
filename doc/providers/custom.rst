@@ -37,7 +37,7 @@ return ``true``, otherwise ``false``.
 
    public function prepareAuthentication($user): void;
 
-This method is where you should to the preparation work for your two-factor provider. E.g. the email authenticator is
+This method is where you should do the preparation work for your two-factor provider. E.g. the email authenticator is
 generating a code and sending it to the user.
 
 validateAuthenticationCode

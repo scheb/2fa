@@ -113,7 +113,7 @@ Configuration Options
 Additional parameter
 --------------------
 
-You can set additional parameters, that will be added to the provisioning URI, which is contained in the QR code.
+You can set additional parameters that will be added to the provisioning URI, which is contained in the QR code.
 Parameters will be common for all users. Custom parameters may not be supported by all applications, but can be very
 interesting to customize the QR codes. In the example below, we add an ``image`` parameter with the URL to the service's
 logo. Some applications, such as FreeOTP, support this parameter and will associate the QR code with that logo.

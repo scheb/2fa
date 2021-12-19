@@ -1,7 +1,7 @@
 Troubleshooting
 ===============
 
-How to debug and solve common issue related to the bundle.
+How to debug and solve common issues related to the bundle.
 
 TOTP / Google Authenticator code is not accepted
 ------------------------------------------------
@@ -39,7 +39,7 @@ current time window will be accepted:
 You might want to configure a time synchronization service, such as ``ntpdate`` on your server to make sure your server
 time is always in sync with UTC.
 
-The Google Authenticator app has an option to sync the time your device. Open the app and select
+The Google Authenticator app has an option to sync the time of your device. Open the app and select
 ``Settings > Time correction for codes > Sync now`` from the menu. Other apps might have a similar option.
 
 Logout redirects back to the two-factor authentication form
@@ -107,7 +107,7 @@ Troubleshooting
    security token. Does that authenticated token have ``authenticated``=``false`` set?
 
    Yes
-       Your authenticated token was flagged as invalid. Follow solution below.
+       Your authenticated token was flagged as invalid. Follow the solution below.
 
    No
        Continue with 3)
@@ -120,7 +120,7 @@ Troubleshooting
    Does it say ``Cannot refresh token because user has changed`` or ``Token was deauthenticated after trying to refresh it``?
 
    Yes
-       Your authenticated token was flagged as invalid. Follow solution below.
+       Your authenticated token was flagged as invalid. Follow the solution below.
 
    No
        Unknown issue. Try to reach out for help by
@@ -129,7 +129,7 @@ Troubleshooting
 
 **Solution to: Your authenticated token was flagged as invalid**
 
-Most likely your user entity implements the ``\Serializable`` interface and not all of the field relevant to the
+Most likely your user entity implements the ``\Serializable`` interface and not all of the fields relevant to the
 authentication process are taken by serialize/unserialize. Check which fields are used in methods ``serialize()`` and
 ``deserialize()``.
 
@@ -289,7 +289,7 @@ Basic checks
 Troubleshooting
 ^^^^^^^^^^^^^^^
 
-Have a look at the response of the HTTP call when you sent over the 2fa and the trusted parameter. Do you see a cookie
+Have a look at the response of the HTTP call when you sent the 2fa and the trusted parameter. Do you see a cookie
 being set (``Set-Cookie`` header)?
 
 Yes
