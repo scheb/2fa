@@ -121,7 +121,7 @@ More per-firewall configuration options can be found in the :doc:`configuration 
 Step 5: Configure the security tokens
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Your firewall may offer different ways how to login. By default (without any configuration), the bundle is listening
+Your firewall may offer different ways to login. By default (without any configuration), the bundle is listening
 only to these tokens:
 
 * ``Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken`` (username+password form)

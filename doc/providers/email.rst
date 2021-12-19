@@ -6,7 +6,7 @@ A two-factor provider to generate a random numeric code and send it to the user 
 How authentication works
 ------------------------
 
-On successful authentication it generates a random number and persist it in the user entity. The number is sent to the
+On successful authentication it generates a random number and persists it in the user entity. The number is sent to the
 user via email. Then the user must enter that number to gain access.
 
 The number of digits can be configured:
@@ -160,7 +160,7 @@ Re-send Authentication Code
 ---------------------------
 
 When you're using the default authentication code generator that is coming with the bundle, there's an easy way to
-re-send the email with the authentication code. Get/inject service ``scheb_two_factor.security.email.code_generator``
+resend the email with the authentication code. Get/inject service ``scheb_two_factor.security.email.code_generator``
 and call method ``reSend(\Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface $user)``.
 
 Custom Code Generator
