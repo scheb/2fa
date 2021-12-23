@@ -74,6 +74,7 @@ Bundle Configuration
        # two-factor authentication for other authentication methods, add their security token classes.
        security_tokens:
            - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+           - Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken
 
        # A list of IP addresses or netmasks, which will not trigger two-factor authentication.
        # Supports IPv4, IPv6 and IP subnet masks.

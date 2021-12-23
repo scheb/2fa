@@ -123,7 +123,8 @@ Step 5: Configure the security tokens
 Your firewall may offer different ways to login. By default (without any configuration), the bundle is listening
 only to these tokens:
 
-* ``Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken`` (authenticator-based security)
+* ``Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken`` (username+password authentication)
+* ``Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken`` (default token used by authenticators)
 
 If you want to support two-factor authentication with another login method, you have to register its token class in the
 ``scheb_two_factor.security_tokens`` configuration option.
