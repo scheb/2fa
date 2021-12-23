@@ -42,13 +42,14 @@ class ExceptionListener implements EventSubscriberInterface
     private function handleAccessDeniedException(ExceptionEvent $exceptionEvent): void
     {
         $token = $this->tokenStorage->getToken();
-        if (!($token instanceof TwoFactorTokenInterface && $token->getFirewallName() === $this->firewallName)) {
+        if (!($token instanceof TwoFactorTokenInterface)) {
+            return;
+        }
+        if ($token->getFirewallName() !== $this->firewallName) {
             return;
         }
 
-        /** @var TwoFactorTokenInterface $token */
         $request = $exceptionEvent->getRequest();
-
         $event = new TwoFactorAuthenticationEvent($request, $token);
         $this->eventDispatcher->dispatch($event, TwoFactorAuthenticationEvents::REQUIRE);
 

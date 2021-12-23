@@ -42,8 +42,6 @@ class TwoFactorAccessListener extends AbstractListener implements FirewallListen
             return;
         }
 
-        /** @var TwoFactorTokenInterface $token */
-        $token = $this->tokenStorage->getToken();
         $request = $event->getRequest();
         if ($this->twoFactorFirewallConfig->isCheckPathRequest($request)) {
             return;
