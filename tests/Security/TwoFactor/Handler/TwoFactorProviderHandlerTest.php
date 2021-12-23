@@ -12,6 +12,7 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderHandler;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
 {
@@ -46,7 +47,7 @@ class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
 
     private function createUserWithPreferredProvider(string $preferredProvider): MockObject
     {
-        $user = $this->createMock(PreferredProviderInterface::class);
+        $user = $this->createMock(UserWithPreferredProviderInterface::class);
         $user
             ->expects($this->any())
             ->method('getPreferredTwoFactorProvider')
@@ -150,4 +151,9 @@ class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
 
         $this->handler->beginTwoFactorAuthentication($context);
     }
+}
+
+// Used to mock combined interfaces
+interface UserWithPreferredProviderInterface extends UserInterface, PreferredProviderInterface
+{
 }

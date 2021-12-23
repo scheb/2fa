@@ -13,6 +13,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInte
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorTwoFactorProvider;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class TotpAuthenticatorTwoFactorProviderTest extends TestCase
 {
@@ -30,7 +31,7 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
 
     private function createUser(bool $enabled = true, bool $hasTotpConfiguration = true, ?string $secret = self::SECRET): MockObject|TwoFactorInterface
     {
-        $user = $this->createMock(TwoFactorInterface::class);
+        $user = $this->createMock(UserWithTwoFactorInterface::class);
         $user
             ->expects($this->any())
             ->method('isTotpAuthenticationEnabled')
@@ -117,7 +118,7 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
      */
     public function beginAuthentication_interfaceNotImplemented_returnFalse(): void
     {
-        $user = new \stdClass(); //Any class without TwoFactorInterface
+        $user = $this->createMock(UserInterface::class);
         $context = $this->createAuthenticationContext($user);
 
         $returnValue = $this->provider->beginAuthentication($context);
@@ -129,7 +130,7 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
      */
     public function validateAuthenticationCode_noTwoFactorUser_returnFalse(): void
     {
-        $user = new \stdClass();
+        $user = $this->createMock(UserInterface::class);
 
         $this->authenticator
             ->expects($this->never())
@@ -164,4 +165,9 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
             [false],
         ];
     }
+}
+
+// Used to mock combined interfaces
+interface UserWithTwoFactorInterface extends UserInterface, TwoFactorInterface
+{
 }

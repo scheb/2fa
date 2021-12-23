@@ -35,7 +35,7 @@ return ``true``, otherwise ``false``.
 
 .. code-block:: php
 
-   public function prepareAuthentication(mixed $user): void;
+   public function prepareAuthentication(object $user): void;
 
 This method is where you should do the preparation work for your two-factor provider. E.g. the *email* provider is
 generating a code and sending it to the user.
@@ -45,7 +45,7 @@ validateAuthenticationCode
 
 .. code-block:: php
 
-   public function validateAuthenticationCode(mixed $user, string $authenticationCode): bool;
+   public function validateAuthenticationCode(object $user, string $authenticationCode): bool;
 
 This method is responsible for validating the authentication code entered by the user. Return ``true`` if the code was
 correct or ``false`` when it was wrong.

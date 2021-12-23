@@ -18,7 +18,7 @@ abstract class AbstractAuthenticationHandlerTestCase extends TestCase
 {
     protected const FIREWALL_NAME = 'firewallName';
 
-    protected function getAuthenticationHandlerMock(): AuthenticationHandlerInterface|MockObject
+    protected function getAuthenticationHandlerMock(): MockObject|AuthenticationHandlerInterface
     {
         return $this->createMock(AuthenticationHandlerInterface::class);
     }
@@ -49,19 +49,19 @@ abstract class AbstractAuthenticationHandlerTestCase extends TestCase
         return $context;
     }
 
-    protected function createRequest(): MockObject
+    protected function createRequest(): MockObject|Request
     {
         $request = $this->createMock(Request::class);
 
         return $request;
     }
 
-    protected function createToken(): MockObject
+    protected function createToken(): MockObject|TokenInterface
     {
         return $this->createMock(TokenInterface::class);
     }
 
-    protected function createUser(): MockObject
+    protected function createUser(): MockObject|UserInterface
     {
         return $this->createMock(UserInterface::class);
     }

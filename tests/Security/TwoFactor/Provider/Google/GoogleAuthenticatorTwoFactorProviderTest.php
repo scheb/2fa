@@ -12,6 +12,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorTwoFactorProvider;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
 {
@@ -29,7 +30,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
 
     private function createUser(bool $enabled = true, ?string $secret = self::SECRET): MockObject
     {
-        $user = $this->createMock(TwoFactorInterface::class);
+        $user = $this->createMock(UserWithTwoFactorInterface::class);
         $user
             ->expects($this->any())
             ->method('isGoogleAuthenticatorEnabled')
@@ -106,7 +107,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
      */
     public function beginAuthentication_interfaceNotImplemented_returnFalse(): void
     {
-        $user = new \stdClass(); //Any class without TwoFactorInterface
+        $user = $this->createMock(UserInterface::class);
         $context = $this->createAuthenticationContext($user);
 
         $returnValue = $this->provider->beginAuthentication($context);
@@ -153,4 +154,9 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
             [false],
         ];
     }
+}
+
+// Used to mock combined interfaces
+interface UserWithTwoFactorInterface extends UserInterface, TwoFactorInterface
+{
 }

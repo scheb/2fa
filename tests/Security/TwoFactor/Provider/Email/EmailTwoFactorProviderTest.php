@@ -11,6 +11,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\EmailTwoFactorProvid
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class EmailTwoFactorProviderTest extends TestCase
 {
@@ -30,7 +31,7 @@ class EmailTwoFactorProviderTest extends TestCase
 
     private function createUser(bool $emailAuthEnabled = true): MockObject
     {
-        $user = $this->createMock(TwoFactorInterface::class);
+        $user = $this->createMock(UserWithTwoFactorInterface::class);
         $user
             ->expects($this->any())
             ->method('isEmailAuthEnabled')
@@ -83,7 +84,7 @@ class EmailTwoFactorProviderTest extends TestCase
      */
     public function beginAuthentication_interfaceNotImplemented_returnFalse(): void
     {
-        $user = new \stdClass(); //Any class without TwoFactorInterface
+        $user = $this->createMock(UserInterface::class);
         $context = $this->createAuthenticationContext($user);
 
         $returnValue = $this->provider->beginAuthentication($context);
@@ -160,4 +161,9 @@ class EmailTwoFactorProviderTest extends TestCase
         $returnValue = $this->provider->validateAuthenticationCode($user, self::INVALID_AUTH_CODE);
         $this->assertFalse($returnValue);
     }
+}
+
+// Used to mock combined interfaces
+interface UserWithTwoFactorInterface extends UserInterface, TwoFactorInterface
+{
 }

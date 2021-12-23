@@ -23,6 +23,7 @@ class TrustedDeviceListenerTest extends TestCase
 
     private MockObject|LoginSuccessEvent $loginSuccessEvent;
     private MockObject|Request $request;
+    private MockObject|UserInterface $user;
     private MockObject|TrustedDeviceManagerInterface $trustedDeviceManager;
     private TrustedDeviceListener $trustedDeviceListener;
 
@@ -34,6 +35,7 @@ class TrustedDeviceListenerTest extends TestCase
     protected function setUp(): void
     {
         $this->request = $this->createMock(Request::class);
+        $this->user = $this->createMock(UserInterface::class);
         $this->loginSuccessEvent = $this->createMock(LoginSuccessEvent::class);
         $this->loginSuccessEvent
             ->expects($this->any())
@@ -43,6 +45,10 @@ class TrustedDeviceListenerTest extends TestCase
             ->expects($this->any())
             ->method('getFirewallName')
             ->willReturn(self::FIREWALL_NAME);
+        $this->loginSuccessEvent
+            ->expects($this->any())
+            ->method('getUser')
+            ->willReturn($this->user);
 
         $this->trustedDeviceManager = $this->createMock(TrustedDeviceManagerInterface::class);
         $this->trustedDeviceListener = new TrustedDeviceListener($this->trustedDeviceManager);
@@ -147,22 +153,16 @@ class TrustedDeviceListenerTest extends TestCase
     {
         $passport = $this->createPassportMock();
         $authenticatedToken = $this->createMock(TokenInterface::class);
-        $user = $this->createMock(UserInterface::class);
 
         $this->stubAuthenticatedToken($authenticatedToken);
         $this->stubPassport($passport);
         $this->stubPassportHasBadge(TwoFactorCodeCredentials::class);
         $this->stubPassportHasBadge(TrustedDeviceBadge::class);
 
-        $authenticatedToken
-            ->expects($this->any())
-            ->method('getUser')
-            ->willReturn($user);
-
         $this->trustedDeviceManager
             ->expects($this->once())
             ->method('canSetTrustedDevice')
-            ->with($user, $this->request, self::FIREWALL_NAME)
+            ->with($this->user, $this->request, self::FIREWALL_NAME)
             ->willReturn(false);
 
         $this->trustedDeviceManager
@@ -179,28 +179,22 @@ class TrustedDeviceListenerTest extends TestCase
     {
         $passport = $this->createPassportMock();
         $authenticatedToken = $this->createMock(TokenInterface::class);
-        $user = $this->createMock(UserInterface::class);
 
         $this->stubAuthenticatedToken($authenticatedToken);
         $this->stubPassport($passport);
         $this->stubPassportHasBadge(TwoFactorCodeCredentials::class);
         $this->stubPassportHasBadge(TrustedDeviceBadge::class);
 
-        $authenticatedToken
-            ->expects($this->any())
-            ->method('getUser')
-            ->willReturn($user);
-
         $this->trustedDeviceManager
             ->expects($this->any())
             ->method('canSetTrustedDevice')
-            ->with($user, $this->request, self::FIREWALL_NAME)
+            ->with($this->user, $this->request, self::FIREWALL_NAME)
             ->willReturn(true);
 
         $this->trustedDeviceManager
             ->expects($this->once())
             ->method('addTrustedDevice')
-            ->with($user, self::FIREWALL_NAME);
+            ->with($this->user, self::FIREWALL_NAME);
 
         $this->trustedDeviceListener->onSuccessfulLogin($this->loginSuccessEvent);
     }

@@ -30,9 +30,9 @@ class AuthenticationContext implements AuthenticationContextInterface
         return $this->passport;
     }
 
-    public function getUser(): ?UserInterface
+    public function getUser(): UserInterface
     {
-        return $this->token->getUser();
+        return $this->passport->getUser();
     }
 
     public function getRequest(): Request
