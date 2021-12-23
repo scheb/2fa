@@ -7,6 +7,7 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp;
 use OTPHP\TOTP;
 use OTPHP\TOTPInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
 
 /**
  * @final
@@ -21,11 +22,16 @@ class TotpFactory
     {
         $totpConfiguration = $user->getTotpAuthenticationConfiguration();
         if (null === $totpConfiguration) {
-            throw new \RuntimeException('Cannot create TOTP, no TotpAuthenticationConfiguration provided.');
+            throw new TwoFactorProviderLogicException('Cannot initialize TOTP, no TotpAuthenticationConfiguration provided.');
+        }
+
+        $secret = $totpConfiguration->getSecret();
+        if (0 === \strlen($secret)) {
+            throw new TwoFactorProviderLogicException('Cannot initialize TOTP, no secret code provided.');
         }
 
         $totp = TOTP::create(
-            $totpConfiguration->getSecret(),
+            $secret,
             $totpConfiguration->getPeriod(),
             $totpConfiguration->getAlgorithm(),
             $totpConfiguration->getDigits()

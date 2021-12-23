@@ -6,6 +6,7 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google;
 
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 
@@ -20,12 +21,18 @@ class GoogleAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
 
     public function beginAuthentication(AuthenticationContextInterface $context): bool
     {
-        // Check if user can do authentication with google authenticator
         $user = $context->getUser();
+        if (!($user instanceof TwoFactorInterface && $user->isGoogleAuthenticatorEnabled())) {
+            return false;
+        }
 
-        return $user instanceof TwoFactorInterface
-            && $user->isGoogleAuthenticatorEnabled()
-            && $user->getGoogleAuthenticatorSecret();
+        // Make sure there is a secret provided when enabled
+        $secret = $user->getGoogleAuthenticatorSecret();
+        if (null === $secret || 0 === \strlen($secret)) {
+            throw new TwoFactorProviderLogicException('User has to provide a secret code for Google Authenticator authentication.');
+        }
+
+        return true;
     }
 
     public function prepareAuthentication(mixed $user): void

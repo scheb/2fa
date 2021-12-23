@@ -7,6 +7,7 @@ namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Google;
 use OTPHP\TOTP;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleTotpFactory;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 
@@ -19,19 +20,41 @@ class GoogleTotpFactoryTest extends TestCase
     private const CUSTOM_DIGITS = 8;
     private const DEFAULT_DIGITS = 6;
 
-    private function createUserMock(): MockObject|TwoFactorInterface
+    private function createUserMock(?string $secret = self::SECRET): MockObject|TwoFactorInterface
     {
         $user = $this->createMock(TwoFactorInterface::class);
         $user
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getGoogleAuthenticatorUsername')
             ->willReturn(self::USER_NAME);
         $user
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getGoogleAuthenticatorSecret')
-            ->willReturn(self::SECRET);
+            ->willReturn($secret);
 
         return $user;
+    }
+
+    /**
+     * @test
+     */
+    public function createTotpForUser_missingSecretCode_throwTwoFactorProviderLogicException(): void
+    {
+        $user = $this->createUserMock('');
+
+        $this->expectException(TwoFactorProviderLogicException::class);
+        (new GoogleTotpFactory(self::SERVER, self::ISSUER, self::CUSTOM_DIGITS))->createTotpForUser($user);
+    }
+
+    /**
+     * @test
+     */
+    public function createTotpForUser_nullSecretCode_throwTwoFactorProviderLogicException(): void
+    {
+        $user = $this->createUserMock(null);
+
+        $this->expectException(TwoFactorProviderLogicException::class);
+        (new GoogleTotpFactory(self::SERVER, self::ISSUER, self::CUSTOM_DIGITS))->createTotpForUser($user);
     }
 
     /**

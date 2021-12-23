@@ -22,6 +22,9 @@ use `AUTHENTICATION_SUCCESS_LISTENER_PRIORITY` instead.
 `Symfony\Component\Security\Http\Authenticator\Passport\Passport` with a
 `Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials` instead.
 
+When a two-factor provider is enabled a secret code/TOTP configuration has to be returned, otherwise a
+`TwoFactorProviderLogicException` will be thrown. Before, the two-factor provider was gracefully skipped.
+
 ### `scheb/2fa-email`
 
 Out-of-the-box support for `symfony/swiftmailer-bundle` was removed, respectively

@@ -8,6 +8,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfigurationInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorTwoFactorProvider;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
@@ -15,6 +16,8 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TotpAuthenticatorTwoFactorProviderTest extends TestCase
 {
+    private const SECRET = 'SECRET';
+
     private MockObject|TotpAuthenticatorInterface $authenticator;
     private TotpAuthenticatorTwoFactorProvider $provider;
 
@@ -25,7 +28,7 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
         $this->provider = new TotpAuthenticatorTwoFactorProvider($this->authenticator, $formRenderer);
     }
 
-    private function createUser(bool $enabled = true, bool $hasTotpConfiguration = true): MockObject|TwoFactorInterface
+    private function createUser(bool $enabled = true, bool $hasTotpConfiguration = true, ?string $secret = self::SECRET): MockObject|TwoFactorInterface
     {
         $user = $this->createMock(TwoFactorInterface::class);
         $user
@@ -33,7 +36,15 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
             ->method('isTotpAuthenticationEnabled')
             ->willReturn($enabled);
 
-        $totpConfiguration = $hasTotpConfiguration ? $this->createMock(TotpConfigurationInterface::class) : null;
+        $totpConfiguration = null;
+        if ($hasTotpConfiguration) {
+            $totpConfiguration = $this->createMock(TotpConfigurationInterface::class);
+            $totpConfiguration
+                ->expects($this->any())
+                ->method('getSecret')
+                ->willReturn($secret);
+        }
+
         $user
             ->expects($this->any())
             ->method('getTotpAuthenticationConfiguration')
@@ -68,13 +79,25 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
     /**
      * @test
      */
-    public function beginAuthentication_twoFactorEnabledNoTotpConfiguration_returnFalse(): void
+    public function beginAuthentication_twoFactorEnabledNoTotpConfiguration_throwTwoFactorProviderLogicException(): void
     {
         $user = $this->createUser(true, false);
         $context = $this->createAuthenticationContext($user);
 
-        $returnValue = $this->provider->beginAuthentication($context);
-        $this->assertFalse($returnValue);
+        $this->expectException(TwoFactorProviderLogicException::class);
+        $this->provider->beginAuthentication($context);
+    }
+
+    /**
+     * @test
+     */
+    public function beginAuthentication_twoFactorEnabledHasNoSecret_throwTwoFactorProviderLogicException(): void
+    {
+        $user = $this->createUser(true, true, '');
+        $context = $this->createAuthenticationContext($user);
+
+        $this->expectException(TwoFactorProviderLogicException::class);
+        $this->provider->beginAuthentication($context);
     }
 
     /**

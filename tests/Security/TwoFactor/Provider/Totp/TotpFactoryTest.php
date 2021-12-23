@@ -8,6 +8,7 @@ use OTPHP\TOTP;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpFactory;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 
@@ -26,21 +27,43 @@ class TotpFactoryTest extends TestCase
     private const DIGITS = 8;
     private const ALGORITHM = TotpConfiguration::ALGORITHM_SHA256;
 
-    private function createUserMock(): MockObject|TwoFactorInterface
+    private function createUserMock(bool $hasTotpConfiguration = true, ?string $secret = self::SECRET): MockObject|TwoFactorInterface
     {
-        $config = new TotpConfiguration(self::SECRET, self::ALGORITHM, self::PERIOD, self::DIGITS);
-
         $user = $this->createMock(TwoFactorInterface::class);
         $user
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getTotpAuthenticationUsername')
             ->willReturn(self::USER_NAME);
+
+        $config = $hasTotpConfiguration ? new TotpConfiguration($secret, self::ALGORITHM, self::PERIOD, self::DIGITS) : null;
         $user
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getTotpAuthenticationConfiguration')
             ->willReturn($config);
 
         return $user;
+    }
+
+    /**
+     * @test
+     */
+    public function createTotpForUser_missingTotpConfiguration_throwTwoFactorProviderLogicException(): void
+    {
+        $user = $this->createUserMock(false);
+
+        $this->expectException(TwoFactorProviderLogicException::class);
+        (new TotpFactory(self::SERVER, self::ISSUER, self::CUSTOM_PARAMETERS))->createTotpForUser($user);
+    }
+
+    /**
+     * @test
+     */
+    public function createTotpForUser_missingSecretCode_throwTwoFactorProviderLogicException(): void
+    {
+        $user = $this->createUserMock(true, '');
+
+        $this->expectException(TwoFactorProviderLogicException::class);
+        (new TotpFactory(self::SERVER, self::ISSUER, self::CUSTOM_PARAMETERS))->createTotpForUser($user);
     }
 
     /**

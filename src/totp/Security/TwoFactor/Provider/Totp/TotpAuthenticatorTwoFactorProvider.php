@@ -6,6 +6,7 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp;
 
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 
@@ -21,10 +22,21 @@ class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
     public function beginAuthentication(AuthenticationContextInterface $context): bool
     {
         $user = $context->getUser();
+        if (!($user instanceof TwoFactorInterface && $user->isTotpAuthenticationEnabled())) {
+            return false;
+        }
 
-        return $user instanceof TwoFactorInterface
-            && $user->isTotpAuthenticationEnabled()
-            && $user->getTotpAuthenticationConfiguration();
+        $totpConfiguration = $user->getTotpAuthenticationConfiguration();
+        if (null === $totpConfiguration) {
+            throw new TwoFactorProviderLogicException('User has to provide a TotpAuthenticationConfiguration for TOTP authentication.');
+        }
+
+        $secret = $totpConfiguration->getSecret();
+        if (0 === \strlen($secret)) {
+            throw new TwoFactorProviderLogicException('User has to provide a secret code for TOTP authentication.');
+        }
+
+        return true;
     }
 
     public function prepareAuthentication(mixed $user): void
