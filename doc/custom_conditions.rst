@@ -31,10 +31,8 @@ Register it as a service and configure the service name:
 Bypassing Two-Factor Authentication
 -----------------------------------
 
-ℹ️ This approach only works when you're using Symfony's authenticator-based security system.
-
 If you simply wish to bypass 2fa for a specific authenticator, setting the
-``TwoFactorAuthenticator::FLAG_2FA_COMPLETE`` attribute on the token will achieve this.
+``TwoFactorAuthenticator::FLAG_2FA_COMPLETE`` attribute on the security token will achieve this.
 
 For example, if you are building a `custom Authenticator <https://symfony.com/doc/5.4/security/experimental_authenticators.html#creating-a-custom-authenticator>`_
 this would bypass 2fa when the authenticator is used:
