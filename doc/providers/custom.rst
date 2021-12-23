@@ -1,5 +1,5 @@
-Implementing a custom two-factor authenticator
-==============================================
+Implementing a custom two-factor provider
+=========================================
 
 Getting started
 ---------------
@@ -37,7 +37,7 @@ return ``true``, otherwise ``false``.
 
    public function prepareAuthentication($user): void;
 
-This method is where you should do the preparation work for your two-factor provider. E.g. the email authenticator is
+This method is where you should do the preparation work for your two-factor provider. E.g. the *email* provider is
 generating a code and sending it to the user.
 
 validateAuthenticationCode

@@ -21,7 +21,7 @@ Documentation Index
 How-to's
 ~~~~~~~~
 
-* :doc:`How to create a custom two-factor authenticator </providers/custom>`
+* :doc:`How to create a custom two-factor provider </providers/custom>`
 * :doc:`How to handle multiple activated authentication methods </multi_authentication>`
 * :doc:`How to customize conditions when to require two-factor authentication </custom_conditions>`
 * :doc:`How to configure two-factor authentication for an API </api>`
