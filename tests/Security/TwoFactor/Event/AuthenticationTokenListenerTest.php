@@ -15,10 +15,13 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Event\AuthenticationTokenCreatedEvent;
 
 class AuthenticationTokenListenerTest extends TestCase
 {
+    private const FIREWALL_NAME = 'firewallName';
+
     private MockObject|AuthenticationHandlerInterface $twoFactorAuthenticationHandler;
     private MockObject|AuthenticationContextFactoryInterface $authenticationContextFactory;
     private AuthenticationTokenListener $listener;
@@ -35,7 +38,7 @@ class AuthenticationTokenListenerTest extends TestCase
             ->willReturn($this->createMock(Request::class));
 
         $this->listener = new AuthenticationTokenListener(
-            'firewallName',
+            self::FIREWALL_NAME,
             $this->twoFactorAuthenticationHandler,
             $this->authenticationContextFactory,
             $requestStack
@@ -49,6 +52,12 @@ class AuthenticationTokenListenerTest extends TestCase
             ->expects($this->any())
             ->method('getAuthenticatedToken')
             ->willReturn($token);
+
+        $passport = $this->createMock(Passport::class);
+        $event
+            ->expects($this->any())
+            ->method('getPassport')
+            ->willReturn($passport);
 
         return $event;
     }
@@ -119,7 +128,7 @@ class AuthenticationTokenListenerTest extends TestCase
         $this->authenticationContextFactory
             ->expects($this->once())
             ->method('create')
-            ->with($this->isInstanceOf(Request::class), $authenticatedToken, 'firewallName');
+            ->with($this->isInstanceOf(Request::class), $authenticatedToken, $this->isInstanceOf(Passport::class), self::FIREWALL_NAME);
 
         $this->listener->onAuthenticationTokenCreated($event);
     }

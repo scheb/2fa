@@ -30,6 +30,25 @@ use `AUTHENTICATION_SUCCESS_LISTENER_PRIORITY` instead.
 When a two-factor provider is enabled a secret code/TOTP configuration has to be returned, otherwise a
 `TwoFactorProviderLogicException` will be thrown. Before, the two-factor provider was gracefully skipped.
 
+### Authentication Context
+
+The passport has been added to the `AuthenticationContext` object, therefore a new getter method was added to
+`Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface`:
+
+```php
+public function getPassport(): Passport
+```
+
+The signature in `Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextFactoryInterface` was adjusted,
+so if you use a custom factory implementation, please adjust it accordingly:
+
+```php
+public function create(Request $request, TokenInterface $token, Passport $passport, string $firewallName): AuthenticationContextInterface
+```
+
+In addition, the constructor of the basic `Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext` class was
+extended with a new parameter for the passport, so if you're extending from this class, please adjust your constructor.
+
 ### `scheb/2fa-email`
 
 Out-of-the-box support for `symfony/swiftmailer-bundle` was removed, respectively

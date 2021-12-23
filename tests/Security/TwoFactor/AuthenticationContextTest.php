@@ -11,18 +11,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 
 class AuthenticationContextTest extends TestCase
 {
     private MockObject|Request $request;
     private MockObject|TokenInterface $token;
     private AuthenticationContext $authContext;
+    private MockObject|Passport $passport;
 
     protected function setUp(): void
     {
         $this->request = $this->createMock(Request::class);
         $this->token = $this->createMock(TokenInterface::class);
-        $this->authContext = new AuthenticationContext($this->request, $this->token, 'firewallName');
+        $this->passport = $this->createMock(Passport::class);
+        $this->authContext = new AuthenticationContext($this->request, $this->token, $this->passport, 'firewallName');
     }
 
     /**
@@ -32,6 +35,15 @@ class AuthenticationContextTest extends TestCase
     {
         $returnValue = $this->authContext->getToken();
         $this->assertEquals($this->token, $returnValue);
+    }
+
+    /**
+     * @test
+     */
+    public function getPassport_objectInitialized_returnPassport(): void
+    {
+        $returnValue = $this->authContext->getPassport();
+        $this->assertEquals($this->passport, $returnValue);
     }
 
     /**

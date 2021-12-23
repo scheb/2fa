@@ -37,7 +37,8 @@ class AuthenticationTokenListener implements EventSubscriberInterface
         }
 
         $request = $this->getRequest();
-        $context = $this->authenticationContextFactory->create($request, $token, $this->firewallName);
+        $passport = $event->getPassport();
+        $context = $this->authenticationContextFactory->create($request, $token, $passport, $this->firewallName);
 
         $newToken = $this->twoFactorAuthenticationHandler->beginTwoFactorAuthentication($context);
         if ($newToken !== $token) {

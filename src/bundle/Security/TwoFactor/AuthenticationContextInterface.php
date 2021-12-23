@@ -7,6 +7,7 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 
 interface AuthenticationContextInterface
 {
@@ -14,6 +15,11 @@ interface AuthenticationContextInterface
      * Return the security token.
      */
     public function getToken(): TokenInterface;
+
+    /**
+     * Return the passport used in the initial authentication process.
+     */
+    public function getPassport(): Passport;
 
     /**
      * Return the user object.
