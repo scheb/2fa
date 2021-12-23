@@ -17,12 +17,12 @@ class TrustedDeviceManager implements TrustedDeviceManagerInterface
     {
     }
 
-    public function canSetTrustedDevice(mixed $user, Request $request, string $firewallName): bool
+    public function canSetTrustedDevice(object $user, Request $request, string $firewallName): bool
     {
         return true;
     }
 
-    public function addTrustedDevice(mixed $user, string $firewallName): void
+    public function addTrustedDevice(object $user, string $firewallName): void
     {
         if (!($user instanceof UserInterface)) {
             return;
@@ -33,7 +33,7 @@ class TrustedDeviceManager implements TrustedDeviceManagerInterface
         $this->trustedTokenStorage->addTrustedToken($username, $firewallName, $version);
     }
 
-    public function isTrustedDevice(mixed $user, string $firewallName): bool
+    public function isTrustedDevice(object $user, string $firewallName): bool
     {
         if (!($user instanceof UserInterface)) {
             return false;

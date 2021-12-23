@@ -27,14 +27,14 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
         return $user instanceof TwoFactorInterface && $user->isEmailAuthEnabled();
     }
 
-    public function prepareAuthentication(mixed $user): void
+    public function prepareAuthentication(object $user): void
     {
         if ($user instanceof TwoFactorInterface) {
             $this->codeGenerator->generateAndSend($user);
         }
     }
 
-    public function validateAuthenticationCode(mixed $user, string $authenticationCode): bool
+    public function validateAuthenticationCode(object $user, string $authenticationCode): bool
     {
         if (!($user instanceof TwoFactorInterface)) {
             return false;

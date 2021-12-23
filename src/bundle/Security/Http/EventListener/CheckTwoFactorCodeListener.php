@@ -24,7 +24,7 @@ class CheckTwoFactorCodeListener extends AbstractCheckCodeListener
         parent::__construct($preparationRecorder);
     }
 
-    protected function isValidCode(string $providerName, mixed $user, string $code): bool
+    protected function isValidCode(string $providerName, object $user, string $code): bool
     {
         try {
             $authenticationProvider = $this->providerRegistry->getProvider($providerName);

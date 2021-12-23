@@ -11,16 +11,16 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class NullTrustedDeviceManager implements TrustedDeviceManagerInterface
 {
-    public function canSetTrustedDevice(mixed $user, Request $request, string $firewallName): bool
+    public function canSetTrustedDevice(object $user, Request $request, string $firewallName): bool
     {
         return false;
     }
 
-    public function addTrustedDevice(mixed $user, string $firewallName): void
+    public function addTrustedDevice(object $user, string $firewallName): void
     {
     }
 
-    public function isTrustedDevice(mixed $user, string $firewallName): bool
+    public function isTrustedDevice(object $user, string $firewallName): bool
     {
         return false;
     }

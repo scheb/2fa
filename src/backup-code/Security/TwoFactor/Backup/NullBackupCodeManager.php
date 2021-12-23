@@ -9,12 +9,12 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Backup;
  */
 class NullBackupCodeManager implements BackupCodeManagerInterface
 {
-    public function isBackupCode(mixed $user, string $code): bool
+    public function isBackupCode(object $user, string $code): bool
     {
         return false;
     }
 
-    public function invalidateBackupCode(mixed $user, string $code): void
+    public function invalidateBackupCode(object $user, string $code): void
     {
     }
 }

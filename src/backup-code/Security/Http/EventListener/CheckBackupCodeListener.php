@@ -24,7 +24,7 @@ class CheckBackupCodeListener extends AbstractCheckCodeListener
         parent::__construct($preparationRecorder);
     }
 
-    protected function isValidCode(string $providerName, mixed $user, string $code): bool
+    protected function isValidCode(string $providerName, object $user, string $code): bool
     {
         if ($this->backupCodeManager->isBackupCode($user, $code)) {
             $this->backupCodeManager->invalidateBackupCode($user, $code);

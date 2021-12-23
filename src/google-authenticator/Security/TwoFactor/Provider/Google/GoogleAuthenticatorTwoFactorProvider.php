@@ -35,11 +35,11 @@ class GoogleAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
         return true;
     }
 
-    public function prepareAuthentication(mixed $user): void
+    public function prepareAuthentication(object $user): void
     {
     }
 
-    public function validateAuthenticationCode(mixed $user, string $authenticationCode): bool
+    public function validateAuthenticationCode(object $user, string $authenticationCode): bool
     {
         if (!($user instanceof TwoFactorInterface)) {
             return false;
