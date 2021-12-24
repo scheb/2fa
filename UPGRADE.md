@@ -148,6 +148,9 @@ The package `scheb/2fa-qr-code` was discontinued. Please migrate to get QR code 
 `scheb_two_factor.security.google_authenticator` or `scheb_two_factor.security.totp_authenticator` and use the
 `endroid/qr-code` package (or any alternative) to render an QR code image.
 
+An example how to render the QR code with `endroid/qr-code` version 4 can be found
+[in the test application](https://github.com/scheb/2fa/blob/6.x/app/src/Controller/MembersController.php).
+
 4.x to 5.x
 ----------
 

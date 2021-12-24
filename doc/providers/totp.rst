@@ -196,41 +196,10 @@ To generate a QR code that can be scanned by the authenticator app, retrieve the
 
    $qrCodeContent = $container->get("scheb_two_factor.security.totp_authenticator")->getQRContent($user);
 
-To render the QR code as an image, install ``scheb/2fa-qr-code``:
+Use the QR code rendering library of your choice to render a QR code image.
 
-.. code-block:: bash
-
-   composer require scheb/2fa-qr-code
-
-Use service ``scheb_two_factor.qr_code_generator`` to get the QR code image. Auto-wiring of
-``Scheb\TwoFactorBundle\Security\TwoFactor\QrCode\QrCodeGenerator`` is also possible. You need to implement a small
-controller to display the image in your application.
-
-.. code-block:: php
-
-   <?php
-
-   namespace App\Controller;
-
-   use Scheb\TwoFactorBundle\Security\TwoFactor\QrCode\QrCodeGenerator;
-   use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-   use Symfony\Component\HttpFoundation\Response;
-   use Symfony\Component\Routing\Annotation\Route;
-
-   class QrCodeController extends AbstractController
-   {
-       /**
-        * @Route("/qr-code", name="qr_code")
-        */
-       public function displayGoogleAuthenticatorQrCode(QrCodeGenerator $qrCodeGenerator): Response
-       {
-           // $qrCode is provided by the endroid/qr-code library. See the docs how to customize the look of the QR code:
-           // https://github.com/endroid/qr-code
-           $qrCode = $qrCodeGenerator->getTotpQrCode($this->getUser());
-
-           return new Response($qrCode->writeString(), 200, ['Content-Type' => 'image/png']);
-       }
-   }
+An example how to render the QR code with ``endroid/qr-code`` version 4 can be found
+`in the demo application <https://github.com/scheb/2fa/blob/6.x/app/src/Controller/MembersController.php>`_.
 
 .. caution::
 
