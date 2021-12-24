@@ -10,6 +10,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -198,5 +199,11 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
     public function getPriority(): int
     {
         return 0;
+    }
+
+    // This method is invoked when the old security system is used
+    public function create(): void
+    {
+        throw new RuntimeException('This version of scheb/2fa-bundle requires the authenticator-based security system to be used. Please enable "enable_authenticator_manager" in your security configuration or downgrade to scheb/2fa-bundle version 5.');
     }
 }
