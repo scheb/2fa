@@ -9,26 +9,20 @@ Here's an overview if you have to do any work when upgrading.
 The bundle now **requires the authenticator-based security system to be used**. Please make sure
 `enable_authenticator_manager` is enabled in the security configuration.
 
-The default value of ``security_tokens``, used when no specific configuration is given, has changed to:
+The default value of `security_tokens`, used when no specific configuration is given, has changed to:
 
 - `Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken`
 - `Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken`
 
+When a two-factor provider is enabled a secret code/TOTP configuration has to be returned, otherwise a
+`TwoFactorProviderLogicException` will be thrown. Before, the two-factor provider was gracefully skipped.
+
 If you use a custom implementation of `Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface`,
 method `getProviderKey()` was removed, please implement `getFirewallName()` instead.
-
-Internal constant `Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface::ATTRIBUTE_NAME_REMEMBER_ME_COOKIE`
-has been removed.
-
-`Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationListener::LISTENER_PRIORITY` was removed,
-use `AUTHENTICATION_SUCCESS_LISTENER_PRIORITY` instead.
 
 `Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\TwoFactorPassport` was removed, use
 `Symfony\Component\Security\Http\Authenticator\Passport\Passport` with a
 `Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials` instead.
-
-When a two-factor provider is enabled a secret code/TOTP configuration has to be returned, otherwise a
-`TwoFactorProviderLogicException` will be thrown. Before, the two-factor provider was gracefully skipped.
 
 ### Authentication Context
 
@@ -49,7 +43,65 @@ public function create(Request $request, TokenInterface $token, Passport $passpo
 In addition, the constructor of the basic `Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext` class was
 extended with a new parameter for the passport, so if you're extending from this class, please adjust your constructor.
 
-### `scheb/2fa-email`
+### Interface Changes
+
+In `Scheb\TwoFactorBundle\Model\PersisterInterface` the `$user` is now typed as `object`:
+
+Before:
+
+```php
+public function persist($user): void;
+```
+
+After:
+
+```php
+public function persist(UserInterface $user): void;
+```
+
+In `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface` the `$user` is now typed as `object`:
+
+Before:
+
+```php
+public function prepareAuthentication($user): void;
+public function validateAuthenticationCode($user, string $authenticationCode): bool;
+```
+
+After:
+
+```php
+public function prepareAuthentication(object $user): void;
+public function validateAuthenticationCode(object $user, string $authenticationCode): bool;
+```
+
+### Constant Changes
+
+Internal constant `Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface::ATTRIBUTE_NAME_REMEMBER_ME_COOKIE`
+has been removed.
+
+`Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationListener::LISTENER_PRIORITY` was removed,
+use `AUTHENTICATION_SUCCESS_LISTENER_PRIORITY` instead.
+
+### `scheb/2fa-backup-code` Package
+
+In `Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface` the `$user` is now typed as `object`:
+
+Before:
+
+```php
+public function isBackupCode($user, string $code): bool;
+public function invalidateBackupCode($user, string $code): void;
+```
+
+After:
+
+```php
+public function isBackupCode(object $user, string $code): bool;
+public function invalidateBackupCode(object $user, string $code): void;
+```
+
+### `scheb/2fa-email` Package
 
 Out-of-the-box support for `symfony/swiftmailer-bundle` was removed, respectively
 `Scheb\TwoFactorBundle\Mailer\SwiftAuthCodeMailer` was removed. Please migrate to `symfony/mailer` or use a
@@ -58,7 +110,39 @@ Out-of-the-box support for `symfony/swiftmailer-bundle` was removed, respectivel
 Signature of `Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface::getEmailAuthCode()` has changed to be nullable,
 please update your implementation accordingly.
 
-### `scheb/2fa-qr-code`
+Before:
+
+```php
+public function getEmailAuthCode(): string;
+```
+
+After:
+
+```php
+public function getEmailAuthCode(): ?string;
+```
+
+### `scheb/2fa-trusted-device` Package
+
+In `Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface` the `$user` is now typed as `object`:
+
+Before:
+
+```php
+public function canSetTrustedDevice($user, Request $request, string $firewallName): bool;
+public function addTrustedDevice($user, string $firewallName): void;
+public function isTrustedDevice($user, string $firewallName): bool;
+```
+
+After:
+
+```php
+public function canSetTrustedDevice(object $user, Request $request, string $firewallName): bool;
+public function addTrustedDevice(object $user, string $firewallName): void;
+public function isTrustedDevice(object $user, string $firewallName): bool;
+```
+
+### `scheb/2fa-qr-code` Package
 
 The package `scheb/2fa-qr-code` was discontinued. Please migrate to get QR code content from service
 `scheb_two_factor.security.google_authenticator` or `scheb_two_factor.security.totp_authenticator` and use the
