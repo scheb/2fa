@@ -199,7 +199,7 @@ To generate a QR code that can be scanned by the authenticator app, retrieve the
 Use the QR code rendering library of your choice to render a QR code image.
 
 An example how to render the QR code with ``endroid/qr-code`` version 4 can be found
-`in the demo application <https://github.com/scheb/2fa/blob/6.x/app/src/Controller/MembersController.php>`_.
+`in the demo application <https://github.com/scheb/2fa/blob/6.x/app/src/Controller/QrCodeController.php>`_.
 
 .. caution::
 
