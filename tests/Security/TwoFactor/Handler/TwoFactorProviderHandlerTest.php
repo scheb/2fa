@@ -26,10 +26,6 @@ class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
     private $twoFactorTokenFactory;
 
     /**
-     * @var MockObject|TwoFactorTokenInterface
-     */
-    private $twoFactorToken;
-    /**
      * @var MockObject|TwoFactorProviderInterface
      */
     private $provider1;
@@ -58,7 +54,6 @@ class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
                 'test2' => $this->provider2,
             ]);
 
-        $this->twoFactorToken = $this->createMock(TwoFactorTokenInterface::class);
         $this->twoFactorTokenFactory = $this->createMock(TwoFactorTokenFactory::class);
 
         $this->handler = new TwoFactorProviderHandler($this->providerRegistry, $this->twoFactorTokenFactory);
