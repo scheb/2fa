@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\Writer\PngWriter;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface as GoogleAuthenticatorTwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface as TotpTwoFactorInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\QrCode\QrCodeGenerator;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -24,45 +29,50 @@ class MembersController extends AbstractController
         $user = $tokenStorage->getToken()->getUser();
 
         return $this->render('members/index.html.twig', [
-            'displayQrCodeGa' => $user instanceof GoogleAuthenticatorTwoFactorInterface,
-            'displayQrCodeTotp' => $user instanceof TotpTwoFactorInterface,
+            'displayQrCodeGa' => $user instanceof GoogleAuthenticatorTwoFactorInterface && $user->isGoogleAuthenticatorEnabled(),
+            'displayQrCodeTotp' => $user instanceof TotpTwoFactorInterface && $user->isTotpAuthenticationEnabled(),
         ]);
     }
 
     /**
      * @Route("/members/qr/ga", name="qr_code_ga")
      */
-    public function displayGoogleAuthenticatorQrCode(TokenStorageInterface $tokenStorage, QrCodeGenerator $qrCodeGenerator)
+    public function displayGoogleAuthenticatorQrCode(TokenStorageInterface $tokenStorage, GoogleAuthenticatorInterface $googleAuthenticator)
     {
         $user = $tokenStorage->getToken()->getUser();
         if (!($user instanceof GoogleAuthenticatorTwoFactorInterface)) {
             throw new NotFoundHttpException('Cannot display QR code');
         }
 
-        return $this->displayQrCode($qrCodeGenerator->getGoogleAuthenticatorQrCode($user));
+        return $this->displayQrCode($googleAuthenticator->getQRContent($user));
     }
 
     /**
      * @Route("/members/qr/totp", name="qr_code_totp")
      */
-    public function displayTotpQrCode(TokenStorageInterface $tokenStorage, QrCodeGenerator $qrCodeGenerator)
+    public function displayTotpQrCode(TokenStorageInterface $tokenStorage, TotpAuthenticatorInterface $totpAuthenticator)
     {
         $user = $tokenStorage->getToken()->getUser();
         if (!($user instanceof TotpTwoFactorInterface)) {
             throw new NotFoundHttpException('Cannot display QR code');
         }
 
-        return $this->displayQrCode($qrCodeGenerator->getTotpQrCode($user));
+        return $this->displayQrCode($totpAuthenticator->getQRContent($user));
     }
 
-    private function displayQrCode(QrCode $qrCode): Response
+    private function displayQrCode(string $qrCodeContent): Response
     {
-        $qrCode->setWriterByName('png');
-        $qrCode->setEncoding('UTF-8');
-        $qrCode->setSize(200);
-        $qrCode->setRoundBlockSize(true);
-        $qrCode->setMargin(0);
+        $result = Builder::create()
+            ->writer(new PngWriter())
+            ->writerOptions([])
+            ->data($qrCodeContent)
+            ->encoding(new Encoding('UTF-8'))
+            ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+            ->size(200)
+            ->margin(0)
+            ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
+            ->build();
 
-        return new Response($qrCode->writeString(), 200, ['Content-Type' => 'image/png']);
+        return new Response($result->getString(), 200, ['Content-Type' => 'image/png']);
     }
 }
