@@ -166,8 +166,3 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
         ];
     }
 }
-
-// Used to mock combined interfaces
-interface UserWithTwoFactorInterface extends UserInterface, TwoFactorInterface
-{
-}

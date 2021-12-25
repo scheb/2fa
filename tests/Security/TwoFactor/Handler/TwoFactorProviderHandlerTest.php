@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Handler;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use Scheb\TwoFactorBundle\Model\PreferredProviderInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderHandler;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
 {
@@ -151,9 +149,4 @@ class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
 
         $this->handler->beginTwoFactorAuthentication($context);
     }
-}
-
-// Used to mock combined interfaces
-interface UserWithPreferredProviderInterface extends UserInterface, PreferredProviderInterface
-{
 }

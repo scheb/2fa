@@ -10,7 +10,6 @@ use Lcobucci\JWT\Token\Signature;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\JwtTokenEncoder;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceToken;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceTokenEncoder;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TrustedDeviceTokenEncoderTest extends TestCase
@@ -66,16 +65,5 @@ class TrustedDeviceTokenEncoderTest extends TestCase
 
         $returnValue = $this->tokenEncoder->decodeToken('invalidToken');
         $this->assertNull($returnValue);
-    }
-}
-
-// Make the current DateTime testable
-class TestableTrustedDeviceTokenEncoder extends TrustedDeviceTokenEncoder
-{
-    public \DateTimeImmutable $now;
-
-    protected function getDateTimeNow(): \DateTimeImmutable
-    {
-        return $this->now;
     }
 }

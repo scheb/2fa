@@ -234,14 +234,3 @@ class TrustedCookieResponseListenerTest extends TestCase
         $this->assertFalse($cookies[0]->isSecure());
     }
 }
-
-// Make the current DateTime testable
-class TestableTrustedCookieResponseListener extends TrustedCookieResponseListener
-{
-    public \DateTime $now;
-
-    protected function getDateTimeNow(): \DateTime
-    {
-        return $this->now;
-    }
-}

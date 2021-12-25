@@ -117,19 +117,3 @@ class CodeGeneratorTest extends TestCase
         $this->authCodeManager->reSend($user);
     }
 }
-
-//Make the AuthCodeManager class testable
-class TestableCodeGenerator extends CodeGenerator
-{
-    public int $testCode;
-    public int $lastMin;
-    public int $lastMax;
-
-    protected function generateCode(int $min, int $max): int
-    {
-        $this->lastMin = $min;
-        $this->lastMax = $max;
-
-        return $this->testCode;
-    }
-}

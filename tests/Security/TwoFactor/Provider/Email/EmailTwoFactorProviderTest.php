@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Email;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\EmailTwoFactorProvider;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface;
@@ -161,9 +160,4 @@ class EmailTwoFactorProviderTest extends TestCase
         $returnValue = $this->provider->validateAuthenticationCode($user, self::INVALID_AUTH_CODE);
         $this->assertFalse($returnValue);
     }
-}
-
-// Used to mock combined interfaces
-interface UserWithTwoFactorInterface extends UserInterface, TwoFactorInterface
-{
 }

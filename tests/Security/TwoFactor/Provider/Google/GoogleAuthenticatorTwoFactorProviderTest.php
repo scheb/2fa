@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Google;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
@@ -154,9 +153,4 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
             [false],
         ];
     }
-}
-
-// Used to mock combined interfaces
-interface UserWithTwoFactorInterface extends UserInterface, TwoFactorInterface
-{
 }
