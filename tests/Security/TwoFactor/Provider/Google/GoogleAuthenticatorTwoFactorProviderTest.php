@@ -11,6 +11,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorTwoFactorProvider;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use stdClass;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
@@ -42,7 +43,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
         return $user;
     }
 
-    private function createAuthenticationContext($user = null): MockObject|AuthenticationContextInterface
+    private function createAuthenticationContext(?UserInterface $user = null): MockObject|AuthenticationContextInterface
     {
         $authContext = $this->createMock(AuthenticationContextInterface::class);
         $authContext
@@ -118,7 +119,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
      */
     public function validateAuthenticationCode_noTwoFactorUser_returnFalse(): void
     {
-        $user = new \stdClass();
+        $user = new stdClass();
 
         $this->authenticator
             ->expects($this->never())
@@ -132,7 +133,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
      * @test
      * @dataProvider provideValidationResult
      */
-    public function validateAuthenticationCode_codeGiven_returnValidationResult($validationResult): void
+    public function validateAuthenticationCode_codeGiven_returnValidationResult(bool $validationResult): void
     {
         $user = $this->createUser();
 
@@ -146,6 +147,9 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
         $this->assertEquals($validationResult, $returnValue);
     }
 
+    /**
+     * @return array<array<bool>>
+     */
     public function provideValidationResult(): array
     {
         return [

@@ -7,6 +7,7 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator;
 use Scheb\TwoFactorBundle\Mailer\AuthCodeMailerInterface;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\PersisterInterface;
+use function random_int;
 
 /**
  * @final

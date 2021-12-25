@@ -21,15 +21,20 @@ class TwoFactorProviderHandler implements AuthenticationHandlerInterface
     {
     }
 
+    /**
+     * @return string[]
+     */
     private function getActiveTwoFactorProviders(AuthenticationContextInterface $context): array
     {
         $activeTwoFactorProviders = [];
 
         // Iterate over two-factor providers and begin the two-factor authentication process.
         foreach ($this->providerRegistry->getAllProviders() as $providerName => $provider) {
-            if ($provider->beginAuthentication($context)) {
-                $activeTwoFactorProviders[] = $providerName;
+            if (!$provider->beginAuthentication($context)) {
+                continue;
             }
+
+            $activeTwoFactorProviders[] = $providerName;
         }
 
         return $activeTwoFactorProviders;
@@ -52,14 +57,19 @@ class TwoFactorProviderHandler implements AuthenticationHandlerInterface
 
     private function setPreferredProvider(TwoFactorTokenInterface $token, object $user): void
     {
-        if ($user instanceof PreferredProviderInterface) {
-            if ($preferredProvider = $user->getPreferredTwoFactorProvider()) {
-                try {
-                    $token->preferTwoFactorProvider($preferredProvider);
-                } catch (UnknownTwoFactorProviderException) {
-                    // Bad user input
-                }
-            }
+        if (!($user instanceof PreferredProviderInterface)) {
+            return;
+        }
+
+        $preferredProvider = $user->getPreferredTwoFactorProvider();
+        if (!$preferredProvider) {
+            return;
+        }
+
+        try {
+            $token->preferTwoFactorProvider($preferredProvider);
+        } catch (UnknownTwoFactorProviderException) {
+            // Bad user input
         }
     }
 }

@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use function array_map;
+use function explode;
+use function implode;
 
 /**
  * @final
@@ -14,9 +18,7 @@ class TrustedDeviceTokenStorage
 {
     private const TOKEN_DELIMITER = ';';
 
-    /**
-     * @var TrustedDeviceToken[]
-     */
+    /** @var TrustedDeviceToken[] */
     private ?array $trustedTokenList;
 
     private bool $updateCookie = false;
@@ -41,16 +43,18 @@ class TrustedDeviceTokenStorage
     public function hasTrustedToken(string $username, string $firewall, int $version): bool
     {
         foreach ($this->getTrustedTokenList() as $key => $token) {
-            if ($token->authenticatesRealm($username, $firewall)) {
-                if ($token->versionMatches($version)) {
-                    return true;
-                }
-
-                // Remove the trusted token, because the version is outdated
-                /** @psalm-suppress PossiblyNullArrayAccess */
-                unset($this->trustedTokenList[$key]);
-                $this->updateCookie = true;
+            if (!$token->authenticatesRealm($username, $firewall)) {
+                continue;
             }
+
+            if ($token->versionMatches($version)) {
+                return true;
+            }
+
+            // Remove the trusted token, because the version is outdated
+            /** @psalm-suppress PossiblyNullArrayAccess */
+            unset($this->trustedTokenList[$key]);
+            $this->updateCookie = true;
         }
 
         return false;
@@ -59,11 +63,13 @@ class TrustedDeviceTokenStorage
     public function addTrustedToken(string $username, string $firewall, int $version): void
     {
         foreach ($this->getTrustedTokenList() as $key => $token) {
-            if ($token->authenticatesRealm($username, $firewall)) {
-                // Remove the trusted token, because it is to be replaced with a newer one
-                /** @psalm-suppress PossiblyNullArrayAccess */
-                unset($this->trustedTokenList[$key]);
+            if (!$token->authenticatesRealm($username, $firewall)) {
+                continue;
             }
+
+            // Remove the trusted token, because it is to be replaced with a newer one
+            /** @psalm-suppress PossiblyNullArrayAccess */
+            unset($this->trustedTokenList[$key]);
         }
 
         $this->trustedTokenList[] = $this->tokenGenerator->generateToken($username, $firewall, $version);
@@ -74,17 +80,21 @@ class TrustedDeviceTokenStorage
     {
         $found = false;
         foreach ($this->getTrustedTokenList() as $key => $token) {
-            if ($token->authenticatesRealm($username, $firewall)) {
-                // Remove the trusted token, because it is to be replaced with a newer one
-                /** @psalm-suppress PossiblyNullArrayAccess */
-                unset($this->trustedTokenList[$key]);
-                $found = true;
+            if (!$token->authenticatesRealm($username, $firewall)) {
+                continue;
             }
+
+            // Remove the trusted token, because it is to be replaced with a newer one
+            /** @psalm-suppress PossiblyNullArrayAccess */
+            unset($this->trustedTokenList[$key]);
+            $found = true;
         }
 
-        if ($found) {
-            $this->updateCookie = true;
+        if (!$found) {
+            return;
         }
+
+        $this->updateCookie = true;
     }
 
     /**
@@ -134,7 +144,7 @@ class TrustedDeviceTokenStorage
     {
         $request = $this->requestStack->getMainRequest();
         if (null === $request) {
-            throw new \RuntimeException('No request available');
+            throw new RuntimeException('No request available');
         }
 
         return $request;

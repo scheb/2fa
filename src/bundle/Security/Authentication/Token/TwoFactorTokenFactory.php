@@ -11,6 +11,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class TwoFactorTokenFactory implements TwoFactorTokenFactoryInterface
 {
+    /**
+     * @param string[] $twoFactorProviders
+     */
     public function create(TokenInterface $authenticatedToken, string $firewallName, array $twoFactorProviders): TwoFactorTokenInterface
     {
         return new TwoFactorToken($authenticatedToken, null, $firewallName, $twoFactorProviders);

@@ -30,6 +30,7 @@ class TwoFactorFirewallConfigCompilerPass implements CompilerPassInterface
             if (!isset($attributes[0]['firewall'])) {
                 throw new InvalidArgumentException('Tag "scheb_two_factor.firewall_config" requires attribute "firewall" to be set.');
             }
+
             $name = $attributes[0]['firewall'];
             $references[$name] = new Reference($id);
         }

@@ -11,6 +11,8 @@ interface TwoFactorFormRendererInterface
 {
     /**
      * Render the authentication form of a two-factor provider.
+     *
+     * @param array<string,mixed> $templateVars
      */
     public function renderForm(Request $request, array $templateVars): Response;
 }

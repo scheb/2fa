@@ -10,6 +10,7 @@ use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use function current;
 
 class SymfonyAuthCodeMailerTest extends TestCase
 {
@@ -39,7 +40,7 @@ class SymfonyAuthCodeMailerTest extends TestCase
             ->willReturn('1234');
 
         $messageValidator = function ($mail) {
-            /* @var Email $mail */
+            /** @var Email $mail */
             $this->assertInstanceOf(Email::class, $mail);
             $this->assertEquals('recipient@example.com', current($mail->getTo())->getAddress());
             $this->assertEquals('sender@example.com', current($mail->getFrom())->getAddress());

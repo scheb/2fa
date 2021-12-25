@@ -12,6 +12,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class UsernameHelperTest extends TestCase
 {
+    /**
+     * @param string[] $addMethods
+     */
     private function createMockWithExtraMethod(string $className, array $addMethods): MockObject
     {
         return $this->getMockBuilder($className)->addMethods($addMethods)->getMockForAbstractClass();
@@ -56,6 +59,9 @@ class UsernameHelperTest extends TestCase
         $this->executeTestGetTokenUserNameFromGetUserIdentifier($additionalMethods);
     }
 
+    /**
+     * @param string[] $additionalMethods
+     */
     private function executeTestGetTokenUserNameFromGetUserIdentifier(array $additionalMethods): void
     {
         $token = $this->createMockWithExtraMethod(TokenInterface::class, $additionalMethods);
@@ -107,6 +113,9 @@ class UsernameHelperTest extends TestCase
         $this->executeTestGetUsernameFromGetUserIdentifier($additionalMethods);
     }
 
+    /**
+     * @param string[] $additionalMethods
+     */
     private function executeTestGetUsernameFromGetUserIdentifier(array $additionalMethods): void
     {
         $user = $this->createMockWithExtraMethod(UserInterface::class, $additionalMethods);

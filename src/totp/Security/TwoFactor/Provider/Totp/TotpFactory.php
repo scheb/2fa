@@ -8,12 +8,16 @@ use OTPHP\TOTP;
 use OTPHP\TOTPInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
+use function strlen;
 
 /**
  * @final
  */
 class TotpFactory
 {
+    /**
+     * @param array<string,mixed> $customParameters
+     */
     public function __construct(private ?string $server, private ?string $issuer, private array $customParameters)
     {
     }
@@ -26,7 +30,7 @@ class TotpFactory
         }
 
         $secret = $totpConfiguration->getSecret();
-        if (0 === \strlen($secret)) {
+        if (0 === strlen($secret)) {
             throw new TwoFactorProviderLogicException('Cannot initialize TOTP, no secret code provided.');
         }
 

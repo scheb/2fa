@@ -8,6 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Persister\DoctrinePersister;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use stdClass;
 
 class DoctrinePersisterTest extends TestCase
 {
@@ -25,7 +26,7 @@ class DoctrinePersisterTest extends TestCase
      */
     public function persist_persistObject_callPersistAndFlush(): void
     {
-        $user = new \stdClass(); //Some user object
+        $user = new stdClass(); //Some user object
 
         //Mock the EntityManager
         $this->objectManager

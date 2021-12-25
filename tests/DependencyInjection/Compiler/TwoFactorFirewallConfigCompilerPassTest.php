@@ -27,6 +27,9 @@ class TwoFactorFirewallConfigCompilerPassTest extends TestCase
         $this->container->setDefinition('scheb_two_factor.firewall_context', $firewallContextDefinition);
     }
 
+    /**
+     * @param array<string,array<string,mixed>> $taggedServices
+     */
     private function stubTaggedContainerService(array $taggedServices): void
     {
         foreach ($taggedServices as $id => $tags) {
@@ -38,10 +41,13 @@ class TwoFactorFirewallConfigCompilerPassTest extends TestCase
         }
     }
 
-    private function assertTwoFactorFirewallContextArgument(array $extepectedConfigs): void
+    /**
+     * @param array<string,Reference> $expectedTags
+     */
+    private function assertTwoFactorFirewallContextArgument(array $expectedTags): void
     {
         $configsArgument = $this->container->getDefinition('scheb_two_factor.firewall_context')->getArgument(0);
-        $this->assertEquals($extepectedConfigs, $configsArgument);
+        $this->assertEquals($expectedTags, $configsArgument);
     }
 
     /**

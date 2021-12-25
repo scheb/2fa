@@ -14,6 +14,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
+use function interface_exists;
 
 /**
  * @final
@@ -47,8 +48,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('ip_whitelist_provider')->defaultValue('scheb_two_factor.default_ip_whitelist_provider')->end()
                 ->scalarNode('two_factor_token_factory')->defaultValue('scheb_two_factor.default_token_factory')->end()
                 ->scalarNode('two_factor_condition')->defaultNull()->end()
-            ->end()
-        ;
+            ->end();
 
         /** @psalm-suppress ArgumentTypeCoercion */
         $this->addExtraConfiguration($rootNode);
@@ -87,8 +87,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('manager')->defaultValue('scheb_two_factor.default_backup_code_manager')->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     private function addTrustedDeviceConfiguration(ArrayNodeDefinition $rootNode): void
@@ -123,8 +122,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     private function addEmailConfiguration(ArrayNodeDefinition $rootNode): void
@@ -152,8 +150,7 @@ class Configuration implements ConfigurationInterface
                         ->integerNode('digits')->defaultValue(4)->min(1)->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     private function addTotpConfiguration(ArrayNodeDefinition $rootNode): void
@@ -182,8 +179,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('template')->defaultValue('@SchebTwoFactor/Authentication/form.html.twig')->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 
     private function addGoogleAuthenticatorConfiguration(ArrayNodeDefinition $rootNode): void
@@ -210,7 +206,6 @@ class Configuration implements ConfigurationInterface
                         ->integerNode('window')->defaultValue(1)->min(0)->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 }

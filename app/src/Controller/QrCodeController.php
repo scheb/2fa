@@ -24,7 +24,7 @@ class QrCodeController extends AbstractController
     /**
      * @Route("/members/qr/ga", name="qr_code_ga")
      */
-    public function displayGoogleAuthenticatorQrCode(TokenStorageInterface $tokenStorage, GoogleAuthenticatorInterface $googleAuthenticator)
+    public function displayGoogleAuthenticatorQrCode(TokenStorageInterface $tokenStorage, GoogleAuthenticatorInterface $googleAuthenticator): Response
     {
         $user = $tokenStorage->getToken()->getUser();
         if (!($user instanceof GoogleAuthenticatorTwoFactorInterface)) {
@@ -37,7 +37,7 @@ class QrCodeController extends AbstractController
     /**
      * @Route("/members/qr/totp", name="qr_code_totp")
      */
-    public function displayTotpQrCode(TokenStorageInterface $tokenStorage, TotpAuthenticatorInterface $totpAuthenticator)
+    public function displayTotpQrCode(TokenStorageInterface $tokenStorage, TotpAuthenticatorInterface $totpAuthenticator): Response
     {
         $user = $tokenStorage->getToken()->getUser();
         if (!($user instanceof TotpTwoFactorInterface)) {

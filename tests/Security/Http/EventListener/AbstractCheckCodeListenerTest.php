@@ -154,7 +154,7 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
     /**
      * @test
      */
-    public function checkPassport_credentialsResolved_doNothing()
+    public function checkPassport_credentialsResolved_doNothing(): void
     {
         $passport = $this->createMock(Passport::class);
         $token = $this->createTwoFactorToken(null);
@@ -172,7 +172,7 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
     /**
      * @test
      */
-    public function checkPassport_noActiveTwoFactorProvider_throwAuthenticationException()
+    public function checkPassport_noActiveTwoFactorProvider_throwAuthenticationException(): void
     {
         $passport = $this->createMock(Passport::class);
         $token = $this->createTwoFactorToken(null);
@@ -192,7 +192,7 @@ abstract class AbstractCheckCodeListenerTest extends TestCase
     /**
      * @test
      */
-    public function checkPassport_providerNotPrepared_throwAuthenticationException()
+    public function checkPassport_providerNotPrepared_throwAuthenticationException(): void
     {
         $passport = $this->createMock(Passport::class);
         $token = $this->createTwoFactorToken(self::TWO_FACTOR_PROVIDER_ID);

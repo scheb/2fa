@@ -6,13 +6,14 @@ namespace Scheb\TwoFactorBundle\Security;
 
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use function method_exists;
 
 /**
- * @final
- *
  * @internal
  *
  * Handles compatibility with different Symfony versions
+ *
+ * @final
  */
 class UsernameHelper
 {

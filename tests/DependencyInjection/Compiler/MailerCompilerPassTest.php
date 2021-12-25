@@ -21,14 +21,14 @@ class MailerCompilerPassTest extends TestCase
         $this->compilerPass = new MailerCompilerPass();
     }
 
-    private function assertHasAlias($id, $aliasId): void
+    private function assertHasAlias(string $id, string $aliasId): void
     {
         $this->assertTrue($this->container->hasAlias($id), 'Alias "'.$id.'" must be defined.');
         $alias = $this->container->getAlias($id);
         $this->assertEquals($aliasId, (string) $alias, 'Alias "'.$id.'" must be alias for "'.$aliasId.'".');
     }
 
-    private function assertNotHasAlias($id): void
+    private function assertNotHasAlias(string $id): void
     {
         $this->assertFalse($this->container->hasAlias($id), 'Alias "'.$id.'" must not be defined.');
     }

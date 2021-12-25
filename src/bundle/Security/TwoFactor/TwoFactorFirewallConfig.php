@@ -14,6 +14,9 @@ use Symfony\Component\Security\Http\HttpUtils;
  */
 class TwoFactorFirewallConfig
 {
+    /**
+     * @param array<string,mixed> $options
+     */
     public function __construct(private array $options, private string $firewallName, private HttpUtils $httpUtils, private RequestDataReader $requestDataReader)
     {
     }

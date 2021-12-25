@@ -18,6 +18,9 @@ class RequestDataReaderTest extends TestCase
         $this->requestDataReader = new RequestDataReader();
     }
 
+    /**
+     * @param array<string,scalar> $postData
+     */
     private function createPostDataRequest(array $postData): Request
     {
         return new Request([], $postData);

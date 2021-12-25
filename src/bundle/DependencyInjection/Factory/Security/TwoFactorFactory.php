@@ -6,12 +6,13 @@ namespace Scheb\TwoFactorBundle\DependencyInjection\Factory\Security;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AuthenticatorFactoryInterface;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\FirewallListenerFactoryInterface;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
+use Symfony\Component\Config\Definition\Builder\ParentNodeDefinitionInterface;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Reference;
+use function assert;
 
 /**
  * @final
@@ -63,8 +64,9 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
 
     public function addConfiguration(NodeDefinition $builder): void
     {
+        assert($builder instanceof ParentNodeDefinitionInterface);
+
         /**
-         * @var ArrayNodeDefinition $builder
          * @psalm-suppress PossiblyNullReference
          * @psalm-suppress PossiblyUndefinedMethod
          */
@@ -89,10 +91,12 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
                 ->scalarNode('csrf_token_id')->defaultValue(self::DEFAULT_CSRF_TOKEN_ID)->end()
                 // Fake node for SecurityExtension, which requires a provider to be set when multiple user providers are registered
                 ->scalarNode('provider')->defaultNull()->end()
-            ->end()
-        ;
+            ->end();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function createAuthenticator(ContainerBuilder $container, string $firewallName, array $config, string $userProviderId): string
     {
         $twoFactorFirewallConfigId = $this->twoFactorServicesFactory->createTwoFactorFirewallConfig($container, $firewallName, $config);
@@ -144,9 +148,12 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
             ->addTag('kernel.event_subscriber', ['dispatcher' => 'security.event_dispatcher.'.$firewallName]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function createListeners(ContainerBuilder $container, string $firewallName, array $config): array
     {
-        $accessListenerId = TwoFactorFactory::KERNEL_ACCESS_LISTENER_ID_PREFIX.$firewallName;
+        $accessListenerId = self::KERNEL_ACCESS_LISTENER_ID_PREFIX.$firewallName;
 
         return [$accessListenerId];
     }
@@ -166,7 +173,9 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
         return 0;
     }
 
-    // This method is invoked when the old security system is used
+    /**
+     * This method is invoked when the old security system is used.
+     */
     public function create(): void
     {
         throw new RuntimeException('This version of scheb/2fa-bundle requires the authenticator-based security system to be used. Please enable "enable_authenticator_manager" in your security configuration or downgrade to scheb/2fa-bundle version 5.');

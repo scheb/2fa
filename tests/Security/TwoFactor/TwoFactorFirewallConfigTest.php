@@ -36,7 +36,10 @@ class TwoFactorFirewallConfigTest extends TestCase
         $this->requestDataReader = $this->createMock(RequestDataReader::class);
     }
 
-    private function createConfig($options = self::FULL_OPTIONS): TwoFactorFirewallConfig
+    /**
+     * @param array<string,mixed> $options
+     */
+    private function createConfig(array $options = self::FULL_OPTIONS): TwoFactorFirewallConfig
     {
         return new TwoFactorFirewallConfig(
             $options,
@@ -51,7 +54,7 @@ class TwoFactorFirewallConfigTest extends TestCase
         $request
             ->expects($this->any())
             ->method('isMethod')
-            ->willReturnCallback(function (string $arg) use ($method) {
+            ->willReturnCallback(static function (string $arg) use ($method) {
                 return $arg === $method;
             });
     }

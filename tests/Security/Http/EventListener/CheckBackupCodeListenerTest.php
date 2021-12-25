@@ -32,7 +32,7 @@ class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTest
     /**
      * @test
      */
-    public function checkPassport_validBackupCode_invalidateAndResolveCredentials()
+    public function checkPassport_validBackupCode_invalidateAndResolveCredentials(): void
     {
         $this->stubAllPreconditionsFulfilled();
 
@@ -55,7 +55,7 @@ class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTest
     /**
      * @test
      */
-    public function checkPassport_invalidBackupCode_unresolvedCredentials()
+    public function checkPassport_invalidBackupCode_unresolvedCredentials(): void
     {
         $this->stubAllPreconditionsFulfilled();
 

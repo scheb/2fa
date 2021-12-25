@@ -9,6 +9,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
+use function strlen;
 
 /**
  * @final
@@ -28,7 +29,7 @@ class GoogleAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
 
         // Make sure there is a secret provided when enabled
         $secret = $user->getGoogleAuthenticatorSecret();
-        if (null === $secret || 0 === \strlen($secret)) {
+        if (null === $secret || 0 === strlen($secret)) {
             throw new TwoFactorProviderLogicException('User has to provide a secret code for Google Authenticator authentication.');
         }
 

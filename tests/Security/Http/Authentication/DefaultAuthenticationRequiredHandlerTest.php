@@ -93,7 +93,7 @@ class DefaultAuthenticationRequiredHandlerTest extends TestCase
         $this->stubRequestToSaveTargetUrl($session);
     }
 
-    private function stubRequestToSaveTargetUrl($session): void
+    private function stubRequestToSaveTargetUrl(SessionInterface $session): void
     {
         $this->request
             ->expects($this->any())

@@ -10,6 +10,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\EmailTwoFactorProvid
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use stdClass;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class EmailTwoFactorProviderTest extends TestCase
@@ -43,13 +44,13 @@ class EmailTwoFactorProviderTest extends TestCase
         return $user;
     }
 
-    private function createAuthenticationContext($user = null): MockObject
+    private function createAuthenticationContext(?UserInterface $user = null): MockObject
     {
         $authContext = $this->createMock(AuthenticationContextInterface::class);
         $authContext
             ->expects($this->any())
             ->method('getUser')
-            ->willReturn($user ? $user : $this->createUser());
+            ->willReturn($user ?: $this->createUser());
 
         return $authContext;
     }
@@ -95,7 +96,7 @@ class EmailTwoFactorProviderTest extends TestCase
      */
     public function prepareAuthentication_interfaceNotImplemented_doNothing(): void
     {
-        $user = new \stdClass();
+        $user = new stdClass();
 
         //Mock the CodeGenerator
         $this->generator
@@ -126,7 +127,7 @@ class EmailTwoFactorProviderTest extends TestCase
      */
     public function validateAuthenticationCode_noTwoFactorUser_returnFalse(): void
     {
-        $user = new \stdClass();
+        $user = new stdClass();
         $returnValue = $this->provider->validateAuthenticationCode($user, 'code');
         $this->assertFalse($returnValue);
     }

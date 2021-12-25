@@ -6,6 +6,8 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp;
 
 use ParagonIE\ConstantTime\Base32;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
+use function random_bytes;
+use function str_replace;
 
 /**
  * @final

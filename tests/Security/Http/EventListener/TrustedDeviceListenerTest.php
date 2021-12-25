@@ -16,6 +16,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
+use function in_array;
 
 class TrustedDeviceListenerTest extends TestCase
 {
@@ -27,9 +28,7 @@ class TrustedDeviceListenerTest extends TestCase
     private MockObject|TrustedDeviceManagerInterface $trustedDeviceManager;
     private TrustedDeviceListener $trustedDeviceListener;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private array $availableBadges = [];
 
     protected function setUp(): void
@@ -61,7 +60,7 @@ class TrustedDeviceListenerTest extends TestCase
             ->expects($this->any())
             ->method('hasBadge')
             ->willReturnCallback(function (string $badgeClass) {
-                return \in_array($badgeClass, $this->availableBadges);
+                return in_array($badgeClass, $this->availableBadges);
             });
 
         return $passport;

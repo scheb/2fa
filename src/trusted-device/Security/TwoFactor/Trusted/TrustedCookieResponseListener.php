@@ -10,6 +10,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use function preg_match;
+use function substr_count;
 
 /**
  * @final
@@ -22,34 +24,36 @@ class TrustedCookieResponseListener implements EventSubscriberInterface
 
     public function onKernelResponse(ResponseEvent $event): void
     {
-        if ($this->trustedTokenStorage->hasUpdatedCookie()) {
-            $domain = null;
-
-            if (null !== $this->cookieDomain) {
-                $domain = $this->cookieDomain;
-            } else {
-                $requestHost = $event->getRequest()->getHost();
-                if ($this->shouldSetDomain($requestHost)) {
-                    $domain = '.'.$requestHost;
-                }
-            }
-
-            // Set the cookie
-            $cookie = new Cookie(
-                $this->cookieName,
-                $this->trustedTokenStorage->getCookieValue(),
-                $this->getValidUntil(),
-                $this->cookiePath,
-                $domain,
-                null === $this->cookieSecure ? $event->getRequest()->isSecure() : $this->cookieSecure,
-                true,
-                false,
-                $this->cookieSameSite
-            );
-
-            $response = $event->getResponse();
-            $response->headers->setCookie($cookie);
+        if (!$this->trustedTokenStorage->hasUpdatedCookie()) {
+            return;
         }
+
+        $domain = null;
+
+        if (null !== $this->cookieDomain) {
+            $domain = $this->cookieDomain;
+        } else {
+            $requestHost = $event->getRequest()->getHost();
+            if ($this->shouldSetDomain($requestHost)) {
+                $domain = '.'.$requestHost;
+            }
+        }
+
+        // Set the cookie
+        $cookie = new Cookie(
+            $this->cookieName,
+            $this->trustedTokenStorage->getCookieValue(),
+            $this->getValidUntil(),
+            $this->cookiePath,
+            $domain,
+            null === $this->cookieSecure ? $event->getRequest()->isSecure() : $this->cookieSecure,
+            true,
+            false,
+            $this->cookieSameSite
+        );
+
+        $response = $event->getResponse();
+        $response->headers->setCookie($cookie);
     }
 
     private function shouldSetDomain(string $requestHost): bool
@@ -71,10 +75,11 @@ class TrustedCookieResponseListener implements EventSubscriberInterface
         return new DateTimeImmutable();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents()
     {
-        return [
-            KernelEvents::RESPONSE => 'onKernelResponse',
-        ];
+        return [KernelEvents::RESPONSE => 'onKernelResponse'];
     }
 }

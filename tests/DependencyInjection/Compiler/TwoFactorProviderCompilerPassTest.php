@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Reference;
+use function count;
 
 class TwoFactorProviderCompilerPassTest extends TestCase
 {
@@ -28,6 +29,9 @@ class TwoFactorProviderCompilerPassTest extends TestCase
         $this->container->setDefinition('scheb_two_factor.provider_registry', $providerRegistryDefinition);
     }
 
+    /**
+     * @param array<string,array<string,mixed>> $taggedServices
+     */
     private function stubTaggedContainerService(array $taggedServices): void
     {
         foreach ($taggedServices as $id => $tags) {
@@ -39,11 +43,14 @@ class TwoFactorProviderCompilerPassTest extends TestCase
         }
     }
 
+    /**
+     * @param array<string,Reference> $providers
+     */
     private function assertProviderRegistryArgument(array $providers): void
     {
         $providersArgument = $this->container->getDefinition('scheb_two_factor.provider_registry')->getArgument(0);
         $this->assertInstanceOf(IteratorArgument::class, $providersArgument);
-        $this->assertCount(\count($providers), $providersArgument->getValues());
+        $this->assertCount(count($providers), $providersArgument->getValues());
     }
 
     /**

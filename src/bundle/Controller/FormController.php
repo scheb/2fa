@@ -18,6 +18,8 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
+use function count;
+use function str_contains;
 
 class FormController
 {
@@ -51,15 +53,20 @@ class FormController
     protected function setPreferredProvider(Request $request, TwoFactorTokenInterface $token): void
     {
         $preferredProvider = (string) $request->query->get('preferProvider');
-        if ($preferredProvider) {
-            try {
-                $token->preferTwoFactorProvider($preferredProvider);
-            } catch (UnknownTwoFactorProviderException) {
-                // Bad user input
-            }
+        if (!$preferredProvider) {
+            return;
+        }
+
+        try {
+            $token->preferTwoFactorProvider($preferredProvider);
+        } catch (UnknownTwoFactorProviderException) {
+            // Bad user input
         }
     }
 
+    /**
+     * @return array<string,mixed>
+     */
     protected function getTemplateVars(Request $request, TwoFactorTokenInterface $token): array
     {
         $config = $this->twoFactorFirewallContext->getFirewallConfig($token->getFirewallName());
@@ -111,6 +118,6 @@ class FormController
         return $this->trustedFeatureEnabled
             && $this->trustedDeviceManager
             && $this->trustedDeviceManager->canSetTrustedDevice($token->getUser(), $request, $config->getFirewallName())
-            && (!$config->isMultiFactor() || 1 === \count($token->getTwoFactorProviders()));
+            && (!$config->isMultiFactor() || 1 === count($token->getTwoFactorProviders()));
     }
 }

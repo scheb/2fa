@@ -39,15 +39,18 @@ class TrustedDeviceListener implements EventSubscriberInterface
         $user = $loginSuccessEvent->getUser();
         $firewallName = $loginSuccessEvent->getFirewallName();
 
-        if ($this->trustedDeviceManager->canSetTrustedDevice($user, $loginSuccessEvent->getRequest(), $firewallName)) {
-            $this->trustedDeviceManager->addTrustedDevice($user, $firewallName);
+        if (!$this->trustedDeviceManager->canSetTrustedDevice($user, $loginSuccessEvent->getRequest(), $firewallName)) {
+            return;
         }
+
+        $this->trustedDeviceManager->addTrustedDevice($user, $firewallName);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents(): array
     {
-        return [
-            LoginSuccessEvent::class => 'onSuccessfulLogin',
-        ];
+        return [LoginSuccessEvent::class => 'onSuccessfulLogin'];
     }
 }

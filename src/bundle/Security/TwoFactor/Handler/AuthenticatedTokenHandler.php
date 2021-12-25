@@ -6,12 +6,16 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Handler;
 
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use function in_array;
 
 /**
  * @final
  */
 class AuthenticatedTokenHandler implements AuthenticationHandlerInterface
 {
+    /**
+     * @param string[] $supportedTokens
+     */
     public function __construct(private AuthenticationHandlerInterface $authenticationHandler, private array $supportedTokens)
     {
     }
@@ -30,6 +34,6 @@ class AuthenticatedTokenHandler implements AuthenticationHandlerInterface
 
     private function isTwoFactorAuthenticationEnabledForToken(TokenInterface $token): bool
     {
-        return \in_array($token::class, $this->supportedTokens, true);
+        return in_array($token::class, $this->supportedTokens, true);
     }
 }

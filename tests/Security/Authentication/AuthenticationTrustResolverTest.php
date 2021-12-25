@@ -22,6 +22,9 @@ class AuthenticationTrustResolverTest extends TestCase
         $this->trustResolver = new AuthenticationTrustResolver($this->decoratedTrustResolver);
     }
 
+    /**
+     * @return array<array<bool>>
+     */
     public function provideReturnedResult(): array
     {
         return [
@@ -34,7 +37,7 @@ class AuthenticationTrustResolverTest extends TestCase
      * @test
      * @dataProvider provideReturnedResult
      */
-    public function isAnonymous_tokenGiven_returnResultFromDecoratedTrustResolver($returnedResult): void
+    public function isAnonymous_tokenGiven_returnResultFromDecoratedTrustResolver(bool $returnedResult): void
     {
         $this->requireAtMostSymfony5_4();
 
@@ -51,7 +54,7 @@ class AuthenticationTrustResolverTest extends TestCase
      * @test
      * @dataProvider provideReturnedResult
      */
-    public function isRememberMe_tokenGiven_returnResultFromDecoratedTrustResolver($returnedResult): void
+    public function isRememberMe_tokenGiven_returnResultFromDecoratedTrustResolver(bool $returnedResult): void
     {
         $this->decoratedTrustResolver
             ->expects($this->once())
@@ -79,7 +82,7 @@ class AuthenticationTrustResolverTest extends TestCase
      * @test
      * @dataProvider provideReturnedResult
      */
-    public function isFullFledged_notTwoFactorToken_returnResultFromDecoratedTrustResolver($returnedResult): void
+    public function isFullFledged_notTwoFactorToken_returnResultFromDecoratedTrustResolver(bool $returnedResult): void
     {
         $this->decoratedTrustResolver
             ->expects($this->once())

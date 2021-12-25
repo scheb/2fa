@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\EventListener;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\InvalidTwoFactorCodeException;
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\TwoFactorProviderNotFoundException;
@@ -47,7 +48,7 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTest
     /**
      * @test
      */
-    public function checkPassport_twoFactorProviderNotExists_throwTwoFactorProviderNotFoundException()
+    public function checkPassport_twoFactorProviderNotExists_throwTwoFactorProviderNotFoundException(): void
     {
         $this->stubAllPreconditionsFulfilled();
 
@@ -55,7 +56,7 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTest
             ->expects($this->once())
             ->method('getProvider')
             ->with(self::TWO_FACTOR_PROVIDER_ID)
-            ->willThrowException(new \InvalidArgumentException());
+            ->willThrowException(new InvalidArgumentException());
 
         $this->expectCredentialsUnresolved();
         $this->expectException(TwoFactorProviderNotFoundException::class);
@@ -66,7 +67,7 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTest
     /**
      * @test
      */
-    public function checkPassport_validCode_invalidateAndResolveCredentials()
+    public function checkPassport_validCode_invalidateAndResolveCredentials(): void
     {
         $this->stubAllPreconditionsFulfilled();
 
@@ -85,7 +86,7 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTest
     /**
      * @test
      */
-    public function checkPassport_invalidCode_unresolvedCredentials()
+    public function checkPassport_invalidCode_unresolvedCredentials(): void
     {
         $this->stubAllPreconditionsFulfilled();
 

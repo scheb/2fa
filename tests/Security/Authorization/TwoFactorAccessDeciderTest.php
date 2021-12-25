@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\AccessMapInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
+use function defined;
 
 class TwoFactorAccessDeciderTest extends TestCase
 {
@@ -31,9 +32,7 @@ class TwoFactorAccessDeciderTest extends TestCase
     private MockObject|LogoutUrlGenerator $logoutUrlGenerator;
     private TwoFactorAccessDecider $accessDecider;
 
-    /**
-     * @var string[]|null
-     */
+    /** @var string[]|null */
     private ?array $attributes = null;
 
     protected function setUp(): void
@@ -91,14 +90,19 @@ class TwoFactorAccessDeciderTest extends TestCase
             ->willReturn($accessGranted);
     }
 
+    /**
+     * @return iterable<string>
+     */
     public function providePublicAccessAttributes(): iterable
     {
         yield [AuthenticatedVoter::PUBLIC_ACCESS];
 
         // Compatibility with Symfony < 6.0
-        if (\defined(AuthenticatedVoter::class.'::IS_AUTHENTICATED_ANONYMOUSLY')) {
-            yield [AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY];
+        if (!defined(AuthenticatedVoter::class.'::IS_AUTHENTICATED_ANONYMOUSLY')) {
+            return;
         }
+
+        yield [AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY];
     }
 
     /**

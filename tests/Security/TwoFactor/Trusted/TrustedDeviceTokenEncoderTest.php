@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Trusted;
 
+use DateTime;
+use DateTimeImmutable;
 use Lcobucci\JWT\Token\DataSet;
 use Lcobucci\JWT\Token\Plain;
 use Lcobucci\JWT\Token\Signature;
@@ -21,7 +23,7 @@ class TrustedDeviceTokenEncoderTest extends TestCase
     {
         $this->jwtEncoder = $this->createMock(JwtTokenEncoder::class);
         $this->tokenEncoder = new TestableTrustedDeviceTokenEncoder($this->jwtEncoder, 3600);
-        $this->tokenEncoder->now = new \DateTimeImmutable('2018-01-01 00:00:00');
+        $this->tokenEncoder->now = new DateTimeImmutable('2018-01-01 00:00:00');
     }
 
     /**
@@ -32,7 +34,7 @@ class TrustedDeviceTokenEncoderTest extends TestCase
         $this->jwtEncoder
             ->expects($this->once())
             ->method('generateToken')
-            ->with('username', 'firewallName', 1, new \DateTime('2018-01-01 01:00:00'))
+            ->with('username', 'firewallName', 1, new DateTime('2018-01-01 01:00:00'))
             ->willReturn(new Plain(new DataSet([], ''), new DataSet([], ''), Signature::fromEmptyData()));
 
         $token = $this->tokenEncoder->generateToken('username', 'firewallName', 1);

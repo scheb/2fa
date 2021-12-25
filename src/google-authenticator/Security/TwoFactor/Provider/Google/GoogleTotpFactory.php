@@ -8,6 +8,7 @@ use OTPHP\TOTP;
 use OTPHP\TOTPInterface;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
+use function strlen;
 
 /**
  * @final
@@ -21,7 +22,7 @@ class GoogleTotpFactory
     public function createTotpForUser(TwoFactorInterface $user): TOTPInterface
     {
         $secret = $user->getGoogleAuthenticatorSecret();
-        if (null === $secret || 0 === \strlen($secret)) {
+        if (null === $secret || 0 === strlen($secret)) {
             throw new TwoFactorProviderLogicException('Cannot initialize TOTP, no secret code provided.');
         }
 

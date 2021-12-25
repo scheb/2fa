@@ -86,6 +86,8 @@ class TotpFactoryTest extends TestCase
     }
 
     /**
+     * @param array<mixed> $customParameters
+     *
      * @test
      * @dataProvider provideHostnameAndIssuer
      */
@@ -98,6 +100,9 @@ class TotpFactoryTest extends TestCase
         $this->assertEquals($expectedUrl, $returnValue);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function provideHostnameAndIssuer(): array
     {
         return [

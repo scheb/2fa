@@ -6,6 +6,7 @@ namespace Scheb\TwoFactorBundle\Tests\Model\Persister;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
+use InvalidArgumentException;
 use Scheb\TwoFactorBundle\Model\Persister\DoctrinePersister;
 use Scheb\TwoFactorBundle\Model\Persister\DoctrinePersisterFactory;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -17,7 +18,7 @@ class DoctrinePersisterFactoryTest extends TestCase
      */
     public function construct_noManagerRegistry_throwInvalidArgumentException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new DoctrinePersisterFactory(null, 'managerName');
     }
 

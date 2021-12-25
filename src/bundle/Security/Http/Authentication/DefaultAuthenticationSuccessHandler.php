@@ -36,7 +36,8 @@ class DefaultAuthenticationSuccessHandler implements AuthenticationSuccessHandle
 
         $session = $request->getSession();
         $firewallName = $this->config->getFirewallName();
-        if ($targetUrl = $this->getTargetPath($session, $firewallName)) {
+        $targetUrl = $this->getTargetPath($session, $firewallName);
+        if (null !== $targetUrl) {
             $this->removeTargetPath($session, $firewallName);
 
             return $targetUrl;

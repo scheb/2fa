@@ -8,11 +8,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
+use function strpos;
+use function substr;
 
 /**
- * @final
- *
  * @internal Helper class analog to Symfony's ParameterBagUtils class
+ *
+ * @final
  */
 class ParameterBagUtils
 {
@@ -26,7 +28,8 @@ class ParameterBagUtils
      */
     public static function getRequestParameterValue(Request $request, string $path): ?string
     {
-        if (false === $pos = strpos($path, '[')) {
+        $pos = strpos($path, '[');
+        if (false === $pos) {
             $value = ($request->query->all()[$path] ?? null) ?? ($request->request->all()[$path] ?? null);
 
             return null === $value ? null : (string) $value;

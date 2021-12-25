@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\Http\Utils;
 
+use stdClass;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
+use function is_scalar;
+use function json_decode;
+use function str_contains;
 
 /**
- * @final
- *
  * @internal Helper class to retrieve data from JSON payload
+ *
+ * @final
  */
 class JsonRequestUtils
 {
@@ -27,13 +31,11 @@ class JsonRequestUtils
     /**
      * Read data from a JSON payload.
      * Paths like foo.bar will be evaluated to find deeper items in nested data structures.
-     *
-     * @return scalar|null
      */
-    public static function getJsonPayloadValue(Request $request, string $parameterName)
+    public static function getJsonPayloadValue(Request $request, string $parameterName): string|int|float|bool|null
     {
         $data = json_decode((string) $request->getContent());
-        if (!$data instanceof \stdClass) {
+        if (!$data instanceof stdClass) {
             throw new BadRequestException('Invalid JSON.');
         }
 

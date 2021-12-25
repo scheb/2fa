@@ -9,12 +9,18 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use function is_bool;
+use function is_string;
+use function trim;
 
 /**
  * @final
  */
 class SchebTwoFactorExtension extends Extension
 {
+    /**
+     * {@inheritdoc}
+     */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
@@ -54,23 +60,36 @@ class SchebTwoFactorExtension extends Extension
             $container->setParameter('scheb_two_factor.trusted_device.enabled', false);
         }
 
-        if (isset($config['backup_codes']['enabled']) && $this->resolveFeatureFlag($container, $config['backup_codes']['enabled'])) {
-            $this->configureBackupCodeManager($container, $config);
+        if (!isset($config['backup_codes']['enabled']) || !$this->resolveFeatureFlag($container, $config['backup_codes']['enabled'])) {
+            return;
         }
+
+        $this->configureBackupCodeManager($container, $config);
     }
 
+    /**
+     * @param array<string,mixed> $config
+     */
     private function configurePersister(ContainerBuilder $container, array $config): void
     {
         $container->setAlias('scheb_two_factor.persister', $config['persister']);
     }
 
+    /**
+     * @param array<string,mixed> $config
+     */
     private function configureTwoFactorCondition(ContainerBuilder $container, array $config): void
     {
-        if (null !== $config['two_factor_condition']) {
-            $container->setAlias('scheb_two_factor.handler_condition', $config['two_factor_condition']);
+        if (null === $config['two_factor_condition']) {
+            return;
         }
+
+        $container->setAlias('scheb_two_factor.handler_condition', $config['two_factor_condition']);
     }
 
+    /**
+     * @param array<string,mixed> $config
+     */
     private function configureTrustedDeviceManager(ContainerBuilder $container, array $config): void
     {
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
@@ -90,6 +109,9 @@ class SchebTwoFactorExtension extends Extension
         $container->setParameter('scheb_two_factor.trusted_device.cookie_path', $config['trusted_device']['cookie_path']);
     }
 
+    /**
+     * @param array<string,mixed> $config
+     */
     private function configureBackupCodeManager(ContainerBuilder $container, array $config): void
     {
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
@@ -97,16 +119,25 @@ class SchebTwoFactorExtension extends Extension
         $container->setAlias('scheb_two_factor.backup_code_manager', $config['backup_codes']['manager']);
     }
 
+    /**
+     * @param array<string,mixed> $config
+     */
     private function configureIpWhitelistProvider(ContainerBuilder $container, array $config): void
     {
         $container->setAlias('scheb_two_factor.ip_whitelist_provider', $config['ip_whitelist_provider']);
     }
 
+    /**
+     * @param array<string,mixed> $config
+     */
     private function configureTokenFactory(ContainerBuilder $container, array $config): void
     {
         $container->setAlias('scheb_two_factor.token_factory', $config['two_factor_token_factory']);
     }
 
+    /**
+     * @param array<string,mixed> $config
+     */
     private function configureEmailAuthenticationProvider(ContainerBuilder $container, array $config): void
     {
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
@@ -122,11 +153,16 @@ class SchebTwoFactorExtension extends Extension
             $container->setAlias('scheb_two_factor.security.email.auth_code_mailer', $config['email']['mailer']);
         }
 
-        if (null !== $config['email']['form_renderer']) {
-            $container->setAlias('scheb_two_factor.security.email.form_renderer', $config['email']['form_renderer']);
+        if (null === $config['email']['form_renderer']) {
+            return;
         }
+
+        $container->setAlias('scheb_two_factor.security.email.form_renderer', $config['email']['form_renderer']);
     }
 
+    /**
+     * @param array<string,mixed> $config
+     */
     private function configureGoogleAuthenticationProvider(ContainerBuilder $container, array $config): void
     {
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
@@ -138,11 +174,16 @@ class SchebTwoFactorExtension extends Extension
         $container->setParameter('scheb_two_factor.google.digits', $config['google']['digits']);
         $container->setParameter('scheb_two_factor.google.window', $config['google']['window']);
 
-        if (null !== $config['google']['form_renderer']) {
-            $container->setAlias('scheb_two_factor.security.google.form_renderer', $config['google']['form_renderer']);
+        if (null === $config['google']['form_renderer']) {
+            return;
         }
+
+        $container->setAlias('scheb_two_factor.security.google.form_renderer', $config['google']['form_renderer']);
     }
 
+    /**
+     * @param array<string,mixed> $config
+     */
     private function configureTotpAuthenticationProvider(ContainerBuilder $container, array $config): void
     {
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
@@ -154,20 +195,22 @@ class SchebTwoFactorExtension extends Extension
         $container->setParameter('scheb_two_factor.totp.parameters', $config['totp']['parameters']);
         $container->setParameter('scheb_two_factor.totp.template', $config['totp']['template']);
 
-        if (null !== $config['totp']['form_renderer']) {
-            $container->setAlias('scheb_two_factor.security.totp.form_renderer', $config['totp']['form_renderer']);
+        if (null === $config['totp']['form_renderer']) {
+            return;
         }
+
+        $container->setAlias('scheb_two_factor.security.totp.form_renderer', $config['totp']['form_renderer']);
     }
 
     private function resolveFeatureFlag(ContainerBuilder $container, bool|string $value): bool
     {
         $retValue = $container->resolveEnvPlaceholders($value, true);
 
-        if (\is_bool($retValue)) {
+        if (is_bool($retValue)) {
             return $retValue;
         }
 
-        if (\is_string($retValue)) {
+        if (is_string($retValue)) {
             $retValue = trim($retValue);
 
             if ('false' === $retValue || 'off' === $retValue) {

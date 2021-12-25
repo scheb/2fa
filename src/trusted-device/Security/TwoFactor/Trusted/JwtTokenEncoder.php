@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
+use DateTimeImmutable;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Exception;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
@@ -12,9 +13,9 @@ use Lcobucci\JWT\Token\Plain;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
 
 /**
- * @final
- *
  * @internal
+ *
+ * @final
  */
 class JwtTokenEncoder
 {
@@ -30,10 +31,10 @@ class JwtTokenEncoder
         $this->configuration->setValidationConstraints(new SignedWith($this->configuration->signer(), $this->configuration->signingKey()));
     }
 
-    public function generateToken(string $username, string $firewallName, int $version, \DateTimeImmutable $validUntil): Plain
+    public function generateToken(string $username, string $firewallName, int $version, DateTimeImmutable $validUntil): Plain
     {
         $builder = $this->configuration->builder()
-            ->issuedAt(new \DateTimeImmutable())
+            ->issuedAt(new DateTimeImmutable())
             ->expiresAt($validUntil)
             ->withClaim(self::CLAIM_USERNAME, $username)
             ->withClaim(self::CLAIM_FIREWALL, $firewallName)
@@ -58,7 +59,7 @@ class JwtTokenEncoder
             return null;
         }
 
-        if ($token->isExpired(new \DateTimeImmutable())) {
+        if ($token->isExpired(new DateTimeImmutable())) {
             return null;
         }
 

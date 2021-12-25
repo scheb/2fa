@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
+use DateTimeImmutable;
 use Lcobucci\JWT\Token\Plain;
 
 /**
@@ -28,7 +29,7 @@ class TrustedDeviceToken
 
     public function isExpired(): bool
     {
-        return $this->jwtToken->isExpired(new \DateTimeImmutable());
+        return $this->jwtToken->isExpired(new DateTimeImmutable());
     }
 
     public function serialize(): string

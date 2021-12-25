@@ -9,6 +9,7 @@ use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 use Scheb\TwoFactorBundle\Model\PersisterInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManager;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use stdClass;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class BackupCodeManagerTest extends TestCase
@@ -32,7 +33,7 @@ class BackupCodeManagerTest extends TestCase
      */
     public function isBackupCode_userNotImplementsInterface_returnFalse(): void
     {
-        $user = new \stdClass();
+        $user = new stdClass();
         $returnValue = $this->backupCodeManager->isBackupCode($user, 'c0de');
         $this->assertFalse($returnValue);
     }
@@ -54,6 +55,9 @@ class BackupCodeManagerTest extends TestCase
         $this->assertEquals($result, $returnValue);
     }
 
+    /**
+     * @return array<array<bool>>
+     */
     public function provideCheckCodeResults(): array
     {
         return [

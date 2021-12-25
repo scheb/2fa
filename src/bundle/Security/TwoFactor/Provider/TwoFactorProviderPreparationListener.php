@@ -16,6 +16,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\AuthenticationEvents;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
+use function assert;
+use function sprintf;
+use const PHP_INT_MAX;
 
 /**
  * @final
@@ -45,31 +48,37 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
     public function onLogin(AuthenticationEvent $event): void
     {
         $token = $event->getAuthenticationToken();
-        if ($this->prepareOnLogin && $this->supports($token)) {
-            /** @var TwoFactorTokenInterface $token */
-            // After login, when the token is a TwoFactorTokenInterface, execute preparation
-            $this->twoFactorToken = $token;
+        if (!$this->prepareOnLogin || !$this->supports($token)) {
+            return;
         }
+
+        // After login, when the token is a TwoFactorTokenInterface, execute preparation
+        assert($token instanceof TwoFactorTokenInterface);
+        $this->twoFactorToken = $token;
     }
 
     public function onAccessDenied(TwoFactorAuthenticationEvent $event): void
     {
         $token = $event->getToken();
-        if ($this->prepareOnAccessDenied && $this->supports($token)) {
-            /** @var TwoFactorTokenInterface $token */
-            // Whenever two-factor authentication is required, execute preparation
-            $this->twoFactorToken = $token;
+        if (!$this->prepareOnAccessDenied || !$this->supports($token)) {
+            return;
         }
+
+        // Whenever two-factor authentication is required, execute preparation
+        assert($token instanceof TwoFactorTokenInterface);
+        $this->twoFactorToken = $token;
     }
 
     public function onTwoFactorForm(TwoFactorAuthenticationEvent $event): void
     {
         $token = $event->getToken();
-        if ($this->supports($token)) {
-            /** @var TwoFactorTokenInterface $token */
-            // Whenever two-factor authentication form is shown, execute preparation
-            $this->twoFactorToken = $token;
+        if (!$this->supports($token)) {
+            return;
         }
+
+        // Whenever two-factor authentication form is shown, execute preparation
+        assert($token instanceof TwoFactorTokenInterface);
+        $this->twoFactorToken = $token;
     }
 
     public function onKernelResponse(ResponseEvent $event): void
@@ -115,6 +124,9 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
         return $token instanceof TwoFactorTokenInterface && $token->getFirewallName() === $this->firewallName;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents(): array
     {
         return [

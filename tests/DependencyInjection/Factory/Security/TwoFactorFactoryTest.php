@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Yaml\Parser;
+use function array_merge;
 
 class TwoFactorFactoryTest extends TestCase
 {
@@ -39,7 +40,10 @@ class TwoFactorFactoryTest extends TestCase
         $this->container->setDefinition('scheb_two_factor.firewall_context', new Definition());
     }
 
-    private function getEmptyConfig(): ?array
+    /**
+     * @return array<string,null>
+     */
+    private function getEmptyConfig(): array
     {
         $yaml = 'two_factor: ~';
         $parser = new Parser();
@@ -47,6 +51,9 @@ class TwoFactorFactoryTest extends TestCase
         return $parser->parse($yaml);
     }
 
+    /**
+     * @return array<string,array<string,mixed>>
+     */
     private function getFullConfig(): array
     {
         $yaml = <<<EOF
@@ -149,6 +156,11 @@ EOF;
             ->with($this->container, self::FIREWALL_NAME, $this->isType('array'));
     }
 
+    /**
+     * @param array<string,mixed> $config
+     *
+     * @return array<string,mixed>
+     */
     private function processConfiguration(array $config): array
     {
         $firewallConfiguration = new TestableFactoryConfiguration($this->factory);
@@ -156,6 +168,9 @@ EOF;
         return (new Processor())->processConfiguration($firewallConfiguration, $config);
     }
 
+    /**
+     * @param array<string,mixed> $customConfig
+     */
     private function callCreateAuthenticator(array $customConfig = []): string
     {
         return $this->factory->createAuthenticator(

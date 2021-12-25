@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Event;
 
+use RuntimeException;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\TwoFactorAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextFactoryInterface;
@@ -41,25 +42,28 @@ class AuthenticationTokenListener implements EventSubscriberInterface
         $context = $this->authenticationContextFactory->create($request, $token, $passport, $this->firewallName);
 
         $newToken = $this->twoFactorAuthenticationHandler->beginTwoFactorAuthentication($context);
-        if ($newToken !== $token) {
-            $event->setAuthenticatedToken($newToken);
+        if ($newToken === $token) {
+            return;
         }
+
+        $event->setAuthenticatedToken($newToken);
     }
 
     private function getRequest(): Request
     {
         $request = $this->requestStack->getMainRequest();
         if (null === $request) {
-            throw new \RuntimeException('No request available');
+            throw new RuntimeException('No request available');
         }
 
         return $request;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents(): array
     {
-        return [
-            AuthenticationTokenCreatedEvent::class => 'onAuthenticationTokenCreated',
-        ];
+        return [AuthenticationTokenCreatedEvent::class => 'onAuthenticationTokenCreated'];
     }
 }

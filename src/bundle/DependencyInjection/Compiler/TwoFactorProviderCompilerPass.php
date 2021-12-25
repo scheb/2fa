@@ -31,6 +31,7 @@ class TwoFactorProviderCompilerPass implements CompilerPassInterface
             if (!isset($attributes[0]['alias'])) {
                 throw new InvalidArgumentException('Tag "scheb_two_factor.provider" requires attribute "alias" to be set.');
             }
+
             $name = $attributes[0]['alias'];
             $references[$name] = new Reference($id);
         }

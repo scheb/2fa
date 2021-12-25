@@ -13,7 +13,7 @@ class HomeController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function home()
+    public function home(): Response
     {
         return $this->render('home.html.twig');
     }
@@ -21,7 +21,7 @@ class HomeController extends AbstractController
     /**
      * @Route("/alwaysAccessible", name="always_accessible")
      */
-    public function alwaysAccessible()
+    public function alwaysAccessible(): Response
     {
         return new Response('This page is accessible for any user any time');
     }

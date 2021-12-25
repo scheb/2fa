@@ -23,23 +23,23 @@ abstract class AbstractAuthenticationHandlerTestCase extends TestCase
         return $this->createMock(AuthenticationHandlerInterface::class);
     }
 
-    protected function createAuthenticationContext($request = null, $token = null, $user = null): MockObject|AuthenticationContextInterface
+    protected function createAuthenticationContext(?Request $request = null, ?TokenInterface $token = null, ?UserInterface $user = null): MockObject|AuthenticationContextInterface
     {
         $context = $this->createMock(AuthenticationContextInterface::class);
         $context
             ->expects($this->any())
             ->method('getRequest')
-            ->willReturn($request ? $request : $this->createRequest());
+            ->willReturn($request ?: $this->createRequest());
 
         $context
             ->expects($this->any())
             ->method('getToken')
-            ->willReturn($token ? $token : $this->createToken());
+            ->willReturn($token ?: $this->createToken());
 
         $context
             ->expects($this->any())
             ->method('getUser')
-            ->willReturn($user ? $user : $this->createUser());
+            ->willReturn($user ?: $this->createUser());
 
         $context
             ->expects($this->any())
@@ -51,9 +51,7 @@ abstract class AbstractAuthenticationHandlerTestCase extends TestCase
 
     protected function createRequest(): MockObject|Request
     {
-        $request = $this->createMock(Request::class);
-
-        return $request;
+        return $this->createMock(Request::class);
     }
 
     protected function createToken(): MockObject|TokenInterface

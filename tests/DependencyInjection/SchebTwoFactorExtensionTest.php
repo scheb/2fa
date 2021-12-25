@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Yaml\Parser;
+use function sprintf;
 
 class SchebTwoFactorExtensionTest extends TestCase
 {
@@ -585,6 +586,9 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.token_factory', 'acme_test.two_factor_token_factory');
     }
 
+    /**
+     * @return array<string,null>|null
+     */
     private function getEmptyConfig(): ?array
     {
         $yaml = '';
@@ -593,6 +597,9 @@ EOF;
         return $parser->parse($yaml);
     }
 
+    /**
+     * @return array<string,array<string,mixed>>
+     */
     private function getFullConfig(): array
     {
         $yaml = <<<EOF
@@ -650,6 +657,9 @@ EOF;
         return $parser->parse($yaml);
     }
 
+    /**
+     * @return array<string,array<string,mixed>>
+     */
     private function getEnvVarBasedConfig(bool $truthyConfig): array
     {
         if ($truthyConfig) {
@@ -685,34 +695,34 @@ EOF;
         return $parser->parse($yaml);
     }
 
-    private function assertHasParameter($value, $key): void
+    private function assertHasParameter(mixed $value, string $key): void
     {
         $this->assertEquals($value, $this->container->getParameter($key), sprintf('%s parameter is correct', $key));
     }
 
-    private function assertHasNotParameter($key): void
+    private function assertHasNotParameter(string $key): void
     {
         $this->assertFalse($this->container->hasParameter($key), sprintf('%s parameter is correct', $key));
     }
 
-    private function assertHasDefinition($id): void
+    private function assertHasDefinition(string $id): void
     {
         $this->assertTrue($this->container->hasDefinition($id), 'Service "'.$id.'" must be defined.');
     }
 
-    private function assertNotHasDefinition($id): void
+    private function assertNotHasDefinition(string $id): void
     {
         $this->assertFalse($this->container->hasDefinition($id), 'Service "'.$id.'" must NOT be defined.');
     }
 
-    private function assertHasAlias($id, $aliasId): void
+    private function assertHasAlias(string $id, string $aliasId): void
     {
         $this->assertTrue($this->container->hasAlias($id), 'Alias "'.$id.'" must be defined.');
         $alias = $this->container->getAlias($id);
         $this->assertEquals($aliasId, (string) $alias, 'Alias "'.$id.'" must be alias for "'.$aliasId.'".');
     }
 
-    private function assertNotHasAlias($id): void
+    private function assertNotHasAlias(string $id): void
     {
         $this->assertFalse($this->container->hasAlias($id), 'Alias "'.$id.'" must not be defined.');
     }

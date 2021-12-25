@@ -9,6 +9,7 @@ use Scheb\TwoFactorBundle\Security\Http\Utils\JsonRequestUtils;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
+use function json_encode;
 
 class JsonRequestUtilsTest extends TestCase
 {

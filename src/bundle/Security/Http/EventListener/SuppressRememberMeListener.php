@@ -8,6 +8,7 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
+use function assert;
 
 class SuppressRememberMeListener implements EventSubscriberInterface
 {
@@ -21,8 +22,8 @@ class SuppressRememberMeListener implements EventSubscriberInterface
             return;
         }
 
-        /** @var RememberMeBadge $rememberMeBadge */
         $rememberMeBadge = $passport->getBadge(RememberMeBadge::class);
+        assert($rememberMeBadge instanceof RememberMeBadge);
         if (!$rememberMeBadge->isEnabled()) {
             return; // User did not request a remember-me cookie
         }
@@ -37,6 +38,9 @@ class SuppressRememberMeListener implements EventSubscriberInterface
         $token->setAttribute(TwoFactorTokenInterface::ATTRIBUTE_NAME_USE_REMEMBER_ME, true);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents(): array
     {
         return [LoginSuccessEvent::class => ['onSuccessfulLogin', self::PRIORITY]];

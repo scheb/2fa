@@ -11,6 +11,7 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderHandler;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
+use function assert;
 
 class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
 {
@@ -111,8 +112,8 @@ class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
             ->with($originalToken, self::FIREWALL_NAME, ['test2'])
             ->willReturn($twoFactorToken);
 
-        /** @var TwoFactorTokenInterface $returnValue */
         $returnValue = $this->handler->beginTwoFactorAuthentication($context);
+        assert($returnValue instanceof TwoFactorTokenInterface);
         $this->assertSame($twoFactorToken, $returnValue);
     }
 

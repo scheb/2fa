@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Trusted;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedCookieResponseListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceTokenStorage;
@@ -38,7 +39,7 @@ class TrustedCookieResponseListenerTest extends TestCase
             '/cookie-path',
             $domain
         );
-        $cookieResponseListener->now = new \DateTimeImmutable('2018-01-01 00:00:00');
+        $cookieResponseListener->now = new DateTimeImmutable('2018-01-01 00:00:00');
 
         return $cookieResponseListener;
     }
@@ -106,7 +107,7 @@ class TrustedCookieResponseListenerTest extends TestCase
         $expectedCookie = new Cookie(
             'cookieName',
             'cookieValue',
-            new \DateTime('2018-01-01 01:00:00'),
+            new DateTimeImmutable('2018-01-01 01:00:00'),
             '/cookie-path',
             '.example.org',
             true,
@@ -137,7 +138,7 @@ class TrustedCookieResponseListenerTest extends TestCase
         $expectedCookie = new Cookie(
             'cookieName',
             null,
-            new \DateTime('2018-01-01 01:00:00'),
+            new DateTimeImmutable('2018-01-01 01:00:00'),
             '/cookie-path',
             '.different-domain.com',
             true,
@@ -172,6 +173,9 @@ class TrustedCookieResponseListenerTest extends TestCase
         $this->assertNull($cookies[0]->getDomain());
     }
 
+    /**
+     * @return string[][]
+     */
     public function provideRequestHostName(): array
     {
         return [

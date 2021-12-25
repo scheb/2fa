@@ -36,7 +36,9 @@ class ExceptionListener implements EventSubscriberInterface
 
                 return;
             }
-        } while (null !== $exception = $exception->getPrevious());
+
+            $exception = $exception->getPrevious();
+        } while (null !== $exception);
     }
 
     private function handleAccessDeniedException(ExceptionEvent $exceptionEvent): void
@@ -45,6 +47,7 @@ class ExceptionListener implements EventSubscriberInterface
         if (!($token instanceof TwoFactorTokenInterface)) {
             return;
         }
+
         if ($token->getFirewallName() !== $this->firewallName) {
             return;
         }
@@ -57,6 +60,9 @@ class ExceptionListener implements EventSubscriberInterface
         $exceptionEvent->setResponse($response);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents(): array
     {
         return [

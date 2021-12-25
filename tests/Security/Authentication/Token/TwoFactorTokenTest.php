@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Authentication\Token;
 
+use LogicException;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
+use function serialize;
+use function unserialize;
 
 class TwoFactorTokenTest extends TestCase
 {
@@ -101,7 +104,7 @@ class TwoFactorTokenTest extends TestCase
     /**
      * @test
      */
-    public function isTwoFactorProviderPrepared_onePreparedProvider_returnTrueOnlyForThatProvider()
+    public function isTwoFactorProviderPrepared_onePreparedProvider_returnTrueOnlyForThatProvider(): void
     {
         $this->twoFactorToken->setTwoFactorProviderPrepared('provider1');
         $this->assertTrue($this->twoFactorToken->isTwoFactorProviderPrepared('provider1'));
@@ -113,7 +116,7 @@ class TwoFactorTokenTest extends TestCase
      */
     public function setTwoFactorProviderComplete_wasNotPrepared_throwsException(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('was not prepared');
 
         $this->twoFactorToken->setTwoFactorProviderComplete('provider1');

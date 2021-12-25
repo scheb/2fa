@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
+use DateInterval;
 use DateTimeImmutable;
 use Lcobucci\JWT\Token\Plain;
 
@@ -36,7 +37,7 @@ class TrustedDeviceTokenEncoder
 
     private function getValidUntil(): DateTimeImmutable
     {
-        return $this->getDateTimeNow()->add(new \DateInterval('PT'.$this->trustedTokenLifetime.'S'));
+        return $this->getDateTimeNow()->add(new DateInterval('PT'.$this->trustedTokenLifetime.'S'));
     }
 
     protected function getDateTimeNow(): DateTimeImmutable

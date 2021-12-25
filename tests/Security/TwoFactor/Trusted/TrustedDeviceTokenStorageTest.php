@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Trusted;
 
-use Lcobucci\JWT\Token;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceToken;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceTokenEncoder;
@@ -45,7 +44,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
             ->willReturn($newToken);
     }
 
-    private function stubDecodeToken(...$serializedValues): void
+    private function stubDecodeToken(?TrustedDeviceToken ...$serializedValues): void
     {
         $this->tokenEncoder
             ->expects($this->any())
@@ -53,7 +52,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
             ->willReturnOnConsecutiveCalls(...$serializedValues);
     }
 
-    private function createTokenWithProperties(string $serializedValue, bool $authenticatesRealm, bool $versionMatches, bool $isExpired): MockObject
+    private function createTokenWithProperties(string $serializedValue, bool $authenticatesRealm, bool $versionMatches, bool $isExpired): MockObject|TrustedDeviceToken
     {
         $jwtToken = $this->createMock(TrustedDeviceToken::class);
         $jwtToken
@@ -196,7 +195,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     {
         $this->stubCookieHasToken('validToken;invalidToken');
         $this->stubDecodeToken(
-            $this->createMock(Token::class),
+            $this->createMock(TrustedDeviceToken::class),
             null
         );
 

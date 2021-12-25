@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor;
 
+use InvalidArgumentException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallContext;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -34,7 +35,7 @@ class TwoFactorFirewallContextTest extends TestCase
      */
     public function getFirewallConfig_unknownFirewall_throwInvalidArgumentException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->firewallContext->getFirewallConfig('unknownFirewallName');
     }
 }

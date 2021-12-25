@@ -45,6 +45,9 @@ class TrustedDeviceTokenTest extends TestCase
         $this->assertFalse($returnValue);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function provideWrongUsernameFirewallNameCombination(): array
     {
         return [

@@ -85,6 +85,9 @@ class GoogleTotpFactoryTest extends TestCase
         $this->assertEquals($expectedUrl, $returnValue);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function provideHostnameAndIssuer(): array
     {
         return [

@@ -9,6 +9,8 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\PreparationRecorderInterfa
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
+use function assert;
+use function sprintf;
 
 /**
  * @internal
@@ -26,14 +28,14 @@ abstract class AbstractCheckCodeListener implements EventSubscriberInterface
             return;
         }
 
-        /** @var TwoFactorCodeCredentials $credentialsBadge */
         $credentialsBadge = $passport->getBadge(TwoFactorCodeCredentials::class);
+        assert($credentialsBadge instanceof TwoFactorCodeCredentials);
         if ($credentialsBadge->isResolved()) {
             return;
         }
 
-        /** @var TwoFactorCodeCredentials $credentialsBadge */
         $credentialsBadge = $passport->getBadge(TwoFactorCodeCredentials::class);
+        assert($credentialsBadge instanceof TwoFactorCodeCredentials);
         $token = $credentialsBadge->getTwoFactorToken();
         $providerName = $token->getCurrentTwoFactorProvider();
         if (!$providerName) {
@@ -44,10 +46,12 @@ abstract class AbstractCheckCodeListener implements EventSubscriberInterface
             throw new AuthenticationException(sprintf('The two-factor provider "%s" has not been prepared.', $providerName));
         }
 
-        if ($this->isValidCode($providerName, $token->getUser(), $credentialsBadge->getCode())) {
-            $token->setTwoFactorProviderComplete($providerName);
-            $credentialsBadge->markResolved();
+        if (!$this->isValidCode($providerName, $token->getUser(), $credentialsBadge->getCode())) {
+            return;
         }
+
+        $token->setTwoFactorProviderComplete($providerName);
+        $credentialsBadge->markResolved();
     }
 
     abstract protected function isValidCode(string $providerName, object $user, string $code): bool;

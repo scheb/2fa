@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\Firewall;
 
+use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
@@ -19,6 +21,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Throwable;
 
 class ExceptionListenerTest extends TestCase
 {
@@ -83,7 +86,7 @@ class ExceptionListenerTest extends TestCase
         return $token;
     }
 
-    private function createExceptionEvent(\Throwable $exception): ExceptionEvent
+    private function createExceptionEvent(Throwable $exception): ExceptionEvent
     {
         return new ExceptionEvent(
             $this->createMock(HttpKernelInterface::class),
@@ -109,7 +112,7 @@ class ExceptionListenerTest extends TestCase
     public function onKernelException_notAccessDeniedException_doNothing(): void
     {
         $this->stubTokenStorageHasToken($this->createTwoFactorToken(self::FIREWALL_NAME));
-        $event = $this->createExceptionEvent(new \InvalidArgumentException());
+        $event = $this->createExceptionEvent(new InvalidArgumentException());
 
         $this->listener->onKernelException($event);
         $this->assertNotHasResponse($event);
@@ -143,7 +146,7 @@ class ExceptionListenerTest extends TestCase
      * @test
      * @dataProvider provideExceptions
      */
-    public function onKernelException_allConditionsFulfilled_displayRequireEventSetResponse(\Throwable $exception): void
+    public function onKernelException_allConditionsFulfilled_displayRequireEventSetResponse(Throwable $exception): void
     {
         $token = $this->createTwoFactorToken(self::FIREWALL_NAME);
         $this->stubTokenStorageHasToken($token);
@@ -156,11 +159,14 @@ class ExceptionListenerTest extends TestCase
         $this->assertHasResponse($event, $this->response);
     }
 
+    /**
+     * @return array<string,array<mixed>>
+     */
     public function provideExceptions(): array
     {
         return [
             'AccessDeniedException' => [new AccessDeniedException()],
-            'nested AccessDeniedException' => [new \Exception('msg', 0, new AccessDeniedException())],
+            'nested AccessDeniedException' => [new Exception('msg', 0, new AccessDeniedException())],
         ];
     }
 }

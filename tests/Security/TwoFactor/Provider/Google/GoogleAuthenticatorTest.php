@@ -11,6 +11,7 @@ use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleTotpFactory;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use function strlen;
 
 class GoogleAuthenticatorTest extends TestCase
 {
@@ -38,7 +39,7 @@ class GoogleAuthenticatorTest extends TestCase
      * @test
      * @dataProvider provideCheckCodeData
      */
-    public function checkCode_validateCode_returnBoolean($code, $expectedReturnValue): void
+    public function checkCode_validateCode_returnBoolean(string $code, bool $expectedReturnValue): void
     {
         $this->totp
             ->expects($this->once())
@@ -50,6 +51,9 @@ class GoogleAuthenticatorTest extends TestCase
         $this->assertEquals($expectedReturnValue, $returnValue);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function provideCheckCodeData(): array
     {
         return [
@@ -92,6 +96,6 @@ class GoogleAuthenticatorTest extends TestCase
     public function generateSecret_getRandomSecretCode_returnString(): void
     {
         $returnValue = $this->authenticator->generateSecret();
-        $this->assertEquals(52, \strlen($returnValue));
+        $this->assertEquals(52, strlen($returnValue));
     }
 }

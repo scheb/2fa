@@ -14,6 +14,7 @@ use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface as TotpTwoFactorInterfac
 use Scheb\TwoFactorBundle\Model\TrustedDeviceInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use function in_array;
 
 /**
  * @ORM\Entity
@@ -31,44 +32,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTw
      */
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=25, unique=true)
-     */
+    /** @ORM\Column(type="string", length=25, unique=true) */
     private string $username;
 
-    /**
-     * @ORM\Column(type="string", length=64)
-     */
+    /** @ORM\Column(type="string", length=64) */
     private string $password;
 
-    /**
-     * @ORM\Column(type="string", length=60, unique=true)
-     */
+    /** @ORM\Column(type="string", length=60, unique=true) */
     private string $email;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    /** @ORM\Column(type="boolean") */
     private bool $emailAuthenticationEnabled = true;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    /** @ORM\Column(type="integer") */
     private ?string $emailAuthenticationCode;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    /** @ORM\Column(type="boolean") */
     private bool $googleAuthenticatorEnabled = true;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    /** @ORM\Column(type="string") */
     private ?string $googleAuthenticatorSecret;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    /** @ORM\Column(type="boolean") */
     private bool $totpAuthenticationEnabled = true;
 
     public function getId(): int
@@ -101,6 +86,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTw
         return $this->password;
     }
 
+    /**
+     * @return string[]
+     */
     public function getRoles(): array
     {
         return ['ROLE_USER'];
@@ -110,6 +98,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTw
     {
     }
 
+    /**
+     * @return mixed[]
+     */
     public function __serialize(): array
     {
         return [
@@ -119,6 +110,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTw
         ];
     }
 
+    /**
+     * @param mixed[] $unserialized
+     */
     public function __unserialize(array $unserialized): void
     {
         [
@@ -200,7 +194,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTw
 
     public function isBackupCode(string $code): bool
     {
-        return \in_array($code, self::BACKUP_CODES);
+        return in_array($code, self::BACKUP_CODES);
     }
 
     public function invalidateBackupCode(string $code): void

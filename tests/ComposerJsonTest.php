@@ -4,6 +4,17 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests;
 
+use DirectoryIterator;
+use Traversable;
+use function array_diff;
+use function array_keys;
+use function array_unique;
+use function file_get_contents;
+use function implode;
+use function json_decode;
+use function sprintf;
+use function str_starts_with;
+
 class ComposerJsonTest extends TestCase
 {
     private const SRC_DIR = __DIR__.'/../src';
@@ -74,15 +85,23 @@ class ComposerJsonTest extends TestCase
         }
     }
 
-    private function listSubPackages(): \Traversable
+    /**
+     * @return Traversable<string>
+     */
+    private function listSubPackages(): Traversable
     {
-        foreach (new \DirectoryIterator(self::SRC_DIR) as $dirInfo) {
-            if ($dirInfo->isDir() && !$dirInfo->isDot()) {
-                yield $dirInfo->getFilename();
+        foreach (new DirectoryIterator(self::SRC_DIR) as $dirInfo) {
+            if (!$dirInfo->isDir() || $dirInfo->isDot()) {
+                continue;
             }
+
+            yield $dirInfo->getFilename();
         }
     }
 
+    /**
+     * @return array<string,string>
+     */
     private function getComposerDependencies(string $composerFilePath): array
     {
         return $this->parseComposerFile($composerFilePath)['require'];
@@ -93,11 +112,17 @@ class ComposerJsonTest extends TestCase
         return $this->parseComposerFile($composerFilePath)['name'];
     }
 
+    /**
+     * @return array<string,string>
+     */
     private function getComposerReplaces(string $composerFilePath): array
     {
         return $this->parseComposerFile($composerFilePath)['replace'];
     }
 
+    /**
+     * @return array<string,mixed>
+     */
     private function parseComposerFile(string $composerFilePath): array
     {
         return json_decode(file_get_contents($composerFilePath), true);

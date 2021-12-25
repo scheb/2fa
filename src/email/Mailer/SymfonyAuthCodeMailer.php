@@ -37,8 +37,7 @@ class SymfonyAuthCodeMailer implements AuthCodeMailerInterface
             ->to($user->getEmailAuthRecipient())
             ->from($this->senderAddress)
             ->subject('Authentication Code')
-            ->text($authCode)
-        ;
+            ->text($authCode);
         $this->mailer->send($message);
     }
 }

@@ -8,7 +8,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManager;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceTokenStorage;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use stdClass;
 use Symfony\Component\Security\Core\User\UserInterface;
+use function method_exists;
 
 class TrustedDeviceManagerTest extends TestCase
 {
@@ -53,7 +55,7 @@ class TrustedDeviceManagerTest extends TestCase
             ->expects($this->never())
             ->method($this->anything());
 
-        $user = new \stdClass();
+        $user = new stdClass();
         $this->trustedDeviceManager->addTrustedDevice($user, 'firewallName');
     }
 
@@ -99,7 +101,7 @@ class TrustedDeviceManagerTest extends TestCase
             ->expects($this->never())
             ->method($this->anything());
 
-        $user = new \stdClass();
+        $user = new stdClass();
         $this->trustedDeviceManager->isTrustedDevice($user, 'firewallName');
     }
 
@@ -154,6 +156,9 @@ class TrustedDeviceManagerTest extends TestCase
         $this->assertEquals($result, $returnValue);
     }
 
+    /**
+     * @return array<array<bool>>
+     */
     public function provideIsTrustedDeviceReturnValues(): array
     {
         return [

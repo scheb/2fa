@@ -28,6 +28,10 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use function array_map;
+use function assert;
+use function count;
+use function method_exists;
 
 class TwoFactorAuthenticatorTest extends TestCase
 {
@@ -161,7 +165,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         return $token;
     }
 
-    private function createPassportWithTwoFactorCredentials($twoFactorToken): MockObject|Passport
+    private function createPassportWithTwoFactorCredentials(TwoFactorTokenInterface $twoFactorToken): MockObject|Passport
     {
         $credentials = $this->createMock(TwoFactorCodeCredentials::class);
         $credentials
@@ -188,6 +192,9 @@ class TwoFactorAuthenticatorTest extends TestCase
             ->willReturn($isCheckPath);
     }
 
+    /**
+     * @param string[] $events
+     */
     private function expectDispatchEvents(array $events): void
     {
         $withArguments = array_map(function ($event): array {
@@ -195,7 +202,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         }, $events);
 
         $this->eventDispatcher
-            ->expects($this->exactly(\count($events)))
+            ->expects($this->exactly(count($events)))
             ->method('dispatch')
             ->withConsecutive(...$withArguments);
     }
@@ -259,8 +266,8 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->assertTrue($returnValue->hasBadge(TwoFactorCodeCredentials::class));
         $this->assertFalse($returnValue->hasBadge(RememberMeBadge::class));
 
-        /** @var TwoFactorCodeCredentials $credentials */
         $credentials = $returnValue->getBadge(TwoFactorCodeCredentials::class);
+        assert($credentials instanceof TwoFactorCodeCredentials);
         $this->assertEquals(self::CODE, $credentials->getCode());
     }
 
@@ -303,8 +310,8 @@ class TwoFactorAuthenticatorTest extends TestCase
         $returnValue = $this->authenticator->authenticate($this->request);
         $this->assertTrue($returnValue->hasBadge(CsrfTokenBadge::class));
 
-        /** @var CsrfTokenBadge $credentials */
         $credentials = $returnValue->getBadge(CsrfTokenBadge::class);
+        assert($credentials instanceof CsrfTokenBadge);
         $this->assertEquals(self::CSRF_TOKEN, $credentials->getCsrfToken());
         $this->assertEquals(self::CSRF_TOKEN_ID, $credentials->getCsrfTokenId());
     }

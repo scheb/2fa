@@ -11,6 +11,7 @@ use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpFactory;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use function strlen;
 
 class TotpAuthenticatorTest extends TestCase
 {
@@ -37,7 +38,7 @@ class TotpAuthenticatorTest extends TestCase
      * @test
      * @dataProvider provideCheckCodeData
      */
-    public function checkCode_validateCode_returnBoolean($code, $expectedReturnValue): void
+    public function checkCode_validateCode_returnBoolean(string $code, bool $expectedReturnValue): void
     {
         $this->totp
             ->expects($this->once())
@@ -49,6 +50,9 @@ class TotpAuthenticatorTest extends TestCase
         $this->assertEquals($expectedReturnValue, $returnValue);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function provideCheckCodeData(): array
     {
         return [
@@ -91,6 +95,6 @@ class TotpAuthenticatorTest extends TestCase
     public function generateSecret_getRandomSecretCode_returnString(): void
     {
         $returnValue = $this->authenticator->generateSecret();
-        $this->assertEquals(52, \strlen($returnValue));
+        $this->assertEquals(52, strlen($returnValue));
     }
 }

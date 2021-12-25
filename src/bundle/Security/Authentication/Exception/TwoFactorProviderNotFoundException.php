@@ -31,16 +31,25 @@ class TwoFactorProviderNotFoundException extends AuthenticationException
         $this->provider = $provider;
     }
 
+    /**
+     * @return array<string,string|null>
+     */
     public function getMessageData(): array
     {
         return ['{{ provider }}' => $this->provider];
     }
 
+    /**
+     * @return mixed[]
+     */
     public function __serialize(): array
     {
         return [$this->provider, parent::__serialize()];
     }
 
+    /**
+     * @param mixed[] $data
+     */
     public function __unserialize(array $data): void
     {
         [$this->provider, $parentData] = $data;

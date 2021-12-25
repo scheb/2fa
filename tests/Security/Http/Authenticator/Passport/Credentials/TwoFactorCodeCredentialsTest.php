@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\Authenticator\Passport\Credentials;
 
+use LogicException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials;
@@ -36,7 +37,7 @@ class TwoFactorCodeCredentialsTest extends TestCase
     public function getCode_markedResolved_throwLogicException(): void
     {
         $this->credentials->markResolved();
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->credentials->getCode();
     }
 

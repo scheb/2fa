@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider;
 
+use LogicException;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnexpectedTokenException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use function sprintf;
 
 /**
  * Uses the security token to store if a two-factor provider has been prepared.
@@ -28,7 +30,7 @@ class TokenPreparationRecorder implements PreparationRecorderInterface
 
         $providerKey = $token->getFirewallName();
         if ($providerKey !== $firewallName) {
-            throw new \LogicException(sprintf('Cannot store preparation state for firewall "%s" in a TwoFactorToken belonging to "%s".', $firewallName, $providerKey));
+            throw new LogicException(sprintf('Cannot store preparation state for firewall "%s" in a TwoFactorToken belonging to "%s".', $firewallName, $providerKey));
         }
 
         return $token->isTwoFactorProviderPrepared($providerName);
@@ -43,7 +45,7 @@ class TokenPreparationRecorder implements PreparationRecorderInterface
 
         $providerKey = $token->getFirewallName();
         if ($providerKey !== $firewallName) {
-            throw new \LogicException(sprintf('Cannot store preparation state for firewall "%s" in a TwoFactorToken belonging to "%s".', $firewallName, $providerKey));
+            throw new LogicException(sprintf('Cannot store preparation state for firewall "%s" in a TwoFactorToken belonging to "%s".', $firewallName, $providerKey));
         }
 
         $token->setTwoFactorProviderPrepared($providerName);

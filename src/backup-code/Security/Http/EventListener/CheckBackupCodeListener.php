@@ -35,6 +35,9 @@ class CheckBackupCodeListener extends AbstractCheckCodeListener
         return false;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents(): array
     {
         return [CheckPassportEvent::class => ['checkPassport', self::LISTENER_PRIORITY]];

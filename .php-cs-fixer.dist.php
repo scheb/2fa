@@ -2,7 +2,8 @@
 
 $rules = [
     '@Symfony' => true,
-    'native_function_invocation' => ['include' => ['@compiler_optimized'], 'scope' => 'namespaced'],
+    'global_namespace_import' => ['import_constants' => true, 'import_functions' => true, 'import_classes' => true],
+    'ordered_imports' => ['imports_order' => ['class', 'function', 'const']],
     'phpdoc_to_comment' => false,
     'phpdoc_align' => false,
     'php_unit_method_casing' => false,

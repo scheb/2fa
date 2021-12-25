@@ -11,6 +11,7 @@ use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\SchebTwoFactorBundle;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use function count;
 
 class SchebTwoFactorBundleTest extends TestCase
 {
@@ -29,7 +30,7 @@ class SchebTwoFactorBundleTest extends TestCase
 
         //Expect compiler pass to be added
         $containerBuilder
-            ->expects($this->exactly(\count($compilerPasses)))
+            ->expects($this->exactly(count($compilerPasses)))
             ->method('addCompilerPass')
             ->with($this->logicalOr(...$compilerPasses));
 

@@ -9,6 +9,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
+use function str_replace;
 
 /**
  * @final
@@ -29,9 +30,11 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
 
     public function prepareAuthentication(object $user): void
     {
-        if ($user instanceof TwoFactorInterface) {
-            $this->codeGenerator->generateAndSend($user);
+        if (!($user instanceof TwoFactorInterface)) {
+            return;
         }
+
+        $this->codeGenerator->generateAndSend($user);
     }
 
     public function validateAuthenticationCode(object $user, string $authenticationCode): bool

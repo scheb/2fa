@@ -9,6 +9,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
+use function strlen;
 
 /**
  * @final
@@ -32,7 +33,7 @@ class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
         }
 
         $secret = $totpConfiguration->getSecret();
-        if (0 === \strlen($secret)) {
+        if (0 === strlen($secret)) {
             throw new TwoFactorProviderLogicException('User has to provide a secret code for TOTP authentication.');
         }
 

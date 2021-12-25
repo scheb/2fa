@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Controller;
 
+use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Controller\FormController;
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\TwoFactorProviderNotFoundException;
@@ -23,6 +24,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
+use Throwable;
 
 class FormControllerTest extends TestCase
 {
@@ -144,6 +146,9 @@ class FormControllerTest extends TestCase
             ->willReturn($token);
     }
 
+    /**
+     * @param string[] $providers
+     */
     private function stubTokenStorageHasTwoFactorToken(array $providers = ['provider1', 'provider2']): void
     {
         $this->twoFactorToken = $this->createMock(TwoFactorTokenInterface::class);
@@ -165,12 +170,15 @@ class FormControllerTest extends TestCase
         $this->stubTokenStorageHasToken($this->twoFactorToken);
     }
 
+    /**
+     * @param array<string,mixed> $params
+     */
     private function stubRequestParameters(array $params): void
     {
         $this->request->query->add($params);
     }
 
-    private function stubSessionHasException(\Exception $exception): void
+    private function stubSessionHasException(Throwable $exception): void
     {
         $this->session
             ->expects($this->any())
@@ -195,7 +203,10 @@ class FormControllerTest extends TestCase
             ->with($this->anything(), $this->callback($callback));
     }
 
-    private function assertTemplateVarsHaveAuthenticationError($error, $errorData): void
+    /**
+     * @param array<string,mixed>|null $errorData
+     */
+    private function assertTemplateVarsHaveAuthenticationError(?string $error, ?array $errorData): void
     {
         $this->assertTemplateVars(function (array $templateVars) use ($error, $errorData) {
             $this->assertArrayHasKey('authenticationError', $templateVars);
@@ -260,7 +271,7 @@ class FormControllerTest extends TestCase
     public function form_hasOtherError_notPassErrorToRenderer(): void
     {
         $this->stubTokenStorageHasTwoFactorToken();
-        $this->stubSessionHasException(new \Exception('Exception message'));
+        $this->stubSessionHasException(new Exception('Exception message'));
 
         $this->assertTemplateVarsHaveAuthenticationError(null, null);
 

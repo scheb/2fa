@@ -56,7 +56,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $this->providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
     }
 
-    private function initTwoFactorProviderPreparationListener($prepareOnLogin, $prepareOnAccessDenied): void
+    private function initTwoFactorProviderPreparationListener(bool $prepareOnLogin, bool $prepareOnAccessDenied): void
     {
         $this->listener = new TwoFactorProviderPreparationListener(
             $this->providerRegistry,

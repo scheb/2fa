@@ -54,7 +54,7 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
         return $user;
     }
 
-    private function createAuthenticationContext($user = null): MockObject|AuthenticationContextInterface
+    private function createAuthenticationContext(?UserInterface $user = null): MockObject|AuthenticationContextInterface
     {
         $authContext = $this->createMock(AuthenticationContextInterface::class);
         $authContext
@@ -144,7 +144,7 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
      * @test
      * @dataProvider provideValidationResult
      */
-    public function validateAuthenticationCode_codeGiven_returnValidationResult($validationResult): void
+    public function validateAuthenticationCode_codeGiven_returnValidationResult(bool $validationResult): void
     {
         $user = $this->createUser();
 
@@ -158,6 +158,9 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
         $this->assertEquals($validationResult, $returnValue);
     }
 
+    /**
+     * @return array<array<bool>>
+     */
     public function provideValidationResult(): array
     {
         return [

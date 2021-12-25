@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider;
 
+use LogicException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnexpectedTokenException;
@@ -63,7 +64,7 @@ class TokenPreparationRecorderTest extends TestCase
     {
         $this->stubTokenStorageHasToken($this->createMock(TwoFactorTokenInterface::class));
 
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->recorder->isTwoFactorProviderPrepared('differentFirewallName', self::PROVIDER_NAME);
     }
 
@@ -87,6 +88,9 @@ class TokenPreparationRecorderTest extends TestCase
         $this->assertEquals($expectedReturnValue, $returnValue);
     }
 
+    /**
+     * @return array<array<bool>>
+     */
     public function provideReturnValues(): array
     {
         return [
@@ -113,7 +117,7 @@ class TokenPreparationRecorderTest extends TestCase
     {
         $this->stubTokenStorageHasToken($this->createMock(TwoFactorTokenInterface::class));
 
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->recorder->setTwoFactorProviderPrepared('differentFirewallName', self::PROVIDER_NAME);
     }
 

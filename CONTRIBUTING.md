@@ -19,7 +19,7 @@ requests or feature request in the issues section. Besides new features,
 For pull requests, please follow these guidelines:
 
 - Do not use any PHP language features above the minimum supported version (see `composer.json`)
-- Symfony code style (use `php_cs.xml` to configure PHP Code Sniffer checks in your IDE)
+- Use the configured code style (`phpcs.xml.dist` to configure PHP Code Sniffer checks in your IDE)
 - PHP 8.0 level type hints for everything (parameter types, return types, nullable types, union types, `void`),
   including test cases
 - `declare(strict_types=1)` must be used
@@ -39,7 +39,7 @@ First, install the dependencies by running `composer install` in the project roo
 
 - Run [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) v3 (not provided with the library, has to be
   installed locally): `php-cs-fixer fix`
-- Run PHP CodeSniffer with `vendor/bin/phpcs --standard=php_cs.xml app/src src tests`
+- Run PHP CodeSniffer with `vendor/bin/phpcs`
 - Run Psalm with `vendor/bin/psalm` and address any error-level issues
 
 ### Unit Tests

@@ -9,12 +9,15 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * @final
- *
  * @internal Helper class for TwoFactorFactory only
+ *
+ * @final
  */
 class TwoFactorServicesFactory
 {
+    /**
+     * @param array<string,mixed> $config
+     */
     public function createSuccessHandler(ContainerBuilder $container, string $firewallName, array $config, string $twoFactorFirewallConfigId): string
     {
         if (isset($config['success_handler'])) {
@@ -29,6 +32,9 @@ class TwoFactorServicesFactory
         return $successHandlerId;
     }
 
+    /**
+     * @param array<string,mixed> $config
+     */
     public function createFailureHandler(ContainerBuilder $container, string $firewallName, array $config, string $twoFactorFirewallConfigId): string
     {
         if (isset($config['failure_handler'])) {
@@ -43,6 +49,9 @@ class TwoFactorServicesFactory
         return $failureHandlerId;
     }
 
+    /**
+     * @param array<string,mixed> $config
+     */
     public function createAuthenticationRequiredHandler(ContainerBuilder $container, string $firewallName, array $config, string $twoFactorFirewallConfigId): string
     {
         if (isset($config['authentication_required_handler'])) {
@@ -57,6 +66,9 @@ class TwoFactorServicesFactory
         return $successHandlerId;
     }
 
+    /**
+     * @param array<string,mixed> $config
+     */
     public function getCsrfTokenManagerId(array $config): string
     {
         return $config['enable_csrf'] ?? false
@@ -64,6 +76,9 @@ class TwoFactorServicesFactory
             : 'scheb_two_factor.null_csrf_token_manager';
     }
 
+    /**
+     * @param array<string,mixed> $config
+     */
     public function createTwoFactorFirewallConfig(ContainerBuilder $container, string $firewallName, array $config): string
     {
         $firewallConfigId = TwoFactorFactory::FIREWALL_CONFIG_ID_PREFIX.$firewallName;
@@ -78,6 +93,9 @@ class TwoFactorServicesFactory
         return $firewallConfigId;
     }
 
+    /**
+     * @param array<string,mixed> $config
+     */
     public function createProviderPreparationListener(ContainerBuilder $container, string $firewallName, array $config): void
     {
         $firewallConfigId = TwoFactorFactory::PROVIDER_PREPARATION_LISTENER_ID_PREFIX.$firewallName;

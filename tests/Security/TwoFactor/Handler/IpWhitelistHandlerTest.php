@@ -8,6 +8,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\IpWhitelistHandler;
 use Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist\IpWhitelistProviderInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class IpWhitelistHandlerTest extends AbstractAuthenticationHandlerTestCase
 {
@@ -33,7 +34,7 @@ class IpWhitelistHandlerTest extends AbstractAuthenticationHandlerTestCase
         $this->ipWhitelistHandler = new IpWhitelistHandler($this->innerAuthenticationHandler, $ipWhitelistProvider);
     }
 
-    private function createRequestWithIp($ip): MockObject
+    private function createRequestWithIp(string $ip): MockObject|Request
     {
         $request = $this->createRequest();
         $request
@@ -62,6 +63,9 @@ class IpWhitelistHandlerTest extends AbstractAuthenticationHandlerTestCase
         $this->assertSame($originalToken, $returnValue);
     }
 
+    /**
+     * @return string[][]
+     */
     public function provideWhitelistedIps(): array
     {
         return [

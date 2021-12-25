@@ -31,6 +31,8 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use function assert;
+use function class_exists;
 
 /**
  * @final
@@ -72,7 +74,7 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::ATTEMPT, $request, $currentToken);
 
         $credentials = new TwoFactorCodeCredentials($currentToken, $this->twoFactorFirewallConfig->getAuthCodeFromRequest($request));
-        $userLoader = function () use ($currentToken): UserInterface {
+        $userLoader = static function () use ($currentToken): UserInterface {
             return $currentToken->getUser();
         };
         $userBadge = new UserBadge(UsernameHelper::getTokenUsername($currentToken), $userLoader);
@@ -116,15 +118,13 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
     public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface
     {
         /** @psalm-suppress InvalidArgument */
-        $token = $this->createToken($passport, $firewallName);
-
-        return $token;
+        return $this->createToken($passport, $firewallName);
     }
 
     public function createToken(Passport $passport, string $firewallName): TokenInterface
     {
-        /** @var TwoFactorCodeCredentials $credentialsBadge */
         $credentialsBadge = $passport->getBadge(TwoFactorCodeCredentials::class);
+        assert($credentialsBadge instanceof TwoFactorCodeCredentials);
         $twoFactorToken = $credentialsBadge->getTwoFactorToken();
 
         if ($this->isAuthenticationComplete($twoFactorToken)) {
@@ -161,8 +161,8 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        /** @var TwoFactorTokenInterface $currentToken */
         $currentToken = $this->tokenStorage->getToken();
+        assert($currentToken instanceof TwoFactorTokenInterface);
         $this->logger->info('Two-factor authentication request failed.', ['exception' => $exception]);
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::FAILURE, $request, $currentToken);
 

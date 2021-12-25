@@ -52,7 +52,7 @@ jobs:
 
             -   name: "PHP Code Style Sniffer"
                 if: always()
-                run: vendor/bin/phpcs --standard=php_cs.xml app/src src tests
+                run: vendor/bin/phpcs
 
             -   name: "Psalm"
                 if: always()

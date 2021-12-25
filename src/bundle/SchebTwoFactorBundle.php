@@ -12,6 +12,7 @@ use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorServices
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use function assert;
 
 /**
  * @final
@@ -26,8 +27,8 @@ class SchebTwoFactorBundle extends Bundle
         $container->addCompilerPass(new TwoFactorFirewallConfigCompilerPass());
         $container->addCompilerPass(new MailerCompilerPass());
 
-        /** @var SecurityExtension $extension */
         $extension = $container->getExtension('security');
+        assert($extension instanceof SecurityExtension);
 
         $securityFactory = new TwoFactorFactory(new TwoFactorServicesFactory());
         $extension->addAuthenticatorFactory($securityFactory);
