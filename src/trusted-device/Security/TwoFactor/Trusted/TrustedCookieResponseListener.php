@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
+use DateInterval;
+use DateTimeImmutable;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -59,14 +61,14 @@ class TrustedCookieResponseListener implements EventSubscriberInterface
         );
     }
 
-    private function getValidUntil(): \DateTime
+    private function getValidUntil(): DateTimeImmutable
     {
-        return $this->getDateTimeNow()->add(new \DateInterval('PT'.$this->trustedTokenLifetime.'S'));
+        return $this->getDateTimeNow()->add(new DateInterval('PT'.$this->trustedTokenLifetime.'S'));
     }
 
-    protected function getDateTimeNow(): \DateTime
+    protected function getDateTimeNow(): DateTimeImmutable
     {
-        return new \DateTime();
+        return new DateTimeImmutable();
     }
 
     public static function getSubscribedEvents()

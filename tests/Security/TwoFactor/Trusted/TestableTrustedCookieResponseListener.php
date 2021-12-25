@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Trusted;
 
-use DateTime;
+use DateTimeImmutable;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedCookieResponseListener;
 
 /**
@@ -12,9 +12,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedCookieResponseListen
  */
 class TestableTrustedCookieResponseListener extends TrustedCookieResponseListener
 {
-    public DateTime $now;
+    public DateTimeImmutable $now;
 
-    protected function getDateTimeNow(): DateTime
+    protected function getDateTimeNow(): DateTimeImmutable
     {
         return $this->now;
     }

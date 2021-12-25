@@ -38,7 +38,7 @@ class TrustedCookieResponseListenerTest extends TestCase
             '/cookie-path',
             $domain
         );
-        $cookieResponseListener->now = new \DateTime('2018-01-01 00:00:00');
+        $cookieResponseListener->now = new \DateTimeImmutable('2018-01-01 00:00:00');
 
         return $cookieResponseListener;
     }
