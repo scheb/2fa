@@ -129,7 +129,7 @@ Troubleshooting
 
 **Solution to: Your authenticated token was flagged as invalid**
 
-Most likely your user entity implements the ``\Serializable`` interface and not all of the fields relevant to the
+Most likely your user entity implements the a serializable interface and not all of the fields relevant to the
 authentication process are taken by serialize/unserialize. Check which fields are used in methods ``serialize()`` and
 ``deserialize()``.
 

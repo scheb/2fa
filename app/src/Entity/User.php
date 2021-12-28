@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity
  * @ORM\Table(name="user")
  */
-class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serializable, EmailTwoFactorInterface, GoogleTwoFactorInterface, TotpTwoFactorInterface, TrustedDeviceInterface, BackupCodeInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTwoFactorInterface, GoogleTwoFactorInterface, TotpTwoFactorInterface, TrustedDeviceInterface, BackupCodeInterface
 {
     private const BACKUP_CODES = [111, 222];
     public const TRUSTED_TOKEN_VERSION = 1;
@@ -115,27 +115,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
     {
     }
 
-    public function serialize(): string
+    public function __serialize(): array
     {
-        return serialize([
+        return [
             $this->id,
             $this->username,
             $this->password,
             // see section on salt below
             // $this->salt,
             $this->isActive,
-        ]);
+        ];
     }
 
-    public function unserialize(string $serialized): void
+    public function __unserialize(array $unserialized): void
     {
-        list(
+        [
             $this->id,
             $this->username,
             $this->password,
             // see section on salt below
-            // $this->salt
-            $this->isActive) = unserialize($serialized);
+            // $this->salt,
+            $this->isActive,
+        ] = $unserialized;
     }
 
     public function getEmailAuthRecipient(): string
