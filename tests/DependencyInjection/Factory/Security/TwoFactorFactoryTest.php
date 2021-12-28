@@ -8,7 +8,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorServicesFactory;
 use Scheb\TwoFactorBundle\Tests\TestCase;
-use Symfony\Component\Config\Definition\BaseNode;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -150,36 +149,11 @@ EOF;
             ->with($this->container, self::FIREWALL_NAME, $this->isType('array'));
     }
 
-    private function expectCsrfManagerIdRetrieved(): void
-    {
-        $this->servicesFactory
-            ->expects($this->once())
-            ->method('getCsrfTokenManagerId')
-            ->with($this->isType('array'))
-            ->willReturn(self::CSRF_TOKEN_MANAGER_ID);
-    }
-
     private function processConfiguration(array $config): array
     {
         $firewallConfiguration = new TestableFactoryConfiguration($this->factory);
 
-        // This is to avoid deprecation errors in PHP7.3
-        if (method_exists(BaseNode::class, 'setPlaceholderUniquePrefix')) {
-            BaseNode::setPlaceholderUniquePrefix('placeholder_prefix');
-        }
-
         return (new Processor())->processConfiguration($firewallConfiguration, $config);
-    }
-
-    private function callCreate(array $customConfig = []): array
-    {
-        return $this->factory->create(
-            $this->container,
-            self::FIREWALL_NAME,
-            array_merge(self::DEFAULT_CONFIG, $customConfig),
-            self::USER_PROVIDER,
-            self::DEFAULT_ENTRY_POINT
-        );
     }
 
     private function callCreateAuthenticator(array $customConfig = []): string
