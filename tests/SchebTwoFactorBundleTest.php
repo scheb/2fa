@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests;
 
-use Scheb\TwoFactorBundle\DependencyInjection\Compiler\AuthenticationProviderDecoratorCompilerPass;
 use Scheb\TwoFactorBundle\DependencyInjection\Compiler\MailerCompilerPass;
 use Scheb\TwoFactorBundle\DependencyInjection\Compiler\TwoFactorFirewallConfigCompilerPass;
 use Scheb\TwoFactorBundle\DependencyInjection\Compiler\TwoFactorProviderCompilerPass;
@@ -23,7 +22,6 @@ class SchebTwoFactorBundleTest extends TestCase
         $containerBuilder = $this->createMock(ContainerBuilder::class);
 
         $compilerPasses = [
-            $this->isInstanceOf(AuthenticationProviderDecoratorCompilerPass::class),
             $this->isInstanceOf(TwoFactorProviderCompilerPass::class),
             $this->isInstanceOf(TwoFactorFirewallConfigCompilerPass::class),
             $this->isInstanceOf(MailerCompilerPass::class),
