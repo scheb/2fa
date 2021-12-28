@@ -71,11 +71,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTw
      */
     private bool $totpAuthenticationEnabled = true;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private bool $isActive = true;
-
     public function getId(): int
     {
         return $this->id;
@@ -121,9 +116,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTw
             $this->id,
             $this->username,
             $this->password,
-            // see section on salt below
-            // $this->salt,
-            $this->isActive,
         ];
     }
 
@@ -133,9 +125,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTw
             $this->id,
             $this->username,
             $this->password,
-            // see section on salt below
-            // $this->salt,
-            $this->isActive,
         ] = $unserialized;
     }
 
@@ -221,25 +210,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTw
     public function getTrustedTokenVersion(): int
     {
         return self::TRUSTED_TOKEN_VERSION;
-    }
-
-    public function isAccountNonExpired()
-    {
-        return true;
-    }
-
-    public function isAccountNonLocked()
-    {
-        return true;
-    }
-
-    public function isCredentialsNonExpired()
-    {
-        return true;
-    }
-
-    public function isEnabled()
-    {
-        return $this->isActive;
     }
 }
