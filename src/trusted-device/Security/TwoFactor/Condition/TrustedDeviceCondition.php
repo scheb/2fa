@@ -2,22 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Scheb\TwoFactorBundle\Security\TwoFactor\Handler;
+namespace Scheb\TwoFactorBundle\Security\TwoFactor\Condition;
 
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
  * @final
  */
-class TrustedDeviceHandler implements AuthenticationHandlerInterface
+class TrustedDeviceCondition implements TwoFactorConditionInterface
 {
-    public function __construct(private AuthenticationHandlerInterface $authenticationHandler, private TrustedDeviceManagerInterface $trustedDeviceManager, private bool $extendTrustedToken)
+    public function __construct(private TrustedDeviceManagerInterface $trustedDeviceManager, private bool $extendTrustedToken)
     {
     }
 
-    public function beginTwoFactorAuthentication(AuthenticationContextInterface $context): TokenInterface
+    public function shouldPerformTwoFactorAuthentication(AuthenticationContextInterface $context): bool
     {
         $user = $context->getUser();
         $firewallName = $context->getFirewallName();
@@ -31,9 +30,9 @@ class TrustedDeviceHandler implements AuthenticationHandlerInterface
                 $this->trustedDeviceManager->addTrustedDevice($user, $firewallName);
             }
 
-            return $context->getToken();
+            return false;
         }
 
-        return $this->authenticationHandler->beginTwoFactorAuthentication($context);
+        return true;
     }
 }

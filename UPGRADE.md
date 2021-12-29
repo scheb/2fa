@@ -24,6 +24,11 @@ method `getProviderKey()` was removed, please implement `getFirewallName()` inst
 `Symfony\Component\Security\Http\Authenticator\Passport\Passport` with a
 `Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials` instead.
 
+The internal interface `Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterface` was removed. If
+you used it nevertheless, please migrate to an implementation based on
+`Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionInterface`. See more about
+[custom conditions for two-factor authentication](https://symfony.com/bundles/SchebTwoFactorBundle/6.x/custom_conditions.html).
+
 ### Authentication Context
 
 The passport has been added to the `AuthenticationContext` object, therefore a new getter method was added to

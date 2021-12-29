@@ -9,8 +9,9 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\TwoFactorAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextFactoryInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionRegistry;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\AuthenticationTokenListener;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInitiator;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -22,13 +23,15 @@ class AuthenticationTokenListenerTest extends TestCase
 {
     private const FIREWALL_NAME = 'firewallName';
 
-    private MockObject|AuthenticationHandlerInterface $twoFactorAuthenticationHandler;
+    private TwoFactorConditionRegistry|MockObject $twoFactorConditionRegistry;
+    private MockObject|TwoFactorProviderInitiator $twoFactorProviderInitiator;
     private MockObject|AuthenticationContextFactoryInterface $authenticationContextFactory;
     private AuthenticationTokenListener $listener;
 
     protected function setUp(): void
     {
-        $this->twoFactorAuthenticationHandler = $this->createMock(AuthenticationHandlerInterface::class);
+        $this->twoFactorConditionRegistry = $this->createMock(TwoFactorConditionRegistry::class);
+        $this->twoFactorProviderInitiator = $this->createMock(TwoFactorProviderInitiator::class);
         $this->authenticationContextFactory = $this->createMock(AuthenticationContextFactoryInterface::class);
 
         $requestStack = $this->createMock(RequestStack::class);
@@ -39,7 +42,8 @@ class AuthenticationTokenListenerTest extends TestCase
 
         $this->listener = new AuthenticationTokenListener(
             self::FIREWALL_NAME,
-            $this->twoFactorAuthenticationHandler,
+            $this->twoFactorConditionRegistry,
+            $this->twoFactorProviderInitiator,
             $this->authenticationContextFactory,
             $requestStack
         );
@@ -62,9 +66,17 @@ class AuthenticationTokenListenerTest extends TestCase
         return $event;
     }
 
+    private function stubTwoFactorConditionsFulfilled(bool $fulfilled): void
+    {
+        $this->twoFactorConditionRegistry
+            ->expects($this->any())
+            ->method('shouldPerformTwoFactorAuthentication')
+            ->willReturn($fulfilled);
+    }
+
     private function expectTwoFactorAuthenticationHandlerNeverCalled(): void
     {
-        $this->twoFactorAuthenticationHandler
+        $this->twoFactorProviderInitiator
             ->expects($this->never())
             ->method($this->anything());
     }
@@ -89,8 +101,8 @@ class AuthenticationTokenListenerTest extends TestCase
      */
     public function onAuthenticationTokenCreated_isTwoFactorToken_notChangeToken(): void
     {
-        $authenticatedToken = $this->createMock(TwoFactorTokenInterface::class);
-        $event = $this->createEvent($authenticatedToken);
+        $this->stubTwoFactorConditionsFulfilled(true);
+        $event = $this->createEvent($this->createMock(TwoFactorTokenInterface::class));
 
         $this->expectTwoFactorAuthenticationHandlerNeverCalled();
         $this->expectTokenNotExchanged($event);
@@ -103,6 +115,7 @@ class AuthenticationTokenListenerTest extends TestCase
      */
     public function onAuthenticationTokenCreated_tokenFlagged2faComplete_notChangeToken(): void
     {
+        $this->stubTwoFactorConditionsFulfilled(true);
         $authenticatedToken = $this->createMock(TokenInterface::class);
         $authenticatedToken
             ->expects($this->any())
@@ -120,8 +133,9 @@ class AuthenticationTokenListenerTest extends TestCase
     /**
      * @test
      */
-    public function createAuthenticatedToken_tokenMustBeChecked_createAuthenticationContext(): void
+    public function createAuthenticatedToken_preconditionsFulfilled_createAuthenticationContext(): void
     {
+        $this->stubTwoFactorConditionsFulfilled(true);
         $authenticatedToken = $this->createMock(TokenInterface::class);
         $event = $this->createEvent($authenticatedToken);
 
@@ -136,16 +150,14 @@ class AuthenticationTokenListenerTest extends TestCase
     /**
      * @test
      */
-    public function onAuthenticationTokenCreated_noTwoFactorNecessary_notChangeToken(): void
+    public function onAuthenticationTokenCreated_twoFactorConditionsUnfulfilled_notInitiate(): void
     {
-        $authenticatedToken = $this->createMock(TokenInterface::class);
-        $event = $this->createEvent($authenticatedToken);
+        $this->stubTwoFactorConditionsFulfilled(false);
+        $event = $this->createEvent($this->createMock(TokenInterface::class));
 
-        $this->twoFactorAuthenticationHandler
-            ->expects($this->once())
-            ->method('beginTwoFactorAuthentication')
-            ->with($this->isInstanceOf(AuthenticationContextInterface::class))
-            ->willReturn($authenticatedToken);
+        $this->twoFactorProviderInitiator
+            ->expects($this->never())
+            ->method('beginTwoFactorAuthentication');
 
         $this->expectTokenNotExchanged($event);
         $this->listener->onAuthenticationTokenCreated($event);
@@ -154,16 +166,49 @@ class AuthenticationTokenListenerTest extends TestCase
     /**
      * @test
      */
-    public function onAuthenticationTokenCreated_twoFactorRequired_setTokenFromTwoFactorAuthenticationHandler(): void
+    public function onAuthenticationTokenCreated_twoFactorConditionsFulfilled_initiateTwoFactorAuthentication(): void
     {
-        $authenticatedToken = $this->createMock(TokenInterface::class);
-        $event = $this->createEvent($authenticatedToken);
+        $this->stubTwoFactorConditionsFulfilled(true);
+        $event = $this->createEvent($this->createMock(TokenInterface::class));
 
-        $twoFactorToken = $this->createMock(TwoFactorTokenInterface::class);
-        $this->twoFactorAuthenticationHandler
+        $this->twoFactorProviderInitiator
             ->expects($this->once())
             ->method('beginTwoFactorAuthentication')
             ->with($this->isInstanceOf(AuthenticationContextInterface::class))
+            ->willReturn(null);
+
+        $this->listener->onAuthenticationTokenCreated($event);
+    }
+
+    /**
+     * @test
+     */
+    public function onAuthenticationTokenCreated_noTwoFactorProvidersAvailable_keepSecurityToken(): void
+    {
+        $this->stubTwoFactorConditionsFulfilled(true);
+        $event = $this->createEvent($this->createMock(TokenInterface::class));
+
+        $this->twoFactorProviderInitiator
+            ->expects($this->any())
+            ->method('beginTwoFactorAuthentication')
+            ->willReturn(null);
+
+        $this->expectTokenNotExchanged($event);
+        $this->listener->onAuthenticationTokenCreated($event);
+    }
+
+    /**
+     * @test
+     */
+    public function onAuthenticationTokenCreated_hasTwoFactorProvidersAvailable_changeSecurityToken(): void
+    {
+        $this->stubTwoFactorConditionsFulfilled(true);
+        $event = $this->createEvent($this->createMock(TokenInterface::class));
+
+        $twoFactorToken = $this->createMock(TwoFactorTokenInterface::class);
+        $this->twoFactorProviderInitiator
+            ->expects($this->any())
+            ->method('beginTwoFactorAuthentication')
             ->willReturn($twoFactorToken);
 
         $this->expectTokenExchanged($event, $twoFactorToken);

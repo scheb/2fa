@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Handler;
+namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderHandler;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInitiator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
-use function assert;
+use Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Condition\AbstractAuthenticationContextTestCase;
 
-class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
+class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCase
 {
     private MockObject|TwoFactorTokenFactoryInterface $twoFactorTokenFactory;
     private MockObject|TwoFactorProviderInterface $provider1;
     private MockObject|TwoFactorProviderInterface $provider2;
-    private TwoFactorProviderHandler $handler;
+    private TwoFactorProviderInitiator $initiator;
 
     protected function setUp(): void
     {
@@ -36,7 +36,7 @@ class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
 
         $this->twoFactorTokenFactory = $this->createMock(TwoFactorTokenFactory::class);
 
-        $this->handler = new TwoFactorProviderHandler($providerRegistry, $this->twoFactorTokenFactory);
+        $this->initiator = new TwoFactorProviderInitiator($providerRegistry, $this->twoFactorTokenFactory);
     }
 
     private function createTwoFactorToken(): MockObject
@@ -44,7 +44,7 @@ class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
         return $this->createMock(TwoFactorTokenInterface::class);
     }
 
-    private function createUserWithPreferredProvider(string $preferredProvider): MockObject
+    private function createUserWithPreferredProvider(string $preferredProvider): MockObject|UserWithPreferredProviderInterface
     {
         $user = $this->createMock(UserWithPreferredProviderInterface::class);
         $user
@@ -93,7 +93,7 @@ class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
             ->method('beginAuthentication')
             ->with($context);
 
-        $this->handler->beginTwoFactorAuthentication($context);
+        $this->initiator->beginTwoFactorAuthentication($context);
     }
 
     /**
@@ -112,22 +112,21 @@ class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
             ->with($originalToken, self::FIREWALL_NAME, ['test2'])
             ->willReturn($twoFactorToken);
 
-        $returnValue = $this->handler->beginTwoFactorAuthentication($context);
-        assert($returnValue instanceof TwoFactorTokenInterface);
+        $returnValue = $this->initiator->beginTwoFactorAuthentication($context);
         $this->assertSame($twoFactorToken, $returnValue);
     }
 
     /**
      * @test
      */
-    public function beginAuthentication_noProviderStarts_returnOriginalToken(): void
+    public function beginAuthentication_noProviderStarts_returnNull(): void
     {
         $originalToken = $this->createToken();
         $context = $this->createAuthenticationContext(null, $originalToken);
         $this->stubProvidersReturn(false, false);
 
-        $returnValue = $this->handler->beginTwoFactorAuthentication($context);
-        $this->assertSame($originalToken, $returnValue);
+        $returnValue = $this->initiator->beginTwoFactorAuthentication($context);
+        $this->assertNull($returnValue);
     }
 
     /**
@@ -148,6 +147,6 @@ class TwoFactorProviderHandlerTest extends AbstractAuthenticationHandlerTestCase
             ->method('preferTwoFactorProvider')
             ->with('preferredProvider');
 
-        $this->handler->beginTwoFactorAuthentication($context);
+        $this->initiator->beginTwoFactorAuthentication($context);
     }
 }

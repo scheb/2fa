@@ -6,10 +6,12 @@ namespace Scheb\TwoFactorBundle\Tests\DependencyInjection;
 
 use Scheb\TwoFactorBundle\DependencyInjection\SchebTwoFactorExtension;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Yaml\Parser;
+use function array_map;
 use function sprintf;
 
 class SchebTwoFactorExtensionTest extends TestCase
@@ -388,23 +390,26 @@ EOF;
     /**
      * @test
      */
-    public function load_defaultCondition_defaultAlias(): void
+    public function load_noCustomCondition_onlyDefaultConditions(): void
     {
         $config = $this->getEmptyConfig();
         $this->extension->load([$config], $this->container);
 
-        $this->assertHasAlias('scheb_two_factor.handler_condition', 'scheb_two_factor.default_handler_condition');
+        $this->assertConditionRegistryContains('scheb_two_factor.authenticated_token_condition');
+        $this->assertConditionRegistryContains('scheb_two_factor.ip_whitelist_condition');
     }
 
     /**
      * @test
      */
-    public function load_customCondition_replaceAlias(): void
+    public function load_customCondition_registerCondition(): void
     {
         $config = $this->getFullConfig();
         $this->extension->load([$config], $this->container);
 
-        $this->assertHasAlias('scheb_two_factor.handler_condition', 'acme_test.two_factor_condition');
+        $this->assertConditionRegistryContains('scheb_two_factor.authenticated_token_condition');
+        $this->assertConditionRegistryContains('scheb_two_factor.ip_whitelist_condition');
+        $this->assertConditionRegistryContains('acme_test.two_factor_condition');
     }
 
     /**
@@ -416,11 +421,7 @@ EOF;
         $config['trusted_device']['enabled'] = false;
         $this->extension->load([$config], $this->container);
 
-        $ipWhitelistHandlerDefinition = $this->container->getDefinition('scheb_two_factor.ip_whitelist_handler');
-        $nextHandlerArgument = $ipWhitelistHandlerDefinition->getArgument(0);
-
-        $this->assertInstanceOf(Reference::class, $nextHandlerArgument);
-        $this->assertEquals('scheb_two_factor.provider_handler', (string) $nextHandlerArgument);
+        $this->assertConditionRegistryNotContains('scheb_two_factor.trusted_device_condition');
     }
 
     /**
@@ -432,11 +433,7 @@ EOF;
         $config['trusted_device']['enabled'] = true;
         $this->extension->load([$config], $this->container);
 
-        $ipWhitelistHandlerDefinition = $this->container->getDefinition('scheb_two_factor.ip_whitelist_handler');
-        $nextHandlerArgument = $ipWhitelistHandlerDefinition->getArgument(0);
-
-        $this->assertInstanceOf(Reference::class, $nextHandlerArgument);
-        $this->assertEquals('scheb_two_factor.trusted_device_handler', (string) $nextHandlerArgument);
+        $this->assertConditionRegistryContains('scheb_two_factor.trusted_device_condition');
     }
 
     /**
@@ -463,7 +460,7 @@ EOF;
         $this->assertHasDefinition('scheb_two_factor.trusted_jwt_encoder');
         $this->assertHasDefinition('scheb_two_factor.trusted_token_encoder');
         $this->assertHasDefinition('scheb_two_factor.trusted_token_storage');
-        $this->assertHasDefinition('scheb_two_factor.trusted_device_handler');
+        $this->assertHasDefinition('scheb_two_factor.trusted_device_condition');
         $this->assertHasDefinition('scheb_two_factor.trusted_cookie_response_listener');
         $this->assertHasDefinition('scheb_two_factor.default_trusted_device_manager');
     }
@@ -725,5 +722,30 @@ EOF;
     private function assertNotHasAlias(string $id): void
     {
         $this->assertFalse($this->container->hasAlias($id), 'Alias "'.$id.'" must not be defined.');
+    }
+
+    private function assertConditionRegistryContains(string $expectedConditionService): void
+    {
+        $conditionServices = $this->getConditionRegistryServices();
+        $this->assertContains($expectedConditionService, $conditionServices);
+    }
+
+    private function assertConditionRegistryNotContains(string $expectedConditionService): void
+    {
+        $conditionServices = $this->getConditionRegistryServices();
+        $this->assertNotContains($expectedConditionService, $conditionServices);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getConditionRegistryServices(): array
+    {
+        $conditionsArgument = $this->container->getDefinition('scheb_two_factor.condition_registry')->getArgument(0);
+        $this->assertInstanceOf(IteratorArgument::class, $conditionsArgument);
+
+        return array_map(static function (Reference $serviceReference) {
+            return (string) $serviceReference;
+        }, $conditionsArgument->getValues());
     }
 }

@@ -11,25 +11,15 @@
 			<argument>Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext</argument>
 		</service>
 
-		<!-- The first two-factor handler in the cascade of handlers, alias to easily wire up the right entry point -->
-		<service id="scheb_two_factor.first_two_factor_handler" alias="scheb_two_factor.condition_handler" />
-
-		<service id="scheb_two_factor.condition_handler" class="Scheb\TwoFactorBundle\Security\TwoFactor\Handler\ConditionAuthenticationHandler" lazy="true">
-			<argument type="service" id="scheb_two_factor.authenticated_token_handler" />
-			<argument type="service" id="scheb_two_factor.handler_condition" />
+		<service id="scheb_two_factor.condition_registry" class="Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionRegistry" lazy="true">
+			<argument type="collection" />
 		</service>
 
-		<service id="scheb_two_factor.default_handler_condition" class="Scheb\TwoFactorBundle\Security\TwoFactor\Condition\DefaultTwoFactorCondition" />
-
-		<service id="scheb_two_factor.handler_condition" alias="scheb_two_factor.default_handler_condition" />
-
-		<service id="scheb_two_factor.authenticated_token_handler" class="Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticatedTokenHandler" lazy="true">
-			<argument type="service" id="scheb_two_factor.ip_whitelist_handler" />
+		<service id="scheb_two_factor.authenticated_token_condition" class="Scheb\TwoFactorBundle\Security\TwoFactor\Condition\AuthenticatedTokenCondition" lazy="true">
 			<argument>%scheb_two_factor.security_tokens%</argument>
 		</service>
 
-		<service id="scheb_two_factor.ip_whitelist_handler" class="Scheb\TwoFactorBundle\Security\TwoFactor\Handler\IpWhitelistHandler" lazy="true">
-			<argument type="service" id="scheb_two_factor.provider_handler" /> <!-- Hook in scheb_two_factor.trusted_device_handler if enabled -->
+		<service id="scheb_two_factor.ip_whitelist_condition" class="Scheb\TwoFactorBundle\Security\TwoFactor\Condition\IpWhitelistCondition" lazy="true">
 			<argument type="service" id="scheb_two_factor.ip_whitelist_provider" />
 		</service>
 
@@ -37,7 +27,7 @@
 			<argument>%scheb_two_factor.ip_whitelist%</argument>
 		</service>
 
-		<service id="scheb_two_factor.provider_handler" class="Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderHandler" lazy="true">
+		<service id="scheb_two_factor.provider_initiator" class="Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInitiator" lazy="true">
 			<argument type="service" id="scheb_two_factor.provider_registry" />
 			<argument type="service" id="scheb_two_factor.token_factory" />
 		</service>

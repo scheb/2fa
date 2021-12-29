@@ -247,7 +247,7 @@ Troubleshooting
       know what you've already tested.
 
 #. On login, is method
-   ``Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderHandler::getActiveTwoFactorProviders()`` called?
+   ``Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderInitiator::getActiveTwoFactorProviders()`` called?
 
    Yes, it's called
        Continue with 5)
@@ -257,7 +257,7 @@ Troubleshooting
        device token. IP whitelist is part of the bundle's configuration. Maybe you have whitelisted "localhost" or
        "127.0.0.1"? The trusted device cookie can be removed with your browser's developer tools.
 
-#. Does ``Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderHandler::getActiveTwoFactorProviders()``
+#. Does ``Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderInitiator::getActiveTwoFactorProviders()``
    return any values?
 
    Yes, it returns an array of strings

@@ -29,7 +29,8 @@
 
 		<service id="scheb_two_factor.security.listener.token_created" class="Scheb\TwoFactorBundle\Security\TwoFactor\Event\AuthenticationTokenListener" abstract="true">
 			<argument type="string" /> <!-- Firewall name -->
-			<argument type="service" id="scheb_two_factor.first_two_factor_handler" />
+			<argument type="service" id="scheb_two_factor.condition_registry" />
+			<argument type="service" id="scheb_two_factor.provider_initiator" />
 			<argument type="service" id="scheb_two_factor.authentication_context_factory" />
 			<argument type="service" id="request_stack" />
 		</service>

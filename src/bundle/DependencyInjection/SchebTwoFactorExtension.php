@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use function assert;
 use function is_bool;
 use function is_string;
 use function trim;
@@ -50,7 +52,7 @@ class SchebTwoFactorExtension extends Extension
 
         // Configure custom services
         $this->configurePersister($container, $config);
-        $this->configureTwoFactorCondition($container, $config);
+        $this->configureTwoFactorConditions($container, $config);
         $this->configureIpWhitelistProvider($container, $config);
         $this->configureTokenFactory($container, $config);
 
@@ -78,13 +80,30 @@ class SchebTwoFactorExtension extends Extension
     /**
      * @param array<string,mixed> $config
      */
-    private function configureTwoFactorCondition(ContainerBuilder $container, array $config): void
+    private function configureTwoFactorConditions(ContainerBuilder $container, array $config): void
     {
-        if (null === $config['two_factor_condition']) {
-            return;
+        $conditions = [
+            new Reference('scheb_two_factor.authenticated_token_condition'),
+            new Reference('scheb_two_factor.ip_whitelist_condition'),
+        ];
+
+        // Custom two-factor condition
+        if (null !== $config['two_factor_condition']) {
+            $conditions[] = new Reference($config['two_factor_condition']);
         }
 
-        $container->setAlias('scheb_two_factor.handler_condition', $config['two_factor_condition']);
+        $conditionRegistryDefinition = $container->getDefinition('scheb_two_factor.condition_registry');
+        $conditionRegistryDefinition->setArgument(0, new IteratorArgument($conditions));
+    }
+
+    private function addTwoFactorCondition(ContainerBuilder $container, Reference $serviceReference): void
+    {
+        $conditionRegistryDefinition = $container->getDefinition('scheb_two_factor.condition_registry');
+        $conditionsIterator = $conditionRegistryDefinition->getArgument(0);
+        assert($conditionsIterator instanceof IteratorArgument);
+        $conditions = $conditionsIterator->getValues();
+        $conditions[] = $serviceReference;
+        $conditionsIterator->setValues($conditions);
     }
 
     /**
@@ -96,8 +115,7 @@ class SchebTwoFactorExtension extends Extension
         $loader->load('trusted_device.xml');
         $container->setAlias('scheb_two_factor.trusted_device_manager', $config['trusted_device']['manager']);
 
-        $ipWhitelistHandlerDefinition = $container->getDefinition('scheb_two_factor.ip_whitelist_handler');
-        $ipWhitelistHandlerDefinition->setArgument(0, new Reference('scheb_two_factor.trusted_device_handler'));
+        $this->addTwoFactorCondition($container, new Reference('scheb_two_factor.trusted_device_condition'));
 
         $container->setParameter('scheb_two_factor.trusted_device.enabled', $this->resolveFeatureFlag($container, $config['trusted_device']['enabled']));
         $container->setParameter('scheb_two_factor.trusted_device.cookie_name', $config['trusted_device']['cookie_name']);

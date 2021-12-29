@@ -8,7 +8,8 @@ use RuntimeException;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\TwoFactorAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextFactoryInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionRegistry;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInitiator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -19,8 +20,13 @@ use Symfony\Component\Security\Http\Event\AuthenticationTokenCreatedEvent;
  */
 class AuthenticationTokenListener implements EventSubscriberInterface
 {
-    public function __construct(private string $firewallName, private AuthenticationHandlerInterface $twoFactorAuthenticationHandler, private AuthenticationContextFactoryInterface $authenticationContextFactory, private RequestStack $requestStack)
-    {
+    public function __construct(
+        private string $firewallName,
+        private TwoFactorConditionRegistry $twoFactorConditionRegistry,
+        private TwoFactorProviderInitiator $twoFactorProviderInitiator,
+        private AuthenticationContextFactoryInterface $authenticationContextFactory,
+        private RequestStack $requestStack
+    ) {
     }
 
     public function onAuthenticationTokenCreated(AuthenticationTokenCreatedEvent $event): void
@@ -41,8 +47,12 @@ class AuthenticationTokenListener implements EventSubscriberInterface
         $passport = $event->getPassport();
         $context = $this->authenticationContextFactory->create($request, $token, $passport, $this->firewallName);
 
-        $newToken = $this->twoFactorAuthenticationHandler->beginTwoFactorAuthentication($context);
-        if ($newToken === $token) {
+        if (!$this->twoFactorConditionRegistry->shouldPerformTwoFactorAuthentication($context)) {
+            return;
+        }
+
+        $newToken = $this->twoFactorProviderInitiator->beginTwoFactorAuthentication($context);
+        if (null === $newToken) {
             return;
         }
 

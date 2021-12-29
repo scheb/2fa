@@ -2,18 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Handler;
+namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Condition;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\IpWhitelistHandler;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Condition\IpWhitelistCondition;
 use Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist\IpWhitelistProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class IpWhitelistHandlerTest extends AbstractAuthenticationHandlerTestCase
+class IpWhitelistConditionTest extends AbstractAuthenticationContextTestCase
 {
-    private MockObject|AuthenticationHandlerInterface $innerAuthenticationHandler;
-    private IpWhitelistHandler $ipWhitelistHandler;
+    private IpWhitelistCondition $ipWhitelistHandler;
 
     protected function setUp(): void
     {
@@ -24,14 +22,13 @@ class IpWhitelistHandlerTest extends AbstractAuthenticationHandlerTestCase
             '2001:db8:abcd:0012::0/64',
         ];
 
-        $this->innerAuthenticationHandler = $this->getAuthenticationHandlerMock();
         $ipWhitelistProvider = $this->createMock(IpWhitelistProviderInterface::class);
         $ipWhitelistProvider
             ->expects($this->any())
             ->method('getWhitelistedIps')
             ->willReturn($ipWhitelist);
 
-        $this->ipWhitelistHandler = new IpWhitelistHandler($this->innerAuthenticationHandler, $ipWhitelistProvider);
+        $this->ipWhitelistHandler = new IpWhitelistCondition($ipWhitelistProvider);
     }
 
     private function createRequestWithIp(string $ip): MockObject|Request
@@ -49,18 +46,14 @@ class IpWhitelistHandlerTest extends AbstractAuthenticationHandlerTestCase
      * @test
      * @dataProvider provideWhitelistedIps
      */
-    public function beginTwoFactorAuthentication_ipIsWhitelisted_returnSameToken(string $ip): void
+    public function shouldPerformTwoFactorAuthentication_ipIsWhitelisted_returnFalse(string $ip): void
     {
         $request = $this->createRequestWithIp($ip);
         $originalToken = $this->createToken();
         $authenticationContext = $this->createAuthenticationContext($request, $originalToken);
 
-        $this->innerAuthenticationHandler
-            ->expects($this->never())
-            ->method($this->anything());
-
-        $returnValue = $this->ipWhitelistHandler->beginTwoFactorAuthentication($authenticationContext);
-        $this->assertSame($originalToken, $returnValue);
+        $returnValue = $this->ipWhitelistHandler->shouldPerformTwoFactorAuthentication($authenticationContext);
+        $this->assertFalse($returnValue);
     }
 
     /**
@@ -79,19 +72,13 @@ class IpWhitelistHandlerTest extends AbstractAuthenticationHandlerTestCase
     /**
      * @test
      */
-    public function beginTwoFactorAuthentication_ipNotWhitelisted_returnTokenFromInnerAuthenticationHandler(): void
+    public function shouldPerformTwoFactorAuthentication_ipNotWhitelisted_returnTrue(): void
     {
         $request = $this->createRequestWithIp('1.1.1.1');
         $transformedToken = $this->createToken();
         $authenticationContext = $this->createAuthenticationContext($request);
 
-        $this->innerAuthenticationHandler
-            ->expects($this->once())
-            ->method('beginTwoFactorAuthentication')
-            ->with($authenticationContext)
-            ->willReturn($transformedToken);
-
-        $returnValue = $this->ipWhitelistHandler->beginTwoFactorAuthentication($authenticationContext);
-        $this->assertSame($transformedToken, $returnValue);
+        $returnValue = $this->ipWhitelistHandler->shouldPerformTwoFactorAuthentication($authenticationContext);
+        $this->assertTrue($returnValue);
     }
 }

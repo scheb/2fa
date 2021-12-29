@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Handler;
+namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Condition;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,14 +13,9 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-abstract class AbstractAuthenticationHandlerTestCase extends TestCase
+abstract class AbstractAuthenticationContextTestCase extends TestCase
 {
     protected const FIREWALL_NAME = 'firewallName';
-
-    protected function getAuthenticationHandlerMock(): MockObject|AuthenticationHandlerInterface
-    {
-        return $this->createMock(AuthenticationHandlerInterface::class);
-    }
 
     protected function createAuthenticationContext(?Request $request = null, ?TokenInterface $token = null, ?UserInterface $user = null): MockObject|AuthenticationContextInterface
     {

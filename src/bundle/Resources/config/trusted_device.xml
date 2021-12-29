@@ -16,8 +16,7 @@
 			<argument>%scheb_two_factor.trusted_device.cookie_name%</argument>
 		</service>
 
-		<service id="scheb_two_factor.trusted_device_handler" class="Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TrustedDeviceHandler" lazy="true">
-			<argument type="service" id="scheb_two_factor.provider_handler" />
+		<service id="scheb_two_factor.trusted_device_condition" class="Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TrustedDeviceCondition" lazy="true">
 			<argument type="service" id="scheb_two_factor.trusted_device_manager" />
 			<argument>%scheb_two_factor.trusted_device.extend_lifetime%</argument>
 		</service>

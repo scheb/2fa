@@ -2,29 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Handler;
+namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Condition;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TrustedDeviceHandler;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TrustedDeviceCondition;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManager;
 
-class TrustedDeviceHandlerTest extends AbstractAuthenticationHandlerTestCase
+class TrustedDeviceConditionTest extends AbstractAuthenticationContextTestCase
 {
-    private MockObject|AuthenticationHandlerInterface $innerAuthenticationHandler;
     private MockObject|TrustedDeviceManager $trustedDeviceManager;
-    private TrustedDeviceHandler $trustedHandler;
+    private TrustedDeviceCondition $trustedHandler;
 
     protected function setUp(): void
     {
-        $this->innerAuthenticationHandler = $this->createMock(AuthenticationHandlerInterface::class);
         $this->trustedDeviceManager = $this->createMock(TrustedDeviceManager::class);
         $this->trustedHandler = $this->createTrustedHandler(false);
     }
 
-    private function createTrustedHandler(bool $extendTrustedToken): TrustedDeviceHandler
+    private function createTrustedHandler(bool $extendTrustedToken): TrustedDeviceCondition
     {
-        return new TrustedDeviceHandler($this->innerAuthenticationHandler, $this->trustedDeviceManager, $extendTrustedToken);
+        return new TrustedDeviceCondition($this->trustedDeviceManager, $extendTrustedToken);
     }
 
     private function stubIsTrustedDevice(bool $isTrustedDevice): void
@@ -56,24 +53,20 @@ class TrustedDeviceHandlerTest extends AbstractAuthenticationHandlerTestCase
             ->method('isTrustedDevice')
             ->with($user, 'firewallName');
 
-        $this->trustedHandler->beginTwoFactorAuthentication($context);
+        $this->trustedHandler->shouldPerformTwoFactorAuthentication($context);
     }
 
     /**
      * @test
      */
-    public function beginAuthentication_isTrustedDevice_returnOriginalToken(): void
+    public function beginAuthentication_isTrustedDevice_returnFalse(): void
     {
         $originalToken = $this->createToken();
         $context = $this->createAuthenticationContext(null, $originalToken);
         $this->stubIsTrustedDevice(true);
 
-        $this->innerAuthenticationHandler
-            ->expects($this->never())
-            ->method($this->anything());
-
-        $returnValue = $this->trustedHandler->beginTwoFactorAuthentication($context);
-        $this->assertSame($originalToken, $returnValue);
+        $returnValue = $this->trustedHandler->shouldPerformTwoFactorAuthentication($context);
+        $this->assertFalse($returnValue);
     }
 
     /**
@@ -92,7 +85,7 @@ class TrustedDeviceHandlerTest extends AbstractAuthenticationHandlerTestCase
             ->method('addTrustedDevice')
             ->with($user, 'firewallName');
 
-        $trustedHandler->beginTwoFactorAuthentication($context);
+        $trustedHandler->shouldPerformTwoFactorAuthentication($context);
     }
 
     /**
@@ -110,7 +103,7 @@ class TrustedDeviceHandlerTest extends AbstractAuthenticationHandlerTestCase
             ->expects($this->never())
             ->method('addTrustedDevice');
 
-        $trustedHandler->beginTwoFactorAuthentication($context);
+        $trustedHandler->shouldPerformTwoFactorAuthentication($context);
     }
 
     /**
@@ -128,13 +121,13 @@ class TrustedDeviceHandlerTest extends AbstractAuthenticationHandlerTestCase
             ->expects($this->never())
             ->method('addTrustedDevice');
 
-        $trustedHandler->beginTwoFactorAuthentication($context);
+        $trustedHandler->shouldPerformTwoFactorAuthentication($context);
     }
 
     /**
      * @test
      */
-    public function beginAuthentication_notTrustedDevice_returnTokenFromInnerAuthenticationHandler(): void
+    public function beginAuthentication_notTrustedDevice_returnTrue(): void
     {
         $context = $this->createAuthenticationContext();
         $transformedToken = $this->createToken();
@@ -144,13 +137,7 @@ class TrustedDeviceHandlerTest extends AbstractAuthenticationHandlerTestCase
             ->expects($this->never())
             ->method('addTrustedDevice');
 
-        $this->innerAuthenticationHandler
-            ->expects($this->once())
-            ->method('beginTwoFactorAuthentication')
-            ->with($context)
-            ->willReturn($transformedToken);
-
-        $returnValue = $this->trustedHandler->beginTwoFactorAuthentication($context);
-        $this->assertSame($transformedToken, $returnValue);
+        $returnValue = $this->trustedHandler->shouldPerformTwoFactorAuthentication($context);
+        $this->assertTrue($returnValue);
     }
 }

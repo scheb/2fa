@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Scheb\TwoFactorBundle\Security\TwoFactor\Handler;
+namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider;
 
 use Scheb\TwoFactorBundle\Model\PreferredProviderInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
  * @final
  */
-class TwoFactorProviderHandler implements AuthenticationHandlerInterface
+class TwoFactorProviderInitiator
 {
-    public function __construct(private TwoFactorProviderRegistry $providerRegistry, private TwoFactorTokenFactoryInterface $twoFactorTokenFactory)
-    {
+    public function __construct(
+        private TwoFactorProviderRegistry $providerRegistry,
+        private TwoFactorTokenFactoryInterface $twoFactorTokenFactory
+    ) {
     }
 
     /**
@@ -40,7 +40,7 @@ class TwoFactorProviderHandler implements AuthenticationHandlerInterface
         return $activeTwoFactorProviders;
     }
 
-    public function beginTwoFactorAuthentication(AuthenticationContextInterface $context): TokenInterface
+    public function beginTwoFactorAuthentication(AuthenticationContextInterface $context): ?TwoFactorTokenInterface
     {
         $activeTwoFactorProviders = $this->getActiveTwoFactorProviders($context);
 
@@ -52,7 +52,7 @@ class TwoFactorProviderHandler implements AuthenticationHandlerInterface
             return $twoFactorToken;
         }
 
-        return $authenticatedToken;
+        return null;
     }
 
     private function setPreferredProvider(TwoFactorTokenInterface $token, object $user): void
