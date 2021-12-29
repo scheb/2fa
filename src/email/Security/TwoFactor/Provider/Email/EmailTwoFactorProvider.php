@@ -16,8 +16,10 @@ use function str_replace;
  */
 class EmailTwoFactorProvider implements TwoFactorProviderInterface
 {
-    public function __construct(private CodeGeneratorInterface $codeGenerator, private TwoFactorFormRendererInterface $formRenderer)
-    {
+    public function __construct(
+        private CodeGeneratorInterface $codeGenerator,
+        private TwoFactorFormRendererInterface $formRenderer,
+    ) {
     }
 
     public function beginAuthentication(AuthenticationContextInterface $context): bool

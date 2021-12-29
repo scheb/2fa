@@ -16,8 +16,11 @@ class SymfonyAuthCodeMailer implements AuthCodeMailerInterface
 {
     private Address|string $senderAddress;
 
-    public function __construct(private MailerInterface $mailer, string $senderEmail, ?string $senderName)
-    {
+    public function __construct(
+        private MailerInterface $mailer,
+        string $senderEmail,
+        ?string $senderName,
+    ) {
         if (null !== $senderName) {
             $this->senderAddress = new Address($senderEmail, $senderName);
         } else {

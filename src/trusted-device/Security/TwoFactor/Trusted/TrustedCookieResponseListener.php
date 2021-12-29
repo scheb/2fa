@@ -18,8 +18,15 @@ use function substr_count;
  */
 class TrustedCookieResponseListener implements EventSubscriberInterface
 {
-    public function __construct(private TrustedDeviceTokenStorage $trustedTokenStorage, private int $trustedTokenLifetime, private string $cookieName, private ?bool $cookieSecure, private ?string $cookieSameSite, private ?string $cookiePath, private ?string $cookieDomain)
-    {
+    public function __construct(
+        private TrustedDeviceTokenStorage $trustedTokenStorage,
+        private int $trustedTokenLifetime,
+        private string $cookieName,
+        private ?bool $cookieSecure,
+        private ?string $cookieSameSite,
+        private ?string $cookiePath,
+        private ?string $cookieDomain,
+    ) {
     }
 
     public function onKernelResponse(ResponseEvent $event): void

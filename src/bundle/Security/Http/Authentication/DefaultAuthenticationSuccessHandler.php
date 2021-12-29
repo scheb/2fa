@@ -17,8 +17,10 @@ class DefaultAuthenticationSuccessHandler implements AuthenticationSuccessHandle
 {
     use TargetPathTrait;
 
-    public function __construct(private HttpUtils $httpUtils, private TwoFactorFirewallConfig $config)
-    {
+    public function __construct(
+        private HttpUtils $httpUtils,
+        private TwoFactorFirewallConfig $config,
+    ) {
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token): Response

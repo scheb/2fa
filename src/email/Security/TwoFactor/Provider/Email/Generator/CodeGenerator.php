@@ -14,8 +14,11 @@ use function random_int;
  */
 class CodeGenerator implements CodeGeneratorInterface
 {
-    public function __construct(private PersisterInterface $persister, private AuthCodeMailerInterface $mailer, private int $digits)
-    {
+    public function __construct(
+        private PersisterInterface $persister,
+        private AuthCodeMailerInterface $mailer,
+        private int $digits,
+    ) {
     }
 
     public function generateAndSend(TwoFactorInterface $user): void

@@ -38,8 +38,12 @@ class TwoFactorToken implements TwoFactorTokenInterface, Stringable
     /**
      * @param string[] $twoFactorProviders
      */
-    public function __construct(TokenInterface $authenticatedToken, private ?string $credentials, private string $firewallName, array $twoFactorProviders)
-    {
+    public function __construct(
+        TokenInterface $authenticatedToken,
+        private ?string $credentials,
+        private string $firewallName,
+        array $twoFactorProviders,
+    ) {
         if (null === $authenticatedToken->getUser()) {
             throw new InvalidArgumentException('The authenticated token must have a user object set.');
         }

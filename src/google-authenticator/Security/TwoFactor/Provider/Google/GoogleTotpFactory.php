@@ -15,8 +15,11 @@ use function strlen;
  */
 class GoogleTotpFactory
 {
-    public function __construct(private ?string $server, private ?string $issuer, private int $digits)
-    {
+    public function __construct(
+        private ?string $server,
+        private ?string $issuer,
+        private int $digits,
+    ) {
     }
 
     public function createTotpForUser(TwoFactorInterface $user): TOTPInterface

@@ -16,8 +16,10 @@ use function strlen;
  */
 class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
 {
-    public function __construct(private TotpAuthenticatorInterface $authenticator, private TwoFactorFormRendererInterface $formRenderer)
-    {
+    public function __construct(
+        private TotpAuthenticatorInterface $authenticator,
+        private TwoFactorFormRendererInterface $formRenderer,
+    ) {
     }
 
     public function beginAuthentication(AuthenticationContextInterface $context): bool

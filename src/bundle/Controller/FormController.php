@@ -23,8 +23,14 @@ use function str_contains;
 
 class FormController
 {
-    public function __construct(private TokenStorageInterface $tokenStorage, private TwoFactorProviderRegistry $providerRegistry, private TwoFactorFirewallContext $twoFactorFirewallContext, private LogoutUrlGenerator $logoutUrlGenerator, private ?TrustedDeviceManagerInterface $trustedDeviceManager, private bool $trustedFeatureEnabled)
-    {
+    public function __construct(
+        private TokenStorageInterface $tokenStorage,
+        private TwoFactorProviderRegistry $providerRegistry,
+        private TwoFactorFirewallContext $twoFactorFirewallContext,
+        private LogoutUrlGenerator $logoutUrlGenerator,
+        private ?TrustedDeviceManagerInterface $trustedDeviceManager,
+        private bool $trustedFeatureEnabled,
+    ) {
     }
 
     public function form(Request $request): Response

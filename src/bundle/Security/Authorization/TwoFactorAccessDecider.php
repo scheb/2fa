@@ -21,8 +21,12 @@ use function substr;
  */
 class TwoFactorAccessDecider
 {
-    public function __construct(private AccessMapInterface $accessMap, private AccessDecisionManagerInterface $accessDecisionManager, private HttpUtils $httpUtils, private LogoutUrlGenerator $logoutUrlGenerator)
-    {
+    public function __construct(
+        private AccessMapInterface $accessMap,
+        private AccessDecisionManagerInterface $accessDecisionManager,
+        private HttpUtils $httpUtils,
+        private LogoutUrlGenerator $logoutUrlGenerator,
+    ) {
     }
 
     public function isPubliclyAccessible(Request $request): bool

@@ -14,8 +14,10 @@ use function str_replace;
  */
 class GoogleAuthenticator implements GoogleAuthenticatorInterface
 {
-    public function __construct(private GoogleTotpFactory $totpFactory, private int $window)
-    {
+    public function __construct(
+        private GoogleTotpFactory $totpFactory,
+        private int $window,
+    ) {
     }
 
     public function checkCode(TwoFactorInterface $user, string $code): bool

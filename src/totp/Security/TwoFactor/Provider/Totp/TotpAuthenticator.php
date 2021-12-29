@@ -14,8 +14,10 @@ use function str_replace;
  */
 class TotpAuthenticator implements TotpAuthenticatorInterface
 {
-    public function __construct(private TotpFactory $totpFactory, private int $window)
-    {
+    public function __construct(
+        private TotpFactory $totpFactory,
+        private int $window,
+    ) {
     }
 
     public function checkCode(TwoFactorInterface $user, string $code): bool

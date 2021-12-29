@@ -16,8 +16,10 @@ use function strlen;
  */
 class GoogleAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
 {
-    public function __construct(private GoogleAuthenticatorInterface $authenticator, private TwoFactorFormRendererInterface $formRenderer)
-    {
+    public function __construct(
+        private GoogleAuthenticatorInterface $authenticator,
+        private TwoFactorFormRendererInterface $formRenderer,
+    ) {
     }
 
     public function beginAuthentication(AuthenticationContextInterface $context): bool

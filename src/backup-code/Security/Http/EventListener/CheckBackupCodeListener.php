@@ -19,7 +19,7 @@ class CheckBackupCodeListener extends AbstractCheckCodeListener
 
     public function __construct(
         PreparationRecorderInterface $preparationRecorder,
-        private BackupCodeManagerInterface $backupCodeManager
+        private BackupCodeManagerInterface $backupCodeManager,
     ) {
         parent::__construct($preparationRecorder);
     }

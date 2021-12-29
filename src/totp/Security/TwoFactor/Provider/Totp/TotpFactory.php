@@ -18,8 +18,11 @@ class TotpFactory
     /**
      * @param array<string,mixed> $customParameters
      */
-    public function __construct(private ?string $server, private ?string $issuer, private array $customParameters)
-    {
+    public function __construct(
+        private ?string $server,
+        private ?string $issuer,
+        private array $customParameters,
+    ) {
     }
 
     public function createTotpForUser(TwoFactorInterface $user): TOTPInterface

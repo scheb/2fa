@@ -23,8 +23,11 @@ class TrustedDeviceTokenStorage
 
     private bool $updateCookie = false;
 
-    public function __construct(private RequestStack $requestStack, private TrustedDeviceTokenEncoder $tokenGenerator, private string $cookieName)
-    {
+    public function __construct(
+        private RequestStack $requestStack,
+        private TrustedDeviceTokenEncoder $tokenGenerator,
+        private string $cookieName,
+    ) {
         $this->trustedTokenList = null;
     }
 

@@ -12,8 +12,10 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterfa
  */
 class TrustedDeviceCondition implements TwoFactorConditionInterface
 {
-    public function __construct(private TrustedDeviceManagerInterface $trustedDeviceManager, private bool $extendTrustedToken)
-    {
+    public function __construct(
+        private TrustedDeviceManagerInterface $trustedDeviceManager,
+        private bool $extendTrustedToken,
+    ) {
     }
 
     public function shouldPerformTwoFactorAuthentication(AuthenticationContextInterface $context): bool
