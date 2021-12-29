@@ -83,6 +83,14 @@ has been removed.
 `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationListener::LISTENER_PRIORITY` was removed,
 use `AUTHENTICATION_SUCCESS_LISTENER_PRIORITY` instead.
 
+In `Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory` the following constants related to the
+old security system have been removed:
+
+- `PROVIDER_ID_PREFIX`
+- `LISTENER_ID_PREFIX`
+- `PROVIDER_DEFINITION_ID`
+- `LISTENER_DEFINITION_ID`
+
 ### `scheb/2fa-backup-code` Package
 
 In `Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface` the `$user` is now typed as `object`:
