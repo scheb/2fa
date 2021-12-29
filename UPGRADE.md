@@ -56,7 +56,7 @@ public function persist($user): void;
 After:
 
 ```php
-public function persist(UserInterface $user): void;
+public function persist(object $user): void;
 ```
 
 In `Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface` the `$user` is now typed as `object`:
