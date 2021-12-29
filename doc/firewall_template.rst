@@ -21,9 +21,9 @@ Create a new form renderer class like this:
    class CustomFormRenderer implements TwoFactorFormRendererInterface
    {
        public function __construct(
-           private Environment $twigEnvironment;
-           private FirewallMapInterface $firewallMap;
-           private array $templates; // Map of [firewall name => template path]
+           private Environment $twigEnvironment,
+           private FirewallMapInterface $firewallMap,
+           private array $templates, // Map of [firewall name => template path]
        ) {
        }
 
