@@ -28,7 +28,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
         $this->provider = new GoogleAuthenticatorTwoFactorProvider($this->authenticator, $formRenderer);
     }
 
-    private function createUser(bool $enabled = true, ?string $secret = self::SECRET): MockObject
+    private function createUser(bool $enabled = true, ?string $secret = self::SECRET): MockObject|UserWithTwoFactorInterface
     {
         $user = $this->createMock(UserWithTwoFactorInterface::class);
         $user

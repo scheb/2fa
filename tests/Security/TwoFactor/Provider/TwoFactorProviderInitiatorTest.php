@@ -39,7 +39,7 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
         $this->initiator = new TwoFactorProviderInitiator($providerRegistry, $this->twoFactorTokenFactory);
     }
 
-    private function createTwoFactorToken(): MockObject
+    private function createTwoFactorToken(): MockObject|TwoFactorTokenInterface
     {
         return $this->createMock(TwoFactorTokenInterface::class);
     }

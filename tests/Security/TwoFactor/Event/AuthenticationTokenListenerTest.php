@@ -23,7 +23,7 @@ class AuthenticationTokenListenerTest extends TestCase
 {
     private const FIREWALL_NAME = 'firewallName';
 
-    private TwoFactorConditionRegistry|MockObject $twoFactorConditionRegistry;
+    private MockObject|TwoFactorConditionRegistry $twoFactorConditionRegistry;
     private MockObject|TwoFactorProviderInitiator $twoFactorProviderInitiator;
     private MockObject|AuthenticationContextFactoryInterface $authenticationContextFactory;
     private AuthenticationTokenListener $listener;
