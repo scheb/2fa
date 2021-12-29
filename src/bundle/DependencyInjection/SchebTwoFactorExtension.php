@@ -32,10 +32,10 @@ class SchebTwoFactorExtension extends Extension
         $container->setParameter('scheb_two_factor.security_tokens', $config['security_tokens']);
         $container->setParameter('scheb_two_factor.ip_whitelist', $config['ip_whitelist']);
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('security.xml');
-        $loader->load('persistence.xml');
-        $loader->load('two_factor.xml');
+        $loader = new Loader\PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('security.php');
+        $loader->load('persistence.php');
+        $loader->load('two_factor.php');
 
         // Load two-factor modules
         if (isset($config['email']['enabled']) && $this->resolveFeatureFlag($container, $config['email']['enabled'])) {
@@ -111,8 +111,8 @@ class SchebTwoFactorExtension extends Extension
      */
     private function configureTrustedDeviceManager(ContainerBuilder $container, array $config): void
     {
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('trusted_device.xml');
+        $loader = new Loader\PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('trusted_device.php');
         $container->setAlias('scheb_two_factor.trusted_device_manager', $config['trusted_device']['manager']);
 
         $this->addTwoFactorCondition($container, new Reference('scheb_two_factor.trusted_device_condition'));
@@ -132,8 +132,8 @@ class SchebTwoFactorExtension extends Extension
      */
     private function configureBackupCodeManager(ContainerBuilder $container, array $config): void
     {
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('backup_codes.xml');
+        $loader = new Loader\PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('backup_codes.php');
         $container->setAlias('scheb_two_factor.backup_code_manager', $config['backup_codes']['manager']);
     }
 
@@ -158,8 +158,8 @@ class SchebTwoFactorExtension extends Extension
      */
     private function configureEmailAuthenticationProvider(ContainerBuilder $container, array $config): void
     {
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('two_factor_provider_email.xml');
+        $loader = new Loader\PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('two_factor_provider_email.php');
 
         $container->setParameter('scheb_two_factor.email.sender_email', $config['email']['sender_email']);
         $container->setParameter('scheb_two_factor.email.sender_name', $config['email']['sender_name']);
@@ -183,8 +183,8 @@ class SchebTwoFactorExtension extends Extension
      */
     private function configureGoogleAuthenticationProvider(ContainerBuilder $container, array $config): void
     {
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('two_factor_provider_google.xml');
+        $loader = new Loader\PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('two_factor_provider_google.php');
 
         $container->setParameter('scheb_two_factor.google.server_name', $config['google']['server_name']);
         $container->setParameter('scheb_two_factor.google.issuer', $config['google']['issuer']);
@@ -204,8 +204,8 @@ class SchebTwoFactorExtension extends Extension
      */
     private function configureTotpAuthenticationProvider(ContainerBuilder $container, array $config): void
     {
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('two_factor_provider_totp.xml');
+        $loader = new Loader\PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('two_factor_provider_totp.php');
 
         $container->setParameter('scheb_two_factor.totp.issuer', $config['totp']['issuer']);
         $container->setParameter('scheb_two_factor.totp.server_name', $config['totp']['server_name']);
