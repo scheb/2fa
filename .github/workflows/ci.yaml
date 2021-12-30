@@ -36,7 +36,7 @@ jobs:
                     php -i
 
             -   name: 'Install Composer dependencies'
-                uses: ramsey/composer-install@v1
+                uses: ramsey/composer-install@v2
                 with:
                     composer-options: '--prefer-dist'
 
@@ -103,7 +103,7 @@ jobs:
                 run: composer require ${{ matrix.composer-require }} --no-update
 
             -   name: 'Install Composer dependencies'
-                uses: ramsey/composer-install@v1
+                uses: ramsey/composer-install@v2
                 with:
                     composer-options: '--prefer-dist'
                     dependency-versions: '${{ matrix.dependency-versions }}'
@@ -177,7 +177,7 @@ jobs:
                 run: composer require ${{ matrix.composer-require }} --no-update --working-dir=app
 
             -   name: 'Install Composer dependencies'
-                uses: ramsey/composer-install@v1
+                uses: ramsey/composer-install@v2
                 with:
                     composer-options: '--prefer-dist --working-dir=app'
 
@@ -219,7 +219,7 @@ jobs:
                     php -i
 
             -   name: 'Install Composer dependencies'
-                uses: ramsey/composer-install@v1
+                uses: ramsey/composer-install@v2
                 with:
                     composer-options: '--prefer-dist'
 
