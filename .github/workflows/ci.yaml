@@ -236,3 +236,11 @@ jobs:
                 run: |
                     wget https://scrutinizer-ci.com/ocular.phar
                     php ocular.phar code-coverage:upload --format=php-clover coverage/clover.xml
+
+            -   name: 'Send Coverage to Codecov'
+                uses: codecov/codecov-action@v2
+                with:
+                    token: ${{ secrets.CODECOV_TOKEN }}
+                    files: coverage/clover.xml
+                    flags: unittests
+                    fail_ci_if_error: true
