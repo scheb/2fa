@@ -11,7 +11,6 @@
 /.gitignore export-ignore
 /.gitsplit.yml export-ignore
 /.php_cs.dist export-ignore
-/.scrutinizer.yml export-ignore
 /CONTRIBUTING.md export-ignore
 /php_cs.xml export-ignore
 /phpunit.xml.dist export-ignore
