@@ -40,7 +40,7 @@ jobs:
                 run: composer config minimum-stability dev && composer config prefer-stable true
 
             -   name: 'Install Composer dependencies'
-                uses: ramsey/composer-install@v1
+                uses: ramsey/composer-install@v2
                 with:
                     composer-options: '--prefer-dist'
 
@@ -110,7 +110,7 @@ jobs:
                 run: composer require ${{ matrix.composer-require }} --no-update
 
             -   name: 'Install Composer dependencies'
-                uses: ramsey/composer-install@v1
+                uses: ramsey/composer-install@v2
                 with:
                     composer-options: '--prefer-dist'
                     dependency-versions: '${{ matrix.dependency-versions }}'
@@ -176,7 +176,7 @@ jobs:
                 run: composer require ${{ matrix.composer-require }} --no-update --working-dir=app
 
             -   name: 'Install Composer dependencies'
-                uses: ramsey/composer-install@v1
+                uses: ramsey/composer-install@v2
                 with:
                     composer-options: '--prefer-dist --working-dir=app'
 
@@ -220,7 +220,7 @@ jobs:
                 run: composer config minimum-stability dev && composer config prefer-stable true
 
             -   name: 'Install Composer dependencies'
-                uses: ramsey/composer-install@v1
+                uses: ramsey/composer-install@v2
                 with:
                     composer-options: '--prefer-dist'
 
