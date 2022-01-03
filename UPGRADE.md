@@ -29,6 +29,10 @@ you used it nevertheless, please migrate to an implementation based on
 `Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionInterface`. See more about
 [custom conditions for two-factor authentication](https://symfony.com/bundles/SchebTwoFactorBundle/6.x/custom_conditions.html).
 
+The bundle has previously recommended the controller syntax with a single colon
+`_controller: "scheb_two_factor.form_controller:form"`. Under Symfony 6, you have to use the syntax with two colons
+`_controller: "scheb_two_factor.form_controller::form"` (which is also compatible with Symfony 5.4).
+
 ### Authentication Context
 
 The passport has been added to the `AuthenticationContext` object, therefore a new getter method was added to
