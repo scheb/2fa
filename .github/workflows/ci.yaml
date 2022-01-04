@@ -21,31 +21,11 @@ jobs:
             -   name: 'Checkout code'
                 uses: actions/checkout@v2
 
-            -   name: 'Setup PHP'
-                uses: shivammathur/setup-php@v2
+            -   name: 'Setup Build'
+                uses: ./.github/actions/setup-build
                 with:
-                    coverage: 'none'
                     php-version: '${{ matrix.php-version }}'
-                    tools: php-cs-fixer
-                env:
-                    COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            -   name: 'Display PHP versions'
-                run: |
-                    php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
-                    php -i
-
-            -   name: "Composer allow dev dependencies"
-                if: ${{ matrix.composer-allow-dev }}
-                run: composer config minimum-stability dev && composer config prefer-stable true
-
-            -   name: 'Install Composer dependencies'
-                uses: ramsey/composer-install@v2
-                with:
-                    composer-options: '--prefer-dist'
-
-            -   name: 'Display dependencies versions'
-                run: composer show
+                    composer-token: ${{ secrets.GITHUB_TOKEN }}
 
             -   name: "PHP Coding Standards Fixer"
                 run: php-cs-fixer fix --dry-run --diff --using-cache=no
@@ -84,39 +64,13 @@ jobs:
             -   name: 'Checkout code'
                 uses: actions/checkout@v2
 
-            -   name: 'Setup PHP'
-                uses: shivammathur/setup-php@v2
+            -   name: 'Setup Build'
+                uses: ./.github/actions/setup-build
                 with:
-                    coverage: 'none'
                     php-version: '${{ matrix.php-version }}'
-                env:
-                    COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            -   name: 'Display PHP versions'
-                run: |
-                    php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
-                    php -i
-
-            -   name: "Composer allow dev dependencies"
-                if: ${{ matrix.composer-allow-dev }}
-                run: composer config minimum-stability dev && composer config prefer-stable true
-
-            -   name: "Require Symfony version"
-                if: ${{ matrix.symfony-version != 'lowest' }}
-                run: composer require "symfony/symfony:${{ matrix.symfony-version }}" --no-update
-
-            -   name: "Require extra Composer dependencies"
-                if: ${{ matrix.composer-require }}
-                run: composer require ${{ matrix.composer-require }} --no-update
-
-            -   name: 'Install Composer dependencies'
-                uses: ramsey/composer-install@v2
-                with:
-                    composer-options: '--prefer-dist'
-                    dependency-versions: '${{ matrix.dependency-versions }}'
-
-            -   name: 'Display dependencies versions'
-                run: composer show
+                    composer-token: ${{ secrets.GITHUB_TOKEN }}
+                    composer-dependency-versions: '${{ matrix.dependency-versions }}'
+                    symfony-version: '${{ matrix.symfony-version }}'
 
             -   name: 'Run tests'
                 run: vendor/bin/phpunit
@@ -147,38 +101,13 @@ jobs:
             -   name: 'Checkout code'
                 uses: actions/checkout@v2
 
-            -   name: 'Setup PHP'
-                uses: shivammathur/setup-php@v2
+            -   name: 'Setup Build'
+                uses: ./.github/actions/setup-build
                 with:
-                    coverage: 'none'
                     php-version: '${{ matrix.php-version }}'
-                env:
-                    COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            -   name: 'Display PHP versions'
-                run: |
-                    php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
-                    php -i
-
-            -   name: "Composer allow dev dependencies"
-                if: ${{ matrix.composer-allow-dev }}
-                run: composer config minimum-stability dev --working-dir=app && composer config prefer-stable true --working-dir=app
-
-            -   name: "Require Symfony version"
-                if: ${{ matrix.symfony-version != 'lowest' }}
-                run: composer require "symfony/symfony:${{ matrix.symfony-version }}" --no-update --working-dir=app
-
-            -   name: "Require extra Composer dependencies"
-                if: ${{ matrix.composer-require }}
-                run: composer require ${{ matrix.composer-require }} --no-update --working-dir=app
-
-            -   name: 'Install Composer dependencies'
-                uses: ramsey/composer-install@v2
-                with:
-                    composer-options: '--prefer-dist --working-dir=app'
-
-            -   name: 'Display dependencies versions'
-                run: composer show --working-dir=app
+                    composer-token: ${{ secrets.GITHUB_TOKEN }}
+                    composer-working-dir: app
+                    symfony-version: '${{ matrix.symfony-version }}'
 
             -   name: 'Run tests'
                 run: app/vendor/bin/phpunit -c app
@@ -199,30 +128,11 @@ jobs:
             -   name: 'Checkout code'
                 uses: actions/checkout@v2
 
-            -   name: 'Setup PHP'
-                uses: shivammathur/setup-php@v2
+            -   name: 'Setup Build'
+                uses: ./.github/actions/setup-build
                 with:
-                    coverage: 'none'
                     php-version: '${{ matrix.php-version }}'
-                env:
-                    COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            -   name: 'Display PHP versions'
-                run: |
-                    php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
-                    php -i
-
-            -   name: "Composer allow dev dependencies"
-                if: ${{ matrix.composer-allow-dev }}
-                run: composer config minimum-stability dev && composer config prefer-stable true
-
-            -   name: 'Install Composer dependencies'
-                uses: ramsey/composer-install@v2
-                with:
-                    composer-options: '--prefer-dist'
-
-            -   name: 'Display dependencies versions'
-                run: composer show
+                    composer-token: ${{ secrets.GITHUB_TOKEN }}
 
             -   name: 'Run tests with coverage'
                 run: phpdbg -qrr vendor/bin/phpunit --coverage-clover coverage/clover.xml

@@ -1,0 +1,71 @@
+name: 'Setup Build'
+description: 'Setup the build for this project'
+inputs:
+    php-version:
+        description: 'PHP version to use'
+        required: true
+    composer-token:
+        description: 'Github token for Composer'
+        required: true
+    composer-working-dir:
+        description: 'Composer working directory'
+        required: false
+        default: '.'
+    composer-require:
+        description: 'Additional Composer dependencies to be added'
+        required: false
+        default: ''
+    composer-allow-dev:
+        description: 'If Composer should allow dev dependencies to be used'
+        required: false
+        default: ''
+    composer-dependency-versions:
+        description: 'Whether the job should install the locked, highest, or lowest versions of Composer dependencies'
+        required: false
+        default: ''
+    symfony-version:
+        description: 'Symfony version to be installed'
+        required: false
+        default: ''
+runs:
+    using: "composite"
+    steps:
+        -   name: 'Setup PHP'
+            uses: shivammathur/setup-php@v2
+            with:
+                coverage: 'none'
+                php-version: '${{ inputs.php-version }}'
+                tools: php-cs-fixer
+            env:
+                COMPOSER_TOKEN: ${{ inputs.composer-token }}
+
+        -   name: 'Display PHP versions'
+            shell: bash
+            run: |
+                php -r 'foreach (get_loaded_extensions() as $extension) echo $extension . " " . phpversion($extension) . PHP_EOL;'
+                php -i
+
+        -   name: "Composer allow dev dependencies"
+            if: ${{ inputs.composer-allow-dev }}
+            shell: bash
+            run: composer config minimum-stability dev && composer config prefer-stable true --working-dir=${{ inputs.composer-working-dir }}
+
+        -   name: "Require Symfony version"
+            if: ${{ inputs.symfony-version && inputs.symfony-version != 'lowest' }}
+            shell: bash
+            run: composer require "symfony/symfony:${{ inputs.symfony-version }}" --no-update --working-dir=${{ inputs.composer-working-dir }}
+
+        -   name: "Require extra Composer dependencies"
+            if: ${{ inputs.composer-require }}
+            shell: bash
+            run: composer require ${{ inputs.composer-require }} --no-update --working-dir=${{ inputs.composer-working-dir }}
+
+        -   name: 'Install Composer dependencies'
+            uses: ramsey/composer-install@v2
+            with:
+                composer-options: '--prefer-dist --working-dir=${{ inputs.composer-working-dir }}'
+                dependency-versions: '${{ inputs.composer-dependency-versions }}'
+
+        -   name: 'Display dependencies versions'
+            shell: bash
+            run: composer show --working-dir=${{ inputs.composer-working-dir }}
