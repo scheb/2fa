@@ -134,17 +134,14 @@ jobs:
                     # Minimum PHP version
                     -   php-version: '8.1'
                         symfony-version: '^5.4'
-                        app-config: 'authenticators'
 
                     # Test against upcoming Symfony 5.4
                     -   php-version: '8.1'
                         symfony-version: '^5.4'
-                        app-config: 'authenticators'
 
                     # Test against upcoming Symfony 6.0
                     -   php-version: '8.1'
                         symfony-version: '^6.0'
-                        app-config: 'authenticators'
 
         steps:
             -   name: 'Checkout code'
