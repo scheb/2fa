@@ -1,6 +1,6 @@
 {
     "type": "project",
-    "license": "proprietary",
+    "license": "MIT",
     "require": {
         "php": "~8.0.0 || ~8.1.0",
         "ext-json": "*",
