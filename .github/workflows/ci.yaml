@@ -71,7 +71,7 @@ jobs:
                     # Lowest possible configuration
                     -   php-version: '8.0'
                         dependency-versions: 'lowest'
-                        symfony-version: '^5.4'
+                        symfony-version: 'lowest'
 
                     # Test against upcoming Symfony 5.4
                     -   php-version: '8.1'
