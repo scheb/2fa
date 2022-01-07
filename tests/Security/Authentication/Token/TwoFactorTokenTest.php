@@ -176,6 +176,7 @@ class TwoFactorTokenTest extends TestCase
         $innerToken = new UsernamePasswordToken($this->createMock(UserInterface::class), self::FIREWALL_NAME, ['ROLE']);
         $twoFactorToken = new TwoFactorToken($innerToken, 'twoFactorCode', self::FIREWALL_NAME, ['2faProvider']);
         $twoFactorToken->setTwoFactorProviderPrepared('2faProvider');
+        $twoFactorToken->setAttribute('attributeName', 'attributeValue');
 
         $unserializedToken = unserialize(serialize($twoFactorToken));
 
