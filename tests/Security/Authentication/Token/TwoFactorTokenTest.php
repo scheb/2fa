@@ -163,6 +163,55 @@ class TwoFactorTokenTest extends TestCase
     /**
      * @test
      */
+    public function getAttributes_attributesSet_returnAllAttributes(): void
+    {
+        $this->twoFactorToken->setAttribute('name', 'value');
+        $this->twoFactorToken->setAttribute('otherName', 'otherValue');
+        $this->assertEquals([
+            'name' => 'value',
+            'otherName' => 'otherValue',
+        ], $this->twoFactorToken->getAttributes());
+    }
+
+    /**
+     * @test
+     */
+    public function hasAttribute_attributeIsSet_returnTrue(): void
+    {
+        $this->twoFactorToken->setAttribute('name', 'value');
+        $this->assertTrue($this->twoFactorToken->hasAttribute('name'));
+    }
+
+    /**
+     * @test
+     */
+    public function hasAttribute_attributeNotSet_returnFalse(): void
+    {
+        $this->twoFactorToken->setAttribute('name', 'value');
+        $this->assertFalse($this->twoFactorToken->hasAttribute('otherName'));
+    }
+
+    /**
+     * @test
+     */
+    public function getAttribute_attributeIsSet_returnValue(): void
+    {
+        $this->twoFactorToken->setAttribute('name', 'value');
+        $this->assertEquals('value', $this->twoFactorToken->getAttribute('name'));
+    }
+
+    /**
+     * @test
+     */
+    public function getAttribute_attributeNotSet_throwInvalidArgumentException(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->twoFactorToken->getAttribute('otherName');
+    }
+
+    /**
+     * @test
+     */
     public function serialize_tokenGiven_unserializeIdenticalToken(): void
     {
         $innerToken = new UsernamePasswordToken('username', 'credentials', self::FIREWALL_NAME, ['ROLE']);
