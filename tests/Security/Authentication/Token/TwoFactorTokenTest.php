@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Authentication\Token;
 
+use InvalidArgumentException;
 use LogicException;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
@@ -166,6 +167,55 @@ class TwoFactorTokenTest extends TestCase
         $this->twoFactorToken->setTwoFactorProviderComplete('provider2');
 
         $this->assertTrue($this->twoFactorToken->allTwoFactorProvidersAuthenticated());
+    }
+
+    /**
+     * @test
+     */
+    public function getAttributes_attributesSet_returnAllAttributes(): void
+    {
+        $this->twoFactorToken->setAttribute('name', 'value');
+        $this->twoFactorToken->setAttribute('otherName', 'otherValue');
+        $this->assertEquals([
+            'name' => 'value',
+            'otherName' => 'otherValue',
+        ], $this->twoFactorToken->getAttributes());
+    }
+
+    /**
+     * @test
+     */
+    public function hasAttribute_attributeIsSet_returnTrue(): void
+    {
+        $this->twoFactorToken->setAttribute('name', 'value');
+        $this->assertTrue($this->twoFactorToken->hasAttribute('name'));
+    }
+
+    /**
+     * @test
+     */
+    public function hasAttribute_attributeNotSet_returnFalse(): void
+    {
+        $this->twoFactorToken->setAttribute('name', 'value');
+        $this->assertFalse($this->twoFactorToken->hasAttribute('otherName'));
+    }
+
+    /**
+     * @test
+     */
+    public function getAttribute_attributeIsSet_returnValue(): void
+    {
+        $this->twoFactorToken->setAttribute('name', 'value');
+        $this->assertEquals('value', $this->twoFactorToken->getAttribute('name'));
+    }
+
+    /**
+     * @test
+     */
+    public function getAttribute_attributeNotSet_throwInvalidArgumentException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->twoFactorToken->getAttribute('otherName');
     }
 
     /**
