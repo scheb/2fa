@@ -28,6 +28,12 @@ How-to's
 * :doc:`How to create a custom persister </persister>`
 * :doc:`How to use a different template per firewall </firewall_template>`
 
+.. admonition:: Screencast
+    :class: screencast
+
+    Do you prefer video tutorials? Check out the `Two Factor Authentication <https://symfonycasts.com/screencast/symfony-security/scheb-2fa>`_
+    screencasts from Symfonycasts.
+
 Two-Factor Authentication Methods
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
