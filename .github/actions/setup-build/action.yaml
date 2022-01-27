@@ -35,7 +35,7 @@ runs:
             with:
                 coverage: 'none'
                 php-version: '${{ inputs.php-version }}'
-                tools: php-cs-fixer
+                tools: php-cs-fixer:3.4
             env:
                 COMPOSER_TOKEN: ${{ inputs.composer-token }}
 
