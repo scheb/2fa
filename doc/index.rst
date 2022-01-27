@@ -31,8 +31,8 @@ How-to's
 .. admonition:: Screencast
     :class: screencast
 
-    Do you prefer video tutorials? Check out the `Two Factor Authentication <https://symfonycasts.com/screencast/symfony-security/scheb-2fa>`_
-    screencasts from Symfonycasts.
+    Do you prefer video tutorials? Check out the `Two-Factor Authentication <https://symfonycasts.com/screencast/symfony-security/scheb-2fa>`_
+    screencasts from SymfonyCasts.
 
 Two-Factor Authentication Methods
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
