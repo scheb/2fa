@@ -49,12 +49,12 @@ class TwoFactorServicesFactory
             return $config['authentication_required_handler'];
         }
 
-        $successHandlerId = TwoFactorFactory::AUTHENTICATION_REQUIRED_HANDLER_ID_PREFIX.$firewallName;
+        $authenticationRequiredHandlerId = TwoFactorFactory::AUTHENTICATION_REQUIRED_HANDLER_ID_PREFIX.$firewallName;
         $container
-            ->setDefinition($successHandlerId, new ChildDefinition(TwoFactorFactory::AUTHENTICATION_REQUIRED_HANDLER_DEFINITION_ID))
+            ->setDefinition($authenticationRequiredHandlerId, new ChildDefinition(TwoFactorFactory::AUTHENTICATION_REQUIRED_HANDLER_DEFINITION_ID))
             ->replaceArgument(1, new Reference($twoFactorFirewallConfigId));
 
-        return $successHandlerId;
+        return $authenticationRequiredHandlerId;
     }
 
     public function getCsrfTokenManagerId(array $config): string
