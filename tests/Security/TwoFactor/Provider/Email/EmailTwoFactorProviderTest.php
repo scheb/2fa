@@ -98,7 +98,7 @@ class EmailTwoFactorProviderTest extends TestCase
     {
         $user = new stdClass();
 
-        //Mock the CodeGenerator
+        // Mock the CodeGenerator
         $this->generator
             ->expects($this->never())
             ->method('generateAndSend');
@@ -113,7 +113,7 @@ class EmailTwoFactorProviderTest extends TestCase
     {
         $user = $this->createUser(true);
 
-        //Mock the CodeGenerator
+        // Mock the CodeGenerator
         $this->generator
             ->expects($this->once())
             ->method('generateAndSend')

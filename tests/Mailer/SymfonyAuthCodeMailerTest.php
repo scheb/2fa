@@ -28,7 +28,7 @@ class SymfonyAuthCodeMailerTest extends TestCase
      */
     public function sendAuthCode_hasAuthCode_sendEmail(): void
     {
-        //Stub the user object
+        // Stub the user object
         $user = $this->createMock(TwoFactorInterface::class);
         $user
             ->expects($this->any())
@@ -50,7 +50,7 @@ class SymfonyAuthCodeMailerTest extends TestCase
             return true;
         };
 
-        //Expect mail to be sent
+        // Expect mail to be sent
         $this->symfonyMailer
             ->expects($this->once())
             ->method('send')
@@ -64,7 +64,7 @@ class SymfonyAuthCodeMailerTest extends TestCase
      */
     public function sendAuthCode_nullAuthCode_sendEmail(): void
     {
-        //Stub the user object
+        // Stub the user object
         $user = $this->createMock(TwoFactorInterface::class);
         $user
             ->expects($this->any())
@@ -75,7 +75,7 @@ class SymfonyAuthCodeMailerTest extends TestCase
             ->method('getEmailAuthCode')
             ->willReturn(null);
 
-        //Expect no mail sent
+        // Expect no mail sent
         $this->symfonyMailer
             ->expects($this->never())
             ->method('send');

@@ -33,7 +33,7 @@ abstract class TestCase extends WebTestCase
 
     private KernelBrowser $client;
 
-    ////////////////////// CONFIGURATION
+    // //////////////////// CONFIGURATION
 
     public function setUp(): void
     {
@@ -148,7 +148,7 @@ abstract class TestCase extends WebTestCase
         return $user;
     }
 
-    ////////////////////// ACTIONS
+    // //////////////////// ACTIONS
 
     protected function performLogin(bool $rememberMe = false): Crawler
     {
@@ -224,7 +224,7 @@ abstract class TestCase extends WebTestCase
         return $this->client->request('GET', '/2fa');
     }
 
-    ////////////////////// ASSERTS
+    // //////////////////// ASSERTS
 
     protected function assertLoggerHasInfo(string $message): void
     {
