@@ -32,9 +32,9 @@ class DoctrinePersisterTest extends TestCase
      */
     public function persist_persistObject_callPersistAndFlush(): void
     {
-        $user = new \stdClass(); //Some user object
+        $user = new \stdClass(); // Some user object
 
-        //Mock the EntityManager
+        // Mock the EntityManager
         $this->objectManager
             ->expects($this->once())
             ->method('persist')

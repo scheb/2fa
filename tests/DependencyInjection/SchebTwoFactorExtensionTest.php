@@ -28,7 +28,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->container = new ContainerBuilder();
         $this->extension = new SchebTwoFactorExtension();
 
-        //Stub services
+        // Stub services
         $this->container->setDefinition('acme_test.persister', new Definition());
         $this->container->setDefinition('acme_test.mailer', new Definition());
     }
@@ -199,15 +199,15 @@ EOF;
         $config = $this->getEmptyConfig();
         $this->extension->load([$config], $this->container);
 
-        //Google
+        // Google
         $this->assertNotHasDefinition('scheb_two_factor.security.google_authenticator');
         $this->assertNotHasDefinition('scheb_two_factor.security.google.provider');
 
-        //TOTP
+        // TOTP
         $this->assertNotHasDefinition('scheb_two_factor.security.totp_authenticator');
         $this->assertNotHasDefinition('scheb_two_factor.security.totp.provider');
 
-        //Email
+        // Email
         $this->assertNotHasDefinition('scheb_two_factor.security.email.swift_auth_code_mailer');
         $this->assertNotHasDefinition('scheb_two_factor.security.email.symfony_auth_code_mailer');
         $this->assertNotHasDefinition('scheb_two_factor.security.email.code_generator');

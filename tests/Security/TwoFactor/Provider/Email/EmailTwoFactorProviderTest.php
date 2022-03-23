@@ -90,7 +90,7 @@ class EmailTwoFactorProviderTest extends TestCase
      */
     public function beginAuthentication_interfaceNotImplemented_returnFalse(): void
     {
-        $user = new \stdClass(); //Any class without TwoFactorInterface
+        $user = new \stdClass(); // Any class without TwoFactorInterface
         $context = $this->createAuthenticationContext($user);
 
         $returnValue = $this->provider->beginAuthentication($context);
@@ -104,7 +104,7 @@ class EmailTwoFactorProviderTest extends TestCase
     {
         $user = new \stdClass();
 
-        //Mock the CodeGenerator
+        // Mock the CodeGenerator
         $this->generator
             ->expects($this->never())
             ->method('generateAndSend');
@@ -119,7 +119,7 @@ class EmailTwoFactorProviderTest extends TestCase
     {
         $user = $this->createUser(true);
 
-        //Mock the CodeGenerator
+        // Mock the CodeGenerator
         $this->generator
             ->expects($this->once())
             ->method('generateAndSend')

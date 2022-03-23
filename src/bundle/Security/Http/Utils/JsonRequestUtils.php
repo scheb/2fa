@@ -49,7 +49,7 @@ class JsonRequestUtils
             return null;
         }
 
-        if (null !== $value && !is_scalar($value)) {
+        if (null !== $value && !\is_scalar($value)) {
             throw new BadRequestException('Invalid JSON data, expected a scalar value.');
         }
 

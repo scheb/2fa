@@ -32,7 +32,7 @@ class SwiftAuthCodeMailerTest extends TestCase
      */
     public function sendAuthCode_withUserObject_sendEmail(): void
     {
-        //Stub the user object
+        // Stub the user object
         $user = $this->createMock(TwoFactorInterface::class);
         $user
             ->expects($this->any())
@@ -54,7 +54,7 @@ class SwiftAuthCodeMailerTest extends TestCase
             return true;
         };
 
-        //Expect mail to be sent
+        // Expect mail to be sent
         $this->swiftMailer
             ->expects($this->once())
             ->method('send')

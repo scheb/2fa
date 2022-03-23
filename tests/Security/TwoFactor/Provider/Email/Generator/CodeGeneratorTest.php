@@ -43,7 +43,7 @@ class CodeGeneratorTest extends TestCase
      */
     public function generateAndSend_useOriginalCodeGenerator_codeBetweenRange(): void
     {
-        //Mock the user object
+        // Mock the user object
         $user = $this->createMock(TwoFactorInterface::class);
         $user
             ->expects($this->once())
@@ -53,7 +53,7 @@ class CodeGeneratorTest extends TestCase
                 $this->lessThanOrEqual(99999)
             ));
 
-        //Construct test subject with original class
+        // Construct test subject with original class
         $authCodeManager = new CodeGenerator($this->persister, $this->mailer, 5);
         $authCodeManager->generateAndSend($user);
     }
@@ -63,12 +63,12 @@ class CodeGeneratorTest extends TestCase
      */
     public function generateAndSend_checkCodeRange_validMinAndMax(): void
     {
-        //Stub the user object
+        // Stub the user object
         $user = $this->createMock(TwoFactorInterface::class);
 
         $this->authCodeManager->generateAndSend($user);
 
-        //Validate min and max value
+        // Validate min and max value
         $this->assertEquals(10000, $this->authCodeManager->lastMin);
         $this->assertEquals(99999, $this->authCodeManager->lastMax);
     }
@@ -78,14 +78,14 @@ class CodeGeneratorTest extends TestCase
      */
     public function generateAndSend_generateNewCode_persistsCode(): void
     {
-        //Mock the user object
+        // Mock the user object
         $user = $this->createMock(TwoFactorInterface::class);
         $user
             ->expects($this->once())
             ->method('setEmailAuthCode')
             ->with(12345);
 
-        //Mock the persister
+        // Mock the persister
         $this->persister
             ->expects($this->once())
             ->method('persist')
@@ -99,10 +99,10 @@ class CodeGeneratorTest extends TestCase
      */
     public function generateAndSend_generateNewCode_sendMail(): void
     {
-        //Stub the user object
+        // Stub the user object
         $user = $this->createMock(TwoFactorInterface::class);
 
-        //Mock the mailer
+        // Mock the mailer
         $this->mailer
             ->expects($this->once())
             ->method('sendAuthCode')
@@ -116,10 +116,10 @@ class CodeGeneratorTest extends TestCase
      */
     public function reSend_whenCalled_sendMail(): void
     {
-        //Stub the user object
+        // Stub the user object
         $user = $this->createMock(TwoFactorInterface::class);
 
-        //Mock the mailer
+        // Mock the mailer
         $this->mailer
             ->expects($this->once())
             ->method('sendAuthCode')
@@ -129,7 +129,7 @@ class CodeGeneratorTest extends TestCase
     }
 }
 
-//Make the AuthCodeManager class testable
+// Make the AuthCodeManager class testable
 class TestableCodeGenerator extends CodeGenerator
 {
     public $testCode;

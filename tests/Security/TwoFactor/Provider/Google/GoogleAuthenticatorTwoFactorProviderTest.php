@@ -98,7 +98,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
      */
     public function beginAuthentication_interfaceNotImplemented_returnFalse(): void
     {
-        $user = new \stdClass(); //Any class without TwoFactorInterface
+        $user = new \stdClass(); // Any class without TwoFactorInterface
         $context = $this->createAuthenticationContext($user);
 
         $returnValue = $this->provider->beginAuthentication($context);

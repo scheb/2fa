@@ -39,13 +39,13 @@ class SchebTwoFactorBundleTest extends TestCase
             $compilerPasses[] = $this->isInstanceOf(AccessListenerCompilerPass::class);
         }
 
-        //Expect compiler pass to be added
+        // Expect compiler pass to be added
         $containerBuilder
             ->expects($this->exactly(\count($compilerPasses)))
             ->method('addCompilerPass')
             ->with($this->logicalOr(...$compilerPasses));
 
-        //Expect register authentication provider factory
+        // Expect register authentication provider factory
         $securityExtension = $this->createMock(SecurityExtension::class);
         $containerBuilder
             ->expects($this->once())

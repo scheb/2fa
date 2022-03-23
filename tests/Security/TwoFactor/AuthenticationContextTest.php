@@ -59,7 +59,7 @@ class AuthenticationContextTest extends TestCase
      */
     public function getSession_objectInitialized_returnSession(): void
     {
-        //Mock the Request object
+        // Mock the Request object
         $session = $this->createMock(SessionInterface::class);
         $this->request
             ->expects($this->once())
@@ -76,7 +76,7 @@ class AuthenticationContextTest extends TestCase
      */
     public function getUser_objectInitialized_returnValid($userObject, $expectedReturnValue): void
     {
-        //Mock the TokenInterface
+        // Mock the TokenInterface
         $this->token
             ->expects($this->once())
             ->method('getUser')
