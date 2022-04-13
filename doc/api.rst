@@ -228,21 +228,46 @@ In the API use-case, you'd usually send the two-factor authentication code to th
 configured in your firewall settings. The code is sent over the same way as if you'd send it from the 2fa form - a
 ``POST`` request with post data in the payload.
 
+The default POST parameter name is ``_auth_code``, though can customize it in the firewall configuration:
+
+.. code-block:: yaml
+
+   # config/packages/security.yaml
+   security:
+       firewalls:
+           your_firewall_name:
+               # ...
+               two_factor:
+                   auth_code_parameter_name: _auth_code  # Name of the parameter for the two-factor authentication code
+
 JSON data
 ~~~~~~~~~
 
 To better integrate with JSON-style APIs, the bundle also accepts ``POST`` requests with a JSON payload. Make sure you
 send a JSON-encoded payload with a JSON content type, such as ``application/json``.
 
-You can use `symfony/property-access <https://symfony.com/doc/current/components/property_access.html>`_ notation to
-define the parameter names in the :doc:`bundle configuration </configuration>`, allowing you to read from complex data
-structures.
-
-Please note, since you're dealing with JSON **objects**, you have to use the dot ``.`` notation to access object
-properties. For example, with the following payload:
+For example, if you'd want to use the following kind of payload:
 
 .. code-block:: json
 
    {"data": {"authCode": "1234"}}
 
-you'd use ``data.authCode`` for the authentication code. The array-style notation ``data[authCode]`` wouldn't work.
+you have to tell the bundle, that the auth code is located in the ``authCode`` property within ``data``. So on the
+firewall configuration, you have to set the following:
+
+.. code-block:: yaml
+
+   # config/packages/security.yaml
+   security:
+       firewalls:
+           your_firewall_name:
+               # ...
+               two_factor:
+                   auth_code_parameter_name: data.authCode
+
+As you can see, it is possible to use `symfony/property-access <https://symfony.com/doc/current/components/property_access.html>`_
+notation to define the parameter names, allowing you to read from complex data structures.
+
+Please note, since you're dealing with JSON **objects**, you have to use the dot ``.`` notation to access object
+properties. For the above example, ``data.authCode`` is the the correct property path. The array-style notation
+``data[authCode]`` wouldn't work.
