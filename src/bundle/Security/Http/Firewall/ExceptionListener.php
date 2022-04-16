@@ -81,6 +81,7 @@ class ExceptionListener implements EventSubscriberInterface
         $this->eventDispatcher->dispatch($event, TwoFactorAuthenticationEvents::REQUIRE);
 
         $response = $this->authenticationRequiredHandler->onAuthenticationRequired($request, $token);
+        $exceptionEvent->allowCustomResponseCode();
         $exceptionEvent->setResponse($response);
     }
 
