@@ -103,6 +103,7 @@ class ExceptionListenerTest extends TestCase
 
     private function assertHasResponse(ExceptionEvent $event, Response $response): void
     {
+        $this->assertTrue($event->isAllowingCustomResponseCode());
         $this->assertSame($response, $event->getResponse());
     }
 
