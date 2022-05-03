@@ -124,8 +124,7 @@ Troubleshooting
 
    No
        Unknown issue. Try to reach out for help by
-       :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and
-       let us know what you've already tested.
+       `creating an issue`_ and let us know what you've already tested.
 
 **Solution to: Your authenticated token was flagged as invalid**
 
@@ -232,8 +231,7 @@ Troubleshooting
 
    No
        Unknown issue. Try to reach out for help by
-       :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
-       know what you've already tested.
+       `creating an issue`_ and let us know what you've already tested.
 
 #. On login, do you reach the end (return statement) of method
    ``Scheb\TwoFactorBundle\Security\Authentication\Provider\AuthenticationProviderDecorator::authenticate()``?
@@ -243,8 +241,7 @@ Troubleshooting
 
    No
        Something is wrong with the integration of the bundle. Try to reach out for help by
-      :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
-      know what you've already tested.
+      `creating an issue`_ and let us know what you've already tested.
 
 #. On login, is method
    ``Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderHandler::getActiveTwoFactorProviders()`` called?
@@ -262,8 +259,7 @@ Troubleshooting
 
    Yes, it returns an array of strings
        Unknown issue. Try to reach out for help by
-       :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
-       know what you've already tested.
+       `creating an issue`_ and let us know what you've already tested.
 
    No, it returns an empty array
        **Solution:** our user doesn't have an active two-factor authentication method. Either the ``is*Enabled`` method
@@ -298,5 +294,6 @@ Yes
 
 No, there's no cookie set
     Unknown issue. Try to reach out for help by
-    :doc:`creating an issue </https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request>` and let us
-    know what you've already tested.
+    `creating an issue`_ and let us know what you've already tested.
+
+.. _`creating an issue`: https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request
