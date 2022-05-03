@@ -2,7 +2,7 @@ TOTP Authentication
 ===================
 
 TOTP authentication uses the `TOTP algorithm <https://en.wikipedia.org/wiki/Time-based_One-Time_Password>`_ to generate
-authentication codes. Compared to :doc:`Google Authenticator two-factor provider </google>`, the TOTP two-factor
+authentication codes. Compared to :doc:`Google Authenticator two-factor provider </providers/google>`, the TOTP two-factor
 provider offers more configuration options, but that means your configuration isn't necessarily compatible with the
 `Google Authenticator app <https://github.com/google/google-authenticator/wiki>`_.
 
