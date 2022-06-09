@@ -15,7 +15,7 @@ jobs:
             fail-fast: false
             matrix:
                 php-version:
-                    - '8.1'
+                    - '7.4'
 
         steps:
             -   name: 'Checkout code'
@@ -51,15 +51,15 @@ jobs:
                     # Lowest possible configuration
                     -   php-version: '7.2.5'
                         dependency-versions: 'lowest'
-                        symfony-version: 'lowest'
+                        symfony-version: '4.4.*'
 
                     # Test against latest Symfony 4.4
                     -   php-version: '8.0'
-                        symfony-version: '^4.4'
+                        symfony-version: '4.4.*'
 
                     # Test against latest Symfony 5
                     -   php-version: '8.1'
-                        symfony-version: '^5.0'
+                        symfony-version: '5.*'
 
         steps:
             -   name: 'Checkout code'
@@ -90,27 +90,27 @@ jobs:
 
                     # Symfony 4.4 on minimum PHP version
                     -   php-version: '7.2.5'
-                        symfony-version: '^4.4'
+                        symfony-version: '4.4.*'
                         app-config: 'default'
 
                     # Latest Symfony 4.4
                     -   php-version: '8.0'
-                        symfony-version: '^4.4'
+                        symfony-version: '4.4.*'
                         app-config: 'default'
 
                     # Latest Symfony 5
                     -   php-version: '8.1'
-                        symfony-version: '^5.0'
+                        symfony-version: '5.*'
                         app-config: 'default'
 
                     # AUTHENTICATORS configuration (experimental security system)
                     -   php-version: '8.0'
-                        symfony-version: '~5.3.0'
+                        symfony-version: '5.3.*'
                         app-config: 'authenticators'
 
                     # AUTHENTICATORS configuration (experimental security system)
                     -   php-version: '8.1'
-                        symfony-version: '~5.4.0'
+                        symfony-version: '5.4.*'
                         app-config: 'authenticators'
 
         steps:

@@ -50,10 +50,10 @@ runs:
             shell: bash
             run: composer config minimum-stability dev && composer config prefer-stable true --working-dir=${{ inputs.composer-working-dir }}
 
-        -   name: "Require Symfony version"
-            if: ${{ inputs.symfony-version && inputs.symfony-version != 'lowest' }}
+        -   name: "Install Flex to require specific Symfony version"
+            if: ${{ inputs.symfony-version }}
             shell: bash
-            run: composer require "symfony/symfony:${{ inputs.symfony-version }}" --no-update --working-dir=${{ inputs.composer-working-dir }}
+            run: composer global require --no-progress --no-scripts --no-plugins symfony/flex
 
         -   name: "Require extra Composer dependencies"
             if: ${{ inputs.composer-require }}
@@ -62,6 +62,8 @@ runs:
 
         -   name: 'Install Composer dependencies'
             uses: ramsey/composer-install@v2
+            env:
+                SYMFONY_REQUIRE: ${{ inputs.symfony-version }}
             with:
                 composer-options: '--prefer-dist --working-dir=${{ inputs.composer-working-dir }}'
                 dependency-versions: '${{ inputs.composer-dependency-versions }}'

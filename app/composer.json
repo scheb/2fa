@@ -4,15 +4,16 @@
     "require": {
         "php": ">=7.2.5",
         "ext-json": "*",
-        "symfony/monolog-bundle": "^3.1",
-        "symfony/symfony": "^4.4|^5.0",
-        "symfony/swiftmailer-bundle": "^3.1.1",
         "doctrine/doctrine-bundle": "^2.0.3",
         "doctrine/orm": "^2.0",
+        "endroid/qr-code": "^3.0",
         "lcobucci/jwt": "^3.4|^4.0",
-        "spomky-labs/otphp": "^9.1|^10.0",
+        "monolog/monolog": "<3",
         "paragonie/constant_time_encoding": "^2.2",
-        "endroid/qr-code": "^3.0"
+        "spomky-labs/otphp": "^9.1|^10.0",
+        "symfony/monolog-bundle": "^3.1",
+        "symfony/swiftmailer-bundle": "^3.1.1",
+        "symfony/symfony": "^4.4|^5.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0|^9.0"
