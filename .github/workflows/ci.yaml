@@ -51,15 +51,15 @@ jobs:
                     # Lowest possible configuration
                     -   php-version: '8.0'
                         dependency-versions: 'lowest'
-                        symfony-version: 'lowest'
+                        symfony-version: '5.4.*'
 
-                    # Test against upcoming Symfony 5.4
+                    # Test against Symfony 5.4
                     -   php-version: '8.1'
-                        symfony-version: '^5.4'
+                        symfony-version: '5.4.*'
 
-                    # Test against upcoming Symfony 6.0
+                    # Test against Symfony 6.*
                     -   php-version: '8.1'
-                        symfony-version: '^6.0'
+                        symfony-version: '6.*'
         steps:
             -   name: 'Checkout code'
                 uses: actions/checkout@v2
@@ -87,15 +87,15 @@ jobs:
                 include:
                     # Minimum PHP version
                     -   php-version: '8.0'
-                        symfony-version: '^5.4'
+                        symfony-version: '5.4.*'
 
-                    # Test against upcoming Symfony 5.4
+                    # Test against Symfony 5.4
                     -   php-version: '8.1'
-                        symfony-version: '^5.4'
+                        symfony-version: '5.4.*'
 
-                    # Test against upcoming Symfony 6.0
+                    # Test against Symfony 6.*
                     -   php-version: '8.1'
-                        symfony-version: '^6.0'
+                        symfony-version: '6.*'
 
         steps:
             -   name: 'Checkout code'
