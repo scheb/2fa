@@ -110,7 +110,7 @@ Enable two-factor authentication **per firewall** and configure ``access_control
        access_control:
            # This makes the logout route accessible during two-factor authentication. Allows the user to
            # cancel two-factor authentication, if they need to.
-           - { path: ^/logout, role: IS_AUTHENTICATED_ANONYMOUSLY }
+           - { path: ^/logout, role: PUBLIC_ACCESS }
            # This ensures that the form can only be accessed when two-factor authentication is in progress.
            - { path: ^/2fa, role: IS_AUTHENTICATED_2FA_IN_PROGRESS }
            # Other rules may follow here...

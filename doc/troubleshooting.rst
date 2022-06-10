@@ -57,7 +57,7 @@ Solution
 
 If you see such behavior, the ``access_control`` rules from the security configuration don't allow accessing the logout
 path. Your logout path must be accessible to user with any authentication state, which is usually done by allowing it
-for ``IS_AUTHENTICATED_ANONYMOUSLY``. You're most likely missing a rule under ``access_control`` in the security
+for ``PUBLIC_ACCESS``. You're most likely missing a rule under ``access_control`` in the security
 configuration.
 
 The configuration should look similar to this:
@@ -67,7 +67,7 @@ The configuration should look similar to this:
    # config/packages/security.yaml
    security:
        access_control:
-           - { path: ^/logout, role: IS_AUTHENTICATED_ANONYMOUSLY }
+           - { path: ^/logout, role: PUBLIC_ACCESS }
            # More rules here ...
 
 Make sure the rule comes first in the list, since access control rules are evaluated in order.
@@ -225,7 +225,7 @@ Troubleshooting
 
    Yes
        **Solution:** The page you've seen after login doesn't require a fully authenticated user. Most likely that
-       path is accessible to ``IS_AUTHENTICATED_ANONYMOUSLY`` via your security ``access_control`` configuration. Either
+       path is accessible to ``PUBLIC_ACCESS`` via your security ``access_control`` configuration. Either
        change your ``access_control`` configuration or after login force-redirect to user to a page that requires full
        authentication.
 
