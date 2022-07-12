@@ -21,7 +21,7 @@ class SymfonyAuthCodeMailer implements AuthCodeMailerInterface
         ?string $senderEmail,
         ?string $senderName,
     ) {
-        if (null !== $senderName) {
+        if (null !== $senderEmail && null !== $senderName) {
             $this->senderAddress = new Address($senderEmail, $senderName);
         } elseif ($senderEmail) {
             $this->senderAddress = $senderEmail;
