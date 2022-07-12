@@ -144,7 +144,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('mailer')->defaultNull()->end()
                         ->scalarNode('code_generator')->defaultValue('scheb_two_factor.security.email.default_code_generator')->end()
                         ->scalarNode('form_renderer')->defaultNull()->end()
-                        ->scalarNode('sender_email')->defaultValue('no-reply@example.com')->end()
+                        ->scalarNode('sender_email')->defaultNull()->end()
                         ->scalarNode('sender_name')->defaultNull()->end()
                         ->scalarNode('template')->defaultValue('@SchebTwoFactor/Authentication/form.html.twig')->end()
                         ->integerNode('digits')->defaultValue(4)->min(1)->end()

@@ -14,16 +14,16 @@ use Symfony\Component\Mime\Email;
  */
 class SymfonyAuthCodeMailer implements AuthCodeMailerInterface
 {
-    private Address|string $senderAddress;
+    private Address|string|null $senderAddress = null;
 
     public function __construct(
         private MailerInterface $mailer,
-        string $senderEmail,
+        ?string $senderEmail,
         ?string $senderName,
     ) {
         if (null !== $senderName) {
             $this->senderAddress = new Address($senderEmail, $senderName);
-        } else {
+        } elseif ($senderEmail) {
             $this->senderAddress = $senderEmail;
         }
     }
@@ -38,9 +38,13 @@ class SymfonyAuthCodeMailer implements AuthCodeMailerInterface
         $message = new Email();
         $message
             ->to($user->getEmailAuthRecipient())
-            ->from($this->senderAddress)
             ->subject('Authentication Code')
             ->text($authCode);
+
+        if (null !== $this->senderAddress) {
+            $message->from($this->senderAddress);
+        }
+
         $this->mailer->send($message);
     }
 }
