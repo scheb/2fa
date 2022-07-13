@@ -63,6 +63,6 @@ class RememberMeServicesDecorator implements RememberMeServicesInterface, Logout
      */
     public function __call(string $method, array $arguments)
     {
-        return ($this->decoratedRememberMeServices)->{$method}(...$arguments);
+        return $this->decoratedRememberMeServices->{$method}(...$arguments);
     }
 }

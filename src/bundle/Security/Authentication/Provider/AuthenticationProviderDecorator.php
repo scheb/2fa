@@ -100,7 +100,7 @@ class AuthenticationProviderDecorator implements AuthenticationProviderInterface
      */
     public function __call(string $method, array $arguments)
     {
-        return ($this->decoratedAuthenticationProvider)->{$method}(...$arguments);
+        return $this->decoratedAuthenticationProvider->{$method}(...$arguments);
     }
 
     private function getRequest(): Request
