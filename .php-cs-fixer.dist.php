@@ -6,6 +6,7 @@ $rules = [
     'phpdoc_to_comment' => false,
     'phpdoc_align' => false,
     'php_unit_method_casing' => false,
+    'blank_line_between_import_groups' => false,
 ];
 
 $finder = PhpCsFixer\Finder::create()
