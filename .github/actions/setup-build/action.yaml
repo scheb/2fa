@@ -53,7 +53,9 @@ runs:
         -   name: "Install Flex to require specific Symfony version"
             if: ${{ inputs.symfony-version }}
             shell: bash
-            run: composer global require --no-progress --no-scripts --no-plugins symfony/flex
+            run: |
+                composer global require --no-progress --no-scripts --no-plugins symfony/flex
+                composer global config --no-plugins allow-plugins.symfony/flex true
 
         -   name: "Require extra Composer dependencies"
             if: ${{ inputs.composer-require }}
