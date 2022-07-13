@@ -60,6 +60,10 @@ runs:
             shell: bash
             run: composer require ${{ inputs.composer-require }} --no-update --working-dir=${{ inputs.composer-working-dir }}
 
+        -   name: "Validate composer.json"
+            shell: bash
+            run: composer validate --no-check-publish --no-check-lock --working-dir=${{ inputs.composer-working-dir }}
+
         -   name: 'Install Composer dependencies'
             uses: ramsey/composer-install@v2
             env:
