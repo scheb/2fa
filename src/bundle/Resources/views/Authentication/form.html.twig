@@ -9,11 +9,13 @@ especially when you're using different route names than the ones used here.
 {% endif %}
 
 {# Let the user select the authentication method #}
-<p>{{ "choose_provider"|trans({}, 'SchebTwoFactorBundle') }}:
-    {% for provider in availableTwoFactorProviders %}
-        <a href="{{ path("2fa_login", {"preferProvider": provider}) }}">{{ provider }}</a>
-    {% endfor %}
-</p>
+{% if availableTwoFactorProviders|length > 1 %}
+    <p>{{ "choose_provider"|trans({}, 'SchebTwoFactorBundle') }}:
+        {% for provider in availableTwoFactorProviders %}
+            <a href="{{ path("2fa_login", {"preferProvider": provider}) }}">{{ provider }}</a>
+        {% endfor %}
+    </p>
+{% endif %}
 
 {# Display current two-factor provider #}
 <p class="label"><label for="_auth_code">{{ "auth_code"|trans({}, 'SchebTwoFactorBundle') }} {{ twoFactorProvider }}:</label></p>
