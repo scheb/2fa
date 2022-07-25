@@ -77,13 +77,11 @@ class SymfonyAuthCodeMailerTest extends TestCase
             ->method('getEmailAuthCode')
             ->willReturn('1234');
 
-        $messageValidator = function ($mail) {
+        $messageValidator = function (Email $mail) {
             // normally set by the mailer in a listener https://github.com/symfony/mailer/blob/8fa150355115ea09238858ae3cfaf249fd1fd5ed/EventListener/EnvelopeListener.php#L49
             // can be removed when min version is symfony 6.1 where sender is to check the message
             $mail->sender('no-reply@example.com');
 
-            /** @var Email $mail */
-            $this->assertInstanceOf(Email::class, $mail);
             $this->assertEquals('recipient@example.com', current($mail->getTo())->getAddress());
             $this->assertFalse(current($mail->getFrom()));
             $this->assertEquals('Authentication Code', $mail->getSubject());
