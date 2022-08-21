@@ -46,10 +46,10 @@ class JwtTokenEncoder
         return $builder->getToken($this->configuration->signer(), $this->configuration->signingKey());
     }
 
-    public function decodeToken(string $token): ?Plain
+    public function decodeToken(string $encodedToken): ?Plain
     {
         try {
-            $token = $this->configuration->parser()->parse($token);
+            $token = $this->configuration->parser()->parse($encodedToken);
         } catch (Exception) {
             return null; // Could not decode token
         }
