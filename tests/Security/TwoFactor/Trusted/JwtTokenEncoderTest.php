@@ -11,7 +11,6 @@ use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Token\Plain;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\JwtTokenEncoder;
 use Scheb\TwoFactorBundle\Tests\TestCase;
-use function base64_decode;
 use function base64_encode;
 use function sprintf;
 
@@ -26,8 +25,8 @@ class JwtTokenEncoderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->encoder = new JwtTokenEncoder(base64_decode(self::APPLICATION_SECRET));
         $this->configuration = Configuration::forSymmetricSigner(new Sha256(), InMemory::base64Encoded(self::APPLICATION_SECRET));
+        $this->encoder = new JwtTokenEncoder($this->configuration);
     }
 
     protected function createToken(DateTimeImmutable $expirationDate): string

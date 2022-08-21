@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Key\InMemory;
 use Scheb\TwoFactorBundle\Security\Http\EventListener\TrustedDeviceListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TrustedDeviceCondition;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\JwtTokenEncoder;
@@ -15,8 +18,21 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $container): void {
     $container->services()
-        ->set('scheb_two_factor.trusted_jwt_encoder', JwtTokenEncoder::class)
+        ->set('scheb_two_factor.trusted_jwt_encoder.configuration.algorithm', Sha256::class)
+
+        ->set('scheb_two_factor.trusted_jwt_encoder.configuration.key', InMemory::class)
+            ->factory([InMemory::class, 'plainText'])
             ->args(['%kernel.secret%'])
+
+        ->set('scheb_two_factor.trusted_jwt_encoder.configuration', Configuration::class)
+            ->factory([Configuration::class, 'forSymmetricSigner'])
+            ->args([
+                service('scheb_two_factor.trusted_jwt_encoder.configuration.algorithm'),
+                service('scheb_two_factor.trusted_jwt_encoder.configuration.key'),
+            ])
+
+        ->set('scheb_two_factor.trusted_jwt_encoder', JwtTokenEncoder::class)
+            ->args([service('scheb_two_factor.trusted_jwt_encoder.configuration')])
 
         ->set('scheb_two_factor.trusted_token_encoder', TrustedDeviceTokenEncoder::class)
             ->args([

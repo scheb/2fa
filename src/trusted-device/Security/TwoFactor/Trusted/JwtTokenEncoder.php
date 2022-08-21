@@ -9,8 +9,6 @@ use Lcobucci\Clock\Clock;
 use Lcobucci\Clock\SystemClock;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Exception;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
-use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Token\Plain;
 use Lcobucci\JWT\Validation\Constraint;
 
@@ -25,12 +23,10 @@ class JwtTokenEncoder
     public const CLAIM_FIREWALL = 'fwl';
     public const CLAIM_VERSION = 'vsn';
 
-    private Configuration $configuration;
     private Clock $clock;
 
-    public function __construct(string $applicationSecret, ?Clock $clock = null)
+    public function __construct(private Configuration $configuration, ?Clock $clock = null)
     {
-        $this->configuration = Configuration::forSymmetricSigner(new Sha256(), InMemory::plainText($applicationSecret));
         $this->clock = $clock ?? SystemClock::fromSystemTimezone();
     }
 
