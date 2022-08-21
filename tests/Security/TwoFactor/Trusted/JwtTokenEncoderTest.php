@@ -11,6 +11,7 @@ use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Token\Plain;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\JwtTokenEncoder;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use function base64_decode;
 use function base64_encode;
 use function sprintf;
 
@@ -18,15 +19,15 @@ class JwtTokenEncoderTest extends TestCase
 {
     private const CLAIM = 'test';
     private const TOKEN_ID = 'tokenId';
-    private const APPLICATION_SECRET = 'applicationSecret';
+    private const APPLICATION_SECRET = 'oW2+MyKdgOf+iS1+qqgqb0FK5+1oZjDYGBemymEuzgU=';
 
     private JwtTokenEncoder $encoder;
     private Configuration $configuration;
 
     protected function setUp(): void
     {
-        $this->encoder = new JwtTokenEncoder(self::APPLICATION_SECRET);
-        $this->configuration = Configuration::forSymmetricSigner(new Sha256(), InMemory::plainText(self::APPLICATION_SECRET));
+        $this->encoder = new JwtTokenEncoder(base64_decode(self::APPLICATION_SECRET));
+        $this->configuration = Configuration::forSymmetricSigner(new Sha256(), InMemory::base64Encoded(self::APPLICATION_SECRET));
     }
 
     protected function createToken(DateTimeImmutable $expirationDate): string
@@ -96,7 +97,7 @@ class JwtTokenEncoderTest extends TestCase
             '%s.%s.%s',
             base64_encode('{"typ":"JWT","alg":"HS256"}'),
             'eyJ0ZXN0IjoidG9rZW5JZCJ9',
-            'LZGo1rmO-iHr5U489XaSC1io7l821fmFSIlOKcZ-c24'
+            'sQft2vmMyZ1kL1FPLN5vsg0akuyMoDMNjP9adFxnYOs'
         );
 
         $this->assertInstanceOf(Plain::class, $this->encoder->decodeToken($encodedToken));
@@ -111,7 +112,7 @@ class JwtTokenEncoderTest extends TestCase
             '%s.%s.%s',
             base64_encode('{"typ":"JWT","alg":"none"}'), // Modified the algorithm from 'HS256' to 'none'
             'eyJ0ZXN0IjoidG9rZW5JZCJ9',
-            'LZGo1rmO-iHr5U489XaSC1io7l821fmFSIlOKcZ-c24'
+            'sQft2vmMyZ1kL1FPLN5vsg0akuyMoDMNjP9adFxnYOs'
         );
 
         $this->assertNull($this->encoder->decodeToken($encodedNoneAlgToken));
@@ -126,7 +127,7 @@ class JwtTokenEncoderTest extends TestCase
             '%s.%s.%s',
             base64_encode('{"typ":"JWT","alg":"test"}'), // Modified the algorithm from 'HS256' to 'test'
             'eyJ0ZXN0IjoidG9rZW5JZCJ9',
-            'LZGo1rmO-iHr5U489XaSC1io7l821fmFSIlOKcZ-c24'
+            'sQft2vmMyZ1kL1FPLN5vsg0akuyMoDMNjP9adFxnYOs'
         );
 
         $this->assertNull($this->encoder->decodeToken($encodedTestAlgToken));
