@@ -117,6 +117,11 @@ class SchebTwoFactorExtension extends Extension
 
         $this->addTwoFactorCondition($container, new Reference('scheb_two_factor.trusted_device_condition'));
 
+        if (null !== $config['trusted_device']['key']) {
+            $jwtEncodeKey = $container->getDefinition('scheb_two_factor.trusted_jwt_encoder.configuration.key');
+            $jwtEncodeKey->setArgument(0, $config['trusted_device']['key']);
+        }
+
         $container->setParameter('scheb_two_factor.trusted_device.enabled', $this->resolveFeatureFlag($container, $config['trusted_device']['enabled']));
         $container->setParameter('scheb_two_factor.trusted_device.cookie_name', $config['trusted_device']['cookie_name']);
         $container->setParameter('scheb_two_factor.trusted_device.lifetime', $config['trusted_device']['lifetime']);

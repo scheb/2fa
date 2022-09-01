@@ -17,6 +17,8 @@ Bundle Configuration
            manager: acme.custom_trusted_device_manager  # Use a custom trusted device manager
            lifetime: 5184000              # Lifetime of the trusted device token
            extend_lifetime: false         # Automatically extend lifetime of the trusted cookie on re-login
+           key: null                      # Encryption key for JWT token, must be at least 32 characters. If not set the
+                                          # application's kernel.secret is used.
            cookie_name: trusted_device    # Name of the trusted device cookie
            cookie_secure: false           # true|false|auto Set the 'Secure' (HTTPS Only) flag on the trusted device cookie
            cookie_same_site: "lax"        # The same-site option of the cookie, can be "lax", "strict" or null

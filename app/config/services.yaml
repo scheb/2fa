@@ -26,9 +26,3 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-
-    scheb_two_factor.trusted_jwt_encoder.configuration.key:
-        class: Lcobucci\JWT\Signer\Key\InMemory
-        factory: [Lcobucci\JWT\Signer\Key\InMemory, 'base64Encoded']
-        arguments:
-            - oW2+MyKdgOf+iS1+qqgqb0FK5+1oZjDYGBemymEuzgU=

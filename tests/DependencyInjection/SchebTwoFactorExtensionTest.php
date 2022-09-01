@@ -492,6 +492,36 @@ EOF;
     /**
      * @test
      */
+    public function load_defaultEncryptionKey_useKernelSecret(): void
+    {
+        $config = $this->getEmptyConfig();
+        $config['trusted_device']['enabled'] = true;
+        $this->extension->load([$config], $this->container);
+
+        $keyService = $this->container->getDefinition('scheb_two_factor.trusted_jwt_encoder.configuration.key');
+        $arguments = $keyService->getArguments();
+        $this->assertCount(1, $arguments);
+        $this->assertEquals('%kernel.secret%', $arguments[0]);
+    }
+
+    /**
+     * @test
+     */
+    public function load_encryptionKeySet_useThatKey(): void
+    {
+        $config = $this->getFullConfig();
+        $config['trusted_device']['enabled'] = true;
+        $this->extension->load([$config], $this->container);
+
+        $keyService = $this->container->getDefinition('scheb_two_factor.trusted_jwt_encoder.configuration.key');
+        $arguments = $keyService->getArguments();
+        $this->assertCount(1, $arguments);
+        $this->assertEquals('encryptionKey', $arguments[0]);
+    }
+
+    /**
+     * @test
+     */
     public function load_disabledBackupCodeManager_noAliasDefined(): void
     {
         $config = $this->getEmptyConfig();
@@ -614,6 +644,7 @@ trusted_device:
     manager: acme_test.trusted_device_manager
     lifetime: 2592000
     extend_lifetime: true
+    key: encryptionKey
     cookie_name: trusted_cookie
     cookie_secure: true
     cookie_same_site: null

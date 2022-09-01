@@ -5,6 +5,7 @@ scheb_two_factor:
         enabled: true                  # If the trusted device feature should be enabled
         lifetime: 5184000              # Lifetime of the trusted device cookie
         extend_lifetime: true
+        key: cc21ed8d4b2a28a1f14028428fd3b5e5scheb
         cookie_name: trusted_device    # Name of the trusted device cookie
         cookie_secure: false           # Set the 'Secure' (HTTPS Only) flag on the trusted device cookie
         cookie_same_site: "lax"        # The same-site option of the cookie, can be "lax" or "strict"

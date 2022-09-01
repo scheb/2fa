@@ -109,6 +109,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('manager')->defaultValue('scheb_two_factor.default_trusted_device_manager')->end()
                         ->integerNode('lifetime')->defaultValue(60 * 24 * 3600)->min(1)->end()
                         ->booleanNode('extend_lifetime')->defaultFalse()->end()
+                        ->scalarNode('key')->defaultNull()->end()
                         ->scalarNode('cookie_name')->defaultValue('trusted_device')->end()
                         ->enumNode('cookie_secure')->values([true, false, 'auto'])->defaultValue('auto')->end()
                         ->scalarNode('cookie_domain')->defaultNull()->end()
