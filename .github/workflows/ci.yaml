@@ -99,7 +99,7 @@ jobs:
                         app-config: 'default'
 
                     # Latest Symfony 5
-                    -   php-version: '8.1'
+                    -   php-version: '8.2'
                         symfony-version: '5.*'
                         app-config: 'default'
 
@@ -109,7 +109,7 @@ jobs:
                         app-config: 'authenticators'
 
                     # AUTHENTICATORS configuration (experimental security system)
-                    -   php-version: '8.1'
+                    -   php-version: '8.2'
                         symfony-version: '5.4.*'
                         app-config: 'authenticators'
 
@@ -140,7 +140,7 @@ jobs:
             fail-fast: false
             matrix:
                 php-version:
-                    - '8.1'
+                    - '8.2'
 
         steps:
             -   name: 'Checkout code'
