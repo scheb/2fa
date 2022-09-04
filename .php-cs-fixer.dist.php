@@ -8,6 +8,7 @@ $rules = [
     'phpdoc_align' => false,
     'php_unit_method_casing' => false,
     'blank_line_between_import_groups' => false,
+    'phpdoc_separation' => ['groups' => [['test', 'dataProvider']]],
 ];
 
 $finder = PhpCsFixer\Finder::create()
