@@ -74,6 +74,7 @@ class TwoFactorFactory implements SecurityFactoryInterface, FirewallListenerFact
     {
         /**
          * @var ArrayNodeDefinition $builder
+         *
          * @psalm-suppress PossiblyNullReference
          * @psalm-suppress PossiblyUndefinedMethod
          */

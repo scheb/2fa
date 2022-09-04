@@ -52,6 +52,7 @@ class User implements UserInterface, \Serializable, EmailTwoFactorInterface, Goo
 
     /**
      * @var string
+     *
      * @ORM\Column(type="integer")
      */
     private $emailAuthenticationCode;
@@ -63,6 +64,7 @@ class User implements UserInterface, \Serializable, EmailTwoFactorInterface, Goo
 
     /**
      * @var string
+     *
      * @ORM\Column(type="string")
      */
     private $googleAuthenticatorSecret;
@@ -74,6 +76,7 @@ class User implements UserInterface, \Serializable, EmailTwoFactorInterface, Goo
 
     /**
      * @var string
+     *
      * @ORM\Column(type="boolean")
      */
     private $isActive;
