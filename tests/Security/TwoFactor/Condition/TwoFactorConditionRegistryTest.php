@@ -16,6 +16,7 @@ class TwoFactorConditionRegistryTest extends TestCase
     private MockObject|AuthenticationContextInterface $context;
     private MockObject|TwoFactorConditionInterface $condition1;
     private MockObject|TwoFactorConditionInterface $condition2;
+    private MockObject|TwoFactorConditionInterface $condition3;
     private TwoFactorConditionRegistry $registry;
 
     protected function setUp(): void
