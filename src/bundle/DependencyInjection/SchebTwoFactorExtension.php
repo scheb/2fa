@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\DependencyInjection;
 
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\ThrottlingListener;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -67,6 +69,13 @@ class SchebTwoFactorExtension extends Extension
         }
 
         $this->configureBackupCodeManager($container, $config);
+
+        if (isset($config['rate_limiter'])) {
+            $container->register('scheb_two_factor.rate_limiter', ThrottlingListener::class)
+                ->setArguments([
+                    '$rateLimiterFactory' => new Reference($config['rate_limiter'])
+                ]);
+        }
     }
 
     /**

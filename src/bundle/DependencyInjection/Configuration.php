@@ -48,6 +48,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('ip_whitelist_provider')->defaultValue('scheb_two_factor.default_ip_whitelist_provider')->end()
                 ->scalarNode('two_factor_token_factory')->defaultValue('scheb_two_factor.default_token_factory')->end()
                 ->scalarNode('two_factor_condition')->defaultNull()->end()
+                ->scalarNode('rate_limiter')->defaultNull()->end()
             ->end();
 
         /** @psalm-suppress ArgumentTypeCoercion */
