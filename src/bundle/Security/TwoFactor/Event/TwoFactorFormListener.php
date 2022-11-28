@@ -30,6 +30,12 @@ class TwoFactorFormListener implements EventSubscriberInterface
         if (!$request->hasSession()) {
             return;
         }
+        
+        $session = $request->getSession();
+
+        if (!$session->isStarted()) {
+            return;
+        }
 
         $token = $this->tokenStorage->getToken();
         if (!($token instanceof TwoFactorTokenInterface)) {
