@@ -30,11 +30,15 @@ current time window will be accepted:
 
        # For TOTP
        totp:
-           window: 1  # How many codes before/after the current one would be accepted as valid
+           window: 1  # Depends on the version of Spomky-Labs/otphp used:
+                      # Until v10: How many codes before/after the current one would be accepted
+                      # From v11: Acceptable time drift in seconds
 
        # For Google Authenticator
        google:
-           window: 1  # How many codes before/after the current one would be accepted as valid
+           window: 1  # Depends on the version of Spomky-Labs/otphp used:
+                      # Until v10: How many codes before/after the current one would be accepted
+                      # From v11: Acceptable time drift in seconds
 
 You might want to configure a time synchronization service, such as ``ntpdate`` on your server to make sure your server
 time is always in sync with UTC.

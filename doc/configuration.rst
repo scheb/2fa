@@ -47,7 +47,9 @@ Bundle Configuration
            server_name: Server Name       # Server name used in QR code
            issuer: Issuer Name            # Issuer name used in QR code
            digits: 6                      # Number of digits in authentication code
-           window: 1                      # How many codes before/after the current one would be accepted as valid
+           window: 1                      # Depends on the version of Spomky-Labs/otphp used:
+                                          # Until v10: How many codes before/after the current one would be accepted
+                                          # From v11: Acceptable time drift in seconds
            template: security/2fa_form.html.twig   # Template used to render the authentication form
            form_renderer: acme.custom_form_renderer  # Use a custom form renderer service
 
@@ -56,7 +58,9 @@ Bundle Configuration
            enabled: true                  # If TOTP authentication should be enabled, default false
            server_name: Server Name       # Server name used in QR code
            issuer: Issuer Name            # Issuer name used in QR code
-           window: 1                      # How many codes before/after the current one would be accepted as valid
+           window: 1                      # Depends on the version of Spomky-Labs/otphp used:
+                                          # Until v10: How many codes before/after the current one would be accepted
+                                          # From v11: Acceptable time drift in seconds
            parameters:                    # Additional parameters added in the QR code
                image: 'https://my-service/img/logo.png'
            template: security/2fa_form.html.twig   # Template used to render the authentication form

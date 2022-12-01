@@ -102,7 +102,9 @@ Configuration Reference
            server_name: Server Name       # Server name used in QR code
            issuer: Issuer Name            # Issuer name used in QR code
            digits: 6                      # Number of digits in authentication code
-           window: 1                      # How many codes before/after the current one would be accepted as valid
+           window: 1                      # Depends on the version of Spomky-Labs/otphp used:
+                                          # Until v10: How many codes before/after the current one would be accepted
+                                          # From v11: Acceptable time drift in seconds
            template: security/2fa_form.html.twig   # Template used to render the authentication form
 
 Custom Authentication Form Template
