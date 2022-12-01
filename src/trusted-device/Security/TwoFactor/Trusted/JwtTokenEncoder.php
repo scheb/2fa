@@ -27,6 +27,9 @@ class JwtTokenEncoder
      */
     private $configuration;
 
+    /**
+     * @param non-empty-string $applicationSecret
+     */
     public function __construct(string $applicationSecret)
     {
         $this->configuration = Configuration::forSymmetricSigner(new Sha256(), InMemory::plainText($applicationSecret));
