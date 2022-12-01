@@ -45,9 +45,6 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
      */
     private $token;
 
-    /**
-     * @var
-     */
     private $user;
 
     /**

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport;
 
-use RuntimeException;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CredentialsInterface;
@@ -51,6 +50,6 @@ class TwoFactorPassport implements UserPassportInterface
 
         // This case should never happen as the Passport is only used with the authenticator-based security system and
         // with that system there is no string-like user.
-        throw new RuntimeException('Failed to find User of type UserInterface');
+        throw new \RuntimeException('Failed to find User of type UserInterface');
     }
 }

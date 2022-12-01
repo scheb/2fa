@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\Authenticator\Passport;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use RuntimeException;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\TwoFactorPassport;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -138,7 +137,7 @@ class TwoFactorPassportTest extends TestCase
             ->method('getUser')
             ->willReturn($user);
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
         $this->passport->getUser();
     }
 }
