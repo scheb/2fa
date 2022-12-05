@@ -30,10 +30,8 @@ class TwoFactorFormListener implements EventSubscriberInterface
         if (!$request->hasSession()) {
             return;
         }
-        
-        $session = $request->getSession();
 
-        if (!$session->isStarted()) {
+        if (!$this->twoFactorFirewallConfig->isAuthFormRequest($request)) {
             return;
         }
 
@@ -42,12 +40,8 @@ class TwoFactorFormListener implements EventSubscriberInterface
             return;
         }
 
-        if ($this->twoFactorFirewallConfig->isAuthFormRequest($request)) {
-            $event = new TwoFactorAuthenticationEvent($request, $token);
-            $this->eventDispatcher->dispatch($event, TwoFactorAuthenticationEvents::FORM);
-
-            return;
-        }
+        $event = new TwoFactorAuthenticationEvent($request, $token);
+        $this->eventDispatcher->dispatch($event, TwoFactorAuthenticationEvents::FORM);
     }
 
     /**
