@@ -37,6 +37,7 @@ class TotpFactory
             throw new TwoFactorProviderLogicException('Cannot initialize TOTP, no secret code provided.');
         }
 
+        /** @psalm-suppress ArgumentTypeCoercion */
         $totp = TOTP::create(
             $secret,
             $totpConfiguration->getPeriod(),

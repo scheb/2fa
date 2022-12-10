@@ -29,6 +29,7 @@ class GoogleTotpFactory
             throw new TwoFactorProviderLogicException('Cannot initialize TOTP, no secret code provided.');
         }
 
+        /** @psalm-suppress ArgumentTypeCoercion */
         $totp = TOTP::create($secret, 30, 'sha1', $this->digits);
 
         $userAndHost = $user->getGoogleAuthenticatorUsername().($this->server ? '@'.$this->server : '');

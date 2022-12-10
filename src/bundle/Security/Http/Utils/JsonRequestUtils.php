@@ -34,6 +34,7 @@ class JsonRequestUtils
      */
     public static function getJsonPayloadValue(Request $request, string $parameterName): string|int|float|bool|null
     {
+        /** @psalm-suppress RedundantCastGivenDocblockType */
         $data = json_decode((string) $request->getContent());
         if (!$data instanceof stdClass) {
             throw new BadRequestException('Invalid JSON.');

@@ -18,6 +18,9 @@ use function substr_count;
  */
 class TrustedCookieResponseListener implements EventSubscriberInterface
 {
+    /**
+     * @param Cookie::SAMESITE_*|null $cookieSameSite
+     */
     public function __construct(
         private TrustedDeviceTokenStorage $trustedTokenStorage,
         private int $trustedTokenLifetime,
