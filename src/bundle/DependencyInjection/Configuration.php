@@ -117,7 +117,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('cookie_same_site')
                             ->defaultValue('lax')
                             ->validate()
-                                ->ifNotInArray(['lax', 'strict', null])
+                                ->ifNotInArray(['lax', 'strict', 'none', null])
                                 ->thenInvalid('Invalid cookie same-site value %s, must be "lax", "strict" or null')
                             ->end()
                         ->end()
