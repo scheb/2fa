@@ -31,17 +31,17 @@ class TwoFactorFormListener implements EventSubscriberInterface
             return;
         }
 
+        if (!$this->twoFactorFirewallConfig->isAuthFormRequest($request)) {
+            return;
+        }
+
         $token = $this->tokenStorage->getToken();
         if (!($token instanceof TwoFactorTokenInterface)) {
             return;
         }
 
-        if ($this->twoFactorFirewallConfig->isAuthFormRequest($request)) {
-            $event = new TwoFactorAuthenticationEvent($request, $token);
-            $this->eventDispatcher->dispatch($event, TwoFactorAuthenticationEvents::FORM);
-
-            return;
-        }
+        $event = new TwoFactorAuthenticationEvent($request, $token);
+        $this->eventDispatcher->dispatch($event, TwoFactorAuthenticationEvents::FORM);
     }
 
     /**
