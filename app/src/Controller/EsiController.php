@@ -10,9 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class EsiController extends AbstractController
 {
-    /**
-     * @Route("/esi/navigation", name="navigation")
-     */
+    #[Route('/esi/navigation', name: 'navigation')]
     public function navigation(): Response
     {
         return $this->render('_navigation.html.twig');

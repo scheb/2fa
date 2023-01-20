@@ -13,9 +13,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    /**
-     * @Route("/login", name="_security_login")
-     */
+    #[Route('/login', name: '_security_login')]
     public function login(AuthenticationUtils $authUtils): Response
     {
         // get the login error if there is one
@@ -30,9 +28,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/password", name="_security_password")
-     */
+    #[Route('/password', name: '_security_password')]
     public function register(UserPasswordHasherInterface $hasher): Response
     {
         $user = new User();
@@ -42,9 +38,7 @@ class SecurityController extends AbstractController
         return new Response($encoded);
     }
 
-    /**
-     * @Route("/2fa/inProgress", name="2fa_in_progress")
-     */
+    #[Route('/2fa/inProgress', name: '2fa_in_progress')]
     public function accessibleDuring2fa(): Response
     {
         return new Response('This page is accessible during 2fa');

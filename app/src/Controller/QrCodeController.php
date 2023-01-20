@@ -21,9 +21,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class QrCodeController extends AbstractController
 {
-    /**
-     * @Route("/members/qr/ga", name="qr_code_ga")
-     */
+    #[Route('/members/qr/ga', name: 'qr_code_ga')]
     public function displayGoogleAuthenticatorQrCode(TokenStorageInterface $tokenStorage, GoogleAuthenticatorInterface $googleAuthenticator): Response
     {
         $user = $tokenStorage->getToken()->getUser();
@@ -34,9 +32,7 @@ class QrCodeController extends AbstractController
         return $this->displayQrCode($googleAuthenticator->getQRContent($user));
     }
 
-    /**
-     * @Route("/members/qr/totp", name="qr_code_totp")
-     */
+    #[Route('/members/qr/totp', name: 'qr_code_totp')]
     public function displayTotpQrCode(TokenStorageInterface $tokenStorage, TotpAuthenticatorInterface $totpAuthenticator): Response
     {
         $user = $tokenStorage->getToken()->getUser();
