@@ -13,9 +13,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class MembersController extends AbstractController
 {
-    /**
-     * @Route("/members", name="members_area")
-     */
+    #[Route('/members', name: 'members_area')]
     public function membersArea(TokenStorageInterface $tokenStorage): Response
     {
         $user = $tokenStorage->getToken()->getUser();

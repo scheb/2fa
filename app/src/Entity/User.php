@@ -16,44 +16,40 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use function in_array;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="user")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'user')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTwoFactorInterface, GoogleTwoFactorInterface, TotpTwoFactorInterface, TrustedDeviceInterface, BackupCodeInterface
 {
     private const BACKUP_CODES = [111, 222];
     public const TRUSTED_TOKEN_VERSION = 1;
 
-    /**
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private int $id;
 
-    /** @ORM\Column(type="string", length=25, unique=true) */
+    #[ORM\Column(type: 'string', length: 25, unique: true)]
     private string $username;
 
-    /** @ORM\Column(type="string", length=64) */
+    #[ORM\Column(type: 'string', length: 64)]
     private string $password;
 
-    /** @ORM\Column(type="string", length=60, unique=true) */
+    #[ORM\Column(type: 'string', length: 60, unique: true)]
     private string $email;
 
-    /** @ORM\Column(type="boolean") */
+    #[ORM\Column(type: 'boolean')]
     private bool $emailAuthenticationEnabled = true;
 
-    /** @ORM\Column(type="integer") */
-    private ?string $emailAuthenticationCode;
+    #[ORM\Column(type: 'integer')]
+    private ?string $emailAuthenticationCode = null;
 
-    /** @ORM\Column(type="boolean") */
+    #[ORM\Column(type: 'boolean')]
     private bool $googleAuthenticatorEnabled = true;
 
-    /** @ORM\Column(type="string") */
-    private ?string $googleAuthenticatorSecret;
+    #[ORM\Column(type: 'string')]
+    private ?string $googleAuthenticatorSecret = null;
 
-    /** @ORM\Column(type="boolean") */
+    #[ORM\Column(type: 'boolean')]
     private bool $totpAuthenticationEnabled = true;
 
     public function getId(): int
