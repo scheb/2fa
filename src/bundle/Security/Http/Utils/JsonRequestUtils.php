@@ -12,6 +12,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use function is_scalar;
 use function json_decode;
+use function method_exists;
 use function str_contains;
 
 /**
