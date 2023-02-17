@@ -82,7 +82,7 @@ To implement such a response you need to a custom success handler:
        {
            if ($token instanceof TwoFactorTokenInterface) {
                // Return the response to tell the client two-factor authentication is required.
-               return new Response('{"login": "success": "two_factor_complete": false}');
+               return new Response('{"login": "success", "two_factor_complete": false}');
            }
 
            // Otherwise return the default response for successful login. You could do this by decorating
