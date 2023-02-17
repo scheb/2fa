@@ -82,7 +82,7 @@ To implement such a response you need to a custom success handler:
        {
            if ($token instanceof TwoFactorTokenInterface) {
                // Return the response to tell the client two-factor authentication is required.
-               return new Response('{"login": "success": "2fa_complete": false}');
+               return new Response('{"login": "success": "two_factor_complete": false}');
            }
 
            // Otherwise return the default response for successful login. You could do this by decorating
@@ -127,7 +127,7 @@ to return the response.
        {
            // Return the response to tell the client that authentication hasn't completed yet and
            // two-factor authentication is required.
-           return new Response('{"error": "access_denied", "2fa_complete": false}');
+           return new Response('{"error": "access_denied", "two_factor_complete": false}');
        }
    }
 
@@ -165,7 +165,7 @@ fully authenticated. Implement another success handler for it:
        {
            // Return the response to tell the client that authentication including two-factor
            // authentication is complete now.
-           return new Response('{"login": "success", "2fa_complete": true}');
+           return new Response('{"login": "success", "two_factor_complete": true}');
       }
    }
 
@@ -203,7 +203,7 @@ reason. Implement a failure handler for it:
        {
            // Return the response to tell the client that 2fa failed. You may want to add more details
            // from the $exception.
-           return new Response('{"error": "2fa_failed", "2fa_complete": false}');
+           return new Response('{"error": "2fa_failed", "two_factor_complete": false}');
       }
    }
 
