@@ -4,6 +4,7 @@
     "require": {
         "php": ">=7.2.5",
         "ext-json": "*",
+        "doctrine/annotations": "^1",
         "doctrine/doctrine-bundle": "^2.0.3",
         "doctrine/orm": "^2.0",
         "endroid/qr-code": "^3.0",
