@@ -65,7 +65,7 @@ class JwtTokenEncoder
     private function validationConstraints(): iterable
     {
         yield new Constraint\SignedWith($this->configuration->signer(), $this->configuration->signingKey());
-        yield new Constraint\ValidAt($this->clock); // replace with LooseValidAt once dependency on lcobucci/jwt is bumped up
+        yield new Constraint\LooseValidAt($this->clock);
         yield from $this->configuration->validationConstraints();
     }
 }

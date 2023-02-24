@@ -15,7 +15,7 @@
         "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
         "ext-json": "*",
         "lcobucci/clock": "^2.0 || ^3.0",
-        "lcobucci/jwt": "^4.0",
+        "lcobucci/jwt": "^4.1",
         "paragonie/constant_time_encoding": "^2.4",
         "spomky-labs/otphp": "^10.0 || ^11.0",
         "symfony/config": "^5.4 || ^6.0",
