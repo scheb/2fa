@@ -53,54 +53,101 @@ To enable this authentication method add this to your configuration:
 Your user entity has to implement ``Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface``. The authentication code must
 be persisted, so make sure that it is stored in a persisted field.
 
-.. code-block:: php
+.. configuration-block::
 
-   <?php
+    .. code-block:: php-annotations
 
-   namespace Acme\Demo\Entity;
+       <?php
 
-   use Doctrine\ORM\Mapping as ORM;
-   use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
-   use Symfony\Component\Security\Core\User\UserInterface;
+       namespace Acme\Demo\Entity;
 
-   class User implements UserInterface, TwoFactorInterface
-   {
-       /**
-        * @ORM\Column(type="string")
-        */
-       private string $email;
+       use Doctrine\ORM\Mapping as ORM;
+       use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
+       use Symfony\Component\Security\Core\User\UserInterface;
 
-       /**
-        * @ORM\Column(type="string", nullable=true)
-        */
-       private string $authCode;
-
-       // [...]
-
-       public function isEmailAuthEnabled(): bool
+       class User implements UserInterface, TwoFactorInterface
        {
-           return true; // This can be a persisted field to switch email code authentication on/off
-       }
+           /**
+            * @ORM\Column(type="string")
+            */
+           private string $email;
 
-       public function getEmailAuthRecipient(): string
-       {
-           return $this->email;
-       }
+           /**
+            * @ORM\Column(type="string", nullable=true)
+            */
+           private ?string $authCode;
 
-       public function getEmailAuthCode(): string
-       {
-           if (null === $this->authCode) {
-               throw new \LogicException('The email authentication code was not set');
+           // [...]
+
+           public function isEmailAuthEnabled(): bool
+           {
+               return true; // This can be a persisted field to switch email code authentication on/off
            }
 
-           return $this->authCode;
+           public function getEmailAuthRecipient(): string
+           {
+               return $this->email;
+           }
+
+           public function getEmailAuthCode(): string
+           {
+               if (null === $this->authCode) {
+                   throw new \LogicException('The email authentication code was not set');
+               }
+
+               return $this->authCode;
+           }
+
+           public function setEmailAuthCode(string $authCode): void
+           {
+               $this->authCode = $authCode;
+           }
        }
 
-       public function setEmailAuthCode(string $authCode): void
+    .. code-block:: php-attributes
+
+       <?php
+
+       namespace Acme\Demo\Entity;
+
+       use Doctrine\ORM\Mapping as ORM;
+       use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
+       use Symfony\Component\Security\Core\User\UserInterface;
+
+       class User implements UserInterface, TwoFactorInterface
        {
-           $this->authCode = $authCode;
+           #[@ORM\Column(type: 'string')]
+           private string $email;
+
+           #[@ORM\Column(type: 'string', nullable: true)]
+           private ?string $authCode;
+
+           // [...]
+
+           public function isEmailAuthEnabled(): bool
+           {
+               return true; // This can be a persisted field to switch email code authentication on/off
+           }
+
+           public function getEmailAuthRecipient(): string
+           {
+               return $this->email;
+           }
+
+           public function getEmailAuthCode(): string
+           {
+               if (null === $this->authCode) {
+                   throw new \LogicException('The email authentication code was not set');
+               }
+
+               return $this->authCode;
+           }
+
+           public function setEmailAuthCode(string $authCode): void
+           {
+               $this->authCode = $authCode;
+           }
        }
-   }
 
 Configuration Reference
 -----------------------

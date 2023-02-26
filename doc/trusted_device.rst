@@ -36,29 +36,53 @@ Trusted device cookies are versioned, which gives you (or the user) to possibili
 cookies at once, e.g. in case of a security breach. To make use of this feature, you have to implement
 ``Scheb\TwoFactorBundle\Model\TrustedDeviceInterface`` in the user entity.
 
-.. code-block:: php
+.. configuration-block::
 
-   <?php
+    .. code-block:: php-annotations
 
-   namespace Acme\Demo\Entity;
+       <?php
 
-   use Doctrine\ORM\Mapping as ORM;
-   use Scheb\TwoFactorBundle\Model\TrustedDeviceInterface;
+       namespace Acme\Demo\Entity;
 
-   class User implements TrustedDeviceInterface
-   {
-       /**
-        * @ORM\Column(type="integer")
-        */
-       private int $trustedVersion;
+       use Doctrine\ORM\Mapping as ORM;
+       use Scheb\TwoFactorBundle\Model\TrustedDeviceInterface;
 
-       // [...]
-
-       public function getTrustedTokenVersion(): int
+       class User implements TrustedDeviceInterface
        {
-           return $this->trustedVersion;
+           /**
+            * @ORM\Column(type="integer")
+            */
+           private int $trustedVersion;
+
+           // [...]
+
+           public function getTrustedTokenVersion(): int
+           {
+               return $this->trustedVersion;
+           }
        }
-   }
+
+    .. code-block:: php-attributes
+
+       <?php
+
+       namespace Acme\Demo\Entity;
+
+       use Doctrine\ORM\Mapping as ORM;
+       use Scheb\TwoFactorBundle\Model\TrustedDeviceInterface;
+
+       class User implements TrustedDeviceInterface
+       {
+           #[@ORM\Column(type: 'integer')]
+           private int $trustedVersion;
+
+           // [...]
+
+           public function getTrustedTokenVersion(): int
+           {
+               return $this->trustedVersion;
+           }
+       }
 
 If not implemented, the bundle is defaulting to version ``0``.
 
