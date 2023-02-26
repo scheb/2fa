@@ -50,45 +50,85 @@ To enable this authentication method add this to your configuration:
 Your user entity has to implement ``Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface``. To activate Google
 Authenticator for a user, generate a secret code and persist it with the user entity.
 
-.. code-block:: php
+.. configuration-block::
 
-   <?php
+    .. code-block:: php-annotations
 
-   namespace Acme\Demo\Entity;
+       <?php
 
-   use Doctrine\ORM\Mapping as ORM;
-   use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
-   use Symfony\Component\Security\Core\User\UserInterface;
+       namespace Acme\Demo\Entity;
 
-   class User implements UserInterface, TwoFactorInterface
-   {
-       /**
-        * @ORM\Column(name="googleAuthenticatorSecret", type="string", nullable=true)
-        */
-       private ?string $googleAuthenticatorSecret;
+       use Doctrine\ORM\Mapping as ORM;
+       use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+       use Symfony\Component\Security\Core\User\UserInterface;
 
-       // [...]
-
-       public function isGoogleAuthenticatorEnabled(): bool
+       class User implements UserInterface, TwoFactorInterface
        {
-           return null !== $this->googleAuthenticatorSecret;
+           /**
+            * @ORM\Column(type="string", nullable=true)
+            */
+           private ?string $googleAuthenticatorSecret;
+
+           // [...]
+
+           public function isGoogleAuthenticatorEnabled(): bool
+           {
+               return null !== $this->googleAuthenticatorSecret;
+           }
+
+           public function getGoogleAuthenticatorUsername(): string
+           {
+               return $this->username;
+           }
+
+           public function getGoogleAuthenticatorSecret(): ?string
+           {
+               return $this->googleAuthenticatorSecret;
+           }
+
+           public function setGoogleAuthenticatorSecret(?string $googleAuthenticatorSecret): void
+           {
+               $this->googleAuthenticatorSecret = $googleAuthenticatorSecret;
+           }
        }
 
-       public function getGoogleAuthenticatorUsername(): string
-       {
-           return $this->username;
-       }
+    .. code-block:: php-attributes
 
-       public function getGoogleAuthenticatorSecret(): ?string
-       {
-           return $this->googleAuthenticatorSecret;
-       }
+        <?php
 
-       public function setGoogleAuthenticatorSecret(?string $googleAuthenticatorSecret): void
-       {
-           $this->googleAuthenticatorSecret = $googleAuthenticatorSecret;
-       }
-   }
+        namespace Acme\Demo\Entity;
+
+        use Doctrine\ORM\Mapping as ORM;
+        use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+        use Symfony\Component\Security\Core\User\UserInterface;
+
+        class User implements UserInterface, TwoFactorInterface
+        {
+           #[@ORM\Column(type: 'string', nullable: true)]
+           private ?string $googleAuthenticatorSecret;
+
+           // [...]
+
+           public function isGoogleAuthenticatorEnabled(): bool
+           {
+               return null !== $this->googleAuthenticatorSecret;
+           }
+
+           public function getGoogleAuthenticatorUsername(): string
+           {
+               return $this->username;
+           }
+
+           public function getGoogleAuthenticatorSecret(): ?string
+           {
+               return $this->googleAuthenticatorSecret;
+           }
+
+           public function setGoogleAuthenticatorSecret(?string $googleAuthenticatorSecret): void
+           {
+               $this->googleAuthenticatorSecret = $googleAuthenticatorSecret;
+           }
+        }
 
 Configuration Reference
 -----------------------

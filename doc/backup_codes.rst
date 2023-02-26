@@ -29,53 +29,101 @@ Enable the feature in the configuration:
 Backup codes have to be provided from the user object. The user entity has to implement
 ``Scheb\TwoFactorBundle\Model\BackupCodeInterface``. Here's an example:
 
-.. code-block:: php
+.. configuration-block::
 
-   <?php
+    .. code-block:: php-annotations
 
-   namespace Acme\Demo\Entity;
+       <?php
 
-   use Doctrine\ORM\Mapping as ORM;
-   use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
+       namespace Acme\Demo\Entity;
 
-   class User implements BackupCodeInterface
-   {
-       /**
-        * @ORM\Column(type="json")
-        */
-       private array $backupCodes = [];
+       use Doctrine\ORM\Mapping as ORM;
+       use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 
-       // [...]
-
-       /**
-        * Check if it is a valid backup code.
-        */
-       public function isBackupCode(string $code): bool
+       class User implements BackupCodeInterface
        {
-           return in_array($code, $this->backupCodes);
-       }
+           /**
+            * @ORM\Column(type="json")
+            */
+           private array $backupCodes = [];
 
-       /**
-        * Invalidate a backup code
-        */
-       public function invalidateBackupCode(string $code): void
-       {
-           $key = array_search($code, $this->backupCodes);
-           if ($key !== false){
-               unset($this->backupCodes[$key]);
+           // [...]
+
+           /**
+            * Check if it is a valid backup code.
+            */
+           public function isBackupCode(string $code): bool
+           {
+               return in_array($code, $this->backupCodes);
+           }
+
+           /**
+            * Invalidate a backup code
+            */
+           public function invalidateBackupCode(string $code): void
+           {
+               $key = array_search($code, $this->backupCodes);
+               if ($key !== false){
+                   unset($this->backupCodes[$key]);
+               }
+           }
+
+           /**
+            * Add a backup code
+            */
+           public function addBackUpCode(string $backUpCode): void
+           {
+               if (!in_array($backUpCode, $this->backupCodes)) {
+                   $this->backupCodes[] = $backUpCode;
+               }
            }
        }
 
-       /**
-        * Add a backup code
-        */
-       public function addBackUpCode(string $backUpCode): void
+    .. code-block:: php-attributes
+
+       <?php
+
+       namespace Acme\Demo\Entity;
+
+       use Doctrine\ORM\Mapping as ORM;
+       use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
+
+       class User implements BackupCodeInterface
        {
-           if (!in_array($backUpCode, $this->backupCodes)) {
-               $this->backupCodes[] = $backUpCode;
+           #[@ORM\Column(type: 'json')]
+           private array $backupCodes = [];
+
+           // [...]
+
+           /**
+            * Check if it is a valid backup code.
+            */
+           public function isBackupCode(string $code): bool
+           {
+               return in_array($code, $this->backupCodes);
+           }
+
+           /**
+            * Invalidate a backup code
+            */
+           public function invalidateBackupCode(string $code): void
+           {
+               $key = array_search($code, $this->backupCodes);
+               if ($key !== false){
+                   unset($this->backupCodes[$key]);
+               }
+           }
+
+           /**
+            * Add a backup code
+            */
+           public function addBackUpCode(string $backUpCode): void
+           {
+               if (!in_array($backUpCode, $this->backupCodes)) {
+                   $this->backupCodes[] = $backUpCode;
+               }
            }
        }
-   }
 
 The example assumes that there are already codes generated for that user. In addition to this, you should implement the
 backup code (re-)generation as you prefer.

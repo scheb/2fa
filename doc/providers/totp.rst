@@ -57,43 +57,81 @@ and the period of the temporary codes.
     Be warned, custom configurations will not be compatible with the defaults of Google Authenticator app any more. You
     will have to use another application (e.g. FreeOTP on Android).
 
-.. code-block:: php
+.. configuration-block::
 
-   <?php
+    .. code-block:: php
 
-   namespace Acme\Demo\Entity;
+       <?php
 
-   use Doctrine\ORM\Mapping as ORM;
-   use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
-   use Scheb\TwoFactorBundle\Model\Totp\TotpConfigurationInterface;
-   use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
-   use Symfony\Component\Security\Core\User\UserInterface;
+       namespace Acme\Demo\Entity;
 
-   class User implements UserInterface, TwoFactorInterface
-   {
-       /**
-        * @ORM\Column(name="totpSecret", type="string", nullable=true)
-        */
-       private ?string $totpSecret;
+       use Doctrine\ORM\Mapping as ORM;
+       use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
+       use Scheb\TwoFactorBundle\Model\Totp\TotpConfigurationInterface;
+       use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
+       use Symfony\Component\Security\Core\User\UserInterface;
 
-       // [...]
-
-       public function isTotpAuthenticationEnabled(): bool
+       class User implements UserInterface, TwoFactorInterface
        {
-           return $this->totpSecret ? true : false;
+           /**
+            * @ORM\Column(type="string", nullable=true)
+            */
+           private ?string $totpSecret;
+
+           // [...]
+
+           public function isTotpAuthenticationEnabled(): bool
+           {
+               return $this->totpSecret ? true : false;
+           }
+
+           public function getTotpAuthenticationUsername(): string
+           {
+               return $this->username;
+           }
+
+           public function getTotpAuthenticationConfiguration(): ?TotpConfigurationInterface
+           {
+               // You could persist the other configuration options in the user entity to make it individual per user.
+               return new TotpConfiguration($this->totpSecret, TotpConfiguration::ALGORITHM_SHA1, 20, 8);
+           }
        }
 
-       public function getTotpAuthenticationUsername(): string
-       {
-           return $this->username;
-       }
+    .. code-block:: php-attributes
 
-       public function getTotpAuthenticationConfiguration(): ?TotpConfigurationInterface
+       <?php
+
+       namespace Acme\Demo\Entity;
+
+       use Doctrine\ORM\Mapping as ORM;
+       use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
+       use Scheb\TwoFactorBundle\Model\Totp\TotpConfigurationInterface;
+       use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
+       use Symfony\Component\Security\Core\User\UserInterface;
+
+       class User implements UserInterface, TwoFactorInterface
        {
-           // You could persist the other configuration options in the user entity to make it individual per user.
-           return new TotpConfiguration($this->totpSecret, TotpConfiguration::ALGORITHM_SHA1, 20, 8);
+           #[@ORM\Column(type: 'string', nullable: true)]
+           private ?string $totpSecret;
+
+           // [...]
+
+           public function isTotpAuthenticationEnabled(): bool
+           {
+               return $this->totpSecret ? true : false;
+           }
+
+           public function getTotpAuthenticationUsername(): string
+           {
+               return $this->username;
+           }
+
+           public function getTotpAuthenticationConfiguration(): ?TotpConfigurationInterface
+           {
+               // You could persist the other configuration options in the user entity to make it individual per user.
+               return new TotpConfiguration($this->totpSecret, TotpConfiguration::ALGORITHM_SHA1, 20, 8);
+           }
        }
-   }
 
 Configuration Options
 ---------------------
