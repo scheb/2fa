@@ -8,3 +8,5 @@ composer.lock
 /app/var/
 /app/vendor/
 /app/symfony.lock
+# PHPStorm
+.idea

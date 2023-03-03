@@ -49,6 +49,7 @@ To enable this authentication method add this to your configuration:
            enabled: true
            sender_email: no-reply@example.com
            sender_name: John Doe  # Optional
+           subject_email: Authentication Code # Email subject
 
 Your user entity has to implement ``Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface``. The authentication code must
 be persisted, so make sure that it is stored in a persisted field.
@@ -162,6 +163,7 @@ Configuration Reference
            code_generator: acme.custom_code_generator_service  # Use alternative service to generate authentication code
            sender_email: me@example.com   # Sender email address
            sender_name: John Doe          # Sender name
+           subject_email: Authentication Code # Email subject
            digits: 4                      # Number of digits in authentication code
            template: security/2fa_form.html.twig   # Template used to render the authentication form
 

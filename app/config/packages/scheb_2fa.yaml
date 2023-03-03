@@ -18,6 +18,7 @@ scheb_two_factor:
         enabled: true                  # If email authentication should be enabled, default false
         sender_email: me@example.com   # Sender email address
         sender_name: John Doe          # Sender name
+        subject_email: Authentication Code # Email subject
         digits: 4                      # Number of digits in authentication code
         template: security/2fa.html.twig   # Template used to render the authentication form
 

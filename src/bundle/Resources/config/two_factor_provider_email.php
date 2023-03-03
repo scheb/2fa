@@ -17,6 +17,7 @@ return static function (ContainerConfigurator $container): void {
                 service('mailer.mailer'),
                 '%scheb_two_factor.email.sender_email%',
                 '%scheb_two_factor.email.sender_name%',
+                '%scheb_two_factor.email.subject_email%',
             ])
 
         ->set('scheb_two_factor.security.email.default_code_generator', CodeGenerator::class)

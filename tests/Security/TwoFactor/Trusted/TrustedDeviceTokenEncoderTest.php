@@ -35,7 +35,7 @@ class TrustedDeviceTokenEncoderTest extends TestCase
             ->expects($this->once())
             ->method('generateToken')
             ->with('username', 'firewallName', 1, new DateTime('2018-01-01 01:00:00'))
-            ->willReturn(new Plain(new DataSet([], ''), new DataSet([], ''), Signature::fromEmptyData()));
+            ->willReturn(new Plain(new DataSet([], ''), new DataSet([], ''), new Signature('', '')));
 
         $token = $this->tokenEncoder->generateToken('username', 'firewallName', 1);
         $this->assertInstanceOf(TrustedDeviceToken::class, $token);
@@ -49,7 +49,7 @@ class TrustedDeviceTokenEncoderTest extends TestCase
         $this->jwtEncoder
             ->expects($this->once())
             ->method('decodeToken')
-            ->willReturn(new Plain(new DataSet([], ''), new DataSet([], ''), Signature::fromEmptyData()));
+            ->willReturn(new Plain(new DataSet([], ''), new DataSet([], ''), new Signature('', '')));
 
         $returnValue = $this->tokenEncoder->decodeToken('validToken');
         $this->assertInstanceOf(TrustedDeviceToken::class, $returnValue);

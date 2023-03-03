@@ -41,6 +41,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasParameter(false, 'scheb_two_factor.trusted_device.enabled');
         $this->assertHasNotParameter('scheb_two_factor.email.sender_email');
         $this->assertHasNotParameter('scheb_two_factor.email.sender_name');
+        $this->assertHasNotParameter('scheb_two_factor.email.subject_email');
         $this->assertHasNotParameter('scheb_two_factor.email.template');
         $this->assertHasNotParameter('scheb_two_factor.email.digits');
         $this->assertHasNotParameter('scheb_two_factor.google.server_name');
@@ -78,6 +79,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasParameter('alternative', 'scheb_two_factor.model_manager_name');
         $this->assertHasParameter('me@example.com', 'scheb_two_factor.email.sender_email');
         $this->assertHasParameter('Sender Name', 'scheb_two_factor.email.sender_name');
+        $this->assertHasParameter('Authentication Code', 'scheb_two_factor.email.subject_email');
         $this->assertHasParameter('AcmeTestBundle:Authentication:emailForm.html.twig', 'scheb_two_factor.email.template');
         $this->assertHasParameter(6, 'scheb_two_factor.email.digits');
         $this->assertHasParameter('Server Name Google', 'scheb_two_factor.google.server_name');
@@ -659,6 +661,7 @@ email:
     code_generator: acme_test.code_generator
     sender_email: me@example.com
     sender_name: Sender Name
+    subject_email: Authentication Code
     template: AcmeTestBundle:Authentication:emailForm.html.twig
     form_renderer: acme_test.email_form_renderer
     digits: 6

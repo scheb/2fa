@@ -37,6 +37,7 @@ Bundle Configuration
            code_generator: acme.custom_code_generator_service  # Use alternative service to generate authentication code
            sender_email: me@example.com   # Sender email address
            sender_name: John Doe          # Sender name
+           subject_email: Authentication Code # Email subject
            digits: 4                      # Number of digits in authentication code
            template: security/2fa_form.html.twig   # Template used to render the authentication form
            form_renderer: acme.custom_form_renderer  # Use a custom form renderer service

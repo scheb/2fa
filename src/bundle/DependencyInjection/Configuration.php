@@ -147,6 +147,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('form_renderer')->defaultNull()->end()
                         ->scalarNode('sender_email')->defaultNull()->end()
                         ->scalarNode('sender_name')->defaultNull()->end()
+                        ->scalarNode('subject_email')->defaultNull()->end()
                         ->scalarNode('template')->defaultValue('@SchebTwoFactor/Authentication/form.html.twig')->end()
                         ->integerNode('digits')->defaultValue(4)->min(1)->end()
                     ->end()

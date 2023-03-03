@@ -20,7 +20,7 @@ class SymfonyAuthCodeMailerTest extends TestCase
     protected function setUp(): void
     {
         $this->symfonyMailer = $this->createMock(MailerInterface::class);
-        $this->mailer = new SymfonyAuthCodeMailer($this->symfonyMailer, 'sender@example.com', 'Sender Name');
+        $this->mailer = new SymfonyAuthCodeMailer($this->symfonyMailer, 'sender@example.com', 'Sender Name', 'Authentication Code');
     }
 
     /**
@@ -64,7 +64,7 @@ class SymfonyAuthCodeMailerTest extends TestCase
      */
     public function sendAuthCode_hasAuthCode_sendEmailWithoutSender(): void
     {
-        $mailer = new SymfonyAuthCodeMailer($this->symfonyMailer, null, null);
+        $mailer = new SymfonyAuthCodeMailer($this->symfonyMailer, null, null, null);
 
         // Stub the user object
         $user = $this->createMock(TwoFactorInterface::class);

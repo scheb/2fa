@@ -22,7 +22,7 @@ class TrustedDeviceTokenTest extends TestCase
             JwtTokenEncoder::CLAIM_FIREWALL => 'firewallName',
             JwtTokenEncoder::CLAIM_VERSION => 1,
         ], 'encodedClaims');
-        $jwtToken = new Plain(new DataSet([], 'encodedHeaders'), $claims, Signature::fromEmptyData());
+        $jwtToken = new Plain(new DataSet([], 'encodedHeaders'), $claims, new Signature('', ''));
         $this->trustedToken = new TrustedDeviceToken($jwtToken);
     }
 

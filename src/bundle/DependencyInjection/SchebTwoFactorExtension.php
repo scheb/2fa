@@ -168,6 +168,7 @@ class SchebTwoFactorExtension extends Extension
 
         $container->setParameter('scheb_two_factor.email.sender_email', $config['email']['sender_email']);
         $container->setParameter('scheb_two_factor.email.sender_name', $config['email']['sender_name']);
+        $container->setParameter('scheb_two_factor.email.subject_email', $config['email']['subject_email']);
         $container->setParameter('scheb_two_factor.email.template', $config['email']['template']);
         $container->setParameter('scheb_two_factor.email.digits', $config['email']['digits']);
         $container->setAlias('scheb_two_factor.security.email.code_generator', $config['email']['code_generator'])->setPublic(true);
