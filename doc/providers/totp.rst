@@ -111,7 +111,7 @@ and the period of the temporary codes.
 
        class User implements UserInterface, TwoFactorInterface
        {
-           #[@ORM\Column(type: 'string', nullable: true)]
+           #[ORM\Column(type: 'string', nullable: true)]
            private ?string $totpSecret;
 
            // [...]
