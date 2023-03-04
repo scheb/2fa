@@ -73,7 +73,7 @@ cookies at once, e.g. in case of a security breach. To make use of this feature,
 
        class User implements TrustedDeviceInterface
        {
-           #[@ORM\Column(type: 'integer')]
+           #[ORM\Column(type: 'integer')]
            private int $trustedVersion;
 
            // [...]

@@ -116,10 +116,10 @@ be persisted, so make sure that it is stored in a persisted field.
 
        class User implements UserInterface, TwoFactorInterface
        {
-           #[@ORM\Column(type: 'string')]
+           #[ORM\Column(type: 'string')]
            private string $email;
 
-           #[@ORM\Column(type: 'string', nullable: true)]
+           #[ORM\Column(type: 'string', nullable: true)]
            private ?string $authCode;
 
            // [...]

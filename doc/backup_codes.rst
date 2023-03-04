@@ -90,7 +90,7 @@ Backup codes have to be provided from the user object. The user entity has to im
 
        class User implements BackupCodeInterface
        {
-           #[@ORM\Column(type: 'json')]
+           #[ORM\Column(type: 'json')]
            private array $backupCodes = [];
 
            // [...]

@@ -104,7 +104,7 @@ Authenticator for a user, generate a secret code and persist it with the user en
 
         class User implements UserInterface, TwoFactorInterface
         {
-           #[@ORM\Column(type: 'string', nullable: true)]
+           #[ORM\Column(type: 'string', nullable: true)]
            private ?string $googleAuthenticatorSecret;
 
            // [...]
