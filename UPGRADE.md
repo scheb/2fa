@@ -7,7 +7,8 @@ Here's an overview if you have to do any work when upgrading.
 ----------
 
 The bundle now **requires the authenticator-based security system to be used**. Please make sure
-`enable_authenticator_manager` is enabled in the security configuration.
+`enable_authenticator_manager` is enabled in the security configuration. If you're using Symfony 6.0.2 or newer, it is no
+longer necessary to declare `enable_authenticator_manager: true` in the configuration, as it's enabled per default.
 
 The default value of `security_tokens`, used when no specific configuration is given, has changed to:
 
