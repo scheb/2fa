@@ -91,7 +91,7 @@ Bundle Configuration
 
        # If you want to exchange/extend the TwoFactorToken class, which is used by the bundle, you can have a factory
        # service providing your own implementation.
-       # Must implement Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextFactoryInterface
+       # Must implement Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface
        two_factor_token_factory: acme.custom_two_factor_token_factory
 
        # If you need custom conditions when to perform two-factor authentication.
