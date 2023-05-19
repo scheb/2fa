@@ -19,7 +19,7 @@ Step 1: Install with Composer
 The bundle is organized into sub-repositories, so you can choose the exact feature set you need and keep installed
 dependencies to a minimum.
 
-If you're using `Symfony Flex <https://flex.symfony.com/>`_, use the following command to install the bundle via
+If you're using `Symfony Flex <https://symfony.com/doc/current/quick_tour/flex_recipes.html>`_, use the following command to install the bundle via
 `Composer <https://getcomposer.org>`_:
 
 .. code-block:: terminal
