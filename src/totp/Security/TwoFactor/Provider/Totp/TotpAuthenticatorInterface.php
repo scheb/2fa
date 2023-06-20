@@ -10,6 +10,8 @@ interface TotpAuthenticatorInterface
 {
     /**
      * Validates the code, which was entered by the user.
+     *
+     * @param non-empty-string $code
      */
     public function checkCode(TwoFactorInterface $user, string $code): bool;
 
@@ -20,6 +22,8 @@ interface TotpAuthenticatorInterface
 
     /**
      * Generate a new secret for TOTP authentication.
+     *
+     * @return non-empty-string
      */
     public function generateSecret(): string;
 }
