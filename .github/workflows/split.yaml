@@ -13,7 +13,7 @@ jobs:
 
         steps:
             -
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
                 with:
                     fetch-depth: 0  # Fetch all history
                     ref: "6.x" # Force checkout the branch to split its commits as well
