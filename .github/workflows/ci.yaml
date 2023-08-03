@@ -60,6 +60,10 @@ jobs:
                     # Test against Symfony 6.*
                     -   php-version: '8.2'
                         symfony-version: '6.*'
+
+                    # Maximum PHP version
+                    -   php-version: '8.3'
+                        symfony-version: '6.*'
         steps:
             -   name: 'Checkout code'
                 uses: actions/checkout@v2
@@ -95,6 +99,10 @@ jobs:
 
                     # Test against Symfony 6.*
                     -   php-version: '8.2'
+                        symfony-version: '6.*'
+
+                    # Maximum PHP version
+                    -   php-version: '8.3'
                         symfony-version: '6.*'
 
         steps:
