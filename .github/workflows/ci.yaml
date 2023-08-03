@@ -19,7 +19,7 @@ jobs:
 
         steps:
             -   name: 'Checkout code'
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             -   name: 'Setup Build'
                 uses: ./.github/actions/setup-build
@@ -62,7 +62,7 @@ jobs:
                         symfony-version: '6.*'
         steps:
             -   name: 'Checkout code'
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             -   name: 'Setup Build'
                 uses: ./.github/actions/setup-build
@@ -99,7 +99,7 @@ jobs:
 
         steps:
             -   name: 'Checkout code'
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             -   name: 'Setup Build'
                 uses: ./.github/actions/setup-build
@@ -126,7 +126,7 @@ jobs:
 
         steps:
             -   name: 'Checkout code'
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             -   name: 'Setup Build'
                 uses: ./.github/actions/setup-build
@@ -138,7 +138,7 @@ jobs:
                 run: phpdbg -qrr vendor/bin/phpunit --coverage-clover coverage/clover.xml
 
             -   name: 'Send Coverage to Codecov'
-                uses: codecov/codecov-action@v2
+                uses: codecov/codecov-action@v3
                 with:
                     token: ${{ secrets.CODECOV_TOKEN }}
                     files: coverage/clover.xml
