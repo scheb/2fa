@@ -1,0 +1,6 @@
+auth_code: Kimlik Doğrulama Kodu
+choose_provider: Kimlik doğrulama yöntemini değiştir
+login: Giriş yap
+code_invalid: Doğrulama kodu geçerli değil.
+trusted: Bu cihaza güven.
+cancel: Vazgeç.
