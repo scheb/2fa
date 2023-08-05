@@ -27,8 +27,8 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
 
         /**
-         * @psalm-suppress PossiblyNullReference
-         * @psalm-suppress PossiblyUndefinedMethod
+         * @psalm-suppress UndefinedMethod
+         * @psalm-suppress UndefinedInterfaceMethod
          */
         $rootNode
             ->children()
@@ -56,9 +56,6 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-    /**
-     * @psalm-suppress ArgumentTypeCoercion
-     */
     private function addExtraConfiguration(ArrayNodeDefinition $rootNode): void
     {
         $this->addTrustedDeviceConfiguration($rootNode);
@@ -75,14 +72,15 @@ class Configuration implements ConfigurationInterface
         }
 
         /**
+         * @psalm-suppress UndefinedMethod
+         * @psalm-suppress UndefinedInterfaceMethod
          * @psalm-suppress PossiblyNullReference
-         * @psalm-suppress PossiblyUndefinedMethod
          */
         $rootNode
             ->children()
                 ->arrayNode('backup_codes')
-                ->canBeEnabled()
-                ->children()
+                    ->canBeEnabled()
+                    ->children()
                         ->scalarNode('enabled')->defaultValue(false)->end()
                         ->scalarNode('manager')->defaultValue('scheb_two_factor.default_backup_code_manager')->end()
                     ->end()
@@ -97,8 +95,9 @@ class Configuration implements ConfigurationInterface
         }
 
         /**
+         * @psalm-suppress UndefinedMethod
+         * @psalm-suppress UndefinedInterfaceMethod
          * @psalm-suppress PossiblyNullReference
-         * @psalm-suppress PossiblyUndefinedMethod
          */
         $rootNode
             ->children()
@@ -133,8 +132,9 @@ class Configuration implements ConfigurationInterface
         }
 
         /**
+         * @psalm-suppress UndefinedMethod
+         * @psalm-suppress UndefinedInterfaceMethod
          * @psalm-suppress PossiblyNullReference
-         * @psalm-suppress PossiblyUndefinedMethod
          */
         $rootNode
             ->children()
@@ -161,8 +161,9 @@ class Configuration implements ConfigurationInterface
         }
 
         /**
+         * @psalm-suppress UndefinedMethod
+         * @psalm-suppress UndefinedInterfaceMethod
          * @psalm-suppress PossiblyNullReference
-         * @psalm-suppress PossiblyUndefinedMethod
          */
         $rootNode
             ->children()
@@ -190,8 +191,9 @@ class Configuration implements ConfigurationInterface
         }
 
         /**
+         * @psalm-suppress UndefinedMethod
+         * @psalm-suppress UndefinedInterfaceMethod
          * @psalm-suppress PossiblyNullReference
-         * @psalm-suppress PossiblyUndefinedMethod
          */
         $rootNode
             ->children()

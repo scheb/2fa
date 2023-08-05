@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 
 use DateTimeImmutable;
-use Lcobucci\JWT\Token\Plain;
+use Lcobucci\JWT\UnencryptedToken;
 
 /**
  * @final
  */
 class TrustedDeviceToken
 {
-    public function __construct(private Plain $jwtToken)
+    public function __construct(private UnencryptedToken $jwtToken)
     {
     }
 

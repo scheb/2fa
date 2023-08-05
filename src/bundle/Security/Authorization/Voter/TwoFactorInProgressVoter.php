@@ -36,6 +36,7 @@ class TwoFactorInProgressVoter implements VoterInterface
             }
 
             // Compatibility for Symfony < 6.0
+            /** @psalm-suppress UndefinedConstant */
             if (
                 defined(AuthenticatedVoter::class.'::IS_AUTHENTICATED_ANONYMOUSLY')
                 && AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY === $attribute

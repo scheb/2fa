@@ -28,6 +28,9 @@
         <!-- We actually want to use Yoda comparison -->
 		<exclude name="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison"/>
 
+        <!-- Sometimes necessary to satisfy Psalm types -->
+		<exclude name="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable"/>
+
         <!-- We don't want this -->
 		<exclude name="Generic.Formatting.MultipleStatementAlignment"/>
 	</rule>

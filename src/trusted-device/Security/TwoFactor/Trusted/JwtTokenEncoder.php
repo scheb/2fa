@@ -10,7 +10,9 @@ use Lcobucci\Clock\SystemClock;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Exception;
 use Lcobucci\JWT\Token\Plain;
+use Lcobucci\JWT\UnencryptedToken;
 use Lcobucci\JWT\Validation\Constraint;
+use function strlen;
 
 /**
  * @internal
@@ -30,7 +32,7 @@ class JwtTokenEncoder
         $this->clock = $clock ?? SystemClock::fromSystemTimezone();
     }
 
-    public function generateToken(string $username, string $firewallName, int $version, DateTimeImmutable $validUntil): Plain
+    public function generateToken(string $username, string $firewallName, int $version, DateTimeImmutable $validUntil): UnencryptedToken
     {
         $builder = $this->configuration->builder()
             ->issuedAt($this->clock->now())
@@ -44,7 +46,12 @@ class JwtTokenEncoder
 
     public function decodeToken(string $encodedToken): ?Plain
     {
+        if (0 === strlen($encodedToken)) {
+            return null;
+        }
+
         try {
+            /** @var non-empty-string $encodedToken */
             $token = $this->configuration->parser()->parse($encodedToken);
         } catch (Exception) {
             return null; // Could not decode token

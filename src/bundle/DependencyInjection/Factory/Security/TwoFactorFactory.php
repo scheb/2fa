@@ -67,8 +67,8 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
         assert($builder instanceof ParentNodeDefinitionInterface);
 
         /**
+         * @psalm-suppress UndefinedInterfaceMethod
          * @psalm-suppress PossiblyNullReference
-         * @psalm-suppress PossiblyUndefinedMethod
          */
         $builder
             ->children()

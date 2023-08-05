@@ -8,6 +8,7 @@ use ParagonIE\ConstantTime\Base32;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use function random_bytes;
 use function str_replace;
+use function strlen;
 
 /**
  * @final
@@ -16,6 +17,7 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
 {
     public function __construct(
         private GoogleTotpFactory $totpFactory,
+        /** @var 0|positive-int */
         private int $window,
     ) {
     }
@@ -24,7 +26,11 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
     {
         // Strip any user added spaces
         $code = str_replace(' ', '', $code);
+        if (0 === strlen($code)) {
+            return false;
+        }
 
+        /** @var non-empty-string $code */
         return $this->totpFactory->createTotpForUser($user)->verify($code, null, $this->window);
     }
 

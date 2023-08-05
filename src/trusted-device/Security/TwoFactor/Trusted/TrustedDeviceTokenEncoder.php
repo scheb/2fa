@@ -7,6 +7,7 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 use DateInterval;
 use DateTimeImmutable;
 use Lcobucci\JWT\Token\Plain;
+use function strlen;
 
 /**
  * @final
@@ -29,6 +30,11 @@ class TrustedDeviceTokenEncoder
 
     public function decodeToken(string $trustedTokenEncoded): ?TrustedDeviceToken
     {
+        if (0 === strlen($trustedTokenEncoded)) {
+            return null;
+        }
+
+        /** @var non-empty-string $trustedTokenEncoded */
         $jwtToken = $this->jwtTokenEncoder->decodeToken($trustedTokenEncoded);
         if (!$jwtToken instanceof Plain) {
             return null;
