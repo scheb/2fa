@@ -9,6 +9,8 @@ $rules = [
     'php_unit_method_casing' => false,
     'blank_line_between_import_groups' => false,
     'phpdoc_separation' => ['groups' => [['test', 'dataProvider']]],
+    'nullable_type_declaration_for_default_null_value' => true,
+    'no_superfluous_phpdoc_tags' => ['remove_inheritdoc' => false],
 ];
 
 $finder = PhpCsFixer\Finder::create()
