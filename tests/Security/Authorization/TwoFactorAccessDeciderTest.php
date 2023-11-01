@@ -93,7 +93,7 @@ class TwoFactorAccessDeciderTest extends TestCase
     /**
      * @return iterable<string>
      */
-    public function providePublicAccessAttributes(): iterable
+    public static function providePublicAccessAttributes(): iterable
     {
         yield [AuthenticatedVoter::PUBLIC_ACCESS];
 

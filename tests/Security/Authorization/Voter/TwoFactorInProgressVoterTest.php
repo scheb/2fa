@@ -44,7 +44,7 @@ class TwoFactorInProgressVoterTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function provideAttributeAndExpectedResult(): array
+    public static function provideAttributeAndExpectedResult(): array
     {
         return [
             // Abstain

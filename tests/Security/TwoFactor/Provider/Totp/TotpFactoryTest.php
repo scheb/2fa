@@ -103,7 +103,7 @@ class TotpFactoryTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function provideHostnameAndIssuer(): array
+    public static function provideHostnameAndIssuer(): array
     {
         return [
             [null, null, [], 'otpauth://totp/User%20Name?algorithm=sha256&digits=8&period=20&secret=SECRET'],

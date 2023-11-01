@@ -88,7 +88,7 @@ class GoogleTotpFactoryTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function provideHostnameAndIssuer(): array
+    public static function provideHostnameAndIssuer(): array
     {
         return [
             [null, null, self::DEFAULT_DIGITS, 'otpauth://totp/User%20Name?secret=SECRET'],

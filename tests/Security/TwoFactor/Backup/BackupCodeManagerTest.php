@@ -58,7 +58,7 @@ class BackupCodeManagerTest extends TestCase
     /**
      * @return array<array<bool>>
      */
-    public function provideCheckCodeResults(): array
+    public static function provideCheckCodeResults(): array
     {
         return [
             [true],

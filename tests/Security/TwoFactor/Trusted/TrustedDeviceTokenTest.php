@@ -48,7 +48,7 @@ class TrustedDeviceTokenTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function provideWrongUsernameFirewallNameCombination(): array
+    public static function provideWrongUsernameFirewallNameCombination(): array
     {
         return [
             ['wrongUsername', 'firewallName'],

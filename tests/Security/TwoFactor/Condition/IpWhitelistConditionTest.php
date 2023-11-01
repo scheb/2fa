@@ -59,7 +59,7 @@ class IpWhitelistConditionTest extends AbstractAuthenticationContextTestCase
     /**
      * @return string[][]
      */
-    public function provideWhitelistedIps(): array
+    public static function provideWhitelistedIps(): array
     {
         return [
             ['127.0.0.1'],

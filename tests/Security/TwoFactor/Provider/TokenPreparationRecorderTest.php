@@ -91,7 +91,7 @@ class TokenPreparationRecorderTest extends TestCase
     /**
      * @return array<array<bool>>
      */
-    public function provideReturnValues(): array
+    public static function provideReturnValues(): array
     {
         return [
             [true],

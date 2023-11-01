@@ -37,7 +37,7 @@ class AuthenticationTrustResolverTest extends TestCase
     /**
      * @return array<array<bool>>
      */
-    public function provideReturnedResult(): array
+    public static function provideReturnedResult(): array
     {
         return [
             [true],

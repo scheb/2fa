@@ -163,7 +163,7 @@ class ExceptionListenerTest extends TestCase
     /**
      * @return array<string,array<mixed>>
      */
-    public function provideExceptions(): array
+    public static function provideExceptions(): array
     {
         return [
             'AccessDeniedException' => [new AccessDeniedException()],

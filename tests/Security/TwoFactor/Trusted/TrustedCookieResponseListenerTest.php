@@ -176,7 +176,7 @@ class TrustedCookieResponseListenerTest extends TestCase
     /**
      * @return string[][]
      */
-    public function provideRequestHostName(): array
+    public static function provideRequestHostName(): array
     {
         return [
             ['localhost'],

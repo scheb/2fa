@@ -159,7 +159,7 @@ class TrustedDeviceManagerTest extends TestCase
     /**
      * @return array<array<bool>>
      */
-    public function provideIsTrustedDeviceReturnValues(): array
+    public static function provideIsTrustedDeviceReturnValues(): array
     {
         return [
             [true],

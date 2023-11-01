@@ -150,7 +150,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
     /**
      * @return array<array<bool>>
      */
-    public function provideValidationResult(): array
+    public static function provideValidationResult(): array
     {
         return [
             [true],

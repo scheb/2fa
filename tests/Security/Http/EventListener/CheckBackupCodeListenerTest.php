@@ -11,7 +11,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 /**
  * @property CheckBackupCodeListener $listener
  */
-class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTest
+class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTestSetup
 {
     private MockObject|BackupCodeManagerInterface $backupCodeManager;
 

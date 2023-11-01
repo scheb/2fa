@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
 
-abstract class AbstractCheckCodeListenerTest extends TestCase
+abstract class AbstractCheckCodeListenerTestSetup extends TestCase
 {
     protected const FIREWALL_NAME = 'firewallName';
     protected const TWO_FACTOR_PROVIDER_ID = 'providerId';

@@ -54,7 +54,7 @@ class TotpAuthenticatorTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function provideCheckCodeData(): array
+    public static function provideCheckCodeData(): array
     {
         return [
             ['validCode', true],

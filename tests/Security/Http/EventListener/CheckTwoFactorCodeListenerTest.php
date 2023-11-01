@@ -16,7 +16,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 /**
  * @property CheckTwoFactorCodeListener $listener
  */
-class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTest
+class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
 {
     private MockObject|BackupCodeManagerInterface $providerRegistry;
 

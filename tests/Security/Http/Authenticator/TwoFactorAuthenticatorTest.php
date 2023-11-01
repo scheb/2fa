@@ -28,7 +28,6 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use function array_map;
 use function assert;
 use function count;
 use function method_exists;
@@ -197,14 +196,18 @@ class TwoFactorAuthenticatorTest extends TestCase
      */
     private function expectDispatchEvents(array $events): void
     {
-        $withArguments = array_map(function ($event): array {
-            return [$this->isInstanceOf(TwoFactorAuthenticationEvent::class), $event];
-        }, $events);
-
+        $matcher = $this->exactly(count($events));
         $this->eventDispatcher
-            ->expects($this->exactly(count($events)))
+            ->expects($matcher)
             ->method('dispatch')
-            ->withConsecutive(...$withArguments);
+            ->with($this->isInstanceOf(
+                TwoFactorAuthenticationEvent::class),
+                $this->callback(function ($value) use ($matcher, $events) {
+                    $this->assertEquals($events[$matcher->numberOfInvocations() - 1], $value);
+
+                    return true;
+                })
+            );
     }
 
     private function expect2faCompleteFlagSet(MockObject $authenticatedToken): void
