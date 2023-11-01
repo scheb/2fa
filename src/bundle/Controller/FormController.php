@@ -16,8 +16,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
+use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use function count;
 use function str_contains;
 
@@ -109,9 +109,9 @@ class FormController
 
     protected function getLastAuthenticationException(SessionInterface $session): ?AuthenticationException
     {
-        $authException = $session->get(Security::AUTHENTICATION_ERROR);
+        $authException = $session->get(SecurityRequestAttributes::AUTHENTICATION_ERROR);
         if ($authException instanceof AuthenticationException) {
-            $session->remove(Security::AUTHENTICATION_ERROR);
+            $session->remove(SecurityRequestAttributes::AUTHENTICATION_ERROR);
 
             return $authException;
         }

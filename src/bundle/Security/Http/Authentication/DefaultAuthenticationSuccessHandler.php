@@ -8,9 +8,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
+use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class DefaultAuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterface
@@ -25,7 +25,7 @@ class DefaultAuthenticationSuccessHandler implements AuthenticationSuccessHandle
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token): Response
     {
-        $request->getSession()->remove(Security::AUTHENTICATION_ERROR);
+        $request->getSession()->remove(SecurityRequestAttributes::AUTHENTICATION_ERROR);
 
         return $this->httpUtils->createRedirectResponse($request, $this->determineRedirectTargetUrl($request));
     }

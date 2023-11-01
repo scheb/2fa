@@ -22,8 +22,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
+use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Throwable;
 
 class FormControllerTest extends TestCase
@@ -183,7 +183,7 @@ class FormControllerTest extends TestCase
         $this->session
             ->expects($this->any())
             ->method('get')
-            ->with(Security::AUTHENTICATION_ERROR)
+            ->with(SecurityRequestAttributes::AUTHENTICATION_ERROR)
             ->willReturn($exception);
     }
 

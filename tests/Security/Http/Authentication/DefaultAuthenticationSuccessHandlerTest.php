@@ -12,8 +12,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\HttpUtils;
+use Symfony\Component\Security\Http\SecurityRequestAttributes;
 
 class DefaultAuthenticationSuccessHandlerTest extends TestCase
 {
@@ -94,7 +94,7 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
         $this->session
             ->expects($this->once())
             ->method('remove')
-            ->with(Security::AUTHENTICATION_ERROR);
+            ->with(SecurityRequestAttributes::AUTHENTICATION_ERROR);
 
         $token = $this->createMock(TokenInterface::class);
         $this->successHandler->onAuthenticationSuccess($this->request, $token);

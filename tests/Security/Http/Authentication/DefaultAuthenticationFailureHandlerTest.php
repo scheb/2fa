@@ -12,8 +12,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\HttpUtils;
+use Symfony\Component\Security\Http\SecurityRequestAttributes;
 
 class DefaultAuthenticationFailureHandlerTest extends TestCase
 {
@@ -59,7 +59,7 @@ class DefaultAuthenticationFailureHandlerTest extends TestCase
         $this->session
             ->expects($this->once())
             ->method('set')
-            ->with(Security::AUTHENTICATION_ERROR, $authenticationException);
+            ->with(SecurityRequestAttributes::AUTHENTICATION_ERROR, $authenticationException);
 
         $this->failureHandler->onAuthenticationFailure($this->request, $authenticationException);
     }
