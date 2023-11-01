@@ -91,7 +91,7 @@ class ExceptionListenerTest extends TestCase
         return new ExceptionEvent(
             $this->createMock(HttpKernelInterface::class),
             $this->request,
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             $exception
         );
     }

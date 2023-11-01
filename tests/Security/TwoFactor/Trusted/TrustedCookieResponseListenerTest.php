@@ -57,7 +57,7 @@ class TrustedCookieResponseListenerTest extends TestCase
         return new ResponseEvent(
             $this->createMock(HttpKernelInterface::class),
             $request,
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             $this->response
         );
     }
