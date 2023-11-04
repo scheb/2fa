@@ -19,9 +19,9 @@ class TotpFactory
      * @param array<string,mixed> $customParameters
      */
     public function __construct(
-        private string|null $server,
-        private string|null $issuer,
-        private array $customParameters,
+        private readonly string|null $server,
+        private readonly string|null $issuer,
+        private readonly array $customParameters,
     ) {
     }
 

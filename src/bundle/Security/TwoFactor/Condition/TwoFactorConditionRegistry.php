@@ -14,7 +14,7 @@ class TwoFactorConditionRegistry
     /**
      * @param TwoFactorConditionInterface[] $conditions
      */
-    public function __construct(private iterable $conditions)
+    public function __construct(private readonly iterable $conditions)
     {
     }
 

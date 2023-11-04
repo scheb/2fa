@@ -12,7 +12,7 @@ use Lcobucci\JWT\UnencryptedToken;
  */
 class TrustedDeviceToken
 {
-    public function __construct(private UnencryptedToken $jwtToken)
+    public function __construct(private readonly UnencryptedToken $jwtToken)
     {
     }
 

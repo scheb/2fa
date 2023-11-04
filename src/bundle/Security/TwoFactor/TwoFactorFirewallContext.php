@@ -15,7 +15,7 @@ class TwoFactorFirewallContext
     /**
      * @param array<string,TwoFactorFirewallConfig> $firewallConfigs
      */
-    public function __construct(private array $firewallConfigs)
+    public function __construct(private readonly array $firewallConfigs)
     {
     }
 

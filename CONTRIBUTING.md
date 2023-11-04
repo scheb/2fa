@@ -20,7 +20,7 @@ For pull requests, please follow these guidelines:
 
 - Do not use any PHP language features above the minimum supported version (see `composer.json`)
 - Use the configured code style (`phpcs.xml.dist` to configure PHP Code Sniffer checks in your IDE)
-- PHP 8.0 level type hints for everything (parameter types, return types, nullable types, union types, `void`),
+- PHP 8.2 level type hints for everything (parameter types, return types, nullable types, union types, `void`),
   including test cases
 - `declare(strict_types=1)` must be used
 - Methods/properties/constants must declare visibility

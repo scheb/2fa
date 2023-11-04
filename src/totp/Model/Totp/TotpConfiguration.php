@@ -22,10 +22,10 @@ class TotpConfiguration implements TotpConfigurationInterface
      * @param int    $digits    Number of digits of the one-time password
      */
     public function __construct(
-        private string $secret,
-        private string $algorithm,
-        private int $period,
-        private int $digits,
+        private readonly string $secret,
+        private readonly string $algorithm,
+        private readonly int $period,
+        private readonly int $digits,
     ) {
         if (!self::isValidAlgorithm($algorithm)) {
             throw new InvalidArgumentException(sprintf('The algorithm "%s" is not supported', $algorithm));

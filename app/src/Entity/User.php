@@ -175,7 +175,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTw
 
     public function isTotpAuthenticationEnabled(): bool
     {
-        return $this->totpAuthenticationEnabled && (bool) $this->googleAuthenticatorSecret;
+        return $this->totpAuthenticationEnabled && $this->googleAuthenticatorSecret;
     }
 
     public function getTotpAuthenticationUsername(): string

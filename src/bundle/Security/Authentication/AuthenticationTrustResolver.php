@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class AuthenticationTrustResolver implements AuthenticationTrustResolverInterface
 {
-    public function __construct(private AuthenticationTrustResolverInterface $decoratedTrustResolver)
+    public function __construct(private readonly AuthenticationTrustResolverInterface $decoratedTrustResolver)
     {
     }
 

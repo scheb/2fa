@@ -15,7 +15,7 @@ class AuthenticatedTokenCondition implements TwoFactorConditionInterface
     /**
      * @param string[] $supportedTokens
      */
-    public function __construct(private array $supportedTokens)
+    public function __construct(private readonly array $supportedTokens)
     {
     }
 

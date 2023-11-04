@@ -12,7 +12,7 @@ class TrustedDeviceManager implements TrustedDeviceManagerInterface
 {
     private const DEFAULT_TOKEN_VERSION = 0;
 
-    public function __construct(private TrustedDeviceTokenStorage $trustedTokenStorage)
+    public function __construct(private readonly TrustedDeviceTokenStorage $trustedTokenStorage)
     {
     }
 

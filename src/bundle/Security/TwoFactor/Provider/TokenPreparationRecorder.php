@@ -17,7 +17,7 @@ use function sprintf;
  */
 class TokenPreparationRecorder implements PreparationRecorderInterface
 {
-    public function __construct(private TokenStorageInterface $tokenStorage)
+    public function __construct(private readonly TokenStorageInterface $tokenStorage)
     {
     }
 

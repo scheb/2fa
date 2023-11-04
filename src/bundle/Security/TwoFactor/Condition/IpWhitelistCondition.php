@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\IpUtils;
  */
 class IpWhitelistCondition implements TwoFactorConditionInterface
 {
-    public function __construct(private IpWhitelistProviderInterface $ipWhitelistProvider)
+    public function __construct(private readonly IpWhitelistProviderInterface $ipWhitelistProvider)
     {
     }
 

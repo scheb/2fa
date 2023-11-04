@@ -16,8 +16,8 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactor
 class TwoFactorProviderInitiator
 {
     public function __construct(
-        private TwoFactorProviderRegistry $providerRegistry,
-        private TwoFactorTokenFactoryInterface $twoFactorTokenFactory,
+        private readonly TwoFactorProviderRegistry $providerRegistry,
+        private readonly TwoFactorTokenFactoryInterface $twoFactorTokenFactory,
     ) {
     }
 

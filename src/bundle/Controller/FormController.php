@@ -24,12 +24,12 @@ use function str_contains;
 class FormController
 {
     public function __construct(
-        private TokenStorageInterface $tokenStorage,
-        private TwoFactorProviderRegistry $providerRegistry,
-        private TwoFactorFirewallContext $twoFactorFirewallContext,
-        private LogoutUrlGenerator $logoutUrlGenerator,
-        private TrustedDeviceManagerInterface|null $trustedDeviceManager,
-        private bool $trustedFeatureEnabled,
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly TwoFactorProviderRegistry $providerRegistry,
+        private readonly TwoFactorFirewallContext $twoFactorFirewallContext,
+        private readonly LogoutUrlGenerator $logoutUrlGenerator,
+        private readonly TrustedDeviceManagerInterface|null $trustedDeviceManager,
+        private readonly bool $trustedFeatureEnabled,
     ) {
     }
 
@@ -85,8 +85,8 @@ class FormController
         return [
             'twoFactorProvider' => $token->getCurrentTwoFactorProvider(),
             'availableTwoFactorProviders' => $pendingTwoFactorProviders,
-            'authenticationError' => $authenticationException ? $authenticationException->getMessageKey() : null,
-            'authenticationErrorData' => $authenticationException ? $authenticationException->getMessageData() : null,
+            'authenticationError' => $authenticationException?->getMessageKey(),
+            'authenticationErrorData' => $authenticationException?->getMessageData(),
             'displayTrustedOption' => $displayTrustedOption,
             'authCodeParameterName' => $config->getAuthCodeParameterName(),
             'trustedParameterName' => $config->getTrustedParameterName(),

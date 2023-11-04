@@ -21,11 +21,11 @@ use Symfony\Component\Security\Http\Event\AuthenticationTokenCreatedEvent;
 class AuthenticationTokenListener implements EventSubscriberInterface
 {
     public function __construct(
-        private string $firewallName,
-        private TwoFactorConditionRegistry $twoFactorConditionRegistry,
-        private TwoFactorProviderInitiator $twoFactorProviderInitiator,
-        private AuthenticationContextFactoryInterface $authenticationContextFactory,
-        private RequestStack $requestStack,
+        private readonly string $firewallName,
+        private readonly TwoFactorConditionRegistry $twoFactorConditionRegistry,
+        private readonly TwoFactorProviderInitiator $twoFactorProviderInitiator,
+        private readonly AuthenticationContextFactoryInterface $authenticationContextFactory,
+        private readonly RequestStack $requestStack,
     ) {
     }
 

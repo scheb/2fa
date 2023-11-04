@@ -17,8 +17,8 @@ use function strlen;
 class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
 {
     public function __construct(
-        private TotpAuthenticatorInterface $authenticator,
-        private TwoFactorFormRendererInterface $formRenderer,
+        private readonly TotpAuthenticatorInterface $authenticator,
+        private readonly TwoFactorFormRendererInterface $formRenderer,
     ) {
     }
 

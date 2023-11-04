@@ -27,7 +27,7 @@ class JwtTokenEncoder
 
     private Clock $clock;
 
-    public function __construct(private Configuration $configuration, Clock|null $clock = null)
+    public function __construct(private readonly Configuration $configuration, Clock|null $clock = null)
     {
         $this->clock = $clock ?? SystemClock::fromSystemTimezone();
     }

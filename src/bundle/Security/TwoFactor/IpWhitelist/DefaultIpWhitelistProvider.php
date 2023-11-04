@@ -14,7 +14,7 @@ class DefaultIpWhitelistProvider implements IpWhitelistProviderInterface
     /**
      * @param string[] $ipWhitelist
      */
-    public function __construct(private array $ipWhitelist)
+    public function __construct(private readonly array $ipWhitelist)
     {
     }
 

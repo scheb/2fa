@@ -20,7 +20,7 @@ class CheckTwoFactorCodeListener extends AbstractCheckCodeListener
 
     public function __construct(
         PreparationRecorderInterface $preparationRecorder,
-        private TwoFactorProviderRegistry $providerRegistry,
+        private readonly TwoFactorProviderRegistry $providerRegistry,
     ) {
         parent::__construct($preparationRecorder);
     }

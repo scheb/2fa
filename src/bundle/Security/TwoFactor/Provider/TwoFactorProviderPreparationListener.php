@@ -35,12 +35,12 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
     private LoggerInterface $logger;
 
     public function __construct(
-        private TwoFactorProviderRegistry $providerRegistry,
-        private PreparationRecorderInterface $preparationRecorder,
+        private readonly TwoFactorProviderRegistry $providerRegistry,
+        private readonly PreparationRecorderInterface $preparationRecorder,
         LoggerInterface|null $logger,
-        private string $firewallName,
-        private bool $prepareOnLogin,
-        private bool $prepareOnAccessDenied,
+        private readonly string $firewallName,
+        private readonly bool $prepareOnLogin,
+        private readonly bool $prepareOnAccessDenied,
     ) {
         $this->logger = $logger ?? new NullLogger();
     }

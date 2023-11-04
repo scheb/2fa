@@ -16,11 +16,11 @@ use function strlen;
 class GoogleAuthenticator implements GoogleAuthenticatorInterface
 {
     public function __construct(
-        private GoogleTotpFactory $totpFactory,
+        private readonly GoogleTotpFactory $totpFactory,
         /** @var 0|positive-int */
-        private int $window,
+        private readonly int $window,
         /** @var 0|positive-int|null */
-        private null|int $leeway,
+        private readonly null|int $leeway,
     ) {
     }
 

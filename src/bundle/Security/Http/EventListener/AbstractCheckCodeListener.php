@@ -17,7 +17,7 @@ use function sprintf;
  */
 abstract class AbstractCheckCodeListener implements EventSubscriberInterface
 {
-    public function __construct(private PreparationRecorderInterface $preparationRecorder)
+    public function __construct(private readonly PreparationRecorderInterface $preparationRecorder)
     {
     }
 

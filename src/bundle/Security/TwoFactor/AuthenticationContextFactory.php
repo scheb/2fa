@@ -14,7 +14,7 @@ use function assert;
  */
 class AuthenticationContextFactory implements AuthenticationContextFactoryInterface
 {
-    public function __construct(private string $authenticationContextClass)
+    public function __construct(private readonly string $authenticationContextClass)
     {
     }
 

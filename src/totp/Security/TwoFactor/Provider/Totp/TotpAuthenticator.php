@@ -16,11 +16,11 @@ use function strlen;
 class TotpAuthenticator implements TotpAuthenticatorInterface
 {
     public function __construct(
-        private TotpFactory $totpFactory,
+        private readonly TotpFactory $totpFactory,
         /** @var 0|positive-int */
-        private int $window,
+        private readonly int $window,
         /** @var 0|positive-int|null */
-        private null|int $leeway,
+        private readonly null|int $leeway,
     ) {
     }
 

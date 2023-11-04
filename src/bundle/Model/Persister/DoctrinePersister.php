@@ -12,7 +12,7 @@ use Scheb\TwoFactorBundle\Model\PersisterInterface;
  */
 class DoctrinePersister implements PersisterInterface
 {
-    public function __construct(private ObjectManager $om)
+    public function __construct(private readonly ObjectManager $om)
     {
     }
 

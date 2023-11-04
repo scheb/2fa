@@ -22,13 +22,13 @@ class TrustedCookieResponseListener implements EventSubscriberInterface
      * @param Cookie::SAMESITE_*|null $cookieSameSite
      */
     public function __construct(
-        private TrustedDeviceTokenStorage $trustedTokenStorage,
-        private int $trustedTokenLifetime,
-        private string $cookieName,
-        private bool|null $cookieSecure,
-        private string|null $cookieSameSite,
-        private string|null $cookiePath,
-        private string|null $cookieDomain,
+        private readonly TrustedDeviceTokenStorage $trustedTokenStorage,
+        private readonly int $trustedTokenLifetime,
+        private readonly string $cookieName,
+        private readonly bool|null $cookieSecure,
+        private readonly string|null $cookieSameSite,
+        private readonly string|null $cookiePath,
+        private readonly string|null $cookieDomain,
     ) {
     }
 

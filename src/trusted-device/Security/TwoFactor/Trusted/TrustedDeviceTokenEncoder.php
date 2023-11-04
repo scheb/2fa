@@ -15,8 +15,8 @@ use function strlen;
 class TrustedDeviceTokenEncoder
 {
     public function __construct(
-        private JwtTokenEncoder $jwtTokenEncoder,
-        private int $trustedTokenLifetime,
+        private readonly JwtTokenEncoder $jwtTokenEncoder,
+        private readonly int $trustedTokenLifetime,
     ) {
     }
 

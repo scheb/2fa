@@ -15,7 +15,7 @@ class TwoFactorProviderRegistry
     /**
      * @param iterable<string,TwoFactorProviderInterface> $providers
      */
-    public function __construct(private iterable $providers)
+    public function __construct(private readonly iterable $providers)
     {
     }
 

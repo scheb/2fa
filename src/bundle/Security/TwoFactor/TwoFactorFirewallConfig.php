@@ -18,10 +18,10 @@ class TwoFactorFirewallConfig
      * @param array<string,mixed> $options
      */
     public function __construct(
-        private array $options,
-        private string $firewallName,
-        private HttpUtils $httpUtils,
-        private RequestDataReader $requestDataReader,
+        private readonly array $options,
+        private readonly string $firewallName,
+        private readonly HttpUtils $httpUtils,
+        private readonly RequestDataReader $requestDataReader,
     ) {
     }
 
@@ -92,7 +92,7 @@ class TwoFactorFirewallConfig
 
     public function isCheckPathRequest(Request $request): bool
     {
-        return ($this->isPostOnly() ? $request->isMethod('POST') : true)
+        return (!$this->isPostOnly() || $request->isMethod('POST'))
             && $this->httpUtils->checkRequestPath($request, $this->getCheckPath());
     }
 

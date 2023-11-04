@@ -58,7 +58,7 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
     public const KERNEL_ACCESS_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.access_listener';
     public const FORM_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.form_listener';
 
-    public function __construct(private TwoFactorServicesFactory $twoFactorServicesFactory)
+    public function __construct(private readonly TwoFactorServicesFactory $twoFactorServicesFactory)
     {
     }
 

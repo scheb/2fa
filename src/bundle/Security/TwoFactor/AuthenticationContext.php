@@ -13,10 +13,10 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 class AuthenticationContext implements AuthenticationContextInterface
 {
     public function __construct(
-        private Request $request,
-        private TokenInterface $token,
-        private Passport $passport,
-        private string $firewallName,
+        private readonly Request $request,
+        private readonly TokenInterface $token,
+        private readonly Passport $passport,
+        private readonly string $firewallName,
     ) {
     }
 

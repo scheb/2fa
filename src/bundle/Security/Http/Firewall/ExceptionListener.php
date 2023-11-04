@@ -24,10 +24,10 @@ class ExceptionListener implements EventSubscriberInterface
     private const LISTENER_PRIORITY = 2;
 
     public function __construct(
-        private string $firewallName,
-        private TokenStorageInterface $tokenStorage,
-        private AuthenticationRequiredHandlerInterface $authenticationRequiredHandler,
-        private EventDispatcherInterface $eventDispatcher,
+        private readonly string $firewallName,
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly AuthenticationRequiredHandlerInterface $authenticationRequiredHandler,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 

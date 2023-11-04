@@ -16,7 +16,7 @@ class TwoFactorCodeCredentials implements CredentialsInterface
     private bool $resolved = false;
 
     public function __construct(
-        private TwoFactorTokenInterface $twoFactorToken,
+        private readonly TwoFactorTokenInterface $twoFactorToken,
         private string|null $code,
     ) {
     }

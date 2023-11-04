@@ -12,7 +12,7 @@ use Scheb\TwoFactorBundle\Model\PersisterInterface;
  */
 class BackupCodeManager implements BackupCodeManagerInterface
 {
-    public function __construct(private PersisterInterface $persister)
+    public function __construct(private readonly PersisterInterface $persister)
     {
     }
 

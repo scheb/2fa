@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
  */
 class TrustedDeviceListener implements EventSubscriberInterface
 {
-    public function __construct(private TrustedDeviceManagerInterface $trustedDeviceManager)
+    public function __construct(private readonly TrustedDeviceManagerInterface $trustedDeviceManager)
     {
     }
 

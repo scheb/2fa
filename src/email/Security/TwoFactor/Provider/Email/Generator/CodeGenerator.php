@@ -15,9 +15,9 @@ use function random_int;
 class CodeGenerator implements CodeGeneratorInterface
 {
     public function __construct(
-        private PersisterInterface $persister,
-        private AuthCodeMailerInterface $mailer,
-        private int $digits,
+        private readonly PersisterInterface $persister,
+        private readonly AuthCodeMailerInterface $mailer,
+        private readonly int $digits,
     ) {
     }
 
