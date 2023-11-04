@@ -3,6 +3,11 @@ Upgrading
 
 Here's an overview if you have to do any work when upgrading.
 
+6.x to 7.x
+----------
+
+Nothing to be done. Upgrade and enjoy :)
+
 5.x to 6.x
 ----------
 
