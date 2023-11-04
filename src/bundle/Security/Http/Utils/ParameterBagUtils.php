@@ -30,25 +30,33 @@ class ParameterBagUtils
     {
         $pos = strpos($path, '[');
         if (false === $pos) {
-            $value = ($request->query->all()[$path] ?? null) ?? ($request->request->all()[$path] ?? null);
+            $value = self::getFromRequest($request, $path);
 
             return null === $value ? null : (string) $value;
         }
 
         $root = substr($path, 0, $pos);
-        $value = ($request->query->all()[$root] ?? null) ?? ($request->request->all()[$root] ?? null);
+        $value = self::getFromRequest($request, $root);
         if (null === $value) {
             return null;
         }
 
-        if (null === self::$propertyAccessor) {
-            self::$propertyAccessor = PropertyAccess::createPropertyAccessor();
-        }
+        self::$propertyAccessor ??= PropertyAccess::createPropertyAccessor();
 
         try {
             return self::$propertyAccessor->getValue($value, substr($path, $pos));
         } catch (AccessException) {
             return null;
         }
+    }
+
+    private static function getFromRequest(Request $request, string $path): mixed
+    {
+        $value = $request->query->all()[$path] ?? null;
+        if (null !== $value) {
+            return $value;
+        }
+
+        return $request->request->all()[$path] ?? null;
     }
 }
