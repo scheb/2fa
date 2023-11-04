@@ -19,7 +19,7 @@ class TrustedDeviceTokenStorage
     private const TOKEN_DELIMITER = ';';
 
     /** @var TrustedDeviceToken[] */
-    private ?array $trustedTokenList;
+    private array|null $trustedTokenList;
 
     private bool $updateCookie = false;
 
@@ -36,7 +36,7 @@ class TrustedDeviceTokenStorage
         return $this->updateCookie;
     }
 
-    public function getCookieValue(): ?string
+    public function getCookieValue(): string|null
     {
         return implode(self::TOKEN_DELIMITER, array_map(static function (TrustedDeviceToken $token): string {
             return $token->serialize();
@@ -136,7 +136,7 @@ class TrustedDeviceTokenStorage
         return $trustedTokenList;
     }
 
-    private function readCookieValue(): ?string
+    private function readCookieValue(): string|null
     {
         $cookieValue = $this->getRequest()->cookies->get($this->cookieName, null);
 

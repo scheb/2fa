@@ -19,8 +19,8 @@ class TotpFactory
      * @param array<string,mixed> $customParameters
      */
     public function __construct(
-        private ?string $server,
-        private ?string $issuer,
+        private string|null $server,
+        private string|null $issuer,
         private array $customParameters,
     ) {
     }
@@ -42,7 +42,7 @@ class TotpFactory
             $secret,
             $totpConfiguration->getPeriod(),
             $totpConfiguration->getAlgorithm(),
-            $totpConfiguration->getDigits()
+            $totpConfiguration->getDigits(),
         );
 
         $userAndHost = $user->getTotpAuthenticationUsername().($this->server ? '@'.$this->server : '');

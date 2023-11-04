@@ -61,7 +61,7 @@ abstract class AbstractCheckCodeListenerTestSetup extends TestCase
         $this->stubPreparationPrepared(true);
     }
 
-    private function createTwoFactorToken(?string $currentProvider): MockObject|TwoFactorTokenInterface
+    private function createTwoFactorToken(string|null $currentProvider): MockObject|TwoFactorTokenInterface
     {
         $token = $this->createMock(TwoFactorTokenInterface::class);
         $token

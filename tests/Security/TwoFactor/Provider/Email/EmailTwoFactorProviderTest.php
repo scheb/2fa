@@ -44,7 +44,7 @@ class EmailTwoFactorProviderTest extends TestCase
         return $user;
     }
 
-    private function createAuthenticationContext(?UserInterface $user = null): MockObject|AuthenticationContextInterface
+    private function createAuthenticationContext(UserInterface|null $user = null): MockObject|AuthenticationContextInterface
     {
         $authContext = $this->createMock(AuthenticationContextInterface::class);
         $authContext

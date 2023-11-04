@@ -28,7 +28,7 @@ class TrustedCookieResponseListenerTest extends TestCase
         $this->response = new Response();
     }
 
-    private function createTrustedCookieResponseListener(?string $domain = null, ?bool $cookieSecure = true): TrustedCookieResponseListener
+    private function createTrustedCookieResponseListener(string|null $domain = null, bool|null $cookieSecure = true): TrustedCookieResponseListener
     {
         $cookieResponseListener = new TestableTrustedCookieResponseListener(
             $this->trustedTokenStorage,
@@ -37,7 +37,7 @@ class TrustedCookieResponseListenerTest extends TestCase
             $cookieSecure,
             Cookie::SAMESITE_LAX,
             '/cookie-path',
-            $domain
+            $domain,
         );
         $cookieResponseListener->now = new DateTimeImmutable('2018-01-01 00:00:00');
 
@@ -58,7 +58,7 @@ class TrustedCookieResponseListenerTest extends TestCase
             $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MAIN_REQUEST,
-            $this->response
+            $this->response,
         );
     }
 
@@ -113,7 +113,7 @@ class TrustedCookieResponseListenerTest extends TestCase
             true,
             true,
             false,
-            Cookie::SAMESITE_LAX
+            Cookie::SAMESITE_LAX,
         );
         $this->assertEquals($expectedCookie, $cookies[0]);
     }
@@ -144,7 +144,7 @@ class TrustedCookieResponseListenerTest extends TestCase
             true,
             true,
             false,
-            Cookie::SAMESITE_LAX
+            Cookie::SAMESITE_LAX,
         );
         $this->assertEquals($expectedCookie, $cookies[0]);
     }

@@ -22,7 +22,7 @@ class NullCsrfTokenManager implements CsrfTokenManagerInterface
         return new CsrfToken($tokenId, '');
     }
 
-    public function removeToken(string $tokenId): ?string
+    public function removeToken(string $tokenId): string|null
     {
         return null;
     }

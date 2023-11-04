@@ -39,7 +39,7 @@ class CodeGeneratorTest extends TestCase
             ->method('setEmailAuthCode')
             ->with($this->logicalAnd(
                 $this->greaterThanOrEqual(10000),
-                $this->lessThanOrEqual(99999)
+                $this->lessThanOrEqual(99999),
             ));
 
         // Construct test subject with original class

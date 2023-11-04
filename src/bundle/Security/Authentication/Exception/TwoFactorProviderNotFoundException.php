@@ -14,14 +14,14 @@ class TwoFactorProviderNotFoundException extends AuthenticationException
     public const MESSAGE_KEY = 'Two-factor provider not found.';
 
     /** @psalm-suppress PropertyNotSetInConstructor */
-    private ?string $provider;
+    private string|null $provider;
 
     public function getMessageKey(): string
     {
         return self::MESSAGE_KEY;
     }
 
-    public function getProvider(): ?string
+    public function getProvider(): string|null
     {
         return $this->provider;
     }
@@ -53,6 +53,7 @@ class TwoFactorProviderNotFoundException extends AuthenticationException
     public function __unserialize(array $data): void
     {
         [$this->provider, $parentData] = $data;
+
         parent::__unserialize($parentData);
     }
 }

@@ -56,13 +56,13 @@ class TwoFactorAccessDecider
         // sorting the LogoutListener in programmatically. When a lazy firewall is used, the LogoutListener is executed
         // last, because all other listeners are encapsulated into LazyFirewallContext, which is invoked first.
         $logoutPath = $this->removeQueryParameters(
-            $this->makeRelativeToBaseUrl($this->logoutUrlGenerator->getLogoutPath(), $request)
+            $this->makeRelativeToBaseUrl($this->logoutUrlGenerator->getLogoutPath(), $request),
         );
 
         return $this->httpUtils->checkRequestPath($request, $logoutPath); // Let the logout route pass
     }
 
-    private function isPubliclyAccessAttribute(?array $attributes): bool
+    private function isPubliclyAccessAttribute(array|null $attributes): bool
     {
         if (null === $attributes) {
             // No access control at all is treated "non-public" by 2fa

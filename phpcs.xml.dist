@@ -33,6 +33,7 @@
 
         <!-- We don't want this -->
 		<exclude name="Generic.Formatting.MultipleStatementAlignment"/>
+		<exclude name="SlevomatCodingStandard.Commenting.RequireOneLineDocComment.MultiLineDocComment"/>
 	</rule>
 
     <!-- Align with php-cs-fixer config -->

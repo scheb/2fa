@@ -184,7 +184,7 @@ class SchebTwoFactorExtensionTest extends TestCase
      */
     public function load_offOrFalseStringEnvVarBasedConfig_setConfigValues(): void
     {
-        $yaml = <<<EOF
+        $yaml = <<<'EOF'
 trusted_device:
     enabled: "%env(ENABLE_2FA_OFF_STR)%"
 backup_codes:
@@ -211,7 +211,7 @@ EOF;
      */
     public function load_onOrTrueStringEnvVarBasedConfig_setConfigValues(): void
     {
-        $yaml = <<<EOF
+        $yaml = <<<'EOF'
 trusted_device:
     enabled: "%env(ENABLE_2FA_ON_STR)%"
 backup_codes:
@@ -663,7 +663,7 @@ EOF;
     /**
      * @return array<string,null>|null
      */
-    private function getEmptyConfig(): ?array
+    private function getEmptyConfig(): array|null
     {
         $yaml = '';
         $parser = new Parser();
@@ -676,7 +676,7 @@ EOF;
      */
     private function getFullConfig(): array
     {
-        $yaml = <<<EOF
+        $yaml = <<<'EOF'
 persister: acme_test.persister
 model_manager_name: "alternative"
 security_tokens:
@@ -738,7 +738,7 @@ EOF;
     private function getEnvVarBasedConfig(bool $truthyConfig): array
     {
         if ($truthyConfig) {
-            $yaml = <<<EOF
+            $yaml = <<<'EOF'
 trusted_device:
     enabled: "%env(ENABLE_2FA_TRUTHY)%"
 backup_codes:
@@ -751,7 +751,7 @@ totp:
     enabled: "%env(ENABLE_2FA_TRUTHY)%"
 EOF;
         } else {
-            $yaml = <<<EOF
+            $yaml = <<<'EOF'
 trusted_device:
     enabled: "%env(ENABLE_2FA_FALSY)%"
 backup_codes:

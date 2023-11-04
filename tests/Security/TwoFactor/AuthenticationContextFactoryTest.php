@@ -34,7 +34,7 @@ class AuthenticationContextFactoryTest extends TestCase
     {
         $this->assertInstanceOf(
             AuthenticationContext::class,
-            $this->authenticationContextFactory->create($this->request, $this->token, $this->passport, 'firewallName')
+            $this->authenticationContextFactory->create($this->request, $this->token, $this->passport, 'firewallName'),
         );
     }
 }

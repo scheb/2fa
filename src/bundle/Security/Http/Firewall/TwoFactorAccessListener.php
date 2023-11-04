@@ -28,7 +28,7 @@ class TwoFactorAccessListener extends AbstractListener implements FirewallListen
     ) {
     }
 
-    public function supports(Request $request): ?bool
+    public function supports(Request $request): bool|null
     {
         // When the path is explicitly configured for anonymous access, no need to check access (important for lazy
         // firewalls, to prevent the response cache control to be flagged "private")

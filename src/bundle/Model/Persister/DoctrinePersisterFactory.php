@@ -18,8 +18,8 @@ class DoctrinePersisterFactory
     private ManagerRegistry $managerRegistry;
 
     public function __construct(
-        ?ManagerRegistry $managerRegistry,
-        private ?string $objectManagerName,
+        ManagerRegistry|null $managerRegistry,
+        private string|null $objectManagerName,
     ) {
         if (null === $managerRegistry) {
             $msg = 'scheb/2fa-bundle requires Doctrine to manage the user entity. If you don\'t want something else ';

@@ -33,7 +33,7 @@ class TwoFactorAccessDeciderTest extends TestCase
     private TwoFactorAccessDecider $accessDecider;
 
     /** @var string[]|null */
-    private ?array $attributes = null;
+    private array|null $attributes = null;
 
     protected function setUp(): void
     {
@@ -46,7 +46,7 @@ class TwoFactorAccessDeciderTest extends TestCase
         $this->accessDecider = new TwoFactorAccessDecider($this->accessMap, $this->accessDecisionManager, $this->httpUtils, $this->logoutUrlGenerator);
     }
 
-    private function stubAccessMapReturnsAttributes(?array $attributes): void
+    private function stubAccessMapReturnsAttributes(array|null $attributes): void
     {
         $this->attributes = $attributes;
         $this->accessMap

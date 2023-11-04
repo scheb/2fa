@@ -96,7 +96,7 @@ class JwtTokenEncoderTest extends TestCase
             '%s.%s.%s',
             base64_encode('{"typ":"JWT","alg":"HS256"}'),
             'eyJ0ZXN0IjoidG9rZW5JZCJ9',
-            'sQft2vmMyZ1kL1FPLN5vsg0akuyMoDMNjP9adFxnYOs'
+            'sQft2vmMyZ1kL1FPLN5vsg0akuyMoDMNjP9adFxnYOs',
         );
 
         $this->assertInstanceOf(Plain::class, $this->encoder->decodeToken($encodedToken));
@@ -111,7 +111,7 @@ class JwtTokenEncoderTest extends TestCase
             '%s.%s.%s',
             base64_encode('{"typ":"JWT","alg":"none"}'), // Modified the algorithm from 'HS256' to 'none'
             'eyJ0ZXN0IjoidG9rZW5JZCJ9',
-            'sQft2vmMyZ1kL1FPLN5vsg0akuyMoDMNjP9adFxnYOs'
+            'sQft2vmMyZ1kL1FPLN5vsg0akuyMoDMNjP9adFxnYOs',
         );
 
         $this->assertNull($this->encoder->decodeToken($encodedNoneAlgToken));
@@ -126,7 +126,7 @@ class JwtTokenEncoderTest extends TestCase
             '%s.%s.%s',
             base64_encode('{"typ":"JWT","alg":"test"}'), // Modified the algorithm from 'HS256' to 'test'
             'eyJ0ZXN0IjoidG9rZW5JZCJ9',
-            'sQft2vmMyZ1kL1FPLN5vsg0akuyMoDMNjP9adFxnYOs'
+            'sQft2vmMyZ1kL1FPLN5vsg0akuyMoDMNjP9adFxnYOs',
         );
 
         $this->assertNull($this->encoder->decodeToken($encodedTestAlgToken));
@@ -141,7 +141,7 @@ class JwtTokenEncoderTest extends TestCase
             '%s.%s.%s',
             base64_encode('{"typ":"JWT","alg":"HS256"}'),
             'eyJ0ZXN0IjoidG9rZW5JZCJ9',
-            'invalid'
+            'invalid',
         );
 
         $this->assertNull($this->encoder->decodeToken($encodedInvalidSignatureToken));

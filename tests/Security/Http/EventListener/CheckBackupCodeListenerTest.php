@@ -18,6 +18,7 @@ class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTestSetup
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->backupCodeManager = $this->createMock(BackupCodeManagerInterface::class);
         $this->listener = new CheckBackupCodeListener($this->preparationRecorder, $this->backupCodeManager);
     }

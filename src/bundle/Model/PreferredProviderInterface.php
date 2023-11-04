@@ -9,5 +9,5 @@ interface PreferredProviderInterface
     /**
      * Return the alias of the preferred two-factor provider (if chosen by the user).
      */
-    public function getPreferredTwoFactorProvider(): ?string;
+    public function getPreferredTwoFactorProvider(): string|null;
 }

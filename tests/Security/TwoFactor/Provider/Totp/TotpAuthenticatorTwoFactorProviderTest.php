@@ -29,7 +29,7 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
         $this->provider = new TotpAuthenticatorTwoFactorProvider($this->authenticator, $formRenderer);
     }
 
-    private function createUser(bool $enabled = true, bool $hasTotpConfiguration = true, ?string $secret = self::SECRET): MockObject|TwoFactorInterface
+    private function createUser(bool $enabled = true, bool $hasTotpConfiguration = true, string|null $secret = self::SECRET): MockObject|TwoFactorInterface
     {
         $user = $this->createMock(UserWithTwoFactorInterface::class);
         $user
@@ -54,7 +54,7 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
         return $user;
     }
 
-    private function createAuthenticationContext(?UserInterface $user = null): MockObject|AuthenticationContextInterface
+    private function createAuthenticationContext(UserInterface|null $user = null): MockObject|AuthenticationContextInterface
     {
         $authContext = $this->createMock(AuthenticationContextInterface::class);
         $authContext

@@ -28,7 +28,7 @@ class TrustedDeviceTokenEncoder
         return new TrustedDeviceToken($jwtToken);
     }
 
-    public function decodeToken(string $trustedTokenEncoded): ?TrustedDeviceToken
+    public function decodeToken(string $trustedTokenEncoded): TrustedDeviceToken|null
     {
         if (0 === strlen($trustedTokenEncoded)) {
             return null;

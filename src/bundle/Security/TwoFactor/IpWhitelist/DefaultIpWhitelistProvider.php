@@ -11,15 +11,11 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
  */
 class DefaultIpWhitelistProvider implements IpWhitelistProviderInterface
 {
-    /** @var string[] */
-    private array $ipWhitelist;
-
     /**
      * @param string[] $ipWhitelist
      */
-    public function __construct(array $ipWhitelist)
+    public function __construct(private array $ipWhitelist)
     {
-        $this->ipWhitelist = $ipWhitelist;
     }
 
     /**

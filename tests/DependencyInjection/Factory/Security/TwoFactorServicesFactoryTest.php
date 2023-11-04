@@ -35,7 +35,7 @@ class TwoFactorServicesFactoryTest extends TestCase
             $this->container,
             self::FIREWALL_NAME,
             self::DEFAULT_CONFIG,
-            self::TWO_FACTOR_FIREWALL_CONFIG_ID
+            self::TWO_FACTOR_FIREWALL_CONFIG_ID,
         );
 
         $this->assertEquals('security.authentication.success_handler.two_factor.firewallName', $returnValue);
@@ -53,7 +53,7 @@ class TwoFactorServicesFactoryTest extends TestCase
             $this->container,
             self::FIREWALL_NAME,
             ['success_handler' => 'my_success_handler'],
-            self::TWO_FACTOR_FIREWALL_CONFIG_ID
+            self::TWO_FACTOR_FIREWALL_CONFIG_ID,
         );
 
         $this->assertEquals('my_success_handler', $returnValue);
@@ -69,7 +69,7 @@ class TwoFactorServicesFactoryTest extends TestCase
             $this->container,
             self::FIREWALL_NAME,
             self::DEFAULT_CONFIG,
-            self::TWO_FACTOR_FIREWALL_CONFIG_ID
+            self::TWO_FACTOR_FIREWALL_CONFIG_ID,
         );
 
         $this->assertEquals('security.authentication.failure_handler.two_factor.firewallName', $returnValue);
@@ -87,7 +87,7 @@ class TwoFactorServicesFactoryTest extends TestCase
             $this->container,
             self::FIREWALL_NAME,
             ['failure_handler' => 'my_failure_handler'],
-            self::TWO_FACTOR_FIREWALL_CONFIG_ID
+            self::TWO_FACTOR_FIREWALL_CONFIG_ID,
         );
 
         $this->assertEquals('my_failure_handler', $returnValue);
@@ -103,7 +103,7 @@ class TwoFactorServicesFactoryTest extends TestCase
             $this->container,
             self::FIREWALL_NAME,
             self::DEFAULT_CONFIG,
-            self::TWO_FACTOR_FIREWALL_CONFIG_ID
+            self::TWO_FACTOR_FIREWALL_CONFIG_ID,
         );
 
         $this->assertEquals('security.authentication.authentication_required_handler.two_factor.firewallName', $returnValue);
@@ -121,7 +121,7 @@ class TwoFactorServicesFactoryTest extends TestCase
             $this->container,
             self::FIREWALL_NAME,
             ['authentication_required_handler' => 'my_authentication_required_handler'],
-            self::TWO_FACTOR_FIREWALL_CONFIG_ID
+            self::TWO_FACTOR_FIREWALL_CONFIG_ID,
         );
 
         $this->assertEquals('my_authentication_required_handler', $returnValue);
@@ -163,7 +163,7 @@ class TwoFactorServicesFactoryTest extends TestCase
         $returnValue = $this->servicesFactory->createTwoFactorFirewallConfig(
             $this->container,
             self::FIREWALL_NAME,
-            self::DEFAULT_CONFIG
+            self::DEFAULT_CONFIG,
         );
 
         $this->assertEquals('security.firewall_config.two_factor.firewallName', $returnValue);
@@ -188,7 +188,7 @@ class TwoFactorServicesFactoryTest extends TestCase
             [
                 'prepare_on_login' => true,
                 'prepare_on_access_denied' => false,
-            ]
+            ],
         );
 
         $this->assertTrue($this->container->hasDefinition('security.authentication.provider_preparation_listener.two_factor.firewallName'));
@@ -208,7 +208,7 @@ class TwoFactorServicesFactoryTest extends TestCase
         $this->servicesFactory->createKernelExceptionListener(
             $this->container,
             self::FIREWALL_NAME,
-            self::AUTH_REQUIRED_HANDLER_ID
+            self::AUTH_REQUIRED_HANDLER_ID,
         );
 
         $this->assertTrue($this->container->hasDefinition('security.authentication.kernel_exception_listener.two_factor.firewallName'));
@@ -225,7 +225,7 @@ class TwoFactorServicesFactoryTest extends TestCase
         $this->servicesFactory->createAccessListener(
             $this->container,
             self::FIREWALL_NAME,
-            self::TWO_FACTOR_FIREWALL_CONFIG_ID
+            self::TWO_FACTOR_FIREWALL_CONFIG_ID,
         );
 
         $this->assertTrue($this->container->hasDefinition('security.authentication.access_listener.two_factor.firewallName'));
@@ -241,7 +241,7 @@ class TwoFactorServicesFactoryTest extends TestCase
         $this->servicesFactory->createFormListener(
             $this->container,
             self::FIREWALL_NAME,
-            self::TWO_FACTOR_FIREWALL_CONFIG_ID
+            self::TWO_FACTOR_FIREWALL_CONFIG_ID,
         );
 
         $this->assertTrue($this->container->hasDefinition('security.authentication.form_listener.two_factor.firewallName'));

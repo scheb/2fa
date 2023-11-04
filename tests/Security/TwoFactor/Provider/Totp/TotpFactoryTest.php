@@ -27,7 +27,7 @@ class TotpFactoryTest extends TestCase
     private const DIGITS = 8;
     private const ALGORITHM = TotpConfiguration::ALGORITHM_SHA256;
 
-    private function createUserMock(bool $hasTotpConfiguration = true, ?string $secret = self::SECRET): MockObject|TwoFactorInterface
+    private function createUserMock(bool $hasTotpConfiguration = true, string|null $secret = self::SECRET): MockObject|TwoFactorInterface
     {
         $user = $this->createMock(TwoFactorInterface::class);
         $user
@@ -91,7 +91,7 @@ class TotpFactoryTest extends TestCase
      * @test
      * @dataProvider provideHostnameAndIssuer
      */
-    public function getProvisioningUri_hostnameAndIssuerGiven_returnProvisioningUri(?string $hostname, ?string $issuer, array $customParameters, string $expectedUrl): void
+    public function getProvisioningUri_hostnameAndIssuerGiven_returnProvisioningUri(string|null $hostname, string|null $issuer, array $customParameters, string $expectedUrl): void
     {
         $user = $this->createUserMock();
         $totp = (new TotpFactory($hostname, $issuer, $customParameters))->createTotpForUser($user);

@@ -31,16 +31,16 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
     // Execute right before ContextListener, which is serializing the security token into the session
     public const RESPONSE_LISTENER_PRIORITY = 1;
 
-    private ?TwoFactorTokenInterface $twoFactorToken = null;
+    private TwoFactorTokenInterface|null $twoFactorToken = null;
     private LoggerInterface $logger;
 
     public function __construct(
         private TwoFactorProviderRegistry $providerRegistry,
         private PreparationRecorderInterface $preparationRecorder,
-        ?LoggerInterface $logger,
+        LoggerInterface|null $logger,
         private string $firewallName,
         private bool $prepareOnLogin,
-        private bool $prepareOnAccessDenied
+        private bool $prepareOnAccessDenied,
     ) {
         $this->logger = $logger ?? new NullLogger();
     }
@@ -125,7 +125,7 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents(): array
     {

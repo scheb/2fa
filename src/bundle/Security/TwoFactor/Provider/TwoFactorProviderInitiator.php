@@ -17,7 +17,7 @@ class TwoFactorProviderInitiator
 {
     public function __construct(
         private TwoFactorProviderRegistry $providerRegistry,
-        private TwoFactorTokenFactoryInterface $twoFactorTokenFactory
+        private TwoFactorTokenFactoryInterface $twoFactorTokenFactory,
     ) {
     }
 
@@ -40,7 +40,7 @@ class TwoFactorProviderInitiator
         return $activeTwoFactorProviders;
     }
 
-    public function beginTwoFactorAuthentication(AuthenticationContextInterface $context): ?TwoFactorTokenInterface
+    public function beginTwoFactorAuthentication(AuthenticationContextInterface $context): TwoFactorTokenInterface|null
     {
         $activeTwoFactorProviders = $this->getActiveTwoFactorProviders($context);
 

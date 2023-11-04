@@ -46,7 +46,7 @@ class ExceptionListenerTest extends TestCase
             self::FIREWALL_NAME,
             $this->tokenStorage,
             $this->authenticationRequiredHandler,
-            $this->eventDispatcher
+            $this->eventDispatcher,
         );
     }
 
@@ -92,7 +92,7 @@ class ExceptionListenerTest extends TestCase
             $this->createMock(HttpKernelInterface::class),
             $this->request,
             HttpKernelInterface::MAIN_REQUEST,
-            $exception
+            $exception,
         );
     }
 

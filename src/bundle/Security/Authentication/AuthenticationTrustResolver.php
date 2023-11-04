@@ -24,7 +24,7 @@ class AuthenticationTrustResolver implements AuthenticationTrustResolverInterfac
      *
      * @deprecated since Symfony 5.4, use !isAuthenticated() instead
      */
-    public function isAnonymous(?TokenInterface $token = null): bool
+    public function isAnonymous(TokenInterface|null $token = null): bool
     {
         if (!method_exists($this->decoratedTrustResolver, 'isAnonymous')) {
             throw new RuntimeException('Method "isAnonymous" was not declared on the decorated AuthenticationTrustResolverInterface');
@@ -33,12 +33,12 @@ class AuthenticationTrustResolver implements AuthenticationTrustResolverInterfac
         return $this->decoratedTrustResolver->isAnonymous($token);
     }
 
-    public function isRememberMe(?TokenInterface $token = null): bool
+    public function isRememberMe(TokenInterface|null $token = null): bool
     {
         return $this->decoratedTrustResolver->isRememberMe($token);
     }
 
-    public function isFullFledged(?TokenInterface $token = null): bool
+    public function isFullFledged(TokenInterface|null $token = null): bool
     {
         return !$this->isTwoFactorToken($token) && $this->decoratedTrustResolver->isFullFledged($token);
     }
@@ -46,7 +46,7 @@ class AuthenticationTrustResolver implements AuthenticationTrustResolverInterfac
     /**
      * Compatibility for Symfony >= 5.4.
      */
-    public function isAuthenticated(?TokenInterface $token = null): bool
+    public function isAuthenticated(TokenInterface|null $token = null): bool
     {
         // The "isAuthenticated" method must be declared in Symfony >= 6.0
         if (method_exists($this->decoratedTrustResolver, 'isAuthenticated')) {
@@ -62,7 +62,7 @@ class AuthenticationTrustResolver implements AuthenticationTrustResolverInterfac
         throw new RuntimeException('Neither method "isAuthenticated" nor "isAnonymous" was declared on the decorated AuthenticationTrustResolverInterface');
     }
 
-    private function isTwoFactorToken(?TokenInterface $token): bool
+    private function isTwoFactorToken(TokenInterface|null $token): bool
     {
         return $token instanceof TwoFactorTokenInterface;
     }

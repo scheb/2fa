@@ -23,6 +23,7 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
         $this->listener = new CheckTwoFactorCodeListener($this->preparationRecorder, $this->providerRegistry);
     }

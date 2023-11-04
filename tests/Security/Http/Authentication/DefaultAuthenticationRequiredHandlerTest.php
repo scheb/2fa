@@ -45,7 +45,7 @@ class DefaultAuthenticationRequiredHandlerTest extends TestCase
 
         $this->handler = new DefaultAuthenticationRequiredHandler(
             $this->httpUtils,
-            $this->twoFactorFirewallConfig
+            $this->twoFactorFirewallConfig,
         );
     }
 

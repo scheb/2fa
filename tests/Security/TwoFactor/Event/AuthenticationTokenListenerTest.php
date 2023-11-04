@@ -45,7 +45,7 @@ class AuthenticationTokenListenerTest extends TestCase
             $this->twoFactorConditionRegistry,
             $this->twoFactorProviderInitiator,
             $this->authenticationContextFactory,
-            $requestStack
+            $requestStack,
         );
     }
 

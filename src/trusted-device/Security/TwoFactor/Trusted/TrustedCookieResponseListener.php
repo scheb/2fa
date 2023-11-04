@@ -25,10 +25,10 @@ class TrustedCookieResponseListener implements EventSubscriberInterface
         private TrustedDeviceTokenStorage $trustedTokenStorage,
         private int $trustedTokenLifetime,
         private string $cookieName,
-        private ?bool $cookieSecure,
-        private ?string $cookieSameSite,
-        private ?string $cookiePath,
-        private ?string $cookieDomain,
+        private bool|null $cookieSecure,
+        private string|null $cookieSameSite,
+        private string|null $cookiePath,
+        private string|null $cookieDomain,
     ) {
     }
 
@@ -59,7 +59,7 @@ class TrustedCookieResponseListener implements EventSubscriberInterface
             null === $this->cookieSecure ? $event->getRequest()->isSecure() : $this->cookieSecure,
             true,
             false,
-            $this->cookieSameSite
+            $this->cookieSameSite,
         );
 
         $response = $event->getResponse();
@@ -86,7 +86,7 @@ class TrustedCookieResponseListener implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents(): array
     {

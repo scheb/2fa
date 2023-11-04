@@ -45,7 +45,7 @@ class TwoFactorFirewallConfigTest extends TestCase
             $options,
             self::FIREWALL_NAME,
             $this->httpUtils,
-            $this->requestDataReader
+            $this->requestDataReader,
         );
     }
 

@@ -118,7 +118,7 @@ class FormControllerTest extends TestCase
             $this->twoFactorFirewallContext,
             $this->logoutUrlGenerator,
             $this->trustedDeviceManager,
-            $trustedFeature
+            $trustedFeature,
         );
     }
 
@@ -206,7 +206,7 @@ class FormControllerTest extends TestCase
     /**
      * @param array<string,mixed>|null $errorData
      */
-    private function assertTemplateVarsHaveAuthenticationError(?string $error, ?array $errorData): void
+    private function assertTemplateVarsHaveAuthenticationError(string|null $error, array|null $errorData): void
     {
         $this->assertTemplateVars(function (array $templateVars) use ($error, $errorData) {
             $this->assertArrayHasKey('authenticationError', $templateVars);
@@ -259,7 +259,7 @@ class FormControllerTest extends TestCase
 
         $this->assertTemplateVarsHaveAuthenticationError(
             TwoFactorProviderNotFoundException::MESSAGE_KEY,
-            ['{{ provider }}' => 'unknownProvider']
+            ['{{ provider }}' => 'unknownProvider'],
         );
 
         $this->controller->form($this->request);

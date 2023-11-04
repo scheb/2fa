@@ -50,12 +50,12 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         private AuthenticationFailureHandlerInterface $failureHandler,
         private AuthenticationRequiredHandlerInterface $authenticationRequiredHandler,
         private EventDispatcherInterface $eventDispatcher,
-        ?LoggerInterface $logger = null
+        LoggerInterface|null $logger = null,
     ) {
         $this->logger = $logger ?? new NullLogger();
     }
 
-    public function supports(Request $request): ?bool
+    public function supports(Request $request): bool|null
     {
         return $this->twoFactorFirewallConfig->isCheckPathRequest($request);
     }
@@ -142,7 +142,7 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         return !$this->twoFactorFirewallConfig->isMultiFactor() || $token->allTwoFactorProvidersAuthenticated();
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): Response|null
     {
         $this->logger->info('User has been two-factor authenticated successfully.', ['username' => UsernameHelper::getTokenUsername($token)]);
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::SUCCESS, $request, $token);
@@ -159,7 +159,7 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         return $this->successHandler->onAuthenticationSuccess($request, $token);
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response|null
     {
         $currentToken = $this->tokenStorage->getToken();
         assert($currentToken instanceof TwoFactorTokenInterface);

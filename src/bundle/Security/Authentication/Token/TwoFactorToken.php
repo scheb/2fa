@@ -9,7 +9,6 @@ use LogicException;
 use RuntimeException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
 use Scheb\TwoFactorBundle\Security\UsernameHelper;
-use Stringable;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use function array_key_exists;
@@ -22,15 +21,10 @@ use function serialize;
 use function sprintf;
 use function unserialize;
 
-class TwoFactorToken implements TwoFactorTokenInterface, Stringable
+class TwoFactorToken implements TwoFactorTokenInterface
 {
-    private TokenInterface $authenticatedToken;
-
     /** @var array<string,mixed> */
     private array $attributes = [];
-
-    /** @var string[] */
-    private array $twoFactorProviders;
 
     /** @var bool[] */
     private array $preparedProviders = [];
@@ -39,17 +33,14 @@ class TwoFactorToken implements TwoFactorTokenInterface, Stringable
      * @param string[] $twoFactorProviders
      */
     public function __construct(
-        TokenInterface $authenticatedToken,
-        private ?string $credentials,
+        private TokenInterface $authenticatedToken,
+        private string|null $credentials,
         private string $firewallName,
-        array $twoFactorProviders,
+        private array $twoFactorProviders,
     ) {
         if (null === $authenticatedToken->getUser()) {
             throw new InvalidArgumentException('The authenticated token must have a user object set.');
         }
-
-        $this->authenticatedToken = $authenticatedToken;
-        $this->twoFactorProviders = $twoFactorProviders;
     }
 
     public function getUser(): UserInterface
@@ -98,7 +89,7 @@ class TwoFactorToken implements TwoFactorTokenInterface, Stringable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getRoleNames(): array
     {
@@ -117,7 +108,7 @@ class TwoFactorToken implements TwoFactorTokenInterface, Stringable
         return $credentialsToken;
     }
 
-    public function getCredentials(): ?string
+    public function getCredentials(): string|null
     {
         return $this->credentials;
     }
@@ -133,7 +124,7 @@ class TwoFactorToken implements TwoFactorTokenInterface, Stringable
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getTwoFactorProviders(): array
     {
@@ -146,7 +137,7 @@ class TwoFactorToken implements TwoFactorTokenInterface, Stringable
         array_unshift($this->twoFactorProviders, $preferredProvider);
     }
 
-    public function getCurrentTwoFactorProvider(): ?string
+    public function getCurrentTwoFactorProvider(): string|null
     {
         $first = reset($this->twoFactorProviders);
 

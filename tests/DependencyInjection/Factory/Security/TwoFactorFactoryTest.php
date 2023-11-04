@@ -56,7 +56,7 @@ class TwoFactorFactoryTest extends TestCase
      */
     private function getFullConfig(): array
     {
-        $yaml = <<<EOF
+        $yaml = <<<'EOF'
 two_factor:
     check_path: /check_path
     post_only: false
@@ -177,7 +177,7 @@ EOF;
             $this->container,
             self::FIREWALL_NAME,
             array_merge(self::DEFAULT_CONFIG, $customConfig),
-            self::USER_PROVIDER
+            self::USER_PROVIDER,
         );
     }
 

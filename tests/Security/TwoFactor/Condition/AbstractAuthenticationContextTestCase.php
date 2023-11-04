@@ -17,7 +17,7 @@ abstract class AbstractAuthenticationContextTestCase extends TestCase
 {
     protected const FIREWALL_NAME = 'firewallName';
 
-    protected function createAuthenticationContext(?Request $request = null, ?TokenInterface $token = null, ?UserInterface $user = null): MockObject|AuthenticationContextInterface
+    protected function createAuthenticationContext(Request|null $request = null, TokenInterface|null $token = null, UserInterface|null $user = null): MockObject|AuthenticationContextInterface
     {
         $context = $this->createMock(AuthenticationContextInterface::class);
         $context

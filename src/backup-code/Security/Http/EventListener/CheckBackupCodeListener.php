@@ -36,7 +36,7 @@ class CheckBackupCodeListener extends AbstractCheckCodeListener
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents(): array
     {

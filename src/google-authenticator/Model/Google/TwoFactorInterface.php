@@ -20,5 +20,5 @@ interface TwoFactorInterface
      * Return the Google Authenticator secret
      * When an empty string is returned, the Google authentication is disabled.
      */
-    public function getGoogleAuthenticatorSecret(): ?string;
+    public function getGoogleAuthenticatorSecret(): string|null;
 }

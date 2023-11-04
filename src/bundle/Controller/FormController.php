@@ -28,7 +28,7 @@ class FormController
         private TwoFactorProviderRegistry $providerRegistry,
         private TwoFactorFirewallContext $twoFactorFirewallContext,
         private LogoutUrlGenerator $logoutUrlGenerator,
-        private ?TrustedDeviceManagerInterface $trustedDeviceManager,
+        private TrustedDeviceManagerInterface|null $trustedDeviceManager,
         private bool $trustedFeatureEnabled,
     ) {
     }
@@ -107,7 +107,7 @@ class FormController
         return $renderer->renderForm($request, $templateVars);
     }
 
-    protected function getLastAuthenticationException(SessionInterface $session): ?AuthenticationException
+    protected function getLastAuthenticationException(SessionInterface $session): AuthenticationException|null
     {
         $authException = $session->get(SecurityRequestAttributes::AUTHENTICATION_ERROR);
         if ($authException instanceof AuthenticationException) {

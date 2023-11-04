@@ -45,7 +45,7 @@ class TwoFactorFormListener implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents(): array
     {

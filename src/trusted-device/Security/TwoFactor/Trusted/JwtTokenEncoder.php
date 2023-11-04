@@ -27,7 +27,7 @@ class JwtTokenEncoder
 
     private Clock $clock;
 
-    public function __construct(private Configuration $configuration, ?Clock $clock = null)
+    public function __construct(private Configuration $configuration, Clock|null $clock = null)
     {
         $this->clock = $clock ?? SystemClock::fromSystemTimezone();
     }
@@ -44,7 +44,7 @@ class JwtTokenEncoder
         return $builder->getToken($this->configuration->signer(), $this->configuration->signingKey());
     }
 
-    public function decodeToken(string $encodedToken): ?Plain
+    public function decodeToken(string $encodedToken): Plain|null
     {
         if (0 === strlen($encodedToken)) {
             return null;

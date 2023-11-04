@@ -34,7 +34,7 @@ class TwoFactorAccessListenerTest extends TestCase
         $this->accessListener = new TwoFactorAccessListener(
             $this->twoFactorFirewallConfig,
             $this->tokenStorage,
-            $this->twoFactorAccessDecider
+            $this->twoFactorAccessDecider,
         );
     }
 

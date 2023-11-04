@@ -18,7 +18,7 @@ use function substr;
  */
 class ParameterBagUtils
 {
-    private static ?PropertyAccessor $propertyAccessor = null;
+    private static PropertyAccessor|null $propertyAccessor = null;
 
     /**
      * @see \Symfony\Component\Security\Http\ParameterBagUtils
@@ -26,7 +26,7 @@ class ParameterBagUtils
      * Returns a request "parameter" value.
      * Paths like foo[bar] will be evaluated to find deeper items in nested data structures.
      */
-    public static function getRequestParameterValue(Request $request, string $path): ?string
+    public static function getRequestParameterValue(Request $request, string $path): string|null
     {
         $pos = strpos($path, '[');
         if (false === $pos) {

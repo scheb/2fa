@@ -17,7 +17,7 @@ class TwoFactorCodeCredentials implements CredentialsInterface
 
     public function __construct(
         private TwoFactorTokenInterface $twoFactorToken,
-        private ?string $code,
+        private string|null $code,
     ) {
     }
 

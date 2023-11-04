@@ -31,7 +31,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
     private MockObject|PreparationRecorderInterface $preparationRecorder;
     private MockObject|TwoFactorToken $token;
     private MockObject|UserInterface $user;
-    private ?TwoFactorProviderPreparationListener $listener = null;
+    private TwoFactorProviderPreparationListener|null $listener = null;
 
     protected function setUp(): void
     {
@@ -64,7 +64,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
             $this->createMock(LoggerInterface::class),
             self::FIREWALL_NAME,
             $prepareOnLogin,
-            $prepareOnAccessDenied
+            $prepareOnAccessDenied,
         );
     }
 

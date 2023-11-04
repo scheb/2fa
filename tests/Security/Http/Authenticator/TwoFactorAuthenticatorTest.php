@@ -83,7 +83,7 @@ class TwoFactorAuthenticatorTest extends TestCase
             $this->failureHandler,
             $this->authenticationRequiredHandler,
             $this->eventDispatcher,
-            $this->createMock(LoggerInterface::class)
+            $this->createMock(LoggerInterface::class),
         );
     }
 
@@ -120,7 +120,7 @@ class TwoFactorAuthenticatorTest extends TestCase
             ->willReturn($rememberMeSetsTrusted);
     }
 
-    private function createTwoFactorToken(?TokenInterface $authenticatedToken = null, bool $allProvidersAuthenticated = false): MockObject|TwoFactorTokenInterface
+    private function createTwoFactorToken(TokenInterface|null $authenticatedToken = null, bool $allProvidersAuthenticated = false): MockObject|TwoFactorTokenInterface
     {
         $user = $this->createMock(UserInterface::class);
         // Compatibility for Symfony < 6.0
@@ -200,13 +200,15 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->eventDispatcher
             ->expects($matcher)
             ->method('dispatch')
-            ->with($this->isInstanceOf(
-                TwoFactorAuthenticationEvent::class),
+            ->with(
+                $this->isInstanceOf(
+                    TwoFactorAuthenticationEvent::class,
+                ),
                 $this->callback(function ($value) use ($matcher, $events) {
                     $this->assertEquals($events[$matcher->numberOfInvocations() - 1], $value);
 
                     return true;
-                })
+                }),
             );
     }
 

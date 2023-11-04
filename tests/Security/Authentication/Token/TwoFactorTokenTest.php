@@ -38,7 +38,7 @@ class TwoFactorTokenTest extends TestCase
             $authenticatedToken,
             null,
             self::FIREWALL_NAME,
-            $twoFactorProviders
+            $twoFactorProviders,
         );
     }
 

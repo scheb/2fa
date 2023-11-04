@@ -34,7 +34,7 @@ class SuppressRememberMeListenerTest extends TestCase
         return $badge;
     }
 
-    private function createPassportWithRememberMeBadge(?RememberMeBadge $badge): MockObject|Passport
+    private function createPassportWithRememberMeBadge(RememberMeBadge|null $badge): MockObject|Passport
     {
         $passport = $this->createMock(Passport::class);
         $passport

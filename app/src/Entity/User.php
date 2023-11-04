@@ -41,13 +41,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTw
     private bool $emailAuthenticationEnabled = true;
 
     #[ORM\Column(type: 'integer')]
-    private ?string $emailAuthenticationCode = null;
+    private string|null $emailAuthenticationCode = null;
 
     #[ORM\Column(type: 'boolean')]
     private bool $googleAuthenticatorEnabled = true;
 
     #[ORM\Column(type: 'string')]
-    private ?string $googleAuthenticatorSecret = null;
+    private string|null $googleAuthenticatorSecret = null;
 
     #[ORM\Column(type: 'boolean')]
     private bool $totpAuthenticationEnabled = true;
@@ -72,12 +72,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTw
         return $this->email;
     }
 
-    public function getSalt(): ?string
+    public function getSalt(): string|null
     {
         return null;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string|null
     {
         return $this->password;
     }
@@ -163,7 +163,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTw
         return $this->googleAuthenticatorSecret;
     }
 
-    public function setGoogleAuthenticatorSecret(?string $googleAuthenticatorSecret): void
+    public function setGoogleAuthenticatorSecret(string|null $googleAuthenticatorSecret): void
     {
         $this->googleAuthenticatorSecret = $googleAuthenticatorSecret;
     }
@@ -183,7 +183,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTw
         return $this->username;
     }
 
-    public function getTotpAuthenticationConfiguration(): ?TotpConfigurationInterface
+    public function getTotpAuthenticationConfiguration(): TotpConfigurationInterface|null
     {
         return new TotpConfiguration($this->googleAuthenticatorSecret, TotpConfiguration::ALGORITHM_SHA1, 30, 6);
     }

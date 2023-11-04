@@ -51,7 +51,7 @@ interface TwoFactorTokenInterface extends TokenInterface
     /**
      * Return the alias of the two-factor provider, which is currently active.
      */
-    public function getCurrentTwoFactorProvider(): ?string;
+    public function getCurrentTwoFactorProvider(): string|null;
 
     /**
      * Flag a two-factor provider as complete. The provider's alias is passed as the argument.

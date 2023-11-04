@@ -20,7 +20,7 @@ class GoogleTotpFactoryTest extends TestCase
     private const CUSTOM_DIGITS = 8;
     private const DEFAULT_DIGITS = 6;
 
-    private function createUserMock(?string $secret = self::SECRET): MockObject|TwoFactorInterface
+    private function createUserMock(string|null $secret = self::SECRET): MockObject|TwoFactorInterface
     {
         $user = $this->createMock(TwoFactorInterface::class);
         $user
@@ -76,7 +76,7 @@ class GoogleTotpFactoryTest extends TestCase
      * @test
      * @dataProvider provideHostnameAndIssuer
      */
-    public function getProvisioningUri_hostnameAndIssuerGiven_returnProvisioningUri(?string $hostname, ?string $issuer, int $digits, string $expectedUrl): void
+    public function getProvisioningUri_hostnameAndIssuerGiven_returnProvisioningUri(string|null $hostname, string|null $issuer, int $digits, string $expectedUrl): void
     {
         $user = $this->createUserMock();
         $totp = (new GoogleTotpFactory($hostname, $issuer, $digits))->createTotpForUser($user);

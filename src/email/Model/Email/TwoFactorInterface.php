@@ -19,7 +19,7 @@ interface TwoFactorInterface
     /**
      * Return the authentication code.
      */
-    public function getEmailAuthCode(): ?string;
+    public function getEmailAuthCode(): string|null;
 
     /**
      * Set the authentication code.

@@ -34,7 +34,7 @@ class TwoFactorInProgressVoterTest extends TestCase
      * @test
      * @dataProvider provideAttributeAndExpectedResult
      */
-    public function vote_isTwoFactorToken_returnAbstain(?string $checkAttribute, int $expectedResult): void
+    public function vote_isTwoFactorToken_returnAbstain(string|null $checkAttribute, int $expectedResult): void
     {
         $token = $this->createMock(TwoFactorTokenInterface::class);
         $returnValue = $this->voter->vote($token, null, [$checkAttribute]);

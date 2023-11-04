@@ -22,7 +22,7 @@ use function str_contains;
  */
 class JsonRequestUtils
 {
-    private static ?PropertyAccessor $propertyAccessor = null;
+    private static PropertyAccessor|null $propertyAccessor = null;
 
     public static function isJsonRequest(Request $request): bool
     {

@@ -20,7 +20,7 @@ class CheckTwoFactorCodeListener extends AbstractCheckCodeListener
 
     public function __construct(
         PreparationRecorderInterface $preparationRecorder,
-        private TwoFactorProviderRegistry $providerRegistry
+        private TwoFactorProviderRegistry $providerRegistry,
     ) {
         parent::__construct($preparationRecorder);
     }
@@ -44,7 +44,7 @@ class CheckTwoFactorCodeListener extends AbstractCheckCodeListener
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getSubscribedEvents(): array
     {

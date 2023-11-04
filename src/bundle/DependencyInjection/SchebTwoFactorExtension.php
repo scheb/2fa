@@ -26,7 +26,7 @@ use function trim;
 class SchebTwoFactorExtension extends Extension
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function load(array $configs, ContainerBuilder $container): void
     {

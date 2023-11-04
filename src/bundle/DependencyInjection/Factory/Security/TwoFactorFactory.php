@@ -95,7 +95,7 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function createAuthenticator(ContainerBuilder $container, string $firewallName, array $config, string $userProviderId): string
     {
@@ -115,7 +115,7 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
             $twoFactorFirewallConfigId,
             $successHandlerId,
             $failureHandlerId,
-            $authRequiredHandlerId
+            $authRequiredHandlerId,
         );
     }
 
@@ -125,7 +125,7 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
         string $twoFactorFirewallConfigId,
         string $successHandlerId,
         string $failureHandlerId,
-        string $authRequiredHandlerId
+        string $authRequiredHandlerId,
     ): string {
         $authenticatorId = self::AUTHENTICATOR_ID_PREFIX.$firewallName;
         $container
@@ -149,7 +149,7 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function createListeners(ContainerBuilder $container, string $firewallName, array $config): array
     {

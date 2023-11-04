@@ -15,8 +15,6 @@ class TotpConfiguration implements TotpConfigurationInterface
     public const ALGORITHM_SHA256 = 'sha256';
     public const ALGORITHM_SHA512 = 'sha512';
 
-    private string $algorithm;
-
     /**
      * @param string $secret    Base32 encoded secret key
      * @param string $algorithm Hashing algorithm to be used, see class constants for available values
@@ -25,15 +23,13 @@ class TotpConfiguration implements TotpConfigurationInterface
      */
     public function __construct(
         private string $secret,
-        string $algorithm,
+        private string $algorithm,
         private int $period,
         private int $digits,
     ) {
         if (!self::isValidAlgorithm($algorithm)) {
             throw new InvalidArgumentException(sprintf('The algorithm "%s" is not supported', $algorithm));
         }
-
-        $this->algorithm = $algorithm;
     }
 
     private static function isValidAlgorithm(string $algorithm): bool
@@ -46,7 +42,7 @@ class TotpConfiguration implements TotpConfigurationInterface
                 self::ALGORITHM_SHA256,
                 self::ALGORITHM_SHA512,
             ],
-            true
+            true,
         );
     }
 
