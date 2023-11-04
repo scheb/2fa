@@ -4,6 +4,10 @@ inputs:
     php-version:
         description: 'PHP version to use'
         required: true
+    php-coverage:
+        description: 'Code coverage tool for php'
+        required: false
+        default: 'none'
     composer-token:
         description: 'Github token for Composer'
         required: true
@@ -33,7 +37,7 @@ runs:
         -   name: 'Setup PHP'
             uses: shivammathur/setup-php@v2
             with:
-                coverage: 'none'
+                coverage: '${{ inputs.php-coverage }}'
                 php-version: '${{ inputs.php-version }}'
                 tools: php-cs-fixer
             env:

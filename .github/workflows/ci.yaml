@@ -129,10 +129,11 @@ jobs:
                 uses: ./.github/actions/setup-build
                 with:
                     php-version: '${{ matrix.php-version }}'
+                    php-coverage: 'pcov'
                     composer-token: ${{ secrets.GITHUB_TOKEN }}
 
             -   name: 'Run tests with coverage'
-                run: phpdbg -qrr vendor/bin/phpunit --coverage-clover coverage/clover.xml
+                run: vendor/bin/phpunit --coverage-clover coverage/clover.xml
 
             -   name: 'Send Coverage to Codecov'
                 uses: codecov/codecov-action@v3
