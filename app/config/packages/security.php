@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Entity\User;
-use App\Kernel;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 $config = [
@@ -14,6 +13,9 @@ $config = [
                 'property' => 'username',
             ],
         ],
+    ],
+    'password_hashers' => [
+        User::class => ['algorithm' => 'sha1'],
     ],
     'firewalls' => [
         'dev' => [
@@ -62,21 +64,6 @@ $config = [
         ['path' => '^/members', 'role' => ['ROLE_USER', 'ROLE_ADMIN']],
     ],
 ];
-
-// Symfony 5.4
-if (Kernel::VERSION_ID < 60000) {
-    $config = array_replace_recursive($config, [
-        'encoders' => [
-            User::class => ['algorithm' => 'sha1'],
-        ],
-    ]);
-} else {
-    $config = array_replace_recursive($config, [
-        'password_hashers' => [
-            User::class => ['algorithm' => 'sha1'],
-        ],
-    ]);
-}
 
 /** @var ContainerBuilder $container */
 $container->loadFromExtension('security', $config);

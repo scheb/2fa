@@ -15,6 +15,7 @@
         "symfony/mailer": "^6.4 || ^7.0",
         "symfony/monolog-bundle": "^3.1",
         "symfony/rate-limiter": "^6.4 || ^7.0",
+        "symfony/runtime": "^6.4 || ^7.0",
         "symfony/security-bundle": "^6.4 || ^7.0",
         "symfony/translation": "^6.4 || ^7.0",
         "symfony/twig-bundle": "^6.4 || ^7.0",
@@ -33,7 +34,8 @@
         },
         "sort-packages": true,
         "allow-plugins": {
-            "composer/package-versions-deprecated": false
+            "composer/package-versions-deprecated": false,
+            "symfony/runtime": true
         }
     },
     "autoload": {
