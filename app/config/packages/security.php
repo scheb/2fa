@@ -7,7 +7,6 @@ use App\Kernel;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 $config = [
-    'enable_authenticator_manager' => true,
     'providers' => [
         'our_db_provider' => [
             'entity' => [
