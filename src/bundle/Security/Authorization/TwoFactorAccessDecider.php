@@ -11,7 +11,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\AccessMapInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Security\Http\Logout\LogoutUrlGenerator;
-use function defined;
 use function strlen;
 use function strpos;
 use function substr;
@@ -44,7 +43,8 @@ class TwoFactorAccessDecider
         }
 
         // Let routes pass, e.g. if a route needs to be callable during two-factor authentication
-        // Compatibility for Symfony < 6.0, true flag to support multiple attributes
+        // Originally compatibility for Symfony < 6.0, true flag to support multiple attributes
+        // Still needed for compatibility with Symfony 7
         /** @psalm-suppress TooManyArguments */
         if (null !== $attributes && $this->accessDecisionManager->decide($token, $attributes, $request, true)) {
             return true;
@@ -69,13 +69,7 @@ class TwoFactorAccessDecider
             return false;
         }
 
-        if ([AuthenticatedVoter::PUBLIC_ACCESS] === $attributes) {
-            return true;
-        }
-
-        // Compatibility for Symfony < 6.0
-        return defined(AuthenticatedVoter::class.'::IS_AUTHENTICATED_ANONYMOUSLY')
-            && [AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY] === $attributes;
+        return [AuthenticatedVoter::PUBLIC_ACCESS] === $attributes;
     }
 
     private function makeRelativeToBaseUrl(string $logoutPath, Request $request): string

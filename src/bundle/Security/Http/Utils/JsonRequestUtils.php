@@ -26,7 +26,7 @@ class JsonRequestUtils
 
     public static function isJsonRequest(Request $request): bool
     {
-        return str_contains((string) (method_exists(Request::class, 'getContentTypeFormat') ? $request->getContentTypeFormat() : $request->getContentType()), 'json');
+        return str_contains((string) $request->getContentTypeFormat(), 'json');
     }
 
     /**

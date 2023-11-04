@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
-use Scheb\TwoFactorBundle\Security\UsernameHelper;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use function array_key_exists;
@@ -17,9 +16,7 @@ use function array_search;
 use function array_unshift;
 use function count;
 use function reset;
-use function serialize;
 use function sprintf;
-use function unserialize;
 
 class TwoFactorToken implements TwoFactorTokenInterface
 {
@@ -53,39 +50,14 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return $user;
     }
 
-    /**
-     * Type hint cannot be added (yet), compatibility for Symfony < 6.0.
-     *
-     * @phpcs:disable SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-     *
-     * @param UserInterface $user
-     */
-    public function setUser($user): void
+    public function setUser(UserInterface $user): void
     {
         $this->authenticatedToken->setUser($user);
     }
 
     public function getUserIdentifier(): string
     {
-        return UsernameHelper::getTokenUsername($this->authenticatedToken);
-    }
-
-    /**
-     * Compatibility for Symfony < 6.0.
-     */
-    public function getUsername(): string
-    {
-        return $this->getUserIdentifier();
-    }
-
-    /**
-     * Compatibility for Symfony < 6.0.
-     *
-     * @return string[]
-     */
-    public function getRoles(): array
-    {
-        return [];
+        return $this->authenticatedToken->getUserIdentifier();
     }
 
     /**
@@ -183,24 +155,6 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return $this->firewallName;
     }
 
-    public function isAuthenticated(): bool
-    {
-        return true;
-    }
-
-    public function setAuthenticated(bool $isAuthenticated): void
-    {
-        throw new RuntimeException('Cannot change authenticated once initialized.');
-    }
-
-    /**
-     * Compatibility for Symfony < 6.0.
-     */
-    public function serialize(): string
-    {
-        return serialize($this->__serialize());
-    }
-
     /**
      * @return mixed[]
      */
@@ -214,14 +168,6 @@ class TwoFactorToken implements TwoFactorTokenInterface
             $this->twoFactorProviders,
             $this->preparedProviders,
         ];
-    }
-
-    /**
-     * Compatibility for Symfony < 6.0.
-     */
-    public function unserialize(string $serialized): void
-    {
-        $this->__unserialize(unserialize($serialized));
     }
 
     /**

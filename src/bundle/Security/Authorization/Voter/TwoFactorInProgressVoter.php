@@ -8,7 +8,6 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
-use function defined;
 
 /**
  * @final
@@ -32,15 +31,6 @@ class TwoFactorInProgressVoter implements VoterInterface
             }
 
             if (AuthenticatedVoter::PUBLIC_ACCESS === $attribute) {
-                return VoterInterface::ACCESS_GRANTED;
-            }
-
-            // Compatibility for Symfony < 6.0
-            /** @psalm-suppress UndefinedConstant */
-            if (
-                defined(AuthenticatedVoter::class.'::IS_AUTHENTICATED_ANONYMOUSLY')
-                && AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY === $attribute
-            ) {
                 return VoterInterface::ACCESS_GRANTED;
             }
         }

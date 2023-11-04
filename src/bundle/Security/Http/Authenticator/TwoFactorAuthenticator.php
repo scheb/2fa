@@ -13,7 +13,6 @@ use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFa
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
-use Scheb\TwoFactorBundle\Security\UsernameHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -29,7 +28,6 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
-use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use function assert;
 use function class_exists;
@@ -77,7 +75,7 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         $userLoader = static function () use ($currentToken): UserInterface {
             return $currentToken->getUser();
         };
-        $userBadge = new UserBadge(UsernameHelper::getTokenUsername($currentToken), $userLoader);
+        $userBadge = new UserBadge($currentToken->getUserIdentifier(), $userLoader);
         $passport = new Passport($userBadge, $credentials, []);
         if ($currentToken->hasAttribute(TwoFactorTokenInterface::ATTRIBUTE_NAME_USE_REMEMBER_ME)) {
             $rememberMeBadge = new RememberMeBadge();
@@ -108,19 +106,6 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
             );
     }
 
-    /**
-     * Compatibility with Symfony < 6.0.
-     *
-     * @deprecated Use createToken() instead
-     *
-     * @psalm-suppress UndefinedClass
-     */
-    public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface
-    {
-        /** @psalm-suppress InvalidArgument */
-        return $this->createToken($passport, $firewallName);
-    }
-
     public function createToken(Passport $passport, string $firewallName): TokenInterface
     {
         $credentialsBadge = $passport->getBadge(TwoFactorCodeCredentials::class);
@@ -144,7 +129,7 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): Response|null
     {
-        $this->logger->info('User has been two-factor authenticated successfully.', ['username' => UsernameHelper::getTokenUsername($token)]);
+        $this->logger->info('User has been two-factor authenticated successfully.', ['username' => $token->getUserIdentifier()]);
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::SUCCESS, $request, $token);
 
         // When it's still a TwoFactorTokenInterface, keep showing the auth form
