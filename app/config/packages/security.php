@@ -25,6 +25,10 @@ $config = [
             'lazy' => true,
             'pattern' => '^/',
             'provider' => 'our_db_provider',
+            'login_throttling' => [
+                'max_attempts' => 3,
+                'interval' => '5 minutes',
+            ],
             'form_login' => [
                 'login_path' => '_security_login',
                 'check_path' => '_security_login',

@@ -15,6 +15,7 @@
         "symfony/dotenv": "^5.4 || ^6.0",
         "symfony/mailer": "^5.4 || ^6.0",
         "symfony/monolog-bundle": "^3.1",
+        "symfony/rate-limiter": "^5.4 || ^6.0",
         "symfony/security-bundle": "^5.4 || ^6.0",
         "symfony/translation": "^5.4 || ^6.0",
         "symfony/twig-bundle": "^5.4 || ^6.0",
