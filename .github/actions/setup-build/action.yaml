@@ -60,7 +60,7 @@ runs:
         -   name: "Require extra Composer dependencies"
             if: ${{ inputs.composer-require }}
             shell: bash
-            run: composer require ${{ inputs.composer-require }} --no-update --working-dir=${{ inputs.composer-working-dir }}
+            run: composer require ${{ inputs.composer-require }} --dev --no-update --working-dir=${{ inputs.composer-working-dir }}
 
         -   name: "Validate composer.json"
             shell: bash
