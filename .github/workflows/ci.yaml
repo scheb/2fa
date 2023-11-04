@@ -54,11 +54,11 @@ jobs:
                         symfony-version: '5.4.*'
 
                     # Test against Symfony 5.4
-                    -   php-version: '8.2'
+                    -   php-version: '8.3'
                         symfony-version: '5.4.*'
 
                     # Test against Symfony 6.*
-                    -   php-version: '8.2'
+                    -   php-version: '8.3'
                         symfony-version: '6.*'
         steps:
             -   name: 'Checkout code'
@@ -90,11 +90,11 @@ jobs:
                         symfony-version: '5.4.*'
 
                     # Test against Symfony 5.4
-                    -   php-version: '8.2'
+                    -   php-version: '8.3'
                         symfony-version: '5.4.*'
 
                     # Test against Symfony 6.*
-                    -   php-version: '8.2'
+                    -   php-version: '8.3'
                         symfony-version: '6.*'
 
         steps:
