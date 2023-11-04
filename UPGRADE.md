@@ -33,7 +33,7 @@ method `getProviderKey()` was removed, please implement `getFirewallName()` inst
 The internal interface `Scheb\TwoFactorBundle\Security\TwoFactor\Handler\AuthenticationHandlerInterface` was removed. If
 you used it nevertheless, please migrate to an implementation based on
 `Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionInterface`. See more about
-[custom conditions for two-factor authentication](https://symfony.com/bundles/SchebTwoFactorBundle/6.x/custom_conditions.html).
+[custom conditions for two-factor authentication](https://symfony.com/bundles/SchebTwoFactorBundle/7.x/custom_conditions.html).
 
 The bundle has previously recommended the controller syntax with a single colon
 `_controller: "scheb_two_factor.form_controller:form"`. Under Symfony 6, you have to use the syntax with two colons
@@ -128,7 +128,7 @@ public function invalidateBackupCode(object $user, string $code): void;
 
 Out-of-the-box support for `symfony/swiftmailer-bundle` was removed, respectively
 `Scheb\TwoFactorBundle\Mailer\SwiftAuthCodeMailer` was removed. Please migrate to `symfony/mailer` or use a
-[custom mailer implementation](https://symfony.com/bundles/SchebTwoFactorBundle/6.x/providers/email.html#custom-mailer).
+[custom mailer implementation](https://symfony.com/bundles/SchebTwoFactorBundle/7.x/providers/email.html#custom-mailer).
 
 Signature of `Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface::getEmailAuthCode()` has changed to be nullable,
 please update your implementation accordingly.
@@ -172,7 +172,7 @@ The package `scheb/2fa-qr-code` was discontinued. Please migrate to get QR code 
 `endroid/qr-code` package (or any alternative) to render an QR code image.
 
 An example how to render the QR code with `endroid/qr-code` version 4 can be found
-[in the test application](https://github.com/scheb/2fa/blob/6.x/app/src/Controller/QrCodeController.php).
+[in the test application](https://github.com/scheb/2fa/blob/7.x/app/src/Controller/QrCodeController.php).
 
 4.x to 5.x
 ----------

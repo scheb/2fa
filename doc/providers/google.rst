@@ -227,7 +227,7 @@ Authenticator service:
 Use the QR code rendering library of your choice to render a QR code image.
 
 An example how to render the QR code with ``endroid/qr-code`` version 4 can be found
-`in the demo application <https://github.com/scheb/2fa/blob/6.x/app/src/Controller/QrCodeController.php>`_.
+`in the demo application <https://github.com/scheb/2fa/blob/7.x/app/src/Controller/QrCodeController.php>`_.
 
 .. caution::
 

@@ -4,8 +4,8 @@ scheb/2fa
 This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki/Multi-factor_authentication) for your
 [Symfony](https://symfony.com/) application**.
 
-[![Build Status](https://github.com/scheb/2fa/actions/workflows/ci.yaml/badge.svg?branch=6.x)](https://github.com/scheb/2fa/actions?query=workflow%3ACI+branch%3A6.x)
-[![Code Coverage](https://codecov.io/gh/scheb/2fa/branch/6.x/graph/badge.svg)](https://app.codecov.io/gh/scheb/2fa/branch/6.x)
+[![Build Status](https://github.com/scheb/2fa/actions/workflows/ci.yaml/badge.svg?branch=7.x)](https://github.com/scheb/2fa/actions?query=workflow%3ACI+branch%3A7.x)
+[![Code Coverage](https://codecov.io/gh/scheb/2fa/branch/7.x/graph/badge.svg)](https://app.codecov.io/gh/scheb/2fa/branch/7.x)
 [![Latest Stable Version](https://img.shields.io/packagist/v/scheb/2fa-bundle)](https://packagist.org/packages/scheb/2fa-bundle)
 [![Monthly Downloads](https://img.shields.io/packagist/dm/scheb/2fa-bundle)](https://packagist.org/packages/scheb/2fa-bundle/stats)
 [![Total Downloads](https://img.shields.io/packagist/dt/scheb/2fa-bundle)](https://packagist.org/packages/scheb/2fa-bundle/stats)
@@ -68,7 +68,8 @@ Version Guidance
 | [3.x][v3-repo]     | EOL                      | 3.4, ^4.0, ^5.0  |
 | [4.x][v4-repo]     | EOL                      | 3.4, ^4.0, ^5.0  |
 | [5.x][v5-repo]     | EOL                      | 4.4, ^5.0        |
-| **[6.x][v6-repo]** | New features + Bug fixes | 5.4, ^6.0        |
+| [6.x][v6-repo]     | Bug & security fixes     | 5.4, ^6.0        |
+| **[7.x][v7-repo]** | New features + Bug fixes | 6.4, ^7.0        |
 
 [v1-repo]: https://github.com/scheb/two-factor-bundle/tree/1.x
 [v2-repo]: https://github.com/scheb/two-factor-bundle/tree/2.x
@@ -76,6 +77,7 @@ Version Guidance
 [v4-repo]: https://github.com/scheb/two-factor-bundle/tree/4.x
 [v5-repo]: https://github.com/scheb/2fa/tree/5.x
 [v6-repo]: https://github.com/scheb/2fa/tree/6.x
+[v7-repo]: https://github.com/scheb/2fa/tree/7.x
 
 License
 -------

@@ -7,9 +7,9 @@ Getting started
 A good starting point are the Google Authenticator, TOTP and email authentication implementations, which are available
 in the codebase. Have a look at the follow files:
 
-* `src/google-authenticator/Security/TwoFactor/Provider/Google/GoogleAuthenticatorTwoFactorProvider.php <https://github.com/scheb/2fa/tree/6.x/src/google-authenticator/Security/TwoFactor/Provider/Google/GoogleAuthenticatorTwoFactorProvider.php>`_
-* `src/totp/Security/TwoFactor/Provider/Totp/TotpAuthenticatorTwoFactorProvider.php <https://github.com/scheb/2fa/tree/6.x/src/totp/Security/TwoFactor/Provider/Totp/TotpAuthenticatorTwoFactorProvider.php>`_
-* `src/email/Security/TwoFactor/Provider/Email/EmailTwoFactorProvider.php <https://github.com/scheb/2fa/tree/6.x/src/email/Security/TwoFactor/Provider/Email/EmailTwoFactorProvider.php>`_
+* `src/google-authenticator/Security/TwoFactor/Provider/Google/GoogleAuthenticatorTwoFactorProvider.php <https://github.com/scheb/2fa/tree/7.x/src/google-authenticator/Security/TwoFactor/Provider/Google/GoogleAuthenticatorTwoFactorProvider.php>`_
+* `src/totp/Security/TwoFactor/Provider/Totp/TotpAuthenticatorTwoFactorProvider.php <https://github.com/scheb/2fa/tree/7.x/src/totp/Security/TwoFactor/Provider/Totp/TotpAuthenticatorTwoFactorProvider.php>`_
+* `src/email/Security/TwoFactor/Provider/Email/EmailTwoFactorProvider.php <https://github.com/scheb/2fa/tree/7.x/src/email/Security/TwoFactor/Provider/Email/EmailTwoFactorProvider.php>`_
 
 You will get the basic idea how to implement a custom two-factor method.
 

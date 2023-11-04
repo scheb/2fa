@@ -101,7 +101,7 @@ To flag a device as "trusted", in the last step of the 2fa process, you have to 
                two_factor:
                    trusted_parameter_name: _trusted  # Name of the parameter for the trusted device option
 
-Please have a look at the `default authentication form template <https://github.com/scheb/2fa/blob/6.x/src/bundle/Resources/views/Authentication/form.html.twig#L38-L40>`_
+Please have a look at the `default authentication form template <https://github.com/scheb/2fa/blob/7.x/src/bundle/Resources/views/Authentication/form.html.twig#L38-L40>`_
 how it's implemented.
 
 Clearing the trusted cookie

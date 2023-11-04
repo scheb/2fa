@@ -1,8 +1,8 @@
 scheb/2fa-trusted-device
 ========================
 
-[![Build Status](https://github.com/scheb/2fa/actions/workflows/ci.yaml/badge.svg?branch=6.x)](https://github.com/scheb/2fa/actions?query=workflow%3ACI+branch%3A6.x)
-[![Code Coverage](https://codecov.io/gh/scheb/2fa/branch/6.x/graph/badge.svg)](https://app.codecov.io/gh/scheb/2fa/branch/6.x)
+[![Build Status](https://github.com/scheb/2fa/actions/workflows/ci.yaml/badge.svg?branch=7.x)](https://github.com/scheb/2fa/actions?query=workflow%3ACI+branch%3A7.x)
+[![Code Coverage](https://codecov.io/gh/scheb/2fa/branch/7.x/graph/badge.svg)](https://app.codecov.io/gh/scheb/2fa/branch/7.x)
 [![Latest Stable Version](https://img.shields.io/packagist/v/scheb/2fa-trusted-device)](https://packagist.org/packages/scheb/2fa-trusted-device)
 [![Monthly Downloads](https://img.shields.io/packagist/dm/scheb/2fa-trusted-device)](https://packagist.org/packages/scheb/2fa-trusted-device/stats)
 [![Total Downloads](https://img.shields.io/packagist/dt/scheb/2fa-trusted-device)](https://packagist.org/packages/scheb/2fa-trusted-device/stats)
