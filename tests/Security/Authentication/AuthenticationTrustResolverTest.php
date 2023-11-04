@@ -49,24 +49,6 @@ class AuthenticationTrustResolverTest extends TestCase
      * @test
      * @dataProvider provideReturnedResult
      */
-    public function isAnonymous_tokenGiven_returnResultFromDecoratedTrustResolver(bool $returnedResult): void
-    {
-        $this->requireAtMostSymfony5_4();
-        $this->initTrustResolver();
-
-        $this->decoratedTrustResolver
-            ->expects($this->once())
-            ->method('isAnonymous')
-            ->willReturn($returnedResult);
-
-        $returnValue = $this->trustResolver->isAnonymous($this->createMock(TokenInterface::class));
-        $this->assertEquals($returnedResult, $returnValue);
-    }
-
-    /**
-     * @test
-     * @dataProvider provideReturnedResult
-     */
     public function isRememberMe_tokenGiven_returnResultFromDecoratedTrustResolver(bool $returnedResult): void
     {
         $this->initTrustResolver();
@@ -111,28 +93,9 @@ class AuthenticationTrustResolverTest extends TestCase
 
     /**
      * @test
-     * @dataProvider provideReturnedResult
-     */
-    public function isAnonymous_sf54DecoratedMethodDeclared_returnResultFromDecoratedTrustResolver(bool $returnedResult): void
-    {
-        $this->requireAtMostSymfony5_4();
-        $this->initTrustResolver([]); // In Symfony 6.0 the "isAnonymous" is declared
-
-        $this->decoratedTrustResolver
-            ->expects($this->once())
-            ->method('isAnonymous')
-            ->willReturn($returnedResult);
-
-        $returnValue = $this->trustResolver->isAnonymous($this->createMock(TokenInterface::class));
-        $this->assertEquals($returnedResult, $returnValue);
-    }
-
-    /**
-     * @test
      */
     public function isAnonymous_sf6DecoratedMethodMissing_throwRuntimeException(): void
     {
-        $this->requireAtLeastSymfony6_0();
         $this->initTrustResolver([]); // In Symfony 6.0 the "isAnonymous" is NOT declared
 
         $this->expectException(RuntimeException::class);
@@ -145,7 +108,6 @@ class AuthenticationTrustResolverTest extends TestCase
      */
     public function isAnonymous_sf6DecoratedMethodDeclared_returnResultFromDecoratedTrustResolver(bool $returnedResult): void
     {
-        $this->requireAtLeastSymfony6_0();
         $this->initTrustResolver(['isAnonymous']); // Extra method, that doesn't exist in the Symfony 6.0 interface
 
         $this->decoratedTrustResolver
@@ -161,47 +123,8 @@ class AuthenticationTrustResolverTest extends TestCase
      * @test
      * @dataProvider provideReturnedResult
      */
-    public function isAuthenticated_sf54DecoratedMethodMissing_returnNegatedResultFromIsAnonymous(bool $returnedResult): void
-    {
-        $this->requireAtMostSymfony5_4();
-        $this->initTrustResolver([]); // In Symfony 6.0 the "isAnonymous" is declared
-
-        $this->decoratedTrustResolver
-            ->expects($this->once())
-            ->method('isAnonymous')
-            ->willReturn($returnedResult);
-
-        $returnValue = $this->trustResolver->isAuthenticated($this->createMock(TokenInterface::class));
-        $this->assertEquals(!$returnedResult, $returnValue);
-    }
-
-    /**
-     * @test
-     * @dataProvider provideReturnedResult
-     */
-    public function isAuthenticated_sf54DecoratedMethodDeclared_returnResultFromDecoratedTrustResolver(bool $returnedResult): void
-    {
-        $this->requireAtMostSymfony5_4();
-        $this->initTrustResolver(['isAuthenticated']); // Extra method, that doesn't exist in the Symfony 5.4 interface
-
-        $this->decoratedTrustResolver
-            ->expects($this->once())
-            ->method('isAuthenticated')
-            ->willReturn($returnedResult);
-
-        $trustResolver = new AuthenticationTrustResolver($this->decoratedTrustResolver);
-
-        $returnValue = $trustResolver->isAuthenticated($this->createMock(TokenInterface::class));
-        $this->assertEquals($returnedResult, $returnValue);
-    }
-
-    /**
-     * @test
-     * @dataProvider provideReturnedResult
-     */
     public function isAuthenticated_sf6DecoratedMethodDeclared_returnResultFromDecoratedTrustResolver(bool $returnedResult): void
     {
-        $this->requireAtLeastSymfony6_0();
         $this->initTrustResolver([]); // In Symfony 6.0 the "isAuthenticated" is declared
 
         $this->decoratedTrustResolver

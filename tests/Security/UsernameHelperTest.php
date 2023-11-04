@@ -23,38 +23,8 @@ class UsernameHelperTest extends TestCase
     /**
      * @test
      */
-    public function getTokenUsername_getUsernameExistsInSymfony54_returnGetUsernameValue(): void
-    {
-        $this->requireAtMostSymfony5_4();
-
-        $token = $this->createMockWithExtraMethod(TokenInterface::class, []);
-        $token
-            ->expects($this->any())
-            ->method('getUsername')
-            ->willReturn('getUsernameValue');
-
-        $returnValue = UsernameHelper::getTokenUsername($token);
-        $this->assertEquals('getUsernameValue', $returnValue);
-    }
-
-    /**
-     * @test
-     */
-    public function getTokenUsername_getUserIdentifierImplementedInSymfony54_returnGetUserIdentifierValue(): void
-    {
-        $this->requireAtMostSymfony5_4();
-
-        $additionalMethods = ['getUserIdentifier'];
-        $this->executeTestGetTokenUserNameFromGetUserIdentifier($additionalMethods);
-    }
-
-    /**
-     * @test
-     */
     public function getTokenUsername_getUserIdentifierExistsInSymfony60_returnGetUserIdentifierValue(): void
     {
-        $this->requireAtLeastSymfony6_0();
-
         $additionalMethods = [];
         $this->executeTestGetTokenUserNameFromGetUserIdentifier($additionalMethods);
     }
@@ -77,38 +47,8 @@ class UsernameHelperTest extends TestCase
     /**
      * @test
      */
-    public function getUserUsername_getUsernameExistsInSymfony54_returnGetUsernameValue(): void
-    {
-        $this->requireAtMostSymfony5_4();
-
-        $user = $this->createMockWithExtraMethod(UserInterface::class, []);
-        $user
-            ->expects($this->any())
-            ->method('getUsername')
-            ->willReturn('getUsernameValue');
-
-        $returnValue = UsernameHelper::getUserUsername($user);
-        $this->assertEquals('getUsernameValue', $returnValue);
-    }
-
-    /**
-     * @test
-     */
-    public function getUserUsername_getUserIdentifierImplementedInSymfony54_returnGetUserIdentifierValue(): void
-    {
-        $this->requireAtMostSymfony5_4();
-
-        $additionalMethods = ['getUserIdentifier'];
-        $this->executeTestGetUsernameFromGetUserIdentifier($additionalMethods);
-    }
-
-    /**
-     * @test
-     */
     public function getUserUsername_getUserIdentifierExistsInSymfony60_returnGetUserIdentifierValue(): void
     {
-        $this->requireAtLeastSymfony6_0();
-
         $additionalMethods = [];
         $this->executeTestGetUsernameFromGetUserIdentifier($additionalMethods);
     }
