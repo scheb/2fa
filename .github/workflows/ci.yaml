@@ -49,17 +49,17 @@ jobs:
             matrix:
                 include:
                     # Lowest possible configuration
-                    -   php-version: '8.0'
+                    -   php-version: '8.2'
                         dependency-versions: 'lowest'
-                        symfony-version: '5.4.*'
+                        symfony-version: '6.4.*'
 
-                    # Test against Symfony 5.4
+                    # Test against Symfony 6.4
                     -   php-version: '8.3'
-                        symfony-version: '5.4.*'
+                        symfony-version: '6.4.*'
 
-                    # Test against Symfony 6.*
+                    # Test against Symfony 7
                     -   php-version: '8.3'
-                        symfony-version: '6.*'
+                        symfony-version: '7.*'
         steps:
             -   name: 'Checkout code'
                 uses: actions/checkout@v3
@@ -70,6 +70,7 @@ jobs:
                     php-version: '${{ matrix.php-version }}'
                     composer-token: ${{ secrets.GITHUB_TOKEN }}
                     composer-dependency-versions: '${{ matrix.dependency-versions }}'
+                    composer-require: '${{ matrix.composer-require }}'
                     symfony-version: '${{ matrix.symfony-version }}'
 
             -   name: 'Run tests'
@@ -86,17 +87,12 @@ jobs:
             matrix:
                 include:
                     # Minimum PHP version
-                    -   php-version: '8.0'
-                        symfony-version: '5.4.*'
-
-                    # Test against Symfony 5.4
                     -   php-version: '8.3'
-                        symfony-version: '5.4.*'
+                        symfony-version: '6.4.*'
 
-                    # Test against Symfony 6.*
+                    # Test against Symfony 7.*
                     -   php-version: '8.3'
-                        symfony-version: '6.*'
-
+                        symfony-version: '7.*'
         steps:
             -   name: 'Checkout code'
                 uses: actions/checkout@v3
@@ -107,6 +103,7 @@ jobs:
                     php-version: '${{ matrix.php-version }}'
                     composer-token: ${{ secrets.GITHUB_TOKEN }}
                     composer-working-dir: app
+                    composer-require: '${{ matrix.composer-require }}'
                     symfony-version: '${{ matrix.symfony-version }}'
 
             -   name: 'Run tests'
