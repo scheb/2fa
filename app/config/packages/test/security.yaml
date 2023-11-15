@@ -1,0 +1,5 @@
+security:
+    firewalls:
+        main:
+            # In integration tests the login throttling should be disabled
+            login_throttling: false
