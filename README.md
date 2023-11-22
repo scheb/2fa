@@ -1,6 +1,13 @@
 scheb/2fa
 =========
 
+### ⚠ Unmaintained version
+
+Please upgrade your project to a recent version. See [version guidance](https://github.com/scheb/2fa#version-guidance)
+on the default branch for maintained versions.
+
+---
+
 This bundle provides **[two-factor authentication](https://en.wikipedia.org/wiki/Multi-factor_authentication) for your
 [Symfony](https://symfony.com/) application**.
 
@@ -61,21 +68,10 @@ in a real Symfony environment. Check out the readme file in the [`app` folder](a
 Version Guidance
 ----------------
 
-| Version            | Status                   | Symfony Version  |
-|--------------------|--------------------------|------------------|
-| [1.x][v1-repo]     | EOL                      | >= 2.1, < 2.7    |
-| [2.x][v2-repo]     | EOL                      | ^2.6, ^3.0, ^4.0 |
-| [3.x][v3-repo]     | EOL                      | 3.4, ^4.0, ^5.0  |
-| [4.x][v4-repo]     | EOL                      | 3.4, ^4.0, ^5.0  |
-| **[5.x][v5-repo]** | Bug & security fixes     | 4.4, ^5.0        |
-| [6.x][v6-repo]     | New features + Bug fixes | 5.4, ^6.0        |
+**⚠ Version 5.x is no longer maintained.**
 
-[v1-repo]: https://github.com/scheb/two-factor-bundle/tree/1.x
-[v2-repo]: https://github.com/scheb/two-factor-bundle/tree/2.x
-[v3-repo]: https://github.com/scheb/two-factor-bundle/tree/3.x
-[v4-repo]: https://github.com/scheb/two-factor-bundle/tree/4.x
-[v5-repo]: https://github.com/scheb/2fa/tree/5.x
-[v6-repo]: https://github.com/scheb/2fa/tree/6.x
+Please upgrade your project to a recent version. See [version guidance](https://github.com/scheb/2fa#version-guidance)
+on the default branch for maintained versions.
 
 License
 -------
