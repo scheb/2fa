@@ -25,6 +25,7 @@ return static function (ContainerConfigurator $container): void {
             ->args([
                 service('scheb_two_factor.security.google_totp_factory'),
                 '%scheb_two_factor.google.window%',
+                '%scheb_two_factor.google.leeway%',
             ])
 
         ->set('scheb_two_factor.security.google.default_form_renderer', DefaultTwoFactorFormRenderer::class)

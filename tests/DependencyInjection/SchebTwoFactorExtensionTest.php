@@ -6,6 +6,7 @@ namespace Scheb\TwoFactorBundle\Tests\DependencyInjection;
 
 use Scheb\TwoFactorBundle\DependencyInjection\SchebTwoFactorExtension;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -48,9 +49,11 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasNotParameter('scheb_two_factor.google.template');
         $this->assertHasNotParameter('scheb_two_factor.google.digits');
         $this->assertHasNotParameter('scheb_two_factor.google.window');
+        $this->assertHasNotParameter('scheb_two_factor.google.leeway');
         $this->assertHasNotParameter('scheb_two_factor.totp.issuer');
         $this->assertHasNotParameter('scheb_two_factor.totp.server_name');
         $this->assertHasNotParameter('scheb_two_factor.totp.window');
+        $this->assertHasNotParameter('scheb_two_factor.totp.leeway');
         $this->assertHasNotParameter('scheb_two_factor.totp.parameters');
         $this->assertHasNotParameter('scheb_two_factor.totp.template');
         $this->assertHasNotParameter('scheb_two_factor.trusted_device.lifetime');
@@ -85,9 +88,11 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasParameter('AcmeTestBundle:Authentication:googleForm.html.twig', 'scheb_two_factor.google.template');
         $this->assertHasParameter(8, 'scheb_two_factor.google.digits');
         $this->assertHasParameter(2, 'scheb_two_factor.google.window');
+        $this->assertHasParameter(null, 'scheb_two_factor.google.leeway');
         $this->assertHasParameter('Issuer TOTP', 'scheb_two_factor.totp.issuer');
         $this->assertHasParameter('Server Name TOTP', 'scheb_two_factor.totp.server_name');
-        $this->assertHasParameter(2, 'scheb_two_factor.totp.window');
+        $this->assertHasParameter(3, 'scheb_two_factor.totp.window');
+        $this->assertHasParameter(null, 'scheb_two_factor.totp.leeway');
         $this->assertHasParameter(['image' => 'http://foo/bar.png'], 'scheb_two_factor.totp.parameters');
         $this->assertHasParameter('AcmeTestBundle:Authentication:totpForm.html.twig', 'scheb_two_factor.totp.template');
         $this->assertHasParameter(true, 'scheb_two_factor.trusted_device.enabled');
@@ -100,6 +105,48 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasParameter('/cookie-path', 'scheb_two_factor.trusted_device.cookie_path');
         $this->assertHasParameter(['Symfony\Component\Security\Core\Authentication\Token\SomeToken'], 'scheb_two_factor.security_tokens');
         $this->assertHasParameter(['127.0.0.1'], 'scheb_two_factor.ip_whitelist');
+    }
+
+    /**
+     * @test
+     */
+    public function load_fullConfigWithGoogleLeeway_setConfigValuesOrException(): void
+    {
+        $config = $this->getFullConfig();
+        $config['google']['leeway'] = 20;
+
+        try {
+            $this->extension->load([$config], $this->container);
+        } catch (InvalidConfigurationException $e) {
+            // When the option is not supported, an exception is thrown instead
+            $this->expectException(InvalidConfigurationException::class);
+            $this->expectExceptionMessage('The "leeway" option can only be set');
+
+            throw $e;
+        }
+
+        $this->assertHasParameter(20, 'scheb_two_factor.google.leeway');
+    }
+
+    /**
+     * @test
+     */
+    public function load_fullConfigWithTotpLeeway_setConfigValuesOrException(): void
+    {
+        $config = $this->getFullConfig();
+        $config['totp']['leeway'] = 30;
+
+        try {
+            $this->extension->load([$config], $this->container);
+        } catch (InvalidConfigurationException $e) {
+            // When the option is not supported, an exception is thrown instead
+            $this->expectException(InvalidConfigurationException::class);
+            $this->expectExceptionMessage('The "leeway" option can only be set');
+
+            throw $e;
+        }
+
+        $this->assertHasParameter(30, 'scheb_two_factor.totp.leeway');
     }
 
     /**
@@ -674,7 +721,7 @@ totp:
     enabled: true
     issuer: Issuer TOTP
     server_name: Server Name TOTP
-    window: 2
+    window: 3
     parameters:
         image: http://foo/bar.png
     template: AcmeTestBundle:Authentication:totpForm.html.twig

@@ -16,6 +16,7 @@ use function strlen;
 class TotpAuthenticatorTest extends TestCase
 {
     private MockObject|TwoFactorInterface $user;
+    private MockObject|TotpFactory $totpFactory;
     private MockObject|TOTP $totp;
     private TotpAuthenticator $authenticator;
 
@@ -24,14 +25,14 @@ class TotpAuthenticatorTest extends TestCase
         $this->user = $this->createMock(TwoFactorInterface::class);
         $this->totp = $this->createMock(TOTPInterface::class);
 
-        $totpFactory = $this->createMock(TotpFactory::class);
-        $totpFactory
+        $this->totpFactory = $this->createMock(TotpFactory::class);
+        $this->totpFactory
             ->expects($this->any())
             ->method('createTotpForUser')
             ->with($this->user)
             ->willReturn($this->totp);
 
-        $this->authenticator = new TotpAuthenticator($totpFactory, 123);
+        $this->authenticator = new TotpAuthenticator($this->totpFactory, 123, 42);
     }
 
     /**
@@ -64,12 +65,42 @@ class TotpAuthenticatorTest extends TestCase
     /**
      * @test
      */
+    public function checkCode_leewayGiven_leewayValueUsed(): void
+    {
+        $this->authenticator = new TotpAuthenticator($this->totpFactory, 123, 42);
+
+        $this->totp
+            ->expects($this->once())
+            ->method('verify')
+            ->with('code', null, 42);
+
+        $this->authenticator->checkCode($this->user, 'code');
+    }
+
+    /**
+     * @test
+     */
+    public function checkCode_onlyWindowValueGiven_windowValueUsed(): void
+    {
+        $this->authenticator = new TotpAuthenticator($this->totpFactory, 123, null);
+
+        $this->totp
+            ->expects($this->once())
+            ->method('verify')
+            ->with('code', null, 123);
+
+        $this->authenticator->checkCode($this->user, 'code');
+    }
+
+    /**
+     * @test
+     */
     public function checkCode_codeWithSpaces_stripSpacesBeforeCheck(): void
     {
         $this->totp
             ->expects($this->once())
             ->method('verify')
-            ->with('123456', null, 123)
+            ->with('123456', null, 42)
             ->willReturn(true);
 
         $this->authenticator->checkCode($this->user, ' 123 456 ');

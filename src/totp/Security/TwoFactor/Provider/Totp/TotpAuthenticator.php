@@ -19,6 +19,8 @@ class TotpAuthenticator implements TotpAuthenticatorInterface
         private TotpFactory $totpFactory,
         /** @var 0|positive-int */
         private int $window,
+        /** @var 0|positive-int|null */
+        private null|int $leeway,
     ) {
     }
 
@@ -31,7 +33,7 @@ class TotpAuthenticator implements TotpAuthenticatorInterface
         }
 
         /** @var non-empty-string $code */
-        return $this->totpFactory->createTotpForUser($user)->verify($code, null, $this->window);
+        return $this->totpFactory->createTotpForUser($user)->verify($code, null, $this->leeway ?? $this->window);
     }
 
     public function getQRContent(TwoFactorInterface $user): string

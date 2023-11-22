@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\DependencyInjection;
 
+use OTPHP\TOTP;
+use ReflectionMethod;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -11,6 +14,8 @@ use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use function assert;
+use function class_exists;
+use function count;
 use function is_bool;
 use function is_string;
 use function trim;
@@ -188,6 +193,11 @@ class SchebTwoFactorExtension extends Extension
      */
     private function configureGoogleAuthenticationProvider(ContainerBuilder $container, array $config): void
     {
+        // Migration path for the "leeway" option, to be fully migrated in bundle version 7
+        if (null !== $config['google']['leeway'] && !$this->isSpomkyOtphpVersion11Used()) {
+            throw new InvalidConfigurationException('The "leeway" option can only be set when spomky-labs/otphp v11 is used.');
+        }
+
         $loader = new Loader\PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('two_factor_provider_google.php');
 
@@ -196,6 +206,7 @@ class SchebTwoFactorExtension extends Extension
         $container->setParameter('scheb_two_factor.google.template', $config['google']['template']);
         $container->setParameter('scheb_two_factor.google.digits', $config['google']['digits']);
         $container->setParameter('scheb_two_factor.google.window', $config['google']['window']);
+        $container->setParameter('scheb_two_factor.google.leeway', $config['google']['leeway']);
 
         if (null === $config['google']['form_renderer']) {
             return;
@@ -209,6 +220,11 @@ class SchebTwoFactorExtension extends Extension
      */
     private function configureTotpAuthenticationProvider(ContainerBuilder $container, array $config): void
     {
+        // Migration path for the "leeway" option, to be fully migrated in bundle version 7
+        if (null !== $config['totp']['leeway'] && !$this->isSpomkyOtphpVersion11Used()) {
+            throw new InvalidConfigurationException('The "leeway" option can only be set when spomky-labs/otphp v11 is used.');
+        }
+
         $loader = new Loader\PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('two_factor_provider_totp.php');
 
@@ -217,12 +233,25 @@ class SchebTwoFactorExtension extends Extension
         $container->setParameter('scheb_two_factor.totp.window', $config['totp']['window']);
         $container->setParameter('scheb_two_factor.totp.parameters', $config['totp']['parameters']);
         $container->setParameter('scheb_two_factor.totp.template', $config['totp']['template']);
+        $container->setParameter('scheb_two_factor.totp.leeway', $config['totp']['leeway']);
 
         if (null === $config['totp']['form_renderer']) {
             return;
         }
 
         $container->setAlias('scheb_two_factor.security.totp.form_renderer', $config['totp']['form_renderer']);
+    }
+
+    private function isSpomkyOtphpVersion11Used(): bool
+    {
+        if (!class_exists(TOTP::class)) {
+            return false;
+        }
+
+        $parameters = (new ReflectionMethod(TOTP::class, 'verify'))->getParameters();
+
+        // Third parameter must be named "leeway"
+        return count($parameters) >= 3 && 'leeway' === $parameters[2]->getName();
     }
 
     private function resolveFeatureFlag(ContainerBuilder $container, bool|string $value): bool

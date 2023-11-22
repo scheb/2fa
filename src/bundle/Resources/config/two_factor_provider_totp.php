@@ -26,6 +26,7 @@ return static function (ContainerConfigurator $container): void {
             ->args([
                 service('scheb_two_factor.security.totp_factory'),
                 '%scheb_two_factor.totp.window%',
+                '%scheb_two_factor.totp.leeway%',
             ])
 
         ->set('scheb_two_factor.security.totp.default_form_renderer', DefaultTwoFactorFormRenderer::class)
