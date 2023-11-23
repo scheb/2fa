@@ -15,7 +15,6 @@ https://symfony.com/bundles/SchebTwoFactorBundle/current/troubleshooting.html
 **Bundle version**: x.y.z
 **Symfony version**: x.y.z
 **PHP version**: x.y.z
-**Using authenticators** (`enable_authenticator_manager: true`): YES / NO
 
 **Description**
 
