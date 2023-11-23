@@ -18,9 +18,7 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
     public function __construct(
         private readonly GoogleTotpFactory $totpFactory,
         /** @var 0|positive-int */
-        private readonly int $window,
-        /** @var 0|positive-int|null */
-        private readonly null|int $leeway,
+        private readonly int $leeway,
     ) {
     }
 
@@ -33,7 +31,7 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
         }
 
         /** @var non-empty-string $code */
-        return $this->totpFactory->createTotpForUser($user)->verify($code, null, $this->leeway ?? $this->window);
+        return $this->totpFactory->createTotpForUser($user)->verify($code, null, $this->leeway);
     }
 
     public function getQRContent(TwoFactorInterface $user): string

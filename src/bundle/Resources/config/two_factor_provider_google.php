@@ -24,7 +24,6 @@ return static function (ContainerConfigurator $container): void {
             ->public()
             ->args([
                 service('scheb_two_factor.security.google_totp_factory'),
-                '%scheb_two_factor.google.window%',
                 '%scheb_two_factor.google.leeway%',
             ])
 

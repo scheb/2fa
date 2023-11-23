@@ -32,7 +32,7 @@ class TotpAuthenticatorTest extends TestCase
             ->with($this->user)
             ->willReturn($this->totp);
 
-        $this->authenticator = new TotpAuthenticator($this->totpFactory, 123, 42);
+        $this->authenticator = new TotpAuthenticator($this->totpFactory, 123);
     }
 
     /**
@@ -65,42 +65,12 @@ class TotpAuthenticatorTest extends TestCase
     /**
      * @test
      */
-    public function checkCode_leewayGiven_leewayValueUsed(): void
-    {
-        $this->authenticator = new TotpAuthenticator($this->totpFactory, 123, 42);
-
-        $this->totp
-            ->expects($this->once())
-            ->method('verify')
-            ->with('code', null, 42);
-
-        $this->authenticator->checkCode($this->user, 'code');
-    }
-
-    /**
-     * @test
-     */
-    public function checkCode_onlyWindowValueGiven_windowValueUsed(): void
-    {
-        $this->authenticator = new TotpAuthenticator($this->totpFactory, 123, null);
-
-        $this->totp
-            ->expects($this->once())
-            ->method('verify')
-            ->with('code', null, 123);
-
-        $this->authenticator->checkCode($this->user, 'code');
-    }
-
-    /**
-     * @test
-     */
     public function checkCode_codeWithSpaces_stripSpacesBeforeCheck(): void
     {
         $this->totp
             ->expects($this->once())
             ->method('verify')
-            ->with('123456', null, 42)
+            ->with('123456', null, 123)
             ->willReturn(true);
 
         $this->authenticator->checkCode($this->user, ' 123 456 ');

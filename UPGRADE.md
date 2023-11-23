@@ -6,7 +6,22 @@ Here's an overview if you have to do any work when upgrading.
 6.x to 7.x
 ----------
 
-Nothing to be done. Upgrade and enjoy :)
+### `scheb/2fa-google-authenticator` and `scheb/2fa-totp` Packages
+
+The configuration options `scheb_two_factor.google.window` and `scheb_two_factor.totp.window` have been removed. If you
+used these, please use `leeway` instead.
+
+```yaml
+# config/packages/scheb_2fa.yaml
+scheb_two_factor:
+   google:
+       leeway: 10  # Acceptable time drift in seconds, must be less or equal than 30 seconds
+
+   # TOTP authentication config
+   totp:
+       leeway: 10  # Acceptable time drift in seconds, must be less or equal than the TOTP period
+```
+
 
 5.x to 6.x
 ----------

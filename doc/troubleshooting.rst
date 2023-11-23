@@ -20,8 +20,8 @@ it depends on your configuration). The bigger the time difference between server
 window, the higher the chance that the codes generated on server and from the app don't match up. When the time
 difference becomes larger than the time window, it becomes impossible to provide the right code.
 
-To counteract the issue of time differences you could increase the ``leeway`` or ``window`` (deprecated) setting,
-then more codes around the current time window will be accepted:
+To counteract the issue of time differences you could increase the ``leeway`` setting, then more codes around the
+current time window will be accepted:
 
 .. code-block:: yaml
 
@@ -30,23 +30,13 @@ then more codes around the current time window will be accepted:
 
        # For TOTP
        totp:
-           window: 1   # [DEPRECATED since v6.11, will be removed in v7] Use "leeway", if possible
-                       # Behavior depends on the version of Spomky-Labs/otphp used:
-                       # - Until v10: How many codes before/after the current one would be accepted
-                       # - From v11: Acceptable time drift in seconds
-           leeway: 0   # Acceptable time drift in seconds, requires Spomky-Labs/otphp v11 to be used
-                       # Must be less or equal than the TOTP code's period
-                       # If configured, takes precedence over the "window" option
+           leeway: 0  # Acceptable time drift in seconds, must be less or equal than the TOTP period
+
 
        # For Google Authenticator
        google:
-           window: 1   # [DEPRECATED since v6.11, will be removed in v7] Use "leeway", if possible
-                       # Behavior depends on the version of Spomky-Labs/otphp used:
-                       # - Until v10: How many codes before/after the current one would be accepted
-                       # - From v11: Acceptable time drift in seconds
-           leeway: 0   # Acceptable time drift in seconds, requires Spomky-Labs/otphp v11 to be used
-                       # Must be less or equal than 30 seconds
-                       # If configured, takes precedence over the "window" option
+           leeway: 0  # Acceptable time drift in seconds, must be less or equal than 30 seconds
+
 
 You might want to configure a time synchronization service, such as ``ntpdate`` on your server to make sure your server
 time is always in sync with UTC.
