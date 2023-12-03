@@ -37,6 +37,7 @@
         "scheb/2fa-trusted-device": "Trusted devices support"
     },
     "conflict": {
-        "scheb/two-factor-bundle": "*"
+        "scheb/two-factor-bundle": "*",
+        "symfony/security-core": "^7"
     }
 }

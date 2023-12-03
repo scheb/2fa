@@ -65,7 +65,8 @@
         "scheb/2fa-trusted-device": "^6.0"
     },
     "conflict": {
-        "scheb/two-factor-bundle": "*"
+        "scheb/two-factor-bundle": "*",
+        "symfony/security-core": "^7"
     },
     "config": {
         "allow-plugins": {
