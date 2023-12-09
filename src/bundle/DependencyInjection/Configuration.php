@@ -48,6 +48,13 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('ip_whitelist_provider')->defaultValue('scheb_two_factor.default_ip_whitelist_provider')->end()
                 ->scalarNode('two_factor_token_factory')->defaultValue('scheb_two_factor.default_token_factory')->end()
                 ->scalarNode('two_factor_condition')->defaultNull()->end()
+                ->arrayNode('rate_limiter')
+                    ->canBeEnabled()
+                    ->children()
+                    ->integerNode('max_attempts')->defaultValue(5)->end()
+                    ->scalarNode('interval')->defaultValue('1 minute')->end()
+                    ->scalarNode('lock_factory')->info('The service ID of the lock factory used by the MFA rate limiter (or null to disable locking)')->defaultNull()->end()
+                ->end()
             ->end();
 
         /** @psalm-suppress ArgumentTypeCoercion */

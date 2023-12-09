@@ -4,15 +4,24 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\DependencyInjection;
 
+use LogicException;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\ThrottlingListener;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\Lock\LockInterface;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Component\RateLimiter\Storage\CacheStorage;
+use Symfony\Component\Security\Http\RateLimiter\DefaultLoginRateLimiter;
 use function assert;
+use function interface_exists;
 use function is_bool;
 use function is_string;
+use function sprintf;
 use function trim;
 
 /**
@@ -67,6 +76,77 @@ class SchebTwoFactorExtension extends Extension
         }
 
         $this->configureBackupCodeManager($container, $config);
+
+        $this->configureRateLimiting($container, $config);
+    }
+
+    /**
+     * @param array<string,mixed> $config
+     */
+    private function configureRateLimiting(ContainerBuilder $container, array $config): void
+    {
+        if (!isset($config['rate_limiter']) || !$config['rate_limiter']['enabled']) {
+            return;
+        }
+
+        $limiterOptions = [
+            'policy' => 'fixed_window',
+            'limit' => $config['rate_limiter']['max_attempts'],
+            'interval' => $config['rate_limiter']['interval'],
+            'lock_factory' => $config['rate_limiter']['lock_factory'],
+        ];
+
+        $requestLimiterId = 'scheb_two_factor.request_rate_limiter';
+        $localLimiterId = 'scheb_two_factor.local_rate_limiter';
+        $globalLimiterId = 'scheb_two_factor.global_rate_limiter';
+        $this->registerRateLimiter($container, $localLimiterId, $limiterOptions);
+        $limiterOptions['limit'] = 5 * $limiterOptions['limit'];
+        $this->registerRateLimiter($container, $globalLimiterId, $limiterOptions);
+
+        $container->register($requestLimiterId, DefaultLoginRateLimiter::class)
+            ->addArgument(new Reference($globalLimiterId))
+            ->addArgument(new Reference($localLimiterId))
+            ->addArgument('%kernel.secret%');
+
+        $container->register('scheb_two_factor.rate_limiter_listener', ThrottlingListener::class)
+            ->setArguments([
+                '$requestRateLimiter' => new Reference($requestLimiterId),
+            ]);
+    }
+
+    /**
+     * @param array<string,mixed> $limiterConfig
+     */
+    private function registerRateLimiter(ContainerBuilder $container, string $name, array $limiterConfig): void
+    {
+        // default configuration (when used by other DI extensions)
+        $limiterConfig += ['lock_factory' => 'lock.factory', 'cache_pool' => 'cache.rate_limiter'];
+
+        $limiter = $container->setDefinition($limiterId = 'limiter.'.$name, new ChildDefinition('limiter'));
+
+        if (null !== $limiterConfig['lock_factory']) {
+            /** @psalm-suppress UndefinedClass */
+            if (!interface_exists(LockInterface::class)) {
+                throw new LogicException(sprintf('Rate limiter "%s" requires the Lock component to be installed. Try running "composer require symfony/lock".', $name));
+            }
+
+            $limiter->replaceArgument(2, new Reference($limiterConfig['lock_factory']));
+        }
+
+        unset($limiterConfig['lock_factory']);
+
+        $storageId = $limiterConfig['storage_service'] ?? null;
+        if (null === $storageId) {
+            $container->register($storageId = 'limiter.storage.'.$name, CacheStorage::class)->addArgument(new Reference($limiterConfig['cache_pool']));
+        }
+
+        $limiter->replaceArgument(1, new Reference($storageId));
+        unset($limiterConfig['storage_service'], $limiterConfig['cache_pool']);
+
+        $limiterConfig['id'] = $name;
+        $limiter->replaceArgument(0, $limiterConfig);
+
+        $container->registerAliasForArgument($limiterId, RateLimiterFactory::class, $name.'.limiter');
     }
 
     /**
