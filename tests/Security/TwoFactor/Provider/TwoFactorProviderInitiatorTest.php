@@ -8,6 +8,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderDecider;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInitiator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
@@ -36,7 +37,7 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
 
         $this->twoFactorTokenFactory = $this->createMock(TwoFactorTokenFactory::class);
 
-        $this->initiator = new TwoFactorProviderInitiator($providerRegistry, $this->twoFactorTokenFactory);
+        $this->initiator = new TwoFactorProviderInitiator($providerRegistry, $this->twoFactorTokenFactory, new TwoFactorProviderDecider());
     }
 
     private function createTwoFactorToken(): MockObject|TwoFactorTokenInterface

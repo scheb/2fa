@@ -614,6 +614,17 @@ EOF;
     }
 
     /**
+     * @test
+     */
+    public function load_alternativeProviderDecider_replaceAlias(): void
+    {
+        $config = $this->getFullConfig();
+        $this->extension->load([$config], $this->container);
+
+        $this->assertHasAlias('scheb_two_factor.provider_decider', 'acme_test.two_factor_provider_decider');
+    }
+
+    /**
      * @return array<string,null>|null
      */
     private function getEmptyConfig(): array|null
@@ -638,6 +649,7 @@ ip_whitelist:
     - 127.0.0.1
 ip_whitelist_provider: acme_test.ip_whitelist_provider
 two_factor_token_factory: acme_test.two_factor_token_factory
+two_factor_provider_decider: acme_test.two_factor_provider_decider
 two_factor_condition: acme_test.two_factor_condition
 trusted_device:
     enabled: true

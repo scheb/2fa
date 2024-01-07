@@ -13,6 +13,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist\DefaultIpWhitelistProvi
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TokenPreparationRecorder;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderDecider;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInitiator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallContext;
@@ -28,6 +29,8 @@ return static function (ContainerConfigurator $container): void {
             ])
 
         ->set('scheb_two_factor.default_token_factory', TwoFactorTokenFactory::class)
+
+        ->set('scheb_two_factor.default_provider_decider', TwoFactorProviderDecider::class)
 
         ->set('scheb_two_factor.authentication_context_factory', AuthenticationContextFactory::class)
             ->args([AuthenticationContext::class])
@@ -56,6 +59,7 @@ return static function (ContainerConfigurator $container): void {
             ->args([
                 service('scheb_two_factor.provider_registry'),
                 service('scheb_two_factor.token_factory'),
+                service('scheb_two_factor.provider_decider'),
             ])
 
         ->set('scheb_two_factor.firewall_context', TwoFactorFirewallContext::class)
