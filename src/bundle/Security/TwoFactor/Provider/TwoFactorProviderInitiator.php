@@ -48,7 +48,7 @@ class TwoFactorProviderInitiator
         if ($activeTwoFactorProviders) {
             $twoFactorToken = $this->twoFactorTokenFactory->create($authenticatedToken, $context->getFirewallName(), $activeTwoFactorProviders);
 
-            $preferredProvider = $this->twoFactorProviderDecider->getPreferredTwoFactorProvider($activeTwoFactorProviders, $twoFactorToken, $context->getUser());
+            $preferredProvider = $this->twoFactorProviderDecider->getPreferredTwoFactorProvider($activeTwoFactorProviders, $twoFactorToken, $context);
 
             if (null !== $preferredProvider) {
                 try {
