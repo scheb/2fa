@@ -100,7 +100,7 @@ Bundle Configuration
        # Must implement Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionInterface
        two_factor_condition: acme.custom_two_factor_condition
 
-       # If you need custom conditions to decide what two factor provider to preferr.
+       # If you need custom conditions to decide what two factor provider to prefer.
        # Must implement  Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderDeciderInterface
        two_factor_provider_decider: acme.custom_two_factor_provider_decider
 
