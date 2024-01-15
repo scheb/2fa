@@ -8,7 +8,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderDecider;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderDeciderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInitiator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
@@ -19,6 +19,7 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
     private MockObject|TwoFactorTokenFactoryInterface $twoFactorTokenFactory;
     private MockObject|TwoFactorProviderInterface $provider1;
     private MockObject|TwoFactorProviderInterface $provider2;
+    private MockObject|TwoFactorProviderDeciderInterface $providerDecider;
     private TwoFactorProviderInitiator $initiator;
 
     protected function setUp(): void
@@ -37,7 +38,9 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
 
         $this->twoFactorTokenFactory = $this->createMock(TwoFactorTokenFactory::class);
 
-        $this->initiator = new TwoFactorProviderInitiator($providerRegistry, $this->twoFactorTokenFactory, new TwoFactorProviderDecider());
+        $this->providerDecider = $this->createMock(TwoFactorProviderDeciderInterface::class);
+
+        $this->initiator = new TwoFactorProviderInitiator($providerRegistry, $this->twoFactorTokenFactory, $this->providerDecider);
     }
 
     private function createTwoFactorToken(): MockObject|TwoFactorTokenInterface
@@ -75,6 +78,14 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
             ->expects($this->any())
             ->method('create')
             ->willReturn($token);
+    }
+
+    private function stubTwoFactorProviderDeciderReturns(string|null $preferredProvider): void
+    {
+        $this->providerDecider
+            ->expects($this->once())
+            ->method('getPreferredTwoFactorProvider')
+            ->willReturn($preferredProvider);
     }
 
     /**
@@ -142,6 +153,7 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
         $context = $this->createAuthenticationContext(null, $originalToken, $user);
         $this->stubProvidersReturn(true, true);
         $this->stubTwoFactorTokenFactoryReturns($twoFactorToken);
+        $this->stubTwoFactorProviderDeciderReturns('preferredProvider');
 
         $twoFactorToken
             ->expects($this->once())
