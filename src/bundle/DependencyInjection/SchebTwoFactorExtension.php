@@ -55,6 +55,7 @@ class SchebTwoFactorExtension extends Extension
         $this->configureTwoFactorConditions($container, $config);
         $this->configureIpWhitelistProvider($container, $config);
         $this->configureTokenFactory($container, $config);
+        $this->configureProviderDecider($container, $config);
 
         if (isset($config['trusted_device']['enabled']) && $this->resolveFeatureFlag($container, $config['trusted_device']['enabled'])) {
             $this->configureTrustedDeviceManager($container, $config);
@@ -156,6 +157,14 @@ class SchebTwoFactorExtension extends Extension
     private function configureTokenFactory(ContainerBuilder $container, array $config): void
     {
         $container->setAlias('scheb_two_factor.token_factory', $config['two_factor_token_factory']);
+    }
+
+    /**
+     * @param array<string,mixed> $config
+     */
+    private function configureProviderDecider(ContainerBuilder $container, array $config): void
+    {
+        $container->setAlias('scheb_two_factor.provider_decider', $config['two_factor_provider_decider']);
     }
 
     /**
