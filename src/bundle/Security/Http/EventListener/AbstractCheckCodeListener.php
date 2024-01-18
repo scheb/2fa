@@ -38,7 +38,7 @@ abstract class AbstractCheckCodeListener implements EventSubscriberInterface
         assert($credentialsBadge instanceof TwoFactorCodeCredentials);
         $token = $credentialsBadge->getTwoFactorToken();
         $providerName = $token->getCurrentTwoFactorProvider();
-        if (!$providerName) {
+        if (null === $providerName || !$providerName) {
             throw new AuthenticationException('There is no active two-factor provider.');
         }
 

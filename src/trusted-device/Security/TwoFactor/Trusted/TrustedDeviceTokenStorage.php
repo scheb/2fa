@@ -118,7 +118,7 @@ class TrustedDeviceTokenStorage
     private function readTrustedTokenList(): array
     {
         $cookie = $this->readCookieValue();
-        if (!$cookie) {
+        if (null === $cookie || !$cookie) {
             return [];
         }
 

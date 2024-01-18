@@ -45,10 +45,10 @@ class TotpFactory
             $totpConfiguration->getDigits(),
         );
 
-        $userAndHost = $user->getTotpAuthenticationUsername().($this->server ? '@'.$this->server : '');
+        $userAndHost = $user->getTotpAuthenticationUsername().(null !== $this->server && $this->server ? '@'.$this->server : '');
         $totp->setLabel($userAndHost);
 
-        if ($this->issuer) {
+        if (null !== $this->issuer && $this->issuer) {
             $totp->setIssuer($this->issuer);
         }
 
