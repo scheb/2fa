@@ -82,9 +82,10 @@ Bundle Configuration
        # Supports IPv4, IPv6 and IP subnet masks.
        ip_whitelist:
            - 127.0.0.1  # One IPv4
-           - 192.168.0.0/16  # IPv4 subnet
+           - 192.168.0.0/16  # One IPv4 subnet
            - 2001:0db8:85a3:0000:0000:8a2e:0370:7334  # One IPv6
-           - 2001:db8:abcd:0012::0/64  # IPv6 subnet
+           - 2001:db8:abcd:0012::0/64  # One IPv6 subnet
+           - !php/const Symfony\Component\HttpFoundation\IpUtils::PRIVATE_SUBNETS # All private IPv4 and IPv6 subnets
 
        # If you want to have your own implementation to retrieve the whitelisted IPs.
        # The configuration option "ip_whitelist" becomes meaningless in that case.
