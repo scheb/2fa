@@ -164,6 +164,8 @@ Configuration Reference
            sender_name: John Doe          # Sender name
            digits: 4                      # Number of digits in authentication code
            template: security/2fa_form.html.twig   # Template used to render the authentication form
+           expires_after: PT5M            # Date interval after which the code is considered invalid. NULL disables the expiration.
+           resend_expired: true           # Whether to regenerate an expired code when user submits form
 
 Custom Mailer
 -------------
