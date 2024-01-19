@@ -15,6 +15,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
 use function interface_exists;
+use function is_iterable;
 
 /**
  * @final
@@ -225,12 +226,14 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
+     * @param iterable<mixed> $iterableValue
+     *
      * @return iterable<mixed>
      */
-    private static function flatten(array $arrayValue): iterable
+    private static function flatten(iterable $iterableValue): iterable
     {
-        foreach ($arrayValue as $value) {
-            if (is_array($value)) {
+        foreach ($iterableValue as $value) {
+            if (is_iterable($value)) {
                 foreach (self::flatten($value) as $x) {
                     yield $x;
                 }
