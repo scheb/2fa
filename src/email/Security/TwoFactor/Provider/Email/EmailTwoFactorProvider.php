@@ -9,6 +9,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
+use function method_exists;
 use function str_replace;
 
 /**
@@ -19,6 +20,7 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
     public function __construct(
         private readonly CodeGeneratorInterface $codeGenerator,
         private readonly TwoFactorFormRendererInterface $formRenderer,
+        private readonly bool $resendExpired
     ) {
     }
 
@@ -42,6 +44,12 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
     public function validateAuthenticationCode(object $user, string $authenticationCode): bool
     {
         if (!($user instanceof TwoFactorInterface)) {
+            return false;
+        }
+
+        if ($this->resendExpired && method_exists($this->codeGenerator, 'isCodeExpired') && $this->codeGenerator->isCodeExpired($user)) {
+            $this->codeGenerator->generateAndSend($user);
+
             return false;
         }
 

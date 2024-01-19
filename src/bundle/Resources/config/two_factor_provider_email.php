@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Psr\Clock\ClockInterface;
 use Scheb\TwoFactorBundle\Mailer\SymfonyAuthCodeMailer;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\DefaultTwoFactorFormRenderer;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\EmailTwoFactorProvider;
@@ -25,6 +26,8 @@ return static function (ContainerConfigurator $container): void {
                 service('scheb_two_factor.persister'),
                 service('scheb_two_factor.security.email.auth_code_mailer'),
                 '%scheb_two_factor.email.digits%',
+                '%scheb_two_factor.email.expires_after%',
+                service(ClockInterface::class)->nullOnInvalid(),
             ])
 
         ->set('scheb_two_factor.security.email.default_form_renderer', DefaultTwoFactorFormRenderer::class)
@@ -39,6 +42,7 @@ return static function (ContainerConfigurator $container): void {
             ->args([
                 service('scheb_two_factor.security.email.code_generator'),
                 service('scheb_two_factor.security.email.form_renderer'),
+                '%scheb_two_factor.email.resend_expired%',
             ])
 
         ->alias(CodeGeneratorInterface::class, 'scheb_two_factor.security.email.code_generator')

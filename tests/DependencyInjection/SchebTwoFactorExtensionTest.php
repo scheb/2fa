@@ -43,6 +43,8 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasNotParameter('scheb_two_factor.email.sender_name');
         $this->assertHasNotParameter('scheb_two_factor.email.template');
         $this->assertHasNotParameter('scheb_two_factor.email.digits');
+        $this->assertHasNotParameter('scheb_two_factor.email.expires_after');
+        $this->assertHasNotParameter('scheb_two_factor.email.resend_expired');
         $this->assertHasNotParameter('scheb_two_factor.google.server_name');
         $this->assertHasNotParameter('scheb_two_factor.google.issuer');
         $this->assertHasNotParameter('scheb_two_factor.google.template');
@@ -80,6 +82,8 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasParameter('Sender Name', 'scheb_two_factor.email.sender_name');
         $this->assertHasParameter('AcmeTestBundle:Authentication:emailForm.html.twig', 'scheb_two_factor.email.template');
         $this->assertHasParameter(6, 'scheb_two_factor.email.digits');
+        $this->assertHasParameter('PT15M', 'scheb_two_factor.email.expires_after');
+        $this->assertHasParameter(false, 'scheb_two_factor.email.resend_expired');
         $this->assertHasParameter('Server Name Google', 'scheb_two_factor.google.server_name');
         $this->assertHasParameter('Issuer Google', 'scheb_two_factor.google.issuer');
         $this->assertHasParameter('AcmeTestBundle:Authentication:googleForm.html.twig', 'scheb_two_factor.google.template');
@@ -674,6 +678,8 @@ email:
     template: AcmeTestBundle:Authentication:emailForm.html.twig
     form_renderer: acme_test.email_form_renderer
     digits: 6
+    expires_after: PT15M
+    resend_expired: false
 google:
     enabled: true
     issuer: Issuer Google

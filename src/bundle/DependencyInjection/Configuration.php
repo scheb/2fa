@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\DependencyInjection;
 
+use DateInterval;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface as EMailTwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface as GoogleTwoFactorInterface;
@@ -12,8 +13,10 @@ use Scheb\TwoFactorBundle\Model\TrustedDeviceInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
+use Throwable;
 use function interface_exists;
 
 /**
@@ -150,6 +153,22 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('sender_name')->defaultNull()->end()
                         ->scalarNode('template')->defaultValue('@SchebTwoFactor/Authentication/form.html.twig')->end()
                         ->integerNode('digits')->defaultValue(4)->min(1)->end()
+                        ->scalarNode('expires_after')
+                            ->defaultNull()
+                            ->validate()
+                                ->ifString()
+                                ->then(static function (string $value): string {
+                                    try {
+                                        new DateInterval($value);
+                                    } catch (Throwable) {
+                                        throw new InvalidConfigurationException('"scheb_two_factor.email.expires_after" is not a valid \DateInterval value.');
+                                    }
+
+                                    return $value;
+                                })
+                            ->end()
+                        ->end()
+                        ->booleanNode('resend_expired')->defaultTrue()->end()
                     ->end()
                 ->end()
             ->end();

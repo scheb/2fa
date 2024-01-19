@@ -6,6 +6,9 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator;
 
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 
+/**
+ * @method bool isCodeExpired(TwoFactorInterface $user)
+ */
 interface CodeGeneratorInterface
 {
     /**

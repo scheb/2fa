@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Model\Email;
 
+use DateTimeImmutable;
+
+/**
+ * @method DateTimeImmutable|null getEmailAuthCodeCreatedAt()
+ * @method void                    setEmailAuthCodeCreatedAt(DateTimeImmutable|null $createdAt)
+ */
 interface TwoFactorInterface
 {
     /**
