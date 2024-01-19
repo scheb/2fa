@@ -47,8 +47,10 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
             return false;
         }
 
-        if ($this->resendExpired && method_exists($this->codeGenerator, 'isCodeExpired') && $this->codeGenerator->isCodeExpired($user)) {
-            $this->codeGenerator->generateAndSend($user);
+        if (method_exists($this->codeGenerator, 'isCodeExpired') && $this->codeGenerator->isCodeExpired($user)) {
+            if ($this->resendExpired) {
+                $this->codeGenerator->generateAndSend($user);
+            }
 
             return false;
         }

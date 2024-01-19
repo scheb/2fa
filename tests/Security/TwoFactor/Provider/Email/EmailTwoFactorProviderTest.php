@@ -201,7 +201,10 @@ class EmailTwoFactorProviderTest extends TestCase
         $this->assertFalse($this->provider->validateAuthenticationCode($user, self::VALID_AUTH_CODE));
     }
 
-    public function validateAuthenticationCode_withExpiredCode_doesNotRegenerateCode(): void
+    /**
+     * @test
+     */
+    public function validateAuthenticationCode_withValidExpiredCode_doesNotRegenerateCode(): void
     {
         $provider = new EmailTwoFactorProvider($this->generator, $this->formRenderer, false);
 
@@ -218,5 +221,27 @@ class EmailTwoFactorProviderTest extends TestCase
             ->method('generateAndSend');
 
         $this->assertFalse($provider->validateAuthenticationCode($user, self::VALID_AUTH_CODE));
+    }
+
+    /**
+     * @test
+     */
+    public function validateAuthenticationCode_withInvalidExpiredCode_doesNotRegenerateCode(): void
+    {
+        $provider = new EmailTwoFactorProvider($this->generator, $this->formRenderer, false);
+
+        $user = $this->createUser();
+
+        $this->generator
+            ->expects($this->once())
+            ->method('isCodeExpired')
+            ->with($user)
+            ->willReturn(true);
+
+        $this->generator
+            ->expects($this->never())
+            ->method('generateAndSend');
+
+        $this->assertFalse($provider->validateAuthenticationCode($user, self::INVALID_AUTH_CODE));
     }
 }
