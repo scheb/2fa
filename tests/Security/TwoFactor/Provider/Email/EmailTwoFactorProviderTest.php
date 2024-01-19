@@ -196,8 +196,7 @@ class EmailTwoFactorProviderTest extends TestCase
         $this->generator
             ->expects($this->once())
             ->method('generateAndSend')
-            ->with($user)
-        ;
+            ->with($user);
 
         $this->assertFalse($this->provider->validateAuthenticationCode($user, self::VALID_AUTH_CODE));
     }
@@ -216,8 +215,7 @@ class EmailTwoFactorProviderTest extends TestCase
 
         $this->generator
             ->expects($this->never())
-            ->method('generateAndSend')
-        ;
+            ->method('generateAndSend');
 
         $this->assertFalse($provider->validateAuthenticationCode($user, self::VALID_AUTH_CODE));
     }

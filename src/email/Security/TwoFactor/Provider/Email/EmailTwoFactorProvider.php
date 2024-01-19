@@ -20,7 +20,7 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
     public function __construct(
         private readonly CodeGeneratorInterface $codeGenerator,
         private readonly TwoFactorFormRendererInterface $formRenderer,
-        private readonly bool $resendExpired
+        private readonly bool $resendExpired,
     ) {
     }
 
