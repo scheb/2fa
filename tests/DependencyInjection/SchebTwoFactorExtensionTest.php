@@ -99,7 +99,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasParameter('cookie.example.org', 'scheb_two_factor.trusted_device.cookie_domain');
         $this->assertHasParameter('/cookie-path', 'scheb_two_factor.trusted_device.cookie_path');
         $this->assertHasParameter(['Symfony\Component\Security\Core\Authentication\Token\SomeToken'], 'scheb_two_factor.security_tokens');
-        $this->assertHasParameter(['127.0.0.1'], 'scheb_two_factor.ip_whitelist');
+        $this->assertHasParameter(['127.0.0.1', '10.0.0.0/8', '192.168.0.0/16'], 'scheb_two_factor.ip_whitelist');
     }
 
     /**
@@ -647,6 +647,7 @@ security_tokens:
     - Symfony\Component\Security\Core\Authentication\Token\SomeToken
 ip_whitelist:
     - 127.0.0.1
+    - ['10.0.0.0/8', '192.168.0.0/16']
 ip_whitelist_provider: acme_test.ip_whitelist_provider
 two_factor_token_factory: acme_test.two_factor_token_factory
 two_factor_provider_decider: acme_test.two_factor_provider_decider

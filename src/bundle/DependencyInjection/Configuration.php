@@ -42,6 +42,17 @@ class Configuration implements ConfigurationInterface
                     ->prototype('scalar')->end()
                 ->end()
                 ->arrayNode('ip_whitelist')
+                    ->beforeNormalization()
+                        ->ifArray()
+                        ->then(static function (mixed $value): array {
+                            $values = [];
+                            foreach (self::flatten($value) as $v) {
+                                $values[] = $v;
+                            }
+
+                            return $values;
+                        })
+                    ->end()
                     ->defaultValue([])
                     ->prototype('scalar')->end()
                 ->end()
@@ -211,5 +222,23 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end();
+    }
+
+    /**
+     * @return iterable<mixed>
+     */
+    private static function flatten(array $arrayValue): iterable
+    {
+        foreach ($arrayValue as $value) {
+            if (is_array($value)) {
+                foreach (self::flatten($value) as $x) {
+                    yield $x;
+                }
+
+                continue;
+            }
+
+            yield $value;
+        }
     }
 }
