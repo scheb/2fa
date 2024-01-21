@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\DependencyInjection;
 
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface as EMailTwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface as GoogleTwoFactorInterface;
@@ -15,7 +17,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
 use function interface_exists;
-use function is_iterable;
+use function iterator_to_array;
 
 /**
  * @final
@@ -45,13 +47,8 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('ip_whitelist')
                     ->beforeNormalization()
                         ->ifArray()
-                        ->then(static function (mixed $value): array {
-                            $values = [];
-                            foreach (self::flatten($value) as $v) {
-                                $values[] = $v;
-                            }
-
-                            return $values;
+                        ->then(static function (array $value): array {
+                            return iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator($value)), false);
                         })
                     ->end()
                     ->defaultValue([])
@@ -223,25 +220,5 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end();
-    }
-
-    /**
-     * @param iterable<mixed> $iterableValue
-     *
-     * @return iterable<mixed>
-     */
-    private static function flatten(iterable $iterableValue): iterable
-    {
-        foreach ($iterableValue as $value) {
-            if (is_iterable($value)) {
-                foreach (self::flatten($value) as $x) {
-                    yield $x;
-                }
-
-                continue;
-            }
-
-            yield $value;
-        }
     }
 }
