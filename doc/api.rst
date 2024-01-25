@@ -200,7 +200,7 @@ reason. Implement a failure handler for it:
 
    class TwoFactorAuthenticationFailureHandler implements AuthenticationFailureHandlerInterface
    {
-       public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+       public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
        {
            // Return the response to tell the client that 2fa failed. You may want to add more details
            // from the $exception.
