@@ -43,6 +43,11 @@ The bundle supports the following authentication methods out of the box:
 * :doc:`TOTP Authenticator </providers/totp>`
 * :doc:`Code-via-Email authentication </providers/email>`
 
+**3rd-party packages:**
+
+* `Webauthn via jbtronics/2fa-webauthn <https://github.com/jbtronics/2fa-webauthn>`_
+* `Text messages via erkens/2fa-text <https://github.com/erkens/2fa-text>`_
+
 The Authentication Process with Two-Factor Authentication
 ---------------------------------------------------------
 
