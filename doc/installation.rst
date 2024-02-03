@@ -42,6 +42,11 @@ Optionally, install any additional packages to extend the bundle's feature accor
    composer require scheb/2fa-google-authenticator   # Add two-factor authentication with Google Authenticator
    composer require scheb/2fa-email                  # Add two-factor authentication using email
 
+.. note::
+
+    There are 3rd-party packages for adding different two-factor authentication methods. Check out the
+    `related packages on Packagist.org<https://packagist.org/packages/scheb/2fa-bundle/dependents>`_.
+
 Step 2: Enable the bundle
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
