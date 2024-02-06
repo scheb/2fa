@@ -51,7 +51,8 @@ The bundle supports the following authentication methods out of the box:
     `related packages on Packagist.org<https://packagist.org/packages/scheb/2fa-bundle/dependents>`_.
 
 * `Webauthn via jbtronics/2fa-webauthn <https://github.com/jbtronics/2fa-webauthn>`_
-* `Text messages via erkens/2fa-text <https://github.com/erkens/2fa-text>`_
+* `Text (SMS) messages via erkens/2fa-text <https://github.com/erkens/2fa-text>`_
+* `More sophisticated code-via-email via danielburger1337/scheb-2fa-email <https://github.com/danielburger1337/scheb-2fa-email>`_
 
 The Authentication Process with Two-Factor Authentication
 ---------------------------------------------------------
