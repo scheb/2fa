@@ -45,7 +45,7 @@ Optionally, install any additional packages to extend the bundle's feature accor
 .. note::
 
     There are 3rd-party packages for adding different two-factor authentication methods. Check out the
-    `related packages on Packagist.org<https://packagist.org/packages/scheb/2fa-bundle/dependents>`_.
+    `related packages on Packagist.org <https://packagist.org/packages/scheb/2fa-bundle/dependents>`_.
 
 Step 2: Enable the bundle
 ~~~~~~~~~~~~~~~~~~~~~~~~~
