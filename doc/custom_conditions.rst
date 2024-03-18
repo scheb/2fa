@@ -34,7 +34,7 @@ Bypassing Two-Factor Authentication
 If you simply wish to bypass 2fa for a specific authenticator, setting the
 ``TwoFactorAuthenticator::FLAG_2FA_COMPLETE`` attribute on the security token will achieve this.
 
-For example, if you are building a `custom Authenticator <https://symfony.com/doc/5.4/security/experimental_authenticators.html#creating-a-custom-authenticator>`_
+For example, if you are building a `custom Authenticator <https://symfony.com/doc/current/security/custom_authenticator.html>`_
 this would bypass 2fa when the authenticator is used:
 
 .. code-block:: php
@@ -46,11 +46,11 @@ this would bypass 2fa when the authenticator is used:
    use Scheb\TwoFactorBundle\Security\Http\Authenticator\TwoFactorAuthenticator;
    use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
    use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
-   use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+   use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 
    class MyAuthenticator extends AbstractAuthenticator
    {
-       public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface
+       public function createToken(Passport $passport, string $firewallName): TokenInterface
        {
            $token = parent::createAuthenticatedToken($passport, $firewallName);
 
