@@ -63,7 +63,7 @@ The client should show the two-factor authentication form then.
 If you provide multiple authentication mechanisms for the user to identify themselves, you have to do this for each one
 of them.
 
-To implement such a response you need to a custom success handler:
+To implement such a response you need to create a custom success handler:
 
 .. code-block:: php
 
