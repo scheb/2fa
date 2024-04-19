@@ -32,10 +32,11 @@ class GoogleTotpFactory
         /** @psalm-suppress ArgumentTypeCoercion */
         $totp = TOTP::create($secret, 30, 'sha1', $this->digits);
 
+        /** @psalm-suppress RiskyTruthyFalsyComparison */
         $userAndHost = $user->getGoogleAuthenticatorUsername().($this->server ? '@'.$this->server : '');
         $totp->setLabel($userAndHost);
 
-        if ($this->issuer) {
+        if (null !== $this->issuer && $this->issuer) {
             $totp->setIssuer($this->issuer);
         }
 

@@ -20,7 +20,7 @@ class TotpAuthenticator implements TotpAuthenticatorInterface
         /** @var 0|positive-int */
         private int $window,
         /** @var 0|positive-int|null */
-        private null|int $leeway,
+        private int|null $leeway,
     ) {
     }
 

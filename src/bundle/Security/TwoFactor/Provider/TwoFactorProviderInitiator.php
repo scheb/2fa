@@ -62,7 +62,7 @@ class TwoFactorProviderInitiator
         }
 
         $preferredProvider = $user->getPreferredTwoFactorProvider();
-        if (!$preferredProvider) {
+        if (null === $preferredProvider || !$preferredProvider) {
             return;
         }
 
