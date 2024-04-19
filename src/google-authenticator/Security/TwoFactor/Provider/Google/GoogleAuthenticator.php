@@ -20,7 +20,7 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
         /** @var 0|positive-int */
         private int $window,
         /** @var 0|positive-int|null */
-        private int|null $leeway,
+        private ?int $leeway,
     ) {
     }
 
