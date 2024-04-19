@@ -7,6 +7,7 @@ namespace Scheb\TwoFactorBundle\Tests\Security\Authorization\Voter;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Authorization\Voter\TwoFactorInProgressVoter;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
@@ -82,6 +83,7 @@ class TwoFactorInProgressVoterTest extends TestCase
             ['array', false],
             ['string', false],
             ['null', true],
+            [Request::class, true],
         ];
     }
 

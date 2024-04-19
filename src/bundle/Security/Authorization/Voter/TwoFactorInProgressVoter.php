@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\Authorization\Voter;
 
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Core\Authorization\Voter\CacheableVoterInterface;
@@ -46,6 +47,6 @@ class TwoFactorInProgressVoter implements CacheableVoterInterface
 
     public function supportsType(string $subjectType): bool
     {
-        return $subjectType === 'null';
+        return $subjectType === 'null' || $subjectType === Request::class;
     }
 }
