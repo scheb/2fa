@@ -11,6 +11,7 @@ $rules = [
     'phpdoc_separation' => ['groups' => [['test', 'dataProvider']]],
     'nullable_type_declaration_for_default_null_value' => true,
     'no_superfluous_phpdoc_tags' => ['remove_inheritdoc' => false],
+    'nullable_type_declaration' => false,
 ];
 
 $finder = PhpCsFixer\Finder::create()
