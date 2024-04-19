@@ -77,11 +77,11 @@ class TwoFactorInProgressVoterTest extends TestCase
     public static function provideTypesForSupportCheck(): array
     {
         return [
-            [UserInterface::class, false],
-            ['any', false],
-            ['int', false],
-            ['array', false],
-            ['string', false],
+            [UserInterface::class, true],
+            ['any', true],
+            ['int', true],
+            ['array', true],
+            ['string', true],
             ['null', true],
             [Request::class, true],
         ];
