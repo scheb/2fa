@@ -7,12 +7,13 @@ namespace Scheb\TwoFactorBundle\Security\Authorization\Voter;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
+use Symfony\Component\Security\Core\Authorization\Voter\CacheableVoterInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
  * @final
  */
-class TwoFactorInProgressVoter implements VoterInterface
+class TwoFactorInProgressVoter implements CacheableVoterInterface
 {
     public const IS_AUTHENTICATED_2FA_IN_PROGRESS = 'IS_AUTHENTICATED_2FA_IN_PROGRESS';
 
@@ -36,5 +37,15 @@ class TwoFactorInProgressVoter implements VoterInterface
         }
 
         return VoterInterface::ACCESS_ABSTAIN;
+    }
+
+    public function supportsAttribute(string $attribute): bool
+    {
+        return $attribute === self::IS_AUTHENTICATED_2FA_IN_PROGRESS || $attribute === AuthenticatedVoter::PUBLIC_ACCESS;
+    }
+
+    public function supportsType(string $subjectType): bool
+    {
+        return $subjectType === 'null';
     }
 }
