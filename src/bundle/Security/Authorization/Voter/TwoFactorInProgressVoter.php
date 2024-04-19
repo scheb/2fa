@@ -41,7 +41,7 @@ class TwoFactorInProgressVoter implements CacheableVoterInterface
 
     public function supportsAttribute(string $attribute): bool
     {
-        return $attribute === self::IS_AUTHENTICATED_2FA_IN_PROGRESS || $attribute === AuthenticatedVoter::PUBLIC_ACCESS;
+        return self::IS_AUTHENTICATED_2FA_IN_PROGRESS === $attribute || AuthenticatedVoter::PUBLIC_ACCESS === $attribute;
     }
 
     public function supportsType(string $subjectType): bool

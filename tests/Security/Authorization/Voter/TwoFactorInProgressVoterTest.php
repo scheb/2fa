@@ -94,11 +94,11 @@ class TwoFactorInProgressVoterTest extends TestCase
     public function supports_attribute(string $attribute, int $expectedResult): void
     {
         $returnValue = $this->voter->supportsAttribute($attribute);
-        $this->assertEquals($expectedResult === VoterInterface::ACCESS_GRANTED, $returnValue);
+        $this->assertEquals(VoterInterface::ACCESS_GRANTED === $expectedResult, $returnValue);
     }
 
     /**
-     * Copied from provideAttributeAndExpectedResult() but removed null
+     * Copied from provideAttributeAndExpectedResult() but removed null.
      *
      * @return array<array<mixed>>
      */
