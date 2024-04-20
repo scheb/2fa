@@ -7,9 +7,11 @@ namespace Scheb\TwoFactorBundle\Tests\Security\Authorization\Voter;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Authorization\Voter\TwoFactorInProgressVoter;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class TwoFactorInProgressVoterTest extends TestCase
 {
@@ -49,6 +51,60 @@ class TwoFactorInProgressVoterTest extends TestCase
         return [
             // Abstain
             [null, VoterInterface::ACCESS_ABSTAIN],
+            ['any', VoterInterface::ACCESS_ABSTAIN],
+            [AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED, VoterInterface::ACCESS_ABSTAIN],
+            [AuthenticatedVoter::IS_AUTHENTICATED_FULLY, VoterInterface::ACCESS_ABSTAIN],
+
+            // Granted
+            [AuthenticatedVoter::PUBLIC_ACCESS, VoterInterface::ACCESS_GRANTED],
+            [TwoFactorInProgressVoter::IS_AUTHENTICATED_2FA_IN_PROGRESS, VoterInterface::ACCESS_GRANTED],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider provideTypesForSupportCheck
+     */
+    public function supports_type(string $checkType, bool $expectedResult): void
+    {
+        $returnValue = $this->voter->supportsType($checkType);
+        $this->assertEquals($expectedResult, $returnValue);
+    }
+
+    /**
+     * @return array<array<mixed>>
+     */
+    public static function provideTypesForSupportCheck(): array
+    {
+        return [
+            [UserInterface::class, true],
+            ['any', true],
+            ['int', true],
+            ['array', true],
+            ['string', true],
+            ['null', true],
+            [Request::class, true],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider provideAttributesForSupportCheck
+     */
+    public function supports_attribute(string $attribute, int $expectedResult): void
+    {
+        $returnValue = $this->voter->supportsAttribute($attribute);
+        $this->assertEquals(VoterInterface::ACCESS_GRANTED === $expectedResult, $returnValue);
+    }
+
+    /**
+     * Copied from provideAttributeAndExpectedResult() but removed null.
+     *
+     * @return array<array<mixed>>
+     */
+    public static function provideAttributesForSupportCheck(): array
+    {
+        return [
             ['any', VoterInterface::ACCESS_ABSTAIN],
             [AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED, VoterInterface::ACCESS_ABSTAIN],
             [AuthenticatedVoter::IS_AUTHENTICATED_FULLY, VoterInterface::ACCESS_ABSTAIN],
