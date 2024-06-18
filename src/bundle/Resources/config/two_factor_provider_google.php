@@ -8,6 +8,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorTwoFactorProvider;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleTotpFactory;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $container): void {
@@ -18,6 +19,7 @@ return static function (ContainerConfigurator $container): void {
                 '%scheb_two_factor.google.server_name%',
                 '%scheb_two_factor.google.issuer%',
                 '%scheb_two_factor.google.digits%',
+                (new ReferenceConfigurator('clock'))->nullOnInvalid(),
             ])
 
         ->set('scheb_two_factor.security.google_authenticator', GoogleAuthenticator::class)

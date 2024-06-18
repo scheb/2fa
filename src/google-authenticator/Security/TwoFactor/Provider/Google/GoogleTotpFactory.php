@@ -6,6 +6,8 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google;
 
 use OTPHP\TOTP;
 use OTPHP\TOTPInterface;
+use Psr\Clock\ClockInterface;
+use ReflectionClass;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
 use function strlen;
@@ -19,6 +21,7 @@ class GoogleTotpFactory
         private readonly string|null $server,
         private readonly string|null $issuer,
         private readonly int $digits,
+        private readonly ClockInterface|null $clock = null,
     ) {
     }
 
@@ -29,8 +32,13 @@ class GoogleTotpFactory
             throw new TwoFactorProviderLogicException('Cannot initialize TOTP, no secret code provided.');
         }
 
-        /** @psalm-suppress ArgumentTypeCoercion */
-        $totp = TOTP::create($secret, 30, 'sha1', $this->digits);
+        if ((new ReflectionClass(TOTP::class))->hasProperty('clock')) {
+            /** @psalm-suppress ArgumentTypeCoercion */
+            $totp = TOTP::create($secret, 30, 'sha1', $this->digits, clock: $this->clock);
+        } else {
+            /** @psalm-suppress ArgumentTypeCoercion */
+            $totp = TOTP::create($secret, 30, 'sha1', $this->digits);
+        }
 
         $userAndHost = $user->getGoogleAuthenticatorUsername().(null !== $this->server && $this->server ? '@'.$this->server : '');
         $totp->setLabel($userAndHost);
