@@ -40,6 +40,7 @@ class TotpFactory
             throw new TwoFactorProviderLogicException('Cannot initialize TOTP, no secret code provided.');
         }
 
+        // Compatibility for spomky-labs/otphp version 12
         if ((new ReflectionClass(TOTP::class))->hasProperty('clock')) {
             /** @psalm-suppress ArgumentTypeCoercion */
             $totp = TOTP::create(

@@ -32,6 +32,7 @@ class GoogleTotpFactory
             throw new TwoFactorProviderLogicException('Cannot initialize TOTP, no secret code provided.');
         }
 
+        // Compatibility for spomky-labs/otphp version 12
         if ((new ReflectionClass(TOTP::class))->hasProperty('clock')) {
             /** @psalm-suppress ArgumentTypeCoercion */
             $totp = TOTP::create($secret, 30, 'sha1', $this->digits, clock: $this->clock);
