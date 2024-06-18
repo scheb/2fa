@@ -8,6 +8,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInte
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorTwoFactorProvider;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpFactory;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $container): void {
@@ -19,6 +20,7 @@ return static function (ContainerConfigurator $container): void {
                 '%scheb_two_factor.totp.server_name%',
                 '%scheb_two_factor.totp.issuer%',
                 '%scheb_two_factor.totp.parameters%',
+                (new ReferenceConfigurator('clock'))->nullOnInvalid(),
             ])
 
         ->set('scheb_two_factor.security.totp_authenticator', TotpAuthenticator::class)
