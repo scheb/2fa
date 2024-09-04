@@ -11,6 +11,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGenera
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use stdClass;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class EmailTwoFactorProviderTest extends TestCase
@@ -22,11 +23,14 @@ class EmailTwoFactorProviderTest extends TestCase
     private MockObject|CodeGeneratorInterface $generator;
     private EmailTwoFactorProvider $provider;
 
+    private MockObject|EventDispatcherInterface $eventDispatcher;
+
     protected function setUp(): void
     {
         $this->generator = $this->createMock(CodeGeneratorInterface::class);
         $formRenderer = $this->createMock(TwoFactorFormRendererInterface::class);
-        $this->provider = new EmailTwoFactorProvider($this->generator, $formRenderer);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->provider = new EmailTwoFactorProvider($this->generator, $formRenderer, $this->eventDispatcher);
     }
 
     private function createUser(bool $emailAuthEnabled = true): MockObject|UserWithTwoFactorInterface

@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email;
 
+use Scheb\TwoFactorBundle\Event\EmailCodeValidated;
+use Scheb\TwoFactorBundle\Event\EmailTwoFactorEvents;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use function str_replace;
 
 /**
@@ -19,6 +22,7 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
     public function __construct(
         private readonly CodeGeneratorInterface $codeGenerator,
         private readonly TwoFactorFormRendererInterface $formRenderer,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
@@ -48,7 +52,15 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
         // Strip any user added spaces
         $authenticationCode = str_replace(' ', '', $authenticationCode);
 
-        return $user->getEmailAuthCode() === $authenticationCode;
+        $isCodeValid = $user->getEmailAuthCode() === $authenticationCode;
+
+        if (false === $isCodeValid) {
+            return false;
+        }
+
+        $this->eventDispatcher->dispatch(new EmailCodeValidated($user->getEmailAuthRecipient()), EmailTwoFactorEvents::EMAIL_CODE_VALIDATED);
+
+        return true;
     }
 
     public function getFormRenderer(): TwoFactorFormRendererInterface
