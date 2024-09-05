@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email;
 
+use Scheb\TwoFactorBundle\Event\EmailCodeValidated;
+use Scheb\TwoFactorBundle\Event\EmailTwoFactorEvents;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use function str_replace;
 
 /**
  * @final
@@ -25,10 +29,19 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
      */
     private $formRenderer;
 
-    public function __construct(CodeGeneratorInterface $codeGenerator, TwoFactorFormRendererInterface $formRenderer)
-    {
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    public function __construct(
+        CodeGeneratorInterface $codeGenerator,
+        TwoFactorFormRendererInterface $formRenderer,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->codeGenerator = $codeGenerator;
         $this->formRenderer = $formRenderer;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function beginAuthentication(AuthenticationContextInterface $context): bool
@@ -55,7 +68,15 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
         // Strip any user added spaces
         $authenticationCode = str_replace(' ', '', $authenticationCode);
 
-        return $user->getEmailAuthCode() === $authenticationCode;
+        $isCodeValid = $user->getEmailAuthCode() === $authenticationCode;
+
+        if (false === $isCodeValid) {
+            return false;
+        }
+
+        $this->eventDispatcher->dispatch(new EmailCodeValidated($user->getEmailAuthRecipient()), EmailTwoFactorEvents::EMAIL_CODE_VALIDATED);
+
+        return true;
     }
 
     public function getFormRenderer(): TwoFactorFormRendererInterface
