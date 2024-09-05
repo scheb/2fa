@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Scheb\TwoFactorBundle\Event;
+namespace Scheb\TwoFactorBundle\Security\TwoFactor\Event;
 
 class EmailTwoFactorEvents
 {

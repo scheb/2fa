@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email;
 
-use Scheb\TwoFactorBundle\Event\EmailCodeValidated;
-use Scheb\TwoFactorBundle\Event\EmailTwoFactorEvents;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\EmailCodeValidated;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\EmailTwoFactorEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;

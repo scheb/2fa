@@ -11,8 +11,8 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGenera
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use stdClass;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class EmailTwoFactorProviderTest extends TestCase
 {
@@ -57,6 +57,20 @@ class EmailTwoFactorProviderTest extends TestCase
             ->willReturn($user ?: $this->createUser());
 
         return $authContext;
+    }
+
+    private function expectEmailValidatedEventDispatched(): void
+    {
+        $this->eventDispatcher
+            ->expects($this->once())
+            ->method('dispatch');
+    }
+
+    private function expectEmailValidatedEventNotDispatched(): void
+    {
+        $this->eventDispatcher
+            ->expects($this->never())
+            ->method('dispatch');
     }
 
     /**
@@ -132,6 +146,8 @@ class EmailTwoFactorProviderTest extends TestCase
     public function validateAuthenticationCode_noTwoFactorUser_returnFalse(): void
     {
         $user = new stdClass();
+
+        $this->expectEmailValidatedEventNotDispatched();
         $returnValue = $this->provider->validateAuthenticationCode($user, 'code');
         $this->assertFalse($returnValue);
     }
@@ -142,6 +158,8 @@ class EmailTwoFactorProviderTest extends TestCase
     public function validateAuthenticationCode_validCodeGiven_returnTrue(): void
     {
         $user = $this->createUser();
+
+        $this->expectEmailValidatedEventDispatched();
         $returnValue = $this->provider->validateAuthenticationCode($user, self::VALID_AUTH_CODE);
         $this->assertTrue($returnValue);
     }
@@ -152,6 +170,8 @@ class EmailTwoFactorProviderTest extends TestCase
     public function validateAuthenticationCode_validCodeWithSpaces_returnTrue(): void
     {
         $user = $this->createUser();
+
+        $this->expectEmailValidatedEventDispatched();
         $returnValue = $this->provider->validateAuthenticationCode($user, self::VALID_AUTH_CODE_WITH_SPACES);
         $this->assertTrue($returnValue);
     }
@@ -162,6 +182,8 @@ class EmailTwoFactorProviderTest extends TestCase
     public function validateAuthenticationCode_validCodeGiven_returnFalse(): void
     {
         $user = $this->createUser();
+
+        $this->expectEmailValidatedEventNotDispatched();
         $returnValue = $this->provider->validateAuthenticationCode($user, self::INVALID_AUTH_CODE);
         $this->assertFalse($returnValue);
     }
