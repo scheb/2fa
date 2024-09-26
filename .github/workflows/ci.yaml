@@ -19,7 +19,7 @@ jobs:
 
         steps:
             -   name: 'Checkout code'
-                uses: actions/checkout@v3
+                uses: actions/checkout@v4
 
             -   name: 'Setup Build'
                 uses: ./.github/actions/setup-build
@@ -62,7 +62,7 @@ jobs:
                         symfony-version: '7.*'
         steps:
             -   name: 'Checkout code'
-                uses: actions/checkout@v3
+                uses: actions/checkout@v4
 
             -   name: 'Setup Build'
                 uses: ./.github/actions/setup-build
@@ -95,7 +95,7 @@ jobs:
                         symfony-version: '7.*'
         steps:
             -   name: 'Checkout code'
-                uses: actions/checkout@v3
+                uses: actions/checkout@v4
 
             -   name: 'Setup Build'
                 uses: ./.github/actions/setup-build
@@ -123,7 +123,7 @@ jobs:
 
         steps:
             -   name: 'Checkout code'
-                uses: actions/checkout@v3
+                uses: actions/checkout@v4
 
             -   name: 'Setup Build'
                 uses: ./.github/actions/setup-build
