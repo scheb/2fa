@@ -329,6 +329,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
     {
         $this->stubCookieHasToken('differentVersionToken;validToken');
         $this->stubDecodeToken(
+            $this->createTokenWithProperties('differentVersionToken', true, false, false),
             $this->createTokenWithProperties('validToken', true, true, false),
         );
 
