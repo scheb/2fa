@@ -28,6 +28,13 @@ Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticati
 
 Is dispatched when two-factor authentication is attempted, right before checking the code.
 
+``scheb_two_factor.authentication.backup_code_used``
+-------------------------------------------
+
+Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents::BACKUP_CODE_USED``
+
+Is dispatched when two-factor authentication was successful with a backup-code.
+
 ``scheb_two_factor.authentication.success``
 -------------------------------------------
 
