@@ -2,7 +2,7 @@
     "type": "project",
     "license": "MIT",
     "require": {
-        "php": "~8.2.0 || ~8.3.0",
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
         "ext-json": "*",
         "doctrine/doctrine-bundle": "^2.0.3",
         "doctrine/orm": "^2.9 || ^3.0",

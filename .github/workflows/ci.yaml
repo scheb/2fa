@@ -57,9 +57,18 @@ jobs:
                     -   php-version: '8.3'
                         symfony-version: '6.4.*'
 
+                    # Test against Symfony 6.4 on PHP8.4
+                    -   php-version: '8.4'
+                        symfony-version: '6.4.*'
+
                     # Test against Symfony 7
                     -   php-version: '8.3'
                         symfony-version: '7.*'
+
+                    # Test against Symfony 7 on PHP8.4
+                    -   php-version: '8.4'
+                        symfony-version: '7.*'
+
         steps:
             -   name: 'Checkout code'
                 uses: actions/checkout@v4
@@ -92,6 +101,14 @@ jobs:
 
                     # Test against Symfony 7.*
                     -   php-version: '8.3'
+                        symfony-version: '7.*'
+
+                    # Minimum PHP version
+                    -   php-version: '8.4'
+                        symfony-version: '6.4.*'
+
+                    # Test against Symfony 7.*
+                    -   php-version: '8.4'
                         symfony-version: '7.*'
         steps:
             -   name: 'Checkout code'
