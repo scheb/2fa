@@ -36,7 +36,9 @@ jobs:
 
             -   name: "Psalm"
                 if: always()
-                run: vendor/bin/psalm
+                run: |
+                    composer require -W --dev vimeo/psalm:^5.0
+                    vendor/bin/psalm
 
     unit-tests:
         name: "Unit Tests - PHP ${{ matrix.php-version }}, Sf ${{ matrix.symfony-version }}${{ matrix.dependency-versions && format(', Deps: {0}', matrix.dependency-versions) }}"

@@ -66,6 +66,10 @@ runs:
             shell: bash
             run: composer require ${{ inputs.composer-require }} --dev --no-update --working-dir=${{ inputs.composer-working-dir }}
 
+        -   name: "Remove Psalm from dependencies"
+            shell: bash
+            run: composer remove --dev vimeo/psalm
+
         -   name: "Validate composer.json"
             shell: bash
             run: composer validate --no-check-publish --no-check-lock --working-dir=${{ inputs.composer-working-dir }}
