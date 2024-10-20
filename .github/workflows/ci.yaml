@@ -131,8 +131,8 @@ jobs:
     code-coverage:
         name: 'Code Coverage - PHP ${{ matrix.php-version }}'
         runs-on: 'ubuntu-latest'
-        # We want to run on external PRs, but not on our own internal PRs as they'll be run by the push to the branch.
-        if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
+        # Do not run on PRs, because Codecov upload for PRs is failing
+        if: ${{ github.event_name != 'pull_request' }}
 
         strategy:
             fail-fast: false
@@ -155,7 +155,7 @@ jobs:
                 run: vendor/bin/phpunit --coverage-clover coverage/clover.xml
 
             -   name: 'Send Coverage to Codecov'
-                uses: codecov/codecov-action@v3
+                uses: codecov/codecov-action@v4
                 with:
                     token: ${{ secrets.CODECOV_TOKEN }}
                     files: coverage/clover.xml
