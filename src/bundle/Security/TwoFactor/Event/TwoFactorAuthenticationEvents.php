@@ -26,6 +26,11 @@ class TwoFactorAuthenticationEvents
     public const ATTEMPT = 'scheb_two_factor.authentication.attempt';
 
     /**
+     * When a backup-code is used.
+     */
+    public const BACKUP_CODE_USED = 'scheb_two_factor.authentication.backup_code_used';
+
+    /**
      * When two-factor authentication was successful (code was valid) for a single provider.
      */
     public const SUCCESS = 'scheb_two_factor.authentication.success';

@@ -20,5 +20,8 @@ return static function (ContainerConfigurator $container): void {
             ->args([
                 service('scheb_two_factor.provider_preparation_recorder'),
                 service('scheb_two_factor.backup_code_manager'),
+                service('security.token_storage'),
+                service('request_stack'),
+                service('event_dispatcher'),
             ]);
 };

@@ -7,6 +7,9 @@ namespace Scheb\TwoFactorBundle\Tests\Security\Http\EventListener;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Http\EventListener\CheckBackupCodeListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @property CheckBackupCodeListener $listener
@@ -14,13 +17,19 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTestSetup
 {
     private MockObject|BackupCodeManagerInterface $backupCodeManager;
+    private MockObject|TokenStorageInterface $tokenStorage;
+    private MockObject|RequestStack $requestStack;
+    private MockObject|EventDispatcherInterface $eventDispatcher;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->backupCodeManager = $this->createMock(BackupCodeManagerInterface::class);
-        $this->listener = new CheckBackupCodeListener($this->preparationRecorder, $this->backupCodeManager);
+        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
+        $this->requestStack = $this->createMock(RequestStack::class);
+        $this->eventDispatecher = $this->createMock(EventDispatcherInterface::class);
+        $this->listener = new CheckBackupCodeListener($this->preparationRecorder, $this->backupCodeManager, $this->tokenStorage, $this->requestStack, $this->eventDispatecher);
     }
 
     protected function expectDoNothing(): void
