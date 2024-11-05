@@ -84,10 +84,9 @@ authentication.
    # config/routes/scheb_2fa.yaml
    2fa_login:
        path: /2fa
-       defaults:
-           # "scheb_two_factor.form_controller" references the controller service provided by the bundle.
-           # You don't HAVE to use it, but - except you have very special requirements - it is recommended.
-           _controller: "scheb_two_factor.form_controller::form"
+       # "scheb_two_factor.form_controller" references the controller service provided by the bundle.
+       # You don't HAVE to use it, but - except you have very special requirements - it is recommended.
+       controller: "scheb_two_factor.form_controller::form"
 
    2fa_login_check:
        path: /2fa_check
