@@ -29,8 +29,8 @@ Core features are provided by `scheb/2fa-bundle`:
 - CSRF protection
 - Whitelisted routes (accessible during two-factor authentication)
 - Fully customizable conditions when to perform two-factor authentication
-- Future proof: Supports the [authenticator-based security system](https://symfony.com/doc/current/security/experimental_authenticators.html),
-  which will replace the current system in Symfony 6
+- Supports the new [authenticator-based security system](https://symfony.com/doc/current/security.html),
+  introduced in Symfony 6, as well as the legacy system.
 
 Additional features:
 
