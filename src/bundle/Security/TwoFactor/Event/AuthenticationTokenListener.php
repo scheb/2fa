@@ -25,7 +25,7 @@ class AuthenticationTokenListener implements EventSubscriberInterface
         private TwoFactorConditionRegistry $twoFactorConditionRegistry,
         private TwoFactorProviderInitiator $twoFactorProviderInitiator,
         private AuthenticationContextFactoryInterface $authenticationContextFactory,
-        private RequestStack $requestStack
+        private RequestStack $requestStack,
     ) {
     }
 

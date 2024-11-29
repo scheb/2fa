@@ -16,7 +16,7 @@ class AuthenticationContext implements AuthenticationContextInterface
         private Request $request,
         private TokenInterface $token,
         private Passport $passport,
-        private string $firewallName
+        private string $firewallName,
     ) {
     }
 

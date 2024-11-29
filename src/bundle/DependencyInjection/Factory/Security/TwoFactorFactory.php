@@ -125,7 +125,7 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
         string $twoFactorFirewallConfigId,
         string $successHandlerId,
         string $failureHandlerId,
-        string $authRequiredHandlerId
+        string $authRequiredHandlerId,
     ): string {
         $authenticatorId = self::AUTHENTICATOR_ID_PREFIX.$firewallName;
         $container

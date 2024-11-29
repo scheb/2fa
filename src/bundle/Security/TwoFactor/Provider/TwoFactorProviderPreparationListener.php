@@ -40,7 +40,7 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
         ?LoggerInterface $logger,
         private string $firewallName,
         private bool $prepareOnLogin,
-        private bool $prepareOnAccessDenied
+        private bool $prepareOnAccessDenied,
     ) {
         $this->logger = $logger ?? new NullLogger();
     }

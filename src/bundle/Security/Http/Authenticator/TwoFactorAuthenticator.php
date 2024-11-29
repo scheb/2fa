@@ -50,7 +50,7 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         private AuthenticationFailureHandlerInterface $failureHandler,
         private AuthenticationRequiredHandlerInterface $authenticationRequiredHandler,
         private EventDispatcherInterface $eventDispatcher,
-        ?LoggerInterface $logger = null
+        ?LoggerInterface $logger = null,
     ) {
         $this->logger = $logger ?? new NullLogger();
     }

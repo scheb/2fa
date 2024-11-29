@@ -17,7 +17,7 @@ class TwoFactorProviderInitiator
 {
     public function __construct(
         private TwoFactorProviderRegistry $providerRegistry,
-        private TwoFactorTokenFactoryInterface $twoFactorTokenFactory
+        private TwoFactorTokenFactoryInterface $twoFactorTokenFactory,
     ) {
     }
 
