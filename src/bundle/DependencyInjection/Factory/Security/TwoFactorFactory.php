@@ -169,6 +169,6 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
 
     public function getPriority(): int
     {
-        return 0;
+        return -50;
     }
 }
