@@ -7,6 +7,7 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Trusted;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Service\ResetInterface;
 use function array_map;
 use function explode;
 use function implode;
@@ -14,7 +15,7 @@ use function implode;
 /**
  * @final
  */
-class TrustedDeviceTokenStorage
+class TrustedDeviceTokenStorage implements ResetInterface
 {
     private const TOKEN_DELIMITER = ';';
 
@@ -98,6 +99,12 @@ class TrustedDeviceTokenStorage
         }
 
         $this->updateCookie = true;
+    }
+
+    public function reset(): void
+    {
+        $this->updateCookie = false;
+        $this->trustedTokenList = null;
     }
 
     /**

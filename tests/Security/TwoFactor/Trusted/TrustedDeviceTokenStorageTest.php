@@ -337,4 +337,32 @@ class TrustedDeviceTokenStorageTest extends TestCase
         $returnValue = $this->tokenStorage->getCookieValue();
         $this->assertEquals('validToken', $returnValue);
     }
+
+    /**
+     * @test
+     */
+    public function reset_cookiePreviouslyUpdated_resetUpdatedCookie(): void
+    {
+        $this->tokenStorage->addTrustedToken('username', 'firewallName', 1);
+        $this->assertTrue($this->tokenStorage->hasUpdatedCookie());
+
+        $this->tokenStorage->reset();
+        $this->assertFalse($this->tokenStorage->hasUpdatedCookie());
+    }
+
+    /**
+     * @test
+     */
+    public function reset_cookiePreviouslyUpdated_resetCookieList(): void
+    {
+        $this->stubCookieHasToken('serializedToken');
+        $this->stubDecodeToken(
+            $this->createTokenWithProperties('serializedToken', true, true, false),
+        );
+        $this->assertEquals('serializedToken', $this->tokenStorage->getCookieValue());
+
+        $this->request->cookies->remove('cookieName');
+        $this->tokenStorage->reset();
+        $this->assertEmpty($this->tokenStorage->getCookieValue());
+    }
 }
