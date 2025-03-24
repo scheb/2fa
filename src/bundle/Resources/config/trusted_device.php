@@ -41,6 +41,7 @@ return static function (ContainerConfigurator $container): void {
             ])
 
         ->set('scheb_two_factor.trusted_token_storage', TrustedDeviceTokenStorage::class)
+            ->tag('kernel.reset', ['method' => 'reset'])
             ->lazy(true)
             ->args([
                 service('request_stack'),
