@@ -125,8 +125,7 @@ Troubleshooting
        Your authenticated token was flagged as invalid. Follow the solution below.
 
    No
-       Unknown issue. Try to reach out for help by
-       `creating an issue`_ and let us know what you've already tested.
+       Unknown issue. Try to reach out for help by `creating an issue`_ and let us know what you've already tested.
 
 **Solution to: Your authenticated token was flagged as invalid**
 
@@ -229,8 +228,7 @@ Troubleshooting
        authentication.
 
    No
-       Unknown issue. Try to reach out for help by
-       `creating an issue`_ and let us know what you've already tested.
+       Unknown issue. Try to reach out for help by `creating an issue`_ and let us know what you've already tested.
 
 #. On login, do you reach the end (return statement) of method
    ``Scheb\TwoFactorBundle\Security\Authentication\Provider\AuthenticationProviderDecorator::authenticate()``?
@@ -239,8 +237,8 @@ Troubleshooting
        Continue with 4)
 
    No
-       Something is wrong with the integration of the bundle. Try to reach out for help by
-      `creating an issue`_ and let us know what you've already tested.
+       Something is wrong with the integration of the bundle. Try to reach out for help by `creating an issue`_ and let
+       us know what you've already tested.
 
 #. On login, is method
    ``Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderInitiator::getActiveTwoFactorProviders()`` called?
@@ -257,8 +255,7 @@ Troubleshooting
    return any values?
 
    Yes, it returns an array of strings
-       Unknown issue. Try to reach out for help by
-       `creating an issue`_ and let us know what you've already tested.
+       Unknown issue. Try to reach out for help by `creating an issue`_ and let us know what you've already tested.
 
    No, it returns an empty array
        **Solution:** our user doesn't have an active two-factor authentication method. Either the ``is*Enabled`` method
@@ -292,7 +289,6 @@ Yes
     other cookie options. Did you maybe try to `set it for a top level domain <https://github.com/scheb/two-factor-bundle/issues/242#issuecomment-538735430>`_\ ?
 
 No, there's no cookie set
-    Unknown issue. Try to reach out for help by
-    `creating an issue`_ and let us know what you've already tested.
+    Unknown issue. Try to reach out for help by `creating an issue`_ and let us know what you've already tested.
 
 .. _`creating an issue`: https://github.com/scheb/2fa/issues/new?labels=Support&template=support-request
