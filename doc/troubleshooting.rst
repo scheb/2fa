@@ -131,8 +131,8 @@ Troubleshooting
 **Solution to: Your authenticated token was flagged as invalid**
 
 Most likely your user entity implements the a serializable interface and not all of the fields relevant to the
-authentication process are taken by serialize/unserialize. Check which fields are used in methods ``serialize()`` and
-``deserialize()``.
+authentication process are taken by serialize/unserialize. Check which fields are used in methods ``serialize()`` /
+``__serialize()`` and ``deserialize()`` / ``__unserialize()``.
 
 It must be at least the fields that are used in the methods from ``Symfony\Component\Security\Core\User\UserInterface``.
 
