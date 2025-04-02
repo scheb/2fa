@@ -236,8 +236,8 @@ Troubleshooting
    No
        Unknown issue. Try to reach out for help by `creating an issue`_ and let us know what you've already tested.
 
-#. On login, do you reach the end (return statement) of method
-   ``Scheb\TwoFactorBundle\Security\Authentication\Provider\AuthenticationProviderDecorator::authenticate()``?
+#. On login, do you reach the start of method
+   ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\AuthenticationTokenListener::onAuthenticationTokenCreated()``?
 
    Yes
        Continue with 4)
@@ -247,24 +247,29 @@ Troubleshooting
        us know what you've already tested.
 
 #. On login, is method
-   ``Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderInitiator::getActiveTwoFactorProviders()`` called?
+   ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInitiator::beginTwoFactorAuthentication()`` called?
 
    Yes, it's called
        Continue with 5)
 
    No it's not called
-       **Solution:** Two-factor authentication is skipped, either because of the IP whitelist or because of a trusted
-       device token. IP whitelist is part of the bundle's configuration. Maybe you have whitelisted "localhost" or
-       "127.0.0.1"? The trusted device cookie can be removed with your browser's developer tools.
+       **Solution:** Two-factor authentication is skipped for some reason. To find out what's going on, check what is
+       happening in ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInitiator::beginTwoFactorAuthentication()``
+       before the call to the ``beginTwoFactorAuthentication()`` method. It's typically one of the reasons:
 
-#. Does ``Scheb\TwoFactorBundle\Security\TwoFactor\Handler\TwoFactorProviderInitiator::getActiveTwoFactorProviders()``
+         * The security token class used by the login method was not configured in the ``security_tokens``
+         * Your IP is whitelisted. Maybe you have whitelisted "localhost" or "127.0.0.1" in the bundle configuration?
+         * A trusted device cookie is set. The trusted device cookie can be removed with your browser's developer tools.
+         * You have implemented a custom condition for 2fa, which skips 2fa.
+
+#. Does ``\Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInitiator::getActiveTwoFactorProviders()``
    return any values?
 
    Yes, it returns an array of strings
        Unknown issue. Try to reach out for help by `creating an issue`_ and let us know what you've already tested.
 
    No, it returns an empty array
-       **Solution:** our user doesn't have an active two-factor authentication method. Either the ``is*Enabled`` method
+       **Solution:** your user doesn't have an active two-factor authentication method. Either the ``is*Enabled`` method
        returns ``false`` or an essential piece of data (e.g. Google Authenticator secret) is missing.
 
 Trusted device cookie is not set
