@@ -136,9 +136,6 @@ authentication process are taken by serialize/unserialize. Check which fields ar
 
 It must be at least the fields that are used in the methods from ``Symfony\Component\Security\Core\User\UserInterface``.
 
-If your user entity implements ``Symfony\Component\Security\Core\User\AdvancedUserInterface``, you also need the fields
-that are used in ``isAccountNonExpired()``, ``isAccountNonLocked()``, ``isCredentialsNonExpired()`` and ``isEnabled()``.
-
 Two-factor authentication form is not shown after login
 -------------------------------------------------------
 
