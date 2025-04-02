@@ -157,10 +157,16 @@ a different page from your application.
 Basic checks
 ~~~~~~~~~~~~
 
-* Your login page belongs to the firewall, which has two-factor authentication configured.
-* The paths of login page, login check, 2fa and 2fa check are all located with the firewall's path ``pattern``.
-* Your user entity has the interfaces implemented, which are necessary for the two-factor authentication method.
-* Your user entity fulfills the requirements of at least one two-factor authentication method:
+.. warning::
+
+    Please do these checks first, as they can save you a lot of unnecessary deep-dive debugging.
+
+* Your login page belongs to the firewall, which has two-factor authentication configured?
+* The paths of login page, login check, 2fa and 2fa check are all located with the firewall's path ``pattern``?
+* The security token class that you see after a login without 2fa is listed in the ``security_tokens`` configuration
+  option? (You can see the security token class that is used in the profiler)
+* Your user entity has the interfaces implemented, which are necessary for the two-factor authentication method?
+* Your user entity fulfills the requirements of at least one two-factor authentication method?
 
   * The ``is*Enabled()`` method returns ``true``
   * Additional data for the authentication method is returned, e.g. for Google Authenticator to work the
