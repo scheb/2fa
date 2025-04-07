@@ -14,6 +14,11 @@ interface TwoFactorProviderInterface
     public function beginAuthentication(AuthenticationContextInterface $context): bool;
 
     /**
+     * Determine whether this Provider needs to be prepared (if the prepareAuthentication method needs to be called).
+     */
+    public function needsPreparation(): bool;
+
+    /**
      * Do all steps necessary to prepare authentication, e.g. generate & send a code.
      */
     public function prepareAuthentication(object $user): void;

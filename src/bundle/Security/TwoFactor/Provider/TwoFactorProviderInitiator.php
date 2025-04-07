@@ -48,6 +48,18 @@ class TwoFactorProviderInitiator
         if ($activeTwoFactorProviders) {
             $twoFactorToken = $this->twoFactorTokenFactory->create($authenticatedToken, $context->getFirewallName(), $activeTwoFactorProviders);
 
+            // Mark all providers which do *not* need to be prepared, to `prepared` so the preparation process is skipped.
+            // This way these providers can be used to verify the second factor immediately
+            foreach ($activeTwoFactorProviders as $providerName) {
+                $provider = $this->providerRegistry->getProvider($providerName);
+
+                if ($provider->needsPreparation()) {
+                    continue;
+                }
+
+                $twoFactorToken->setTwoFactorProviderPrepared($providerName);
+            }
+
             $preferredProvider = $this->twoFactorProviderDecider->getPreferredTwoFactorProvider($activeTwoFactorProviders, $twoFactorToken, $context);
 
             if (null !== $preferredProvider) {
