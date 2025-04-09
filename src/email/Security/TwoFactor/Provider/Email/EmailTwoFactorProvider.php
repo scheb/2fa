@@ -30,6 +30,11 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
         return $user instanceof TwoFactorInterface && $user->isEmailAuthEnabled();
     }
 
+    public function needsPreparation(): bool
+    {
+        return true;
+    }
+
     public function prepareAuthentication(object $user): void
     {
         if (!($user instanceof TwoFactorInterface)) {

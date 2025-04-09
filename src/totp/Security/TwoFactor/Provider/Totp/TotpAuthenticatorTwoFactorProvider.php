@@ -42,6 +42,11 @@ class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
         return true;
     }
 
+    public function needsPreparation(): bool
+    {
+        return false;
+    }
+
     public function prepareAuthentication(object $user): void
     {
     }
