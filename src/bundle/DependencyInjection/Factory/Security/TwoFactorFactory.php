@@ -18,6 +18,7 @@ use function assert;
  */
 class TwoFactorFactory implements FirewallListenerFactoryInterface, AuthenticatorFactoryInterface
 {
+    public const AUTHENTICATOR_PRIORITY = -100;
     public const AUTHENTICATION_PROVIDER_KEY = 'two_factor';
 
     public const DEFAULT_CHECK_PATH = '/2fa_check';
@@ -172,6 +173,7 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
 
     public function getPriority(): int
     {
-        return 0;
+        // Lower than the lowest "official" authenticator HttpBasicFactory (-50)
+        return self::AUTHENTICATOR_PRIORITY;
     }
 }

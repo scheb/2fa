@@ -3,6 +3,14 @@ Upgrading
 
 Here's an overview if you have to do any work when upgrading.
 
+7.x to 8.x
+----------
+
+Priority of the two-factor authenticator has changed from `0` to `-100`. Please make sure your authentication system
+is still working fine, especially when you're using custom (non-official) authenticators. You might need to adjust
+the priority of your custom authenticator.
+
+
 6.x to 7.x
 ----------
 
