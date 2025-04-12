@@ -25,7 +25,9 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
     protected function setUp(): void
     {
         $this->provider1 = $this->createMock(TwoFactorProviderInterface::class);
+        $this->provider1->method('needsPreparation')->willReturn(true);
         $this->provider2 = $this->createMock(TwoFactorProviderInterface::class);
+        $this->provider2->method('needsPreparation')->willReturn(false);
 
         $providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
         $providerRegistry
@@ -159,6 +161,25 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
             ->expects($this->once())
             ->method('preferTwoFactorProvider')
             ->with('preferredProvider');
+
+        $this->initiator->beginTwoFactorAuthentication($context);
+    }
+
+    /**
+     * @test
+     */
+    public function beginAuthentication_statelessProviderPrepared_setThatProviderIsPrepared(): void
+    {
+        $originalToken = $this->createToken();
+        $context = $this->createAuthenticationContext(null, $originalToken);
+        $this->stubProvidersReturn(true, true);
+
+        $twoFactorToken = $this->createTwoFactorToken();
+        $twoFactorToken
+            ->expects($this->once())
+            ->method('setTwoFactorProviderPrepared')
+            ->with('test2');
+        $this->stubTwoFactorTokenFactoryReturns($twoFactorToken);
 
         $this->initiator->beginTwoFactorAuthentication($context);
     }
