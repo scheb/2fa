@@ -10,6 +10,9 @@
 	<!-- Ignore warnings and show progress of the run -->
 	<arg value="np"/>
 
+    <!-- PHP version to test against -->
+    <config name="php_version" value="80200"/>
+
 	<file>./app/src</file>
 	<file>./src</file>
 	<file>./tests</file>
