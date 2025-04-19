@@ -8,12 +8,18 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Http\EventListener\CheckBackupCodeListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\BackupCodeEvents;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
+use Scheb\TwoFactorBundle\Tests\EventDispatcherTestHelper;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @property CheckBackupCodeListener $listener
  */
 class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTestSetup
 {
+    use EventDispatcherTestHelper;
+
     private MockObject|BackupCodeManagerInterface $backupCodeManager;
 
     protected function setUp(): void
@@ -21,7 +27,8 @@ class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTestSetup
         parent::setUp();
 
         $this->backupCodeManager = $this->createMock(BackupCodeManagerInterface::class);
-        $this->listener = new CheckBackupCodeListener($this->preparationRecorder, $this->backupCodeManager);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->listener = new CheckBackupCodeListener($this->preparationRecorder, $this->backupCodeManager, $this->eventDispatcher);
     }
 
     protected function expectDoNothing(): void
@@ -52,6 +59,27 @@ class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTestSetup
         $this->listener->checkPassport($this->checkPassportEvent);
     }
 
+    /**
+     * @test
+     */
+    public function checkPassport_validBackupCode_dispatchCheckAndInvalidateEvent(): void
+    {
+        $this->stubAllPreconditionsFulfilled();
+
+        $this->backupCodeManager
+            ->expects($this->any())
+            ->method('isBackupCode')
+            ->willReturn(true);
+
+        $event = new TwoFactorCodeEvent($this->user, self::CODE);
+        $this->expectDispatchConsecutiveEvents([
+            [$event, BackupCodeEvents::CHECK],
+            [$event, BackupCodeEvents::VALID],
+        ]);
+
+        $this->listener->checkPassport($this->checkPassportEvent);
+    }
+
     #[Test]
     public function checkPassport_invalidBackupCode_unresolvedCredentials(): void
     {
@@ -68,6 +96,27 @@ class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTestSetup
             ->method('invalidateBackupCode');
 
         $this->expectCredentialsUnresolved();
+
+        $this->listener->checkPassport($this->checkPassportEvent);
+    }
+
+    /**
+     * @test
+     */
+    public function checkPassport_invalidBackupCode_dispatchCheckEvent(): void
+    {
+        $this->stubAllPreconditionsFulfilled();
+
+        $this->backupCodeManager
+            ->expects($this->any())
+            ->method('isBackupCode')
+            ->willReturn(false);
+
+        $event = new TwoFactorCodeEvent($this->user, self::CODE);
+        $this->expectDispatchConsecutiveEvents([
+            [$event, BackupCodeEvents::CHECK],
+            [$event, BackupCodeEvents::INVALID],
+        ]);
 
         $this->listener->checkPassport($this->checkPassportEvent);
     }

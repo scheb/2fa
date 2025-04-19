@@ -141,3 +141,8 @@ configuration:
    scheb_two_factor:
        backup_codes:
            manager: acme.custom_backup_code_manager  # Use a custom backup code manager
+
+Backup code events
+------------------
+
+See :doc:`Events </events>`
