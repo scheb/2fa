@@ -8,6 +8,9 @@ use Scheb\TwoFactorBundle\Model\TrustedDeviceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * @api Part of the bundle's public API, may be extended
+ */
 class TrustedDeviceManager implements TrustedDeviceManagerInterface
 {
     private const DEFAULT_TOKEN_VERSION = 0;

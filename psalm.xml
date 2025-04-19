@@ -3,6 +3,7 @@
     resolveFromConfigFile="true"
 	findUnusedBaselineEntry="false"
 	findUnusedCode="false"
+	ensureOverrideAttribute="false"
 	errorLevel="2"
 	phpVersion="8.2"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

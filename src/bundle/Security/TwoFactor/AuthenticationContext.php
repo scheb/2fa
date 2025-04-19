@@ -10,6 +10,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 
+/**
+ * @api Part of the bundle's public API, may be extended
+ */
 class AuthenticationContext implements AuthenticationContextInterface
 {
     public function __construct(

@@ -8,6 +8,9 @@ use InvalidArgumentException;
 use function in_array;
 use function sprintf;
 
+/**
+ * @api Part of the bundle's public API, may be extended
+ */
 class TotpConfiguration implements TotpConfigurationInterface
 {
     public const ALGORITHM_MD5 = 'md5';

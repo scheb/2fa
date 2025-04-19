@@ -21,6 +21,9 @@ use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use function count;
 use function str_contains;
 
+/**
+ * @api Part of the bundle's public API, may be extended
+ */
 class FormController
 {
     public function __construct(

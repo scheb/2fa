@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 use function array_merge;
 
+/**
+ * @api Part of the bundle's public API, may be extended
+ */
 class DefaultTwoFactorFormRenderer implements TwoFactorFormRendererInterface
 {
     /**

@@ -11,6 +11,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
+/**
+ * @api Part of the bundle's public API, may be extended
+ */
 class DefaultAuthenticationRequiredHandler implements AuthenticationRequiredHandlerInterface
 {
     use TargetPathTrait;

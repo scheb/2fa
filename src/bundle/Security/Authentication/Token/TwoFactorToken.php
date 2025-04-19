@@ -18,6 +18,9 @@ use function count;
 use function reset;
 use function sprintf;
 
+/**
+ * @api Part of the bundle's public API, may be extended
+ */
 class TwoFactorToken implements TwoFactorTokenInterface
 {
     /** @var array<string,mixed> */

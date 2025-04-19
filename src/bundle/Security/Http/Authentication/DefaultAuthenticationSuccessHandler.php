@@ -13,6 +13,9 @@ use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
+/**
+ * @api Part of the bundle's public API, may be extended
+ */
 class DefaultAuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     use TargetPathTrait;

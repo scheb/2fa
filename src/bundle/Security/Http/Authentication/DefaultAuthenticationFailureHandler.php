@@ -12,6 +12,9 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerI
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 
+/**
+ * @api Part of the bundle's public API, may be extended
+ */
 class DefaultAuthenticationFailureHandler implements AuthenticationFailureHandlerInterface
 {
     public function __construct(

@@ -8,6 +8,9 @@ use Scheb\TwoFactorBundle\Model\PreferredProviderInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 
+/**
+ * @api Part of the bundle's public API, may be extended
+ */
 class TwoFactorProviderDecider implements TwoFactorProviderDeciderInterface
 {
     /**

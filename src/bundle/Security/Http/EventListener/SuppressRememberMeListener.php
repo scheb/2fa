@@ -10,6 +10,9 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 use function assert;
 
+/**
+ * @final
+ */
 class SuppressRememberMeListener implements EventSubscriberInterface
 {
     // Just before Symfony's RememberMeListener
