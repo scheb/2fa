@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use Scheb\TwoFactorBundle\DependencyInjection\Compiler\MailerCompilerPass;
 use Scheb\TwoFactorBundle\DependencyInjection\Compiler\TwoFactorFirewallConfigCompilerPass;
 use Scheb\TwoFactorBundle\DependencyInjection\Compiler\TwoFactorProviderCompilerPass;
@@ -15,9 +16,7 @@ use function count;
 
 class SchebTwoFactorBundleTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function build_initializeBundle_addCompilerPass(): void
     {
         $containerBuilder = $this->createMock(ContainerBuilder::class);

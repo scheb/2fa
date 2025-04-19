@@ -7,6 +7,8 @@ namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Trusted;
 use Lcobucci\JWT\Token\DataSet;
 use Lcobucci\JWT\Token\Plain;
 use Lcobucci\JWT\Token\Signature;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\JwtTokenEncoder;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceToken;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -26,19 +28,15 @@ class TrustedDeviceTokenTest extends TestCase
         $this->trustedToken = new TrustedDeviceToken($jwtToken);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function authenticatesRealm_usernameAndFirewallNameMatches_returnTrue(): void
     {
         $returnValue = $this->trustedToken->authenticatesRealm('username', 'firewallName');
         $this->assertTrue($returnValue);
     }
 
-    /**
-     * @test
-     * @dataProvider provideWrongUsernameFirewallNameCombination
-     */
+    #[Test]
+    #[DataProvider('provideWrongUsernameFirewallNameCombination')]
     public function authenticatesRealm_usernameAndFirewallNameDiffernt_returnFalse(string $username, string $firewallName): void
     {
         $returnValue = $this->trustedToken->authenticatesRealm($username, $firewallName);
@@ -56,27 +54,21 @@ class TrustedDeviceTokenTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function versionMatches_sameVersion_returnTrue(): void
     {
         $returnValue = $this->trustedToken->versionMatches(1);
         $this->assertTrue($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function versionMatches_differentVersion_returnFalse(): void
     {
         $returnValue = $this->trustedToken->versionMatches(2);
         $this->assertFalse($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function serialize_encodeToken_returnEncodedString(): void
     {
         $returnValue = $this->trustedToken->serialize();

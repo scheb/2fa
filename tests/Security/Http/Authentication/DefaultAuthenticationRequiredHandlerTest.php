@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\Authentication;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\DefaultAuthenticationRequiredHandler;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
@@ -115,9 +116,7 @@ class DefaultAuthenticationRequiredHandlerTest extends TestCase
             ->willReturn(false);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationRequired_redirectToForm_returnsRedirect(): void
     {
         $token = $this->createMock(TokenInterface::class);
@@ -133,9 +132,7 @@ class DefaultAuthenticationRequiredHandlerTest extends TestCase
         $this->assertSame($this->authFormRedirectResponse, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationRequired_isNotCheckPath_saveRedirectUrl(): void
     {
         $token = $this->createMock(TokenInterface::class);
@@ -146,9 +143,7 @@ class DefaultAuthenticationRequiredHandlerTest extends TestCase
         $this->handler->onAuthenticationRequired($this->request, $token);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationRequired_isCheckPath_notSaveRedirectUrl(): void
     {
         $token = $this->createMock(TokenInterface::class);

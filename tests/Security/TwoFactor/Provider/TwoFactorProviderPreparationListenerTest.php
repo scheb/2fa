@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
@@ -124,9 +125,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
             ->method('getProvider');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onLogin_optionPrepareOnLoginTrue_twoFactorProviderIsPrepared(): void
     {
         $this->initTwoFactorProviderPreparationListener(true, false);
@@ -138,9 +137,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $this->listener->onKernelResponse($this->createResponseEvent());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onLogin_optionPrepareOnLoginFalse_twoFactorProviderIsNotPrepared(): void
     {
         $this->initTwoFactorProviderPreparationListener(false, false);
@@ -152,9 +149,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $this->listener->onKernelResponse($this->createResponseEvent());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAccessDenied_optionPrepareOnAccessDeniedTrue_twoFactorProviderIsPrepared(): void
     {
         $this->initTwoFactorProviderPreparationListener(false, true);
@@ -166,9 +161,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $this->listener->onKernelResponse($this->createResponseEvent());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAccessDenied_optionPrepareOnAccessDeniedFalse_twoFactorProviderIsNotPrepared(): void
     {
         $this->initTwoFactorProviderPreparationListener(false, false);
@@ -180,9 +173,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $this->listener->onKernelResponse($this->createResponseEvent());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onTwoFactorForm_onEvent_twoFactorProviderIsPrepared(): void
     {
         $this->initTwoFactorProviderPreparationListener(false, false);
@@ -197,9 +188,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $this->listener->onKernelResponse($this->createResponseEvent());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onKernelResponse_providerAlreadyPrepared_saveSession(): void
     {
         $this->initTwoFactorProviderPreparationListener(true, true);
@@ -223,9 +212,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $this->listener->onKernelResponse($this->createResponseEvent());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onKernelResponse_recorderThrowsUnexpectedTokenException_doNothing(): void
     {
         $this->initTwoFactorProviderPreparationListener(false, false);

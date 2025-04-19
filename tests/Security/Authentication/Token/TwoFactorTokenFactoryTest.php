@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Authentication\Token;
 
+use PHPUnit\Framework\Attributes\Test;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactory;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -12,9 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class TwoFactorTokenFactoryTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function create_onCreate_returnTwoFactorToken(): void
     {
         $authenticatedToken = $this->createMock(TokenInterface::class);

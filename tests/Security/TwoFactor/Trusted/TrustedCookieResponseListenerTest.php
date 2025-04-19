@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Trusted;
 
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedCookieResponseListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceTokenStorage;
@@ -69,9 +71,7 @@ class TrustedCookieResponseListenerTest extends TestCase
         return $this->createEventWithRequest($request);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onKernelResponse_noUpdatedCookie_noCookieHeader(): void
     {
         $this->trustedTokenStorage
@@ -84,9 +84,7 @@ class TrustedCookieResponseListenerTest extends TestCase
         $this->assertCount(0, $this->response->headers->getCookies(), 'Response must have no cookie set.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onKernelResponse_hasUpdatedCookie_addCookieHeader(): void
     {
         $this->trustedTokenStorage
@@ -118,9 +116,7 @@ class TrustedCookieResponseListenerTest extends TestCase
         $this->assertEquals($expectedCookie, $cookies[0]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onKernelResponse_hasDomainConfigured_setCookieDomain(): void
     {
         $this->cookieResponseListener = $this->createTrustedCookieResponseListener('.different-domain.com');
@@ -149,10 +145,8 @@ class TrustedCookieResponseListenerTest extends TestCase
         $this->assertEquals($expectedCookie, $cookies[0]);
     }
 
-    /**
-     * @test
-     * @dataProvider provideRequestHostName
-     */
+    #[Test]
+    #[DataProvider('provideRequestHostName')]
     public function onKernelResponse_excludedHostNames_notSetDomain(string $requestHostName): void
     {
         $this->trustedTokenStorage
@@ -185,9 +179,7 @@ class TrustedCookieResponseListenerTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onKernelResponse_cookieSecureAutoOnSecureRequest_setSecureCookie(): void
     {
         $this->trustedTokenStorage
@@ -212,9 +204,7 @@ class TrustedCookieResponseListenerTest extends TestCase
         $this->assertTrue($cookies[0]->isSecure());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onKernelResponse_cookieSecureAutoOnUnsecureRequest_setUnsecureCookie(): void
     {
         $this->trustedTokenStorage

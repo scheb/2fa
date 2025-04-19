@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Authentication;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\AuthenticationTrustResolver;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
@@ -33,10 +35,8 @@ class AuthenticationTrustResolverTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider provideReturnedResult
-     */
+    #[Test]
+    #[DataProvider('provideReturnedResult')]
     public function isRememberMe_tokenGiven_returnResultFromDecoratedTrustResolver(bool $returnedResult): void
     {
         $this->decoratedTrustResolver
@@ -48,9 +48,7 @@ class AuthenticationTrustResolverTest extends TestCase
         $this->assertEquals($returnedResult, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isFullFledged_twoFactorToken_returnFalse(): void
     {
         $this->decoratedTrustResolver
@@ -61,10 +59,8 @@ class AuthenticationTrustResolverTest extends TestCase
         $this->assertFalse($returnValue);
     }
 
-    /**
-     * @test
-     * @dataProvider provideReturnedResult
-     */
+    #[Test]
+    #[DataProvider('provideReturnedResult')]
     public function isFullFledged_notTwoFactorToken_returnResultFromDecoratedTrustResolver(bool $returnedResult): void
     {
         $this->decoratedTrustResolver
@@ -76,10 +72,8 @@ class AuthenticationTrustResolverTest extends TestCase
         $this->assertEquals($returnedResult, $returnValue);
     }
 
-    /**
-     * @test
-     * @dataProvider provideReturnedResult
-     */
+    #[Test]
+    #[DataProvider('provideReturnedResult')]
     public function isAuthenticated_tokenGiven_returnResultFromDecoratedTrustResolver(bool $returnedResult): void
     {
         $this->decoratedTrustResolver

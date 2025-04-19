@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Event;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\TwoFactorAuthenticator;
@@ -96,9 +97,7 @@ class AuthenticationTokenListenerTest extends TestCase
             ->with($expectedToken);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationTokenCreated_isTwoFactorToken_notChangeToken(): void
     {
         $this->stubTwoFactorConditionsFulfilled(true);
@@ -110,9 +109,7 @@ class AuthenticationTokenListenerTest extends TestCase
         $this->listener->onAuthenticationTokenCreated($event);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationTokenCreated_tokenFlagged2faComplete_notChangeToken(): void
     {
         $this->stubTwoFactorConditionsFulfilled(true);
@@ -130,9 +127,7 @@ class AuthenticationTokenListenerTest extends TestCase
         $this->listener->onAuthenticationTokenCreated($this->createEvent($authenticatedToken));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createAuthenticatedToken_preconditionsFulfilled_createAuthenticationContext(): void
     {
         $this->stubTwoFactorConditionsFulfilled(true);
@@ -147,9 +142,7 @@ class AuthenticationTokenListenerTest extends TestCase
         $this->listener->onAuthenticationTokenCreated($event);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationTokenCreated_twoFactorConditionsUnfulfilled_notInitiate(): void
     {
         $this->stubTwoFactorConditionsFulfilled(false);
@@ -163,9 +156,7 @@ class AuthenticationTokenListenerTest extends TestCase
         $this->listener->onAuthenticationTokenCreated($event);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationTokenCreated_twoFactorConditionsFulfilled_initiateTwoFactorAuthentication(): void
     {
         $this->stubTwoFactorConditionsFulfilled(true);
@@ -180,9 +171,7 @@ class AuthenticationTokenListenerTest extends TestCase
         $this->listener->onAuthenticationTokenCreated($event);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationTokenCreated_noTwoFactorProvidersAvailable_keepSecurityToken(): void
     {
         $this->stubTwoFactorConditionsFulfilled(true);
@@ -197,9 +186,7 @@ class AuthenticationTokenListenerTest extends TestCase
         $this->listener->onAuthenticationTokenCreated($event);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationTokenCreated_hasTwoFactorProvidersAvailable_changeSecurityToken(): void
     {
         $this->stubTwoFactorConditionsFulfilled(true);

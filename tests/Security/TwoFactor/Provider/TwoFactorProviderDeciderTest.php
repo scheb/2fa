@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
@@ -23,9 +24,7 @@ class TwoFactorProviderDeciderTest extends AbstractAuthenticationContextTestCase
         $this->twoFactorProviderDecider = new TwoFactorProviderDecider();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getPreferredTwoFactorProvider_implementsPreferredProvider_returnsPreferredProvider(): void
     {
         $user = $this->createUserWithPreferredProvider('preferredProvider');
@@ -36,9 +35,7 @@ class TwoFactorProviderDeciderTest extends AbstractAuthenticationContextTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getPreferredTwoFactorProvider_implementsPreferredProvider_returnsNullPreferredProvider(): void
     {
         $user = $this->createUserWithPreferredProvider(null);
@@ -48,9 +45,7 @@ class TwoFactorProviderDeciderTest extends AbstractAuthenticationContextTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getPreferredTwoFactorProvider_unexpectedUserObject_returnsNull(): void
     {
         $user = $this->createMock(UserInterface::class);

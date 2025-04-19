@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Http\Utils\RequestDataReader;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
@@ -68,170 +69,132 @@ class TwoFactorFirewallConfigTest extends TestCase
             ->willReturn($result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFirewallName_isSet_returnFirewallName(): void
     {
         $this->assertEquals(self::FIREWALL_NAME, $this->createConfig()->getFirewallName());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isMultiFactor_optionSet_returnThatValue(): void
     {
         $returnValue = $this->createConfig()->isMultiFactor();
         $this->assertTrue($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAuthCodeParameterName_optionSet_returnThatValue(): void
     {
         $returnValue = $this->createConfig()->getAuthCodeParameterName();
         $this->assertEquals('auth_code_param', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getTrustedParameterName_optionSet_returnThatValue(): void
     {
         $returnValue = $this->createConfig()->getTrustedParameterName();
         $this->assertEquals('trusted_param', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isRememberMeSetsTrusted_optionIsNotSet_returnFalse(): void
     {
         $returnValue = $this->createConfig([])->isRememberMeSetsTrusted();
         $this->assertFalse($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isRememberMeSetsTrusted_optionDisabled_returnTrue(): void
     {
         $returnValue = $this->createConfig(['remember_me_sets_trusted' => false])->isRememberMeSetsTrusted();
         $this->assertFalse($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isRememberMeSetsTrusted_optionEnabled_returnTrue(): void
     {
         $returnValue = $this->createConfig(self::FULL_OPTIONS)->isRememberMeSetsTrusted();
         $this->assertTrue($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getCsrfParameterName_optionSet_returnThatValue(): void
     {
         $returnValue = $this->createConfig()->getCsrfParameterName();
         $this->assertEquals('parameter_name', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getCsrfTokenId_optionSet_returnThatValue(): void
     {
         $returnValue = $this->createConfig()->getCsrfTokenId();
         $this->assertEquals('token_id', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isCsrfProtectionEnabled_csrfOptionIsNotSet_returnFalse(): void
     {
         $returnValue = $this->createConfig([])->isCsrfProtectionEnabled();
         $this->assertFalse($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isCsrfProtectionEnabled_csrfDisabled_returnTrue(): void
     {
         $returnValue = $this->createConfig(['enable_csrf' => false])->isCsrfProtectionEnabled();
         $this->assertFalse($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isCsrfProtectionEnabled_csrfEnabled_returnTrue(): void
     {
         $returnValue = $this->createConfig(self::FULL_OPTIONS)->isCsrfProtectionEnabled();
         $this->assertTrue($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAuthFormPath_optionSet_returnThatValue(): void
     {
         $returnValue = $this->createConfig()->getAuthFormPath();
         $this->assertEquals('auth_form_path_route_name', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAuthFormPath_optionNotSet_returnDefault(): void
     {
         $returnValue = $this->createConfig([])->getAuthFormPath();
         $this->assertEquals('/2fa', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getCheckPath_optionSet_returnThatValue(): void
     {
         $returnValue = $this->createConfig()->getCheckPath();
         $this->assertEquals('check_path_route_name', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getCheckPath_optionNotSet_returnDefault(): void
     {
         $returnValue = $this->createConfig([])->getCheckPath();
         $this->assertEquals('/2fa_check', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isPostOnly_optionSet_returnThatValue(): void
     {
         $returnValue = $this->createConfig()->isPostOnly();
         $this->assertFalse($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isPostOnly_optionNotSet_returnDefault(): void
     {
         $returnValue = $this->createConfig([])->isPostOnly();
         $this->assertTrue($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isCheckPathRequest_pathNotMatches_returnFalse(): void
     {
         $request = $this->createMock(Request::class);
@@ -245,9 +208,7 @@ class TwoFactorFirewallConfigTest extends TestCase
         $this->assertFalse($config->isCheckPathRequest($request));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isCheckPathRequest_pathMatchesButWrongMethod_returnFalse(): void
     {
         $request = $this->createMock(Request::class);
@@ -261,9 +222,7 @@ class TwoFactorFirewallConfigTest extends TestCase
         $this->assertFalse($config->isCheckPathRequest($request));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isCheckPathRequest_pathMatchesAndCorrectMethod_returnTrue(): void
     {
         $request = $this->createMock(Request::class);
@@ -278,9 +237,7 @@ class TwoFactorFirewallConfigTest extends TestCase
         $this->assertTrue($config->isCheckPathRequest($request));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isAuthFormRequest_pathMatches_returnTrue(): void
     {
         $request = $this->createMock(Request::class);
@@ -290,9 +247,7 @@ class TwoFactorFirewallConfigTest extends TestCase
         $this->assertTrue($config->isAuthFormRequest($request));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isAuthFormRequest_differentPath_returnFalse(): void
     {
         $request = $this->createMock(Request::class);
@@ -302,9 +257,7 @@ class TwoFactorFirewallConfigTest extends TestCase
         $this->assertFalse($config->isAuthFormRequest($request));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAuthCodeFromRequest_parameterConfigured_returnRequestData(): void
     {
         $request = $this->createMock(Request::class);
@@ -320,9 +273,7 @@ class TwoFactorFirewallConfigTest extends TestCase
         $this->assertEquals('authCodeValue', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasTrustedDeviceParameterInRequest_trueLikeValue_returnTrue(): void
     {
         $request = $this->createMock(Request::class);
@@ -338,9 +289,7 @@ class TwoFactorFirewallConfigTest extends TestCase
         $this->assertTrue($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasTrustedDeviceParameterInRequest_falseLikeValue_returnFalse(): void
     {
         $request = $this->createMock(Request::class);
@@ -356,9 +305,7 @@ class TwoFactorFirewallConfigTest extends TestCase
         $this->assertFalse($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getCsrfTokenFromRequest_hasParameter_returnValue(): void
     {
         $request = $this->createMock(Request::class);

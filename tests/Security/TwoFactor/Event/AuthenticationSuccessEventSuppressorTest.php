@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Event;
 
+use PHPUnit\Framework\Attributes\Test;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\AuthenticationSuccessEventSuppressor;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -24,9 +25,7 @@ class AuthenticationSuccessEventSuppressorTest extends TestCase
         return new AuthenticationEvent($token);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onLogin_twoFactorToken_stopEventPropagation(): void
     {
         $token = $this->createMock(TwoFactorTokenInterface::class);
@@ -37,9 +36,7 @@ class AuthenticationSuccessEventSuppressorTest extends TestCase
         $this->assertTrue($event->isPropagationStopped());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onLogin_noTwoFactorToken_doNotStopEventPropagation(): void
     {
         $token = $this->createMock(TokenInterface::class);

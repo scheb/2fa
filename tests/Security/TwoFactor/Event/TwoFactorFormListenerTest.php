@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Event;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
@@ -78,9 +79,7 @@ class TwoFactorFormListenerTest extends TestCase
         return $event;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onKernelRequest_hasNoSession_doNothing(): void
     {
         $this->stubHasSession(false);
@@ -92,9 +91,7 @@ class TwoFactorFormListenerTest extends TestCase
         $this->listener->onKernelRequest($this->createRequestEvent());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onKernelRequest_noTwoFactorToken_doNothing(): void
     {
         $this->stubHasSession(true);
@@ -106,9 +103,7 @@ class TwoFactorFormListenerTest extends TestCase
         $this->listener->onKernelRequest($this->createRequestEvent());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onKernelRequest_isNotAuthFormRequest_doNothing(): void
     {
         $this->stubHasSession(true);
@@ -120,9 +115,7 @@ class TwoFactorFormListenerTest extends TestCase
         $this->listener->onKernelRequest($this->createRequestEvent());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onKernelRequest_isAuthFormRequest_dispatchFormEvent(): void
     {
         $this->stubHasSession(true);

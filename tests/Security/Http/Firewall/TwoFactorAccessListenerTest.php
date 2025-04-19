@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\Firewall;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Authorization\TwoFactorAccessDecider;
@@ -89,27 +90,21 @@ class TwoFactorAccessListenerTest extends TestCase
             ->willReturn($result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function supports_isPubliclyAccessiblePath_returnFalse(): void
     {
         $this->stubRequestIsPubliclyAccessiblePath(true);
         $this->assertFalse($this->accessListener->supports($this->request));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function supports_isAccessControlledPath_returnTrue(): void
     {
         $this->stubRequestIsPubliclyAccessiblePath(false);
         $this->assertTrue($this->accessListener->supports($this->request));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function authenticate_notTwoFactorToken_doNothing(): void
     {
         $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
@@ -123,9 +118,7 @@ class TwoFactorAccessListenerTest extends TestCase
         $this->accessListener->authenticate($this->createRequestEvent());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function authenticate_isCheckPathRequest_doNothing(): void
     {
         $this->stubTokenStorageHasToken($this->createTwoFactorToken());
@@ -139,9 +132,7 @@ class TwoFactorAccessListenerTest extends TestCase
         $this->accessListener->authenticate($this->createRequestEvent());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function authenticate_isAuthFormRequest_doNothing(): void
     {
         $this->stubTokenStorageHasToken($this->createTwoFactorToken());
@@ -155,9 +146,7 @@ class TwoFactorAccessListenerTest extends TestCase
         $this->accessListener->authenticate($this->createRequestEvent());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function authenticate_noSpecialPath_checkIfAccessible(): void
     {
         $token = $this->createTwoFactorToken();
@@ -174,9 +163,7 @@ class TwoFactorAccessListenerTest extends TestCase
         $this->accessListener->authenticate($this->createRequestEvent());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function authenticate_isAccessDenied_throwAccessDeniedException(): void
     {
         $token = $this->createTwoFactorToken();

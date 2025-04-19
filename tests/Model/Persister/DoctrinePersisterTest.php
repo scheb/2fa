@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Model\Persister;
 
 use Doctrine\Persistence\ObjectManager;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Persister\DoctrinePersister;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -21,9 +22,7 @@ class DoctrinePersisterTest extends TestCase
         $this->persister = new DoctrinePersister($this->objectManager);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function persist_persistObject_callPersistAndFlush(): void
     {
         $user = new stdClass(); // Some user object

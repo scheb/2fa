@@ -6,6 +6,8 @@ namespace Scheb\TwoFactorBundle\Tests\Security\Http\Firewall;
 
 use Exception;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHandlerInterface;
@@ -107,9 +109,7 @@ class ExceptionListenerTest extends TestCase
         $this->assertSame($response, $event->getResponse());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onKernelException_notAccessDeniedException_doNothing(): void
     {
         $this->stubTokenStorageHasToken($this->createTwoFactorToken(self::FIREWALL_NAME));
@@ -119,9 +119,7 @@ class ExceptionListenerTest extends TestCase
         $this->assertNotHasResponse($event);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onKernelException_notTwoFactorToken_doNothing(): void
     {
         $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
@@ -131,9 +129,7 @@ class ExceptionListenerTest extends TestCase
         $this->assertNotHasResponse($event);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onKernelException_differentFirewall_doNothing(): void
     {
         $this->stubTokenStorageHasToken($this->createTwoFactorToken('differentFirewallName'));
@@ -143,10 +139,8 @@ class ExceptionListenerTest extends TestCase
         $this->assertNotHasResponse($event);
     }
 
-    /**
-     * @test
-     * @dataProvider provideExceptions
-     */
+    #[Test]
+    #[DataProvider('provideExceptions')]
     public function onKernelException_allConditionsFulfilled_displayRequireEventSetResponse(Throwable $exception): void
     {
         $token = $this->createTwoFactorToken(self::FIREWALL_NAME);

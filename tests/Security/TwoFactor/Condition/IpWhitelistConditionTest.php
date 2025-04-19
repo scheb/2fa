@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Condition;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Condition\IpWhitelistCondition;
 use Scheb\TwoFactorBundle\Security\TwoFactor\IpWhitelist\IpWhitelistProviderInterface;
@@ -42,10 +44,8 @@ class IpWhitelistConditionTest extends AbstractAuthenticationContextTestCase
         return $request;
     }
 
-    /**
-     * @test
-     * @dataProvider provideWhitelistedIps
-     */
+    #[Test]
+    #[DataProvider('provideWhitelistedIps')]
     public function shouldPerformTwoFactorAuthentication_ipIsWhitelisted_returnFalse(string $ip): void
     {
         $request = $this->createRequestWithIp($ip);
@@ -69,9 +69,7 @@ class IpWhitelistConditionTest extends AbstractAuthenticationContextTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldPerformTwoFactorAuthentication_ipNotWhitelisted_returnTrue(): void
     {
         $request = $this->createRequestWithIp('1.1.1.1');

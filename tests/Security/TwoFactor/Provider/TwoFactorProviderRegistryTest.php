@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
@@ -27,27 +28,21 @@ class TwoFactorProviderRegistryTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getProvider_exists_returnTwoFactorProvider(): void
     {
         $returnValue = $this->providerRegistry->getProvider('provider2');
         $this->assertSame($this->twoFactorProvider2, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getProvider_notExists_throwUnknownTwoFactorProviderException(): void
     {
         $this->expectException(UnknownTwoFactorProviderException::class);
         $this->providerRegistry->getProvider('unknownProvider');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAllProviders_hasRegisteredProviders_returnAllTwoFactorProviders(): void
     {
         $returnValue = $this->providerRegistry->getAllProviders();

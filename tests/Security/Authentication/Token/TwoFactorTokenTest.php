@@ -6,6 +6,7 @@ namespace Scheb\TwoFactorBundle\Tests\Security\Authentication\Token;
 
 use InvalidArgumentException;
 use LogicException;
+use PHPUnit\Framework\Attributes\Test;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -42,9 +43,7 @@ class TwoFactorTokenTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createWithCredentials_tokenAndCredentialsGiven_recreateIdenticalTokenWithCredentials(): void
     {
         $this->twoFactorToken->setTwoFactorProviderPrepared('provider1');
@@ -58,53 +57,41 @@ class TwoFactorTokenTest extends TestCase
         $this->assertEquals($this->twoFactorToken, $credentialsToken);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function preferTwoFactorProvider_preferOtherProvider_becomesCurrentProvider(): void
     {
         $this->twoFactorToken->preferTwoFactorProvider('provider2');
         $this->assertEquals('provider2', $this->twoFactorToken->getCurrentTwoFactorProvider());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function preferTwoFactorProvider_preferOtherProvider_returnsPreferredProviderFirst(): void
     {
         $this->twoFactorToken->preferTwoFactorProvider('provider2');
         $this->assertEquals(['provider2', 'provider1'], $this->twoFactorToken->getTwoFactorProviders());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function preferTwoFactorProvider_unknownProvider_throwUnknownTwoFactorProviderException(): void
     {
         $this->expectException(UnknownTwoFactorProviderException::class);
         $this->twoFactorToken->preferTwoFactorProvider('unknownProvider');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getCurrentTwoFactorProvider_defaultOrderGiven_returnFirstProvider(): void
     {
         $this->assertEquals('provider1', $this->twoFactorToken->getCurrentTwoFactorProvider());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isTwoFactorProviderPrepared_isPrepared_returnTrue(): void
     {
         $this->twoFactorToken->setTwoFactorProviderPrepared('provider1');
         $this->assertTrue($this->twoFactorToken->isTwoFactorProviderPrepared('provider1'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isTwoFactorProviderPrepared_onePreparedProvider_returnTrueOnlyForThatProvider(): void
     {
         $this->twoFactorToken->setTwoFactorProviderPrepared('provider1');
@@ -112,9 +99,7 @@ class TwoFactorTokenTest extends TestCase
         $this->assertFalse($this->twoFactorToken->isTwoFactorProviderPrepared('provider2'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setTwoFactorProviderComplete_wasNotPrepared_throwsException(): void
     {
         $this->expectException(LogicException::class);
@@ -123,9 +108,7 @@ class TwoFactorTokenTest extends TestCase
         $this->twoFactorToken->setTwoFactorProviderComplete('provider1');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setTwoFactorProviderComplete_completeProvider_continueWithNextProvider(): void
     {
         $this->twoFactorToken->setTwoFactorProviderPrepared('provider1');
@@ -133,9 +116,7 @@ class TwoFactorTokenTest extends TestCase
         $this->assertEquals('provider2', $this->twoFactorToken->getCurrentTwoFactorProvider());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setTwoFactorProviderComplete_unknownProvider_throwUnknownTwoFactorProviderException(): void
     {
         $this->expectException(UnknownTwoFactorProviderException::class);
@@ -144,9 +125,7 @@ class TwoFactorTokenTest extends TestCase
         $this->twoFactorToken->setTwoFactorProviderComplete('unknownProvider');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function allTwoFactorProvidersAuthenticated_notComplete_returnFalse(): void
     {
         $this->twoFactorToken->setTwoFactorProviderPrepared('provider1');
@@ -155,9 +134,7 @@ class TwoFactorTokenTest extends TestCase
         $this->assertFalse($this->twoFactorToken->allTwoFactorProvidersAuthenticated());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function allTwoFactorProvidersAuthenticated_allComplete_returnTrue(): void
     {
         $this->twoFactorToken->setTwoFactorProviderPrepared('provider1');
@@ -169,9 +146,7 @@ class TwoFactorTokenTest extends TestCase
         $this->assertTrue($this->twoFactorToken->allTwoFactorProvidersAuthenticated());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAttributes_attributesSet_returnAllAttributes(): void
     {
         $this->twoFactorToken->setAttribute('name', 'value');
@@ -182,45 +157,35 @@ class TwoFactorTokenTest extends TestCase
         ], $this->twoFactorToken->getAttributes());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasAttribute_attributeIsSet_returnTrue(): void
     {
         $this->twoFactorToken->setAttribute('name', 'value');
         $this->assertTrue($this->twoFactorToken->hasAttribute('name'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasAttribute_attributeNotSet_returnFalse(): void
     {
         $this->twoFactorToken->setAttribute('name', 'value');
         $this->assertFalse($this->twoFactorToken->hasAttribute('otherName'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAttribute_attributeIsSet_returnValue(): void
     {
         $this->twoFactorToken->setAttribute('name', 'value');
         $this->assertEquals('value', $this->twoFactorToken->getAttribute('name'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAttribute_attributeNotSet_throwInvalidArgumentException(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->twoFactorToken->getAttribute('otherName');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function serialize_tokenGiven_unserializeIdenticalToken(): void
     {
         $innerToken = new UsernamePasswordToken($this->createMock(UserInterface::class), self::FIREWALL_NAME, ['ROLE']);

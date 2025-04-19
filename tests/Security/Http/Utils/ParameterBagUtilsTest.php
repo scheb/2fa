@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\Utils;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Http\Utils\ParameterBagUtils;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -21,27 +22,21 @@ class ParameterBagUtilsTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRequestParameterValue_nonExistentField_returnNull(): void
     {
         $returnValue = ParameterBagUtils::getRequestParameterValue($this->request, 'nonExistentField');
         $this->assertNull($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRequestParameterValue_topLevelField_returnValue(): void
     {
         $returnValue = ParameterBagUtils::getRequestParameterValue($this->request, 'topLevelField');
         $this->assertEquals('topLevelValue', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRequestParameterValue_arrayArrayField_returnValue(): void
     {
         $returnValue = ParameterBagUtils::getRequestParameterValue($this->request, 'arrayArrayField[nestedField]');

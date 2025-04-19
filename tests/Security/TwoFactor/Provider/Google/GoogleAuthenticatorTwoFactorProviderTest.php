@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Google;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
@@ -54,9 +56,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
         return $authContext;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_twoFactorEnabledHasSecret_returnTrue(): void
     {
         $user = $this->createUser(true);
@@ -66,9 +66,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
         $this->assertTrue($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_twoFactorEnabledHasNoSecret_throwTwoFactorProviderLogicException(): void
     {
         $user = $this->createUser(true, '');
@@ -78,9 +76,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
         $this->provider->beginAuthentication($context);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_twoFactorEnabledHasNullSecret_throwTwoFactorProviderLogicException(): void
     {
         $user = $this->createUser(true, null);
@@ -90,9 +86,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
         $this->provider->beginAuthentication($context);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_twoFactorDisabledHasSecret_returnFalse(): void
     {
         $user = $this->createUser(false);
@@ -102,9 +96,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
         $this->assertFalse($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_interfaceNotImplemented_returnFalse(): void
     {
         $user = $this->createMock(UserInterface::class);
@@ -114,9 +106,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
         $this->assertFalse($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validateAuthenticationCode_noTwoFactorUser_returnFalse(): void
     {
         $user = new stdClass();
@@ -129,10 +119,8 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
         $this->assertFalse($returnValue);
     }
 
-    /**
-     * @test
-     * @dataProvider provideValidationResult
-     */
+    #[Test]
+    #[DataProvider('provideValidationResult')]
     public function validateAuthenticationCode_codeGiven_returnValidationResult(bool $validationResult): void
     {
         $user = $this->createUser();

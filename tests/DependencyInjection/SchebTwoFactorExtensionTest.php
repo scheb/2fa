@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\DependencyInjection;
 
+use PHPUnit\Framework\Attributes\Test;
 use Scheb\TwoFactorBundle\DependencyInjection\SchebTwoFactorExtension;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
@@ -29,9 +30,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->container->setDefinition('acme_test.mailer', new Definition());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_emptyConfig_setDefaultValues(): void
     {
         $config = $this->getEmptyConfig();
@@ -67,9 +66,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasParameter([], 'scheb_two_factor.ip_whitelist');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_fullConfig_setConfigValues(): void
     {
         $config = $this->getFullConfig();
@@ -102,9 +99,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasParameter(['127.0.0.1', '10.0.0.0/8', '192.168.0.0/16'], 'scheb_two_factor.ip_whitelist');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_truthyEnvVarBasedConfig_setConfigValues(): void
     {
         $config = $this->getEnvVarBasedConfig(true);
@@ -117,9 +112,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasDefinition('scheb_two_factor.security.totp.provider');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_falsyEnvVarBasedConfig_setConfigValues(): void
     {
         $config = $this->getEnvVarBasedConfig(false);
@@ -132,9 +125,7 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertNotHasDefinition('scheb_two_factor.security.totp.provider');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_offOrFalseStringEnvVarBasedConfig_setConfigValues(): void
     {
         $yaml = <<<'EOF'
@@ -159,9 +150,7 @@ EOF;
         $this->assertNotHasDefinition('scheb_two_factor.security.totp.provider');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_onOrTrueStringEnvVarBasedConfig_setConfigValues(): void
     {
         $yaml = <<<'EOF'
@@ -186,9 +175,7 @@ EOF;
         $this->assertHasDefinition('scheb_two_factor.security.totp.provider');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_noAuthEnabled_notLoadServices(): void
     {
         $config = $this->getEmptyConfig();
@@ -208,9 +195,7 @@ EOF;
         $this->assertNotHasDefinition('scheb_two_factor.security.email.provider');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_googleAuthEnabled_loadGoogleServices(): void
     {
         $config = $this->getFullConfig();
@@ -222,9 +207,7 @@ EOF;
         $this->assertHasDefinition('scheb_two_factor.security.google.provider');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_defaultGoogleAuthFormRenderer_hasDefaultAlias(): void
     {
         $config = $this->getEmptyConfig();
@@ -234,9 +217,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.security.google.form_renderer', 'scheb_two_factor.security.google.default_form_renderer');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_customGoogleAuthFormRenderer_hasCustomAlias(): void
     {
         $config = $this->getFullConfig();
@@ -245,9 +226,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.security.google.form_renderer', 'acme_test.google_form_renderer');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_totpAuthEnabled_loadTotpFactoryServices(): void
     {
         $config = $this->getFullConfig();
@@ -259,9 +238,7 @@ EOF;
         $this->assertHasDefinition('scheb_two_factor.security.totp.provider');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_defaultTotpFormRenderer_hasDefaultAlias(): void
     {
         $config = $this->getEmptyConfig();
@@ -271,9 +248,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.security.totp.form_renderer', 'scheb_two_factor.security.totp.default_form_renderer');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_customTotpFormRenderer_hasCustomAlias(): void
     {
         $config = $this->getFullConfig();
@@ -282,9 +257,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.security.totp.form_renderer', 'acme_test.totp_form_renderer');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_emailAuthEnabled_loadEmailServices(): void
     {
         $config = $this->getFullConfig();
@@ -296,9 +269,7 @@ EOF;
         $this->assertHasDefinition('scheb_two_factor.security.email.provider');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_defaultEmailFormRenderer_hasDefaultAlias(): void
     {
         $config = $this->getEmptyConfig();
@@ -308,9 +279,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.security.email.form_renderer', 'scheb_two_factor.security.email.default_form_renderer');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_customEmailFormRenderer_hasCustomAlias(): void
     {
         $config = $this->getFullConfig();
@@ -319,9 +288,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.security.email.form_renderer', 'acme_test.email_form_renderer');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_defaultMailer_notSetAlias(): void
     {
         $config = $this->getEmptyConfig();
@@ -331,9 +298,7 @@ EOF;
         $this->assertNotHasAlias('scheb_two_factor.security.email.auth_code_mailer');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_customMailer_setAlias(): void
     {
         $config = $this->getFullConfig();
@@ -342,9 +307,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.security.email.auth_code_mailer', 'acme_test.mailer');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_defaultCodeGenerator_defaultAlias(): void
     {
         $config = $this->getEmptyConfig();
@@ -354,9 +317,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.security.email.code_generator', 'scheb_two_factor.security.email.default_code_generator');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_alternativeCodeGenerator_replaceAlias(): void
     {
         $config = $this->getFullConfig();
@@ -365,9 +326,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.security.email.code_generator', 'acme_test.code_generator');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_defaultPersister_defaultAlias(): void
     {
         $config = $this->getEmptyConfig();
@@ -376,9 +335,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.persister', 'scheb_two_factor.persister.doctrine');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_alternativePersister_replaceAlias(): void
     {
         $config = $this->getFullConfig();
@@ -387,9 +344,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.persister', 'acme_test.persister');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_noCustomCondition_onlyDefaultConditions(): void
     {
         $config = $this->getEmptyConfig();
@@ -399,9 +354,7 @@ EOF;
         $this->assertConditionRegistryContains('scheb_two_factor.ip_whitelist_condition');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_customCondition_registerCondition(): void
     {
         $config = $this->getFullConfig();
@@ -412,9 +365,7 @@ EOF;
         $this->assertConditionRegistryContains('acme_test.two_factor_condition');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_trustedDeviceFeatureDisabled_defaultHandlerConfiguration(): void
     {
         $config = $this->getFullConfig();
@@ -424,9 +375,7 @@ EOF;
         $this->assertConditionRegistryNotContains('scheb_two_factor.trusted_device_condition');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_trustedDeviceFeatureDisabled_trustedDeviceHandlerConfigured(): void
     {
         $config = $this->getFullConfig();
@@ -436,9 +385,7 @@ EOF;
         $this->assertConditionRegistryContains('scheb_two_factor.trusted_device_condition');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_disabledTrustedDeviceManager_noAliasDefined(): void
     {
         $config = $this->getEmptyConfig();
@@ -448,9 +395,7 @@ EOF;
         $this->assertNotHasAlias('scheb_two_factor.trusted_device_manager');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_enabledTrustedDeviceManager_loadTrustedDeviceServices(): void
     {
         $config = $this->getFullConfig();
@@ -465,9 +410,7 @@ EOF;
         $this->assertHasDefinition('scheb_two_factor.default_trusted_device_manager');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_enabledTrustedDeviceManager_defaultAlias(): void
     {
         $config = $this->getEmptyConfig();
@@ -477,9 +420,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.trusted_device_manager', 'scheb_two_factor.default_trusted_device_manager');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_alternativeTrustedDeviceManager_replaceAlias(): void
     {
         $config = $this->getFullConfig();
@@ -489,9 +430,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.trusted_device_manager', 'acme_test.trusted_device_manager');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_defaultEncryptionKey_useKernelSecret(): void
     {
         $config = $this->getEmptyConfig();
@@ -504,9 +443,7 @@ EOF;
         $this->assertEquals('%kernel.secret%', $arguments[0]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_encryptionKeySet_useThatKey(): void
     {
         $config = $this->getFullConfig();
@@ -519,9 +456,7 @@ EOF;
         $this->assertEquals('encryptionKey', $arguments[0]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_disabledBackupCodeManager_noAliasDefined(): void
     {
         $config = $this->getEmptyConfig();
@@ -531,9 +466,7 @@ EOF;
         $this->assertNotHasAlias('scheb_two_factor.backup_code_manager');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_enabledBackupCodeManager_loadBackupCodeServices(): void
     {
         $config = $this->getFullConfig();
@@ -545,9 +478,7 @@ EOF;
         $this->assertHasDefinition('scheb_two_factor.security.listener.check_backup_code');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_enabledBackupCodeManager_defaultAlias(): void
     {
         $config = $this->getEmptyConfig();
@@ -557,9 +488,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.backup_code_manager', 'scheb_two_factor.default_backup_code_manager');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_alternativeBackupCodeManager_replaceAlias(): void
     {
         $config = $this->getFullConfig();
@@ -569,9 +498,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.backup_code_manager', 'acme_test.backup_code_manager');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_defaultIpWhitelistProvider_defaultAlias(): void
     {
         $config = $this->getEmptyConfig();
@@ -580,9 +507,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.ip_whitelist_provider', 'scheb_two_factor.default_ip_whitelist_provider');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_alternativeIpWhitelistProvider_replaceAlias(): void
     {
         $config = $this->getFullConfig();
@@ -591,9 +516,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.ip_whitelist_provider', 'acme_test.ip_whitelist_provider');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_defaultTokenFactory_defaultAlias(): void
     {
         $config = $this->getEmptyConfig();
@@ -602,9 +525,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.token_factory', 'scheb_two_factor.default_token_factory');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_alternativeTokenFactory_replaceAlias(): void
     {
         $config = $this->getFullConfig();
@@ -613,9 +534,7 @@ EOF;
         $this->assertHasAlias('scheb_two_factor.token_factory', 'acme_test.two_factor_token_factory');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function load_alternativeProviderDecider_replaceAlias(): void
     {
         $config = $this->getFullConfig();

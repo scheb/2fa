@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextFactory;
@@ -27,9 +28,7 @@ class AuthenticationContextFactoryTest extends TestCase
         $this->authenticationContextFactory = new AuthenticationContextFactory(AuthenticationContext::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function create_onCreate_returnAuthenticationContext(): void
     {
         $this->assertInstanceOf(

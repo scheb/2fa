@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Authorization\Voter;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Authorization\Voter\TwoFactorInProgressVoter;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -22,9 +24,7 @@ class TwoFactorInProgressVoterTest extends TestCase
         $this->voter = new TwoFactorInProgressVoter();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function vote_isNotTwoFactorToken_returnAbstain(): void
     {
         $token = $this->createMock(TokenInterface::class);
@@ -32,10 +32,8 @@ class TwoFactorInProgressVoterTest extends TestCase
         $this->assertEquals(VoterInterface::ACCESS_ABSTAIN, $returnValue);
     }
 
-    /**
-     * @test
-     * @dataProvider provideAttributeAndExpectedResult
-     */
+    #[Test]
+    #[DataProvider('provideAttributeAndExpectedResult')]
     public function vote_isTwoFactorToken_returnAbstain(string|null $checkAttribute, int $expectedResult): void
     {
         $token = $this->createMock(TwoFactorTokenInterface::class);
@@ -61,10 +59,8 @@ class TwoFactorInProgressVoterTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider provideTypesForSupportCheck
-     */
+    #[Test]
+    #[DataProvider('provideTypesForSupportCheck')]
     public function supports_type(string $checkType, bool $expectedResult): void
     {
         $returnValue = $this->voter->supportsType($checkType);
@@ -87,10 +83,8 @@ class TwoFactorInProgressVoterTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider provideAttributesForSupportCheck
-     */
+    #[Test]
+    #[DataProvider('provideAttributesForSupportCheck')]
     public function supports_attribute(string $attribute, int $expectedResult): void
     {
         $returnValue = $this->voter->supportsAttribute($attribute);

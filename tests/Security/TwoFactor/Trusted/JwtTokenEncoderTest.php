@@ -9,6 +9,7 @@ use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Token\Plain;
+use PHPUnit\Framework\Attributes\Test;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\JwtTokenEncoder;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use function base64_encode;
@@ -43,9 +44,7 @@ class JwtTokenEncoderTest extends TestCase
         $this->assertEquals($expectedValue, $jwtToken->claims()->get($name, false));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function generateToken_withClaims_returnEncodedToken(): void
     {
         $jwtToken = $this->encoder->generateToken('username', 'firewallName', 1, new DateTimeImmutable());
@@ -57,18 +56,14 @@ class JwtTokenEncoderTest extends TestCase
         $this->assertTrue($jwtToken->isExpired(new DateTimeImmutable('+100 seconds')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function decodeToken_invalidToken_returnNull(): void
     {
         $decodedToken = $this->encoder->decodeToken('invalidToken');
         $this->assertNull($decodedToken);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function decodeToken_expiredToken_returnNull(): void
     {
         $encodedToken = $this->createToken(new DateTimeImmutable('-1000 seconds'));
@@ -76,9 +71,7 @@ class JwtTokenEncoderTest extends TestCase
         $this->assertNull($decodedToken);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function decodeToken_validToken_returnDecodedToken(): void
     {
         $encodedToken = $this->createToken(new DateTimeImmutable('+1000 seconds'));
@@ -87,9 +80,7 @@ class JwtTokenEncoderTest extends TestCase
         $this->assertJwtClaim($decodedToken, self::CLAIM, self::TOKEN_ID);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function decodeToken_validAlgAndSignature_returnDecodedToken(): void
     {
         $encodedToken = sprintf(
@@ -102,9 +93,7 @@ class JwtTokenEncoderTest extends TestCase
         $this->assertInstanceOf(Plain::class, $this->encoder->decodeToken($encodedToken));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function decodeToken_ignoredAlgNone_returnNull(): void
     {
         $encodedNoneAlgToken = sprintf(
@@ -117,9 +106,7 @@ class JwtTokenEncoderTest extends TestCase
         $this->assertNull($this->encoder->decodeToken($encodedNoneAlgToken));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function decodeToken_ignoredAlgTest_returnNull(): void
     {
         $encodedTestAlgToken = sprintf(
@@ -132,9 +119,7 @@ class JwtTokenEncoderTest extends TestCase
         $this->assertNull($this->encoder->decodeToken($encodedTestAlgToken));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function decodeToken_validAlgWrongSignature_returnNull(): void
     {
         $encodedInvalidSignatureToken = sprintf(

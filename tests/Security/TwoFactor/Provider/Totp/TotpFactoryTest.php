@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Totp;
 
 use OTPHP\TOTP;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
@@ -44,9 +46,7 @@ class TotpFactoryTest extends TestCase
         return $user;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createTotpForUser_missingTotpConfiguration_throwTwoFactorProviderLogicException(): void
     {
         $user = $this->createUserMock(false);
@@ -55,9 +55,7 @@ class TotpFactoryTest extends TestCase
         (new TotpFactory(self::SERVER, self::ISSUER, self::CUSTOM_PARAMETERS))->createTotpForUser($user);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createTotpForUser_missingSecretCode_throwTwoFactorProviderLogicException(): void
     {
         $user = $this->createUserMock(true, '');
@@ -66,9 +64,7 @@ class TotpFactoryTest extends TestCase
         (new TotpFactory(self::SERVER, self::ISSUER, self::CUSTOM_PARAMETERS))->createTotpForUser($user);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createTotpForUser_factoryCalled_returnTotpObject(): void
     {
         $user = $this->createUserMock();
@@ -87,10 +83,9 @@ class TotpFactoryTest extends TestCase
 
     /**
      * @param array<mixed> $customParameters
-     *
-     * @test
-     * @dataProvider provideHostnameAndIssuer
      */
+    #[Test]
+    #[DataProvider('provideHostnameAndIssuer')]
     public function getProvisioningUri_hostnameAndIssuerGiven_returnProvisioningUri(string|null $hostname, string|null $issuer, array $customParameters, string $expectedUrl): void
     {
         $user = $this->createUserMock();

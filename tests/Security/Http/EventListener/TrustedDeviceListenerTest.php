@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\EventListener;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Badge\TrustedDeviceBadge;
@@ -87,9 +88,7 @@ class TrustedDeviceListenerTest extends TestCase
             ->willReturn($passport);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onSuccessfulLogin_noTwoFactorPassportCredentials_doNothing(): void
     {
         $passport = $this->createPassportMock();
@@ -106,9 +105,7 @@ class TrustedDeviceListenerTest extends TestCase
         $this->trustedDeviceListener->onSuccessfulLogin($this->loginSuccessEvent);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onSuccessfulLogin_hasTwoFactorCredentials_doNothing(): void
     {
         $passport = $this->createMock(Passport::class);
@@ -126,9 +123,7 @@ class TrustedDeviceListenerTest extends TestCase
         $this->trustedDeviceListener->onSuccessfulLogin($this->loginSuccessEvent);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onSuccessfulLogin_noTrustedDeviceBadge_doNothing(): void
     {
         $passport = $this->createPassportMock();
@@ -145,9 +140,7 @@ class TrustedDeviceListenerTest extends TestCase
         $this->trustedDeviceListener->onSuccessfulLogin($this->loginSuccessEvent);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onSuccessfulLogin_cannotSetTrustedDevice_notSetTrustedDevice(): void
     {
         $passport = $this->createPassportMock();
@@ -171,9 +164,7 @@ class TrustedDeviceListenerTest extends TestCase
         $this->trustedDeviceListener->onSuccessfulLogin($this->loginSuccessEvent);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onSuccessfulLogin_canSetTrustedDevice_setTrustedDevice(): void
     {
         $passport = $this->createPassportMock();

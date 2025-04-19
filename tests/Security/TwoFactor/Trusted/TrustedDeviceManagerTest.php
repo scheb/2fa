@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Trusted;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManager;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceTokenStorage;
@@ -46,9 +48,7 @@ class TrustedDeviceManagerTest extends TestCase
             ->willReturn($version);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addTrustedDevice_notUserInterface_doNothing(): void
     {
         $this->trustedTokenStorage
@@ -59,9 +59,7 @@ class TrustedDeviceManagerTest extends TestCase
         $this->trustedDeviceManager->addTrustedDevice($user, 'firewallName');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addTrustedDevice_supportsTrustedDeviceInterface_addTrustedTokenWithVersion(): void
     {
         $user = $this->createMock(UserInterfaceWithTrustedDeviceInterface::class);
@@ -76,9 +74,7 @@ class TrustedDeviceManagerTest extends TestCase
         $this->trustedDeviceManager->addTrustedDevice($user, 'firewallName');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addTrustedDevice_notSupportsTrustedDeviceInterface_addTrustedTokenWithDefaultVersion(): void
     {
         $user = $this->createMock(UserInterface::class);
@@ -92,9 +88,7 @@ class TrustedDeviceManagerTest extends TestCase
         $this->trustedDeviceManager->addTrustedDevice($user, 'firewallName');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isTrustedDevice_notUserInterface_doNothing(): void
     {
         $this->trustedTokenStorage
@@ -105,9 +99,7 @@ class TrustedDeviceManagerTest extends TestCase
         $this->trustedDeviceManager->isTrustedDevice($user, 'firewallName');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isTrustedDevice_supportsTrustedDeviceInterface_checkHasTrustedTokenWithVersion(): void
     {
         $user = $this->createMock(UserInterfaceWithTrustedDeviceInterface::class);
@@ -122,9 +114,7 @@ class TrustedDeviceManagerTest extends TestCase
         $this->trustedDeviceManager->isTrustedDevice($user, 'firewallName');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addTrustedDevice_notSupportsTrustedDeviceInterface_checkHasTrustedTokenWithDefaultVersion(): void
     {
         $user = $this->createMock(UserInterface::class);
@@ -138,10 +128,8 @@ class TrustedDeviceManagerTest extends TestCase
         $this->trustedDeviceManager->isTrustedDevice($user, 'firewallName');
     }
 
-    /**
-     * @test
-     * @dataProvider provideIsTrustedDeviceReturnValues
-     */
+    #[Test]
+    #[DataProvider('provideIsTrustedDeviceReturnValues')]
     public function addTrustedDevice_notSupportsTrustedDeviceInterface_returnResult(bool $result): void
     {
         $user = $this->createMock(UserInterface::class);

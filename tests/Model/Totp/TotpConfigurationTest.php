@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Model\Totp;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Test;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 
@@ -15,9 +16,7 @@ class TotpConfigurationTest extends TestCase
     private const PERIOD = 20;
     private const DIGITS = 8;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function construct_fullyConfigured_returnValues(): void
     {
         $totpConfig = new TotpConfiguration(self::SECRET, self::ALGORITHM, self::PERIOD, self::DIGITS);
@@ -27,9 +26,7 @@ class TotpConfigurationTest extends TestCase
         $this->assertEquals(self::DIGITS, $totpConfig->getDigits());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function construct_invalidAlgorithm_throwInvalidArgumentException(): void
     {
         $this->expectException(InvalidArgumentException::class);

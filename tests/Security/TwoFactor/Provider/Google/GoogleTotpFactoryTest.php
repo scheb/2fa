@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Google;
 
 use OTPHP\TOTP;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
@@ -35,9 +37,7 @@ class GoogleTotpFactoryTest extends TestCase
         return $user;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createTotpForUser_missingSecretCode_throwTwoFactorProviderLogicException(): void
     {
         $user = $this->createUserMock('');
@@ -46,9 +46,7 @@ class GoogleTotpFactoryTest extends TestCase
         (new GoogleTotpFactory(self::SERVER, self::ISSUER, self::CUSTOM_DIGITS))->createTotpForUser($user);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createTotpForUser_nullSecretCode_throwTwoFactorProviderLogicException(): void
     {
         $user = $this->createUserMock(null);
@@ -57,9 +55,7 @@ class GoogleTotpFactoryTest extends TestCase
         (new GoogleTotpFactory(self::SERVER, self::ISSUER, self::CUSTOM_DIGITS))->createTotpForUser($user);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createTotpForUser_factoryCalled_returnTotpObject(): void
     {
         $user = $this->createUserMock();
@@ -72,10 +68,8 @@ class GoogleTotpFactoryTest extends TestCase
         $this->assertEquals(self::SECRET, $returnValue->getSecret());
     }
 
-    /**
-     * @test
-     * @dataProvider provideHostnameAndIssuer
-     */
+    #[Test]
+    #[DataProvider('provideHostnameAndIssuer')]
     public function getProvisioningUri_hostnameAndIssuerGiven_returnProvisioningUri(string|null $hostname, string|null $issuer, int $digits, string $expectedUrl): void
     {
         $user = $this->createUserMock();

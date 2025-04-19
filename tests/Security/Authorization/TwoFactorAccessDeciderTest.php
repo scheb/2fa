@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Authorization;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authorization\TwoFactorAccessDecider;
 use Scheb\TwoFactorBundle\Security\Authorization\Voter\TwoFactorInProgressVoter;
@@ -105,37 +107,29 @@ class TwoFactorAccessDeciderTest extends TestCase
         yield [AuthenticatedVoter::IS_AUTHENTICATED_ANONYMOUSLY];
     }
 
-    /**
-     * @test
-     * @dataProvider providePublicAccessAttributes
-     */
+    #[Test]
+    #[DataProvider('providePublicAccessAttributes')]
     public function isPubliclyAccessible_hasPublicAccessAttribute_returnTrue(string $publicAccessAttribute): void
     {
         $this->stubAccessMapReturnsAttributes([$publicAccessAttribute]);
         $this->assertTrue($this->accessDecider->isPubliclyAccessible($this->request));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isPubliclyAccessible_hasOtherAccessAttribute_returnFalse(): void
     {
         $this->stubAccessMapReturnsAttributes(['PROTECTED_ACCESS']);
         $this->assertFalse($this->accessDecider->isPubliclyAccessible($this->request));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isPubliclyAccessible_hasNoAccessAttribute_returnFalse(): void
     {
         $this->stubAccessMapReturnsAttributes(null);
         $this->assertFalse($this->accessDecider->isPubliclyAccessible($this->request));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isAccessible_pathAccessGranted_returnTrue(): void
     {
         $this->stubAccessMapReturnsAttributes(self::ACCESS_MAP_ATTRIBUTES);
@@ -146,10 +140,8 @@ class TwoFactorAccessDeciderTest extends TestCase
         $this->assertTrue($returnValue);
     }
 
-    /**
-     * @test
-     * @dataProvider providePublicAccessAttributes
-     */
+    #[Test]
+    #[DataProvider('providePublicAccessAttributes')]
     public function isAccessible_isPubliclyAccessible_returnTrue(string $publicAccessAttribute): void
     {
         $this->stubAccessMapReturnsAttributes([$publicAccessAttribute]);
@@ -162,9 +154,7 @@ class TwoFactorAccessDeciderTest extends TestCase
         $this->assertTrue($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isAccessible_isLogoutPathNoBasePath_returnTrue(): void
     {
         $this->stubAccessMapReturnsAttributes(self::ACCESS_MAP_ATTRIBUTES);
@@ -177,9 +167,7 @@ class TwoFactorAccessDeciderTest extends TestCase
         $this->assertTrue($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isAccessible_isLogoutPathWithBasePath_returnTrue(): void
     {
         $this->stubAccessMapReturnsAttributes(self::ACCESS_MAP_ATTRIBUTES);
@@ -192,9 +180,7 @@ class TwoFactorAccessDeciderTest extends TestCase
         $this->assertTrue($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isAccessible_isNotAccessible_returnFalse(): void
     {
         $this->stubAccessMapReturnsAttributes(self::ACCESS_MAP_ATTRIBUTES);

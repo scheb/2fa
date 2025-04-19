@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Condition;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TrustedDeviceCondition;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManager;
@@ -40,9 +41,7 @@ class TrustedDeviceConditionTest extends AbstractAuthenticationContextTestCase
             ->willReturn($canSetTrustedDevice);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_trustedOptionEnabled_checkTrustedToken(): void
     {
         $user = $this->createUser();
@@ -56,9 +55,7 @@ class TrustedDeviceConditionTest extends AbstractAuthenticationContextTestCase
         $this->trustedHandler->shouldPerformTwoFactorAuthentication($context);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_isTrustedDevice_returnFalse(): void
     {
         $originalToken = $this->createToken();
@@ -69,9 +66,7 @@ class TrustedDeviceConditionTest extends AbstractAuthenticationContextTestCase
         $this->assertFalse($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_isTrustedDeviceAndExtensionAllowed_addNewTrustedToken(): void
     {
         $trustedHandler = $this->createTrustedHandler(true);
@@ -88,9 +83,7 @@ class TrustedDeviceConditionTest extends AbstractAuthenticationContextTestCase
         $trustedHandler->shouldPerformTwoFactorAuthentication($context);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_isTrustedDeviceAndConfiguredNotExtendTrustedToken_notAddNewTrustedToken(): void
     {
         $trustedHandler = $this->createTrustedHandler(false);
@@ -106,9 +99,7 @@ class TrustedDeviceConditionTest extends AbstractAuthenticationContextTestCase
         $trustedHandler->shouldPerformTwoFactorAuthentication($context);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_isTrustedDeviceAndNotAllowedToSet_notAddNewTrustedToken(): void
     {
         $trustedHandler = $this->createTrustedHandler(true);
@@ -124,9 +115,7 @@ class TrustedDeviceConditionTest extends AbstractAuthenticationContextTestCase
         $trustedHandler->shouldPerformTwoFactorAuthentication($context);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_notTrustedDevice_returnTrue(): void
     {
         $context = $this->createAuthenticationContext();

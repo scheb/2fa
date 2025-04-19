@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\Authentication;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\DefaultAuthenticationFailureHandler;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
@@ -44,9 +45,7 @@ class DefaultAuthenticationFailureHandlerTest extends TestCase
             ->willReturn($this->session);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationFailure_authenticationExceptionGiven_setExceptionMessageInSession(): void
     {
         $authenticationException = new AuthenticationException('Exception message');
@@ -64,9 +63,7 @@ class DefaultAuthenticationFailureHandlerTest extends TestCase
         $this->failureHandler->onAuthenticationFailure($this->request, $authenticationException);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationFailure_failedAuthentication_redirectToAuthenticationForm(): void
     {
         $redirectResponse = $this->createMock(RedirectResponse::class);

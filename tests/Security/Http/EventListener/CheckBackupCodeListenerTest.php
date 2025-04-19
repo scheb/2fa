@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\EventListener;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Http\EventListener\CheckBackupCodeListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
@@ -30,9 +31,7 @@ class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTestSetup
             ->method($this->anything());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkPassport_validBackupCode_invalidateAndResolveCredentials(): void
     {
         $this->stubAllPreconditionsFulfilled();
@@ -53,9 +52,7 @@ class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTestSetup
         $this->listener->checkPassport($this->checkPassportEvent);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkPassport_invalidBackupCode_unresolvedCredentials(): void
     {
         $this->stubAllPreconditionsFulfilled();

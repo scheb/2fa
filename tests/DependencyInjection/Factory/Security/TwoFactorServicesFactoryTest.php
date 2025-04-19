@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\DependencyInjection\Factory\Security;
 
+use PHPUnit\Framework\Attributes\Test;
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorServicesFactory;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -26,9 +27,7 @@ class TwoFactorServicesFactoryTest extends TestCase
         $this->container = new ContainerBuilder();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createSuccessHandler_defaultHandler_createSuccessHandlerDefinition(): void
     {
         $returnValue = $this->servicesFactory->createSuccessHandler(
@@ -44,9 +43,7 @@ class TwoFactorServicesFactoryTest extends TestCase
         $this->assertEquals(new Reference(self::TWO_FACTOR_FIREWALL_CONFIG_ID), $definition->getArgument(1));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createSuccessHandler_customSuccessHandler_useCustomSuccessHandlerDefinition(): void
     {
         $returnValue = $this->servicesFactory->createSuccessHandler(
@@ -60,9 +57,7 @@ class TwoFactorServicesFactoryTest extends TestCase
         $this->assertFalse($this->container->hasDefinition('security.authentication.success_handler.two_factor.firewallName'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createFailureHandler_defaultHandler_createFailureHandlerDefinition(): void
     {
         $returnValue = $this->servicesFactory->createFailureHandler(
@@ -78,9 +73,7 @@ class TwoFactorServicesFactoryTest extends TestCase
         $this->assertEquals(new Reference(self::TWO_FACTOR_FIREWALL_CONFIG_ID), $definition->getArgument(1));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createFailureHandler_customFailureHandler_useCustomFailureHandlerDefinition(): void
     {
         $returnValue = $this->servicesFactory->createFailureHandler(
@@ -94,9 +87,7 @@ class TwoFactorServicesFactoryTest extends TestCase
         $this->assertFalse($this->container->hasDefinition('security.authentication.failure_handler.two_factor.firewallName'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createAuthenticationRequiredHandler_defaultHandler_createAuthenticationRequiredHandlerDefinition(): void
     {
         $returnValue = $this->servicesFactory->createAuthenticationRequiredHandler(
@@ -112,9 +103,7 @@ class TwoFactorServicesFactoryTest extends TestCase
         $this->assertEquals(new Reference(self::TWO_FACTOR_FIREWALL_CONFIG_ID), $definition->getArgument(1));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createAuthenticationRequiredHandler_customAuthenticationRequired_useCustomAuthenticationRequiredHandlerDefinition(): void
     {
         $returnValue = $this->servicesFactory->createAuthenticationRequiredHandler(
@@ -128,36 +117,28 @@ class TwoFactorServicesFactoryTest extends TestCase
         $this->assertFalse($this->container->hasDefinition('security.authentication.authentication_required_handler.two_factor.firewallName'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getCsrfTokenManagerId_csrfOptionNotSet_useNullCsrfManager(): void
     {
         $returnValue = $this->servicesFactory->getCsrfTokenManagerId([]);
         $this->assertEquals('scheb_two_factor.null_csrf_token_manager', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getCsrfTokenManagerId_csrfDisabled_useNullCsrfManager(): void
     {
         $returnValue = $this->servicesFactory->getCsrfTokenManagerId(['enable_csrf' => false]);
         $this->assertEquals('scheb_two_factor.null_csrf_token_manager', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getCsrfTokenManagerId_csrfEnabled_useCsrfManagerAlias(): void
     {
         $returnValue = $this->servicesFactory->getCsrfTokenManagerId(['enable_csrf' => true]);
         $this->assertEquals('scheb_two_factor.csrf_token_manager', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createTwoFactorFirewallConfig_configGiven_createFirewallConfigDefinition(): void
     {
         $returnValue = $this->servicesFactory->createTwoFactorFirewallConfig(
@@ -177,9 +158,7 @@ class TwoFactorServicesFactoryTest extends TestCase
         $this->assertEquals(['firewall' => self::FIREWALL_NAME], $tag[0]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createProviderPreparationListener_withSettings_createProviderPreparationListenerDefinition(): void
     {
         $this->servicesFactory->createProviderPreparationListener(
@@ -200,9 +179,7 @@ class TwoFactorServicesFactoryTest extends TestCase
         $this->assertCount(1, $tag, 'Must have the "kernel.event_subscriber" tag assigned');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function create_createForFirewall_createExceptionListener(): void
     {
         $this->servicesFactory->createKernelExceptionListener(
@@ -217,9 +194,7 @@ class TwoFactorServicesFactoryTest extends TestCase
         $this->assertEquals(new Reference(self::AUTH_REQUIRED_HANDLER_ID), $definition->getArgument(2));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function create_createForFirewall_createAccessListener(): void
     {
         $this->servicesFactory->createAccessListener(
@@ -233,9 +208,7 @@ class TwoFactorServicesFactoryTest extends TestCase
         $this->assertEquals(new Reference(self::TWO_FACTOR_FIREWALL_CONFIG_ID), $definition->getArgument(0));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function create_createForFirewall_createFormListener(): void
     {
         $this->servicesFactory->createFormListener(

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Totp;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfigurationInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
@@ -65,9 +67,7 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
         return $authContext;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_twoFactorEnabledHasTotpConfiguration_returnTrue(): void
     {
         $user = $this->createUser(true, true);
@@ -77,9 +77,7 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
         $this->assertTrue($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_twoFactorEnabledNoTotpConfiguration_throwTwoFactorProviderLogicException(): void
     {
         $user = $this->createUser(true, false);
@@ -89,9 +87,7 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
         $this->provider->beginAuthentication($context);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_twoFactorEnabledHasNoSecret_throwTwoFactorProviderLogicException(): void
     {
         $user = $this->createUser(true, true, '');
@@ -101,9 +97,7 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
         $this->provider->beginAuthentication($context);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_twoFactorDisabledHasTotpConfiguration_returnFalse(): void
     {
         $user = $this->createUser(false, true);
@@ -113,9 +107,7 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
         $this->assertFalse($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_interfaceNotImplemented_returnFalse(): void
     {
         $user = $this->createMock(UserInterface::class);
@@ -125,9 +117,7 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
         $this->assertFalse($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validateAuthenticationCode_noTwoFactorUser_returnFalse(): void
     {
         $user = $this->createMock(UserInterface::class);
@@ -140,10 +130,8 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
         $this->assertFalse($returnValue);
     }
 
-    /**
-     * @test
-     * @dataProvider provideValidationResult
-     */
+    #[Test]
+    #[DataProvider('provideValidationResult')]
     public function validateAuthenticationCode_codeGiven_returnValidationResult(bool $validationResult): void
     {
         $user = $this->createUser();

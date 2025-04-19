@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\Authentication;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Http\Authentication\DefaultAuthenticationSuccessHandler;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
@@ -79,9 +80,7 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
         return $redirectResponse;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationSuccess_hasAuthenticationException_removeAuthenticationException(): void
     {
         $this->setUpSuccessHandlerWithOptions(false);
@@ -100,9 +99,7 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
         $this->successHandler->onAuthenticationSuccess($this->request, $token);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationSuccess_alwaysUseDefaultTargetPath_redirectToDefaultTargetPath(): void
     {
         $this->setUpSuccessHandlerWithOptions(true);
@@ -114,9 +111,7 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
         $this->assertSame($redirectResponse, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationSuccess_hasTargetPathInSession_redirectToSessionTargetPath(): void
     {
         $this->setUpSuccessHandlerWithOptions(false);
@@ -128,9 +123,7 @@ class DefaultAuthenticationSuccessHandlerTest extends TestCase
         $this->assertSame($redirectResponse, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationSuccess_noTargetPathInSession_redirectToDefaultTargetPath(): void
     {
         $this->setUpSuccessHandlerWithOptions(false);

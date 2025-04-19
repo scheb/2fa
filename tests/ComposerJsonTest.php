@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests;
 
 use DirectoryIterator;
+use PHPUnit\Framework\Attributes\Test;
 use Traversable;
 use function array_diff;
 use function array_keys;
@@ -19,9 +20,7 @@ class ComposerJsonTest extends TestCase
 {
     private const SRC_DIR = __DIR__.'/../src';
 
-    /**
-     * @test
-     */
+    #[Test]
     public function packageDependenciesEqualRootDependencies(): void
     {
         $usedDependencies = ['symfony/symfony']; // Some builds add this to composer.json
@@ -50,9 +49,7 @@ class ComposerJsonTest extends TestCase
         $this->assertCount(0, $unusedDependencies, $message);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function rootDependenciesContainedInAppDependencies(): void
     {
         $rootDependencies = $this->getComposerDependencies(__DIR__.'/../composer.json');
@@ -72,9 +69,7 @@ class ComposerJsonTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function rootReplacesSubPackages(): void
     {
         $rootReplaces = $this->getComposerReplaces(__DIR__.'/../composer.json');

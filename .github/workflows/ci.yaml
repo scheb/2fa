@@ -38,7 +38,7 @@ jobs:
             -   name: "Psalm"
                 if: always()
                 run: |
-                    composer require -W --dev vimeo/psalm:^5.0
+                    composer require -W --dev vimeo/psalm:^6.0
                     vendor/bin/psalm
 
     unit-tests:

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Backup;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 use Scheb\TwoFactorBundle\Model\PersisterInterface;
@@ -28,9 +30,7 @@ class BackupCodeManagerTest extends TestCase
         return $this->createMock(BackupCodeInterface::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isBackupCode_userNotImplementsInterface_returnFalse(): void
     {
         $user = new stdClass();
@@ -38,10 +38,8 @@ class BackupCodeManagerTest extends TestCase
         $this->assertFalse($returnValue);
     }
 
-    /**
-     * @test
-     * @dataProvider provideCheckCodeResults
-     */
+    #[Test]
+    #[DataProvider('provideCheckCodeResults')]
     public function isBackupCode_userAndCodeGiven_returnValidationResultFromUser(bool $result): void
     {
         $user = $this->createUserWithBackupCodeInterface();
@@ -66,9 +64,7 @@ class BackupCodeManagerTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function invalidateBackupCode_interfaceNotImplemented_doNothing(): void
     {
         $user = $this->createMock(UserInterface::class);
@@ -83,9 +79,7 @@ class BackupCodeManagerTest extends TestCase
         $this->backupCodeManager->invalidateBackupCode($user, 'c0de');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function invalidateBackupCode_userAndCodeGiven_invalidateCodeOnUser(): void
     {
         $user = $this->createUserWithBackupCodeInterface();

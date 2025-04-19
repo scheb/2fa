@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Condition;
 
+use PHPUnit\Framework\Attributes\Test;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Condition\AuthenticatedTokenCondition;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -23,9 +24,7 @@ class AuthenticatedTokenConditionTest extends AbstractAuthenticationContextTestC
         return new UsernamePasswordToken($this->createMock(UserInterface::class), 'firewallName');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldPerformTwoFactorAuthentication_tokenIsEnabled_returnTrue(): void
     {
         $supportedToken = $this->createSupportedSecurityToken();
@@ -36,9 +35,7 @@ class AuthenticatedTokenConditionTest extends AbstractAuthenticationContextTestC
         $this->assertTrue($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldPerformTwoFactorAuthentication_tokenIsNotEnabled_returnFalse(): void
     {
         $unsupportedToken = $this->createMock(TokenInterface::class);

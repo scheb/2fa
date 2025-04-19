@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\Attributes\Test;
 use Scheb\TwoFactorBundle\DependencyInjection\Compiler\MailerCompilerPass;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -33,18 +34,14 @@ class MailerCompilerPassTest extends TestCase
         $this->assertFalse($this->container->hasAlias($id), 'Alias "'.$id.'" must not be defined.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function process_emailProviderNotDefined_doNothing(): void
     {
         $this->compilerPass->process($this->container);
         $this->assertNotHasAlias('scheb_two_factor.security.email.auth_code_mailer');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function process_aliasAlreadySet_doNothing(): void
     {
         $this->container->setDefinition('scheb_two_factor.security.email.provider', new Definition());
@@ -53,9 +50,7 @@ class MailerCompilerPassTest extends TestCase
         $this->assertHasAlias('scheb_two_factor.security.email.auth_code_mailer', 'some_service');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function process_symfonyMailerAvailable_useIt(): void
     {
         $this->container->setDefinition('scheb_two_factor.security.email.provider', new Definition());
@@ -64,9 +59,7 @@ class MailerCompilerPassTest extends TestCase
         $this->assertHasAlias('scheb_two_factor.security.email.auth_code_mailer', 'scheb_two_factor.security.email.symfony_auth_code_mailer');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function process_noMailerAvailable_throwLogicException(): void
     {
         $this->container->setDefinition('scheb_two_factor.security.email.provider', new Definition());

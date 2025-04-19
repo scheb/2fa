@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\Utils;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Http\Utils\JsonRequestUtils;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -29,9 +30,7 @@ class JsonRequestUtilsTest extends TestCase
         return new Request([], [], [], [], [], [], $payload);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isJsonRequest_contentTypeContainsJson_returnTrue(): void
     {
         $request = new Request();
@@ -39,9 +38,7 @@ class JsonRequestUtilsTest extends TestCase
         $this->assertTrue(JsonRequestUtils::isJsonRequest($request));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isJsonRequest_contentTypeNotJson_returnFalse(): void
     {
         $request = new Request();
@@ -49,9 +46,7 @@ class JsonRequestUtilsTest extends TestCase
         $this->assertFalse(JsonRequestUtils::isJsonRequest($request));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getJsonPayloadValue_invalidJsonPayload_throwBadRequestException(): void
     {
         $this->expectException(BadRequestException::class);
@@ -60,9 +55,7 @@ class JsonRequestUtilsTest extends TestCase
         JsonRequestUtils::getJsonPayloadValue($request, 'nonExistentField');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getJsonPayloadValue_nonScalarValue_throwBadRequestException(): void
     {
         $this->expectException(BadRequestException::class);
@@ -70,27 +63,21 @@ class JsonRequestUtilsTest extends TestCase
         JsonRequestUtils::getJsonPayloadValue($this->request, 'objectField');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getJsonPayloadValue_nonExistentField_returnNull(): void
     {
         $returnValue = JsonRequestUtils::getJsonPayloadValue($this->request, 'nonExistentField');
         $this->assertNull($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getJsonPayloadValue_topLevelField_returnValue(): void
     {
         $returnValue = JsonRequestUtils::getJsonPayloadValue($this->request, 'topLevelField');
         $this->assertEquals('topLevelValue', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getJsonPayloadValue_arrayArrayField_returnValue(): void
     {
         $returnValue = JsonRequestUtils::getJsonPayloadValue($this->request, 'objectField.nestedField');

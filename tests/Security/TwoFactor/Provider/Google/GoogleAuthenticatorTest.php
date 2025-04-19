@@ -6,6 +6,8 @@ namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Google;
 
 use OTPHP\TOTP;
 use OTPHP\TOTPInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
@@ -35,10 +37,8 @@ class GoogleAuthenticatorTest extends TestCase
         $this->authenticator = new GoogleAuthenticator($this->totpFactory, 123);
     }
 
-    /**
-     * @test
-     * @dataProvider provideCheckCodeData
-     */
+    #[Test]
+    #[DataProvider('provideCheckCodeData')]
     public function checkCode_validateCode_returnBoolean(string $code, bool $expectedReturnValue): void
     {
         $this->totp
@@ -62,9 +62,7 @@ class GoogleAuthenticatorTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkCode_codeWithSpaces_stripSpacesBeforeCheck(): void
     {
         $this->totp
@@ -76,9 +74,7 @@ class GoogleAuthenticatorTest extends TestCase
         $this->authenticator->checkCode($this->user, ' 123 456 ');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getQRContent_getContentForQrCode_returnUri(): void
     {
         $this->totp
@@ -90,9 +86,7 @@ class GoogleAuthenticatorTest extends TestCase
         $this->assertEquals('QRCodeContent', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function generateSecret_getRandomSecretCode_returnString(): void
     {
         $returnValue = $this->authenticator->generateSecret();

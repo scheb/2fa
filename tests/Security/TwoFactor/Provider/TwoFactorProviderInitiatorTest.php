@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactory;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInterface;
@@ -88,9 +89,7 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
             ->willReturn($preferredProvider);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_multipleProviders_beginAuthenticationOnEachTwoFactorProvider(): void
     {
         $context = $this->createAuthenticationContext();
@@ -108,9 +107,7 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
         $this->initiator->beginTwoFactorAuthentication($context);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_oneProviderStarts_returnTwoFactorToken(): void
     {
         $originalToken = $this->createToken();
@@ -128,9 +125,7 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
         $this->assertSame($twoFactorToken, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_noProviderStarts_returnNull(): void
     {
         $originalToken = $this->createToken();
@@ -141,9 +136,7 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
         $this->assertNull($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function beginAuthentication_hasPreferredProvider_setThatProviderPreferred(): void
     {
         $user = $this->createUserWithPreferredProvider('preferredProvider');

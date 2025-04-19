@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\EventListener;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\EventListener\SuppressRememberMeListener;
@@ -71,9 +72,7 @@ class SuppressRememberMeListenerTest extends TestCase
         return $event;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onSuccessfulLogin_noRememberMeBadge_doNothing(): void
     {
         $passport = $this->createPassportWithRememberMeBadge(null);
@@ -87,9 +86,7 @@ class SuppressRememberMeListenerTest extends TestCase
         $this->suppressRememberMeListener->onSuccessfulLogin($event);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onSuccessfulLogin_rememberMeBadgeDisabled_doNothing(): void
     {
         $badge = $this->createRememberMeBadge(false);
@@ -107,9 +104,7 @@ class SuppressRememberMeListenerTest extends TestCase
         $this->suppressRememberMeListener->onSuccessfulLogin($event);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onSuccessfulLogin_noTwoFactorToken_doNothing(): void
     {
         $badge = $this->createRememberMeBadge(true);
@@ -127,9 +122,7 @@ class SuppressRememberMeListenerTest extends TestCase
         $this->suppressRememberMeListener->onSuccessfulLogin($event);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onSuccessfulLogin_requirementsFulfilled_disableRememberMeAndSetTokenAttribute(): void
     {
         $badge = $this->createRememberMeBadge(true);

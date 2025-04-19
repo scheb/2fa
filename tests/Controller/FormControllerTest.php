@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Controller;
 
 use Exception;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Controller\FormController;
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\TwoFactorProviderNotFoundException;
@@ -219,9 +220,7 @@ class FormControllerTest extends TestCase
         });
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function form_noTwoFactorToken_throwAccessDeniedException(): void
     {
         $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
@@ -230,9 +229,7 @@ class FormControllerTest extends TestCase
         $this->controller->form($this->request);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function form_setPreferredProvider_switchCurrentProvider(): void
     {
         $this->stubTokenStorageHasTwoFactorToken();
@@ -246,9 +243,7 @@ class FormControllerTest extends TestCase
         $this->controller->form($this->request);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function form_hasAuthenticationError_passErrorToRenderer(): void
     {
         $exception = new TwoFactorProviderNotFoundException('Authentication exception message');
@@ -265,9 +260,7 @@ class FormControllerTest extends TestCase
         $this->controller->form($this->request);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function form_hasOtherError_notPassErrorToRenderer(): void
     {
         $this->stubTokenStorageHasTwoFactorToken();
@@ -278,9 +271,7 @@ class FormControllerTest extends TestCase
         $this->controller->form($this->request);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function form_multiFactorFirewallTwoProviders_displayTrustedOptionFalse(): void
     {
         $this->stubCanSetTrustedDevice(true);
@@ -297,9 +288,7 @@ class FormControllerTest extends TestCase
         $this->controller->form($this->request);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function form_multiFactorFirewallOneProviderLeft_displayTrustedOptionTrue(): void
     {
         $this->stubCanSetTrustedDevice(true);
@@ -316,9 +305,7 @@ class FormControllerTest extends TestCase
         $this->controller->form($this->request);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function form_notMultiFactorFirewallTwoProviders_displayTrustedOptionTrue(): void
     {
         $this->stubCanSetTrustedDevice(true);
@@ -335,9 +322,7 @@ class FormControllerTest extends TestCase
         $this->controller->form($this->request);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function form_canNotSetTrustedDevice_displayTrustedOptionFalse(): void
     {
         $this->stubCanSetTrustedDevice(false);
@@ -354,9 +339,7 @@ class FormControllerTest extends TestCase
         $this->controller->form($this->request);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function form_trustedDisabledMultiFactorFirewallOneProviderLeft_displayTrustedOptionFalse(): void
     {
         $this->initControllerWithTrustedFeature(false);
@@ -374,9 +357,7 @@ class FormControllerTest extends TestCase
         $this->controller->form($this->request);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function form_trustedDisabledNotMultiFactorFirewallTwoProviders_displayTrustedOptionFalse(): void
     {
         $this->initControllerWithTrustedFeature(false);
@@ -394,9 +375,7 @@ class FormControllerTest extends TestCase
         $this->controller->form($this->request);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function form_csrfTokenGeneratorInstanceOfCsrfTokenManagerInterface_isCsrfProtectionEnabledTrue(): void
     {
         $this->stubTokenStorageHasTwoFactorToken();
@@ -412,9 +391,7 @@ class FormControllerTest extends TestCase
         $this->controller->form($this->request);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function form_renderForm_renderTemplateWithTemplateVars(): void
     {
         $this->firewallConfig
@@ -456,9 +433,7 @@ class FormControllerTest extends TestCase
         $this->controller->form($this->request);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function form_renderForm_renderTemplateWithTemplateVarsSetsRoutePath(): void
     {
         $this->firewallConfig

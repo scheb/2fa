@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\Authenticator;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
@@ -220,27 +221,21 @@ class TwoFactorAuthenticatorTest extends TestCase
             ->with(TwoFactorAuthenticator::FLAG_2FA_COMPLETE, true);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function supports_notCheckPath_returnFalse(): void
     {
         $this->stubIsCheckPath(false);
         $this->assertFalse($this->authenticator->supports($this->request));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function supports_isCheckPath_returnTrue(): void
     {
         $this->stubIsCheckPath(true);
         $this->assertTrue($this->authenticator->supports($this->request));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function authenticate_notTwoFactorToken_throwAccessDeniedException(): void
     {
         $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
@@ -248,9 +243,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->authenticator->authenticate($this->request);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function authenticate_onRequest_dispatchAttemptEvent(): void
     {
         $this->stubTokenStorageHasTwoFactorToken();
@@ -260,9 +253,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->authenticator->authenticate($this->request);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function authenticate_onRequest_createTwoFactorPassportWithCredentials(): void
     {
         $this->stubTokenStorageHasTwoFactorToken();
@@ -276,9 +267,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->assertEquals(self::CODE, $credentials->getCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function authenticate_tokenHasRememberMeAttribute_createTwoFactorPassportWithRememberMeBadge(): void
     {
         $twoFactorToken = $this->stubTokenStorageHasTwoFactorToken();
@@ -292,9 +281,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->assertTrue($returnValue->hasBadge(RememberMeBadge::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function authenticate_csrfDisabled_noCsrfBadge(): void
     {
         $this->stubCsrfProtectionEnabled(false);
@@ -304,9 +291,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->assertFalse($returnValue->hasBadge(CsrfTokenBadge::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function authenticate_csrfEnabled_csrfBadgeAdded(): void
     {
         $this->stubCsrfProtectionEnabled(true);
@@ -321,9 +306,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->assertEquals(self::CSRF_TOKEN_ID, $credentials->getCsrfTokenId());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function authenticate_trustedDeviceParameterNotSet_noTrustedDeviceBadge(): void
     {
         $this->stubRequestHasTrustedDeviceParameter(false);
@@ -334,9 +317,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->assertFalse($returnValue->hasBadge(TrustedDeviceBadge::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function authenticate_trustedDeviceParameterSet_addTrustedDeviceBadge(): void
     {
         $this->stubRequestHasTrustedDeviceParameter(true);
@@ -347,9 +328,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->assertTrue($returnValue->hasBadge(TrustedDeviceBadge::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function authenticate_rememberMeSetsTrustedWithRememberMeEnabled_addTrustedDeviceBadge(): void
     {
         $this->stubRequestHasTrustedDeviceParameter(false);
@@ -365,9 +344,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->assertTrue($returnValue->hasBadge(TrustedDeviceBadge::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createToken_multiFactorAuthenticationNotComplete_returnTwoFactorToken(): void
     {
         $this->stubIsMultiFactorFirewall(true);
@@ -379,9 +356,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->assertSame($twoFactorToken, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createToken_multiFactorAuthenticationIsComplete_returnAuthenticatedToken(): void
     {
         $this->stubIsMultiFactorFirewall(true);
@@ -395,9 +370,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->assertSame($authenticatedToken, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createToken_noMultiFactorAuthentication_returnAuthenticatedToken(): void
     {
         $this->stubIsMultiFactorFirewall(false);
@@ -411,9 +384,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->assertSame($authenticatedToken, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationSuccess_authenticationIncomplete_dispatchSuccessAndRequireEvent(): void
     {
         $this->expectDispatchEvents([TwoFactorAuthenticationEvents::SUCCESS, TwoFactorAuthenticationEvents::REQUIRE]);
@@ -421,9 +392,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->authenticator->onAuthenticationSuccess($this->request, $this->createTwoFactorToken(), self::FIREWALL_NAME);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationSuccess_authenticationIncomplete_returnRequireHandlerResult(): void
     {
         $token = $this->createTwoFactorToken();
@@ -439,9 +408,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->assertSame($response, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationSuccess_authenticationComplete_dispatchSuccessAndCompleteEvent(): void
     {
         $this->expectDispatchEvents([TwoFactorAuthenticationEvents::SUCCESS, TwoFactorAuthenticationEvents::COMPLETE]);
@@ -449,9 +416,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->authenticator->onAuthenticationSuccess($this->request, $this->createMock(TokenInterface::class), self::FIREWALL_NAME);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationSuccess_authenticationComplete_returnSuccessHandlerResponse(): void
     {
         $token = $this->createMock(TokenInterface::class);
@@ -467,9 +432,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->assertSame($response, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationFailure_exceptionGiven_dispatchFailureEvent(): void
     {
         $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
@@ -479,9 +442,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->authenticator->onAuthenticationFailure($this->request, $this->createMock(AuthenticationException::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onAuthenticationFailure_exceptionGiven_returnFailureHandlerResponse(): void
     {
         $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));

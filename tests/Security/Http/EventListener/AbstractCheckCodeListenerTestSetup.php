@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\EventListener;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials;
@@ -136,9 +137,7 @@ abstract class AbstractCheckCodeListenerTestSetup extends TestCase
             ->willReturn($isPrepared);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkPassport_noTwoFactorCodeCredentials_doNothing(): void
     {
         $passport = $this->createMock(Passport::class);
@@ -151,9 +150,7 @@ abstract class AbstractCheckCodeListenerTestSetup extends TestCase
         $this->listener->checkPassport($this->checkPassportEvent);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkPassport_credentialsResolved_doNothing(): void
     {
         $passport = $this->createMock(Passport::class);
@@ -169,9 +166,7 @@ abstract class AbstractCheckCodeListenerTestSetup extends TestCase
         $this->listener->checkPassport($this->checkPassportEvent);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkPassport_noActiveTwoFactorProvider_throwAuthenticationException(): void
     {
         $passport = $this->createMock(Passport::class);
@@ -189,9 +184,7 @@ abstract class AbstractCheckCodeListenerTestSetup extends TestCase
         $this->listener->checkPassport($this->checkPassportEvent);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkPassport_providerNotPrepared_throwAuthenticationException(): void
     {
         $passport = $this->createMock(Passport::class);

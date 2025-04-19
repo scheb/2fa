@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\DependencyInjection\Factory\Security;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorFactory;
 use Scheb\TwoFactorBundle\DependencyInjection\Factory\Security\TwoFactorServicesFactory;
@@ -181,9 +182,7 @@ EOF;
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addConfiguration_emptyConfig_setDefaultValues(): void
     {
         $config = $this->getEmptyConfig();
@@ -208,9 +207,7 @@ EOF;
         $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_TOKEN_ID, $processedConfiguration['csrf_token_id']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addConfiguration_fullConfig_setConfigValues(): void
     {
         $config = $this->getFullConfig();
@@ -235,18 +232,14 @@ EOF;
         $this->assertEquals('custom_two_factor', $processedConfiguration['csrf_token_id']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createAuthenticator_createForFirewall_createServices(): void
     {
         $this->expectDependingServicesCreated();
         $this->callCreateAuthenticator();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createAuthenticator_createForFirewall_returnServiceIds(): void
     {
         $this->stubServicesFactory();
@@ -255,9 +248,7 @@ EOF;
         $this->assertEquals('security.authenticator.two_factor.firewallName', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createAuthenticator_createForFirewall_createAuthenticatorDefinition(): void
     {
         $this->stubServicesFactory();
@@ -271,9 +262,7 @@ EOF;
         $this->assertEquals(new Reference(self::AUTH_REQUIRED_HANDLER_ID), (string) $definition->getArgument(4));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createAuthenticator_createForFirewall_createAuthenticationTokenCreatedListener(): void
     {
         $this->stubServicesFactory();

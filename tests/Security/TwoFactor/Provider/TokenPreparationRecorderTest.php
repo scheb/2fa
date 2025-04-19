@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider;
 
 use LogicException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnexpectedTokenException;
@@ -46,9 +48,7 @@ class TokenPreparationRecorderTest extends TestCase
         return $token;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isTwoFactorProviderPrepared_invalidToken_throwUnexpectedTokenException(): void
     {
         $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
@@ -57,9 +57,7 @@ class TokenPreparationRecorderTest extends TestCase
         $this->recorder->isTwoFactorProviderPrepared(self::FIREWALL_NAME, self::PROVIDER_NAME);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isTwoFactorProviderPrepared_differentFirewallName_throwLogicException(): void
     {
         $this->stubTokenStorageHasToken($this->createMock(TwoFactorTokenInterface::class));
@@ -68,10 +66,8 @@ class TokenPreparationRecorderTest extends TestCase
         $this->recorder->isTwoFactorProviderPrepared('differentFirewallName', self::PROVIDER_NAME);
     }
 
-    /**
-     * @test
-     * @dataProvider provideReturnValues
-     */
+    #[Test]
+    #[DataProvider('provideReturnValues')]
     public function isTwoFactorProviderPrepared_validToken_setOnToken(bool $expectedReturnValue): void
     {
         $token = $this->createTwoFactorTokenWithFirewallName();
@@ -99,9 +95,7 @@ class TokenPreparationRecorderTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setTwoFactorProviderPrepared_invalidToken_throwUnexpectedTokenException(): void
     {
         $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
@@ -110,9 +104,7 @@ class TokenPreparationRecorderTest extends TestCase
         $this->recorder->setTwoFactorProviderPrepared(self::FIREWALL_NAME, self::PROVIDER_NAME);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setTwoFactorProviderPrepared_differentFirewallName_throwLogicException(): void
     {
         $this->stubTokenStorageHasToken($this->createMock(TwoFactorTokenInterface::class));
@@ -121,9 +113,7 @@ class TokenPreparationRecorderTest extends TestCase
         $this->recorder->setTwoFactorProviderPrepared('differentFirewallName', self::PROVIDER_NAME);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setTwoFactorProviderPrepared_validToken_getFromToken(): void
     {
         $token = $this->createTwoFactorTokenWithFirewallName();

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Condition;
 
 use ArrayIterator;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionInterface;
@@ -48,9 +49,7 @@ class TwoFactorConditionRegistryTest extends TestCase
             ->method($this->anything());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldPerformTwoFactorAuthentication_allConditionsFulfilled_checkEachConditionsAndReturnTrue(): void
     {
         $this->conditionReturns($this->condition1, true);
@@ -61,9 +60,7 @@ class TwoFactorConditionRegistryTest extends TestCase
         $this->assertTrue($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldPerformTwoFactorAuthentication_conditionFails_skipFollowingConditionsAndReturnFalse(): void
     {
         $this->conditionReturns($this->condition1, true);

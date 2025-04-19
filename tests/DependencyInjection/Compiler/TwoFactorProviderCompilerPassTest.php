@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\Attributes\Test;
 use Scheb\TwoFactorBundle\DependencyInjection\Compiler\TwoFactorProviderCompilerPass;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -53,9 +54,7 @@ class TwoFactorProviderCompilerPassTest extends TestCase
         $this->assertCount(count($providers), $providersArgument->getValues());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function process_noTaggedServices_replaceArgumentWithEmptyArray(): void
     {
         $taggedServices = [];
@@ -66,9 +65,7 @@ class TwoFactorProviderCompilerPassTest extends TestCase
         $this->assertProviderRegistryArgument([]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function process_taggedServices_replaceArgumentWithServiceList(): void
     {
         $taggedServices = [
@@ -84,9 +81,7 @@ class TwoFactorProviderCompilerPassTest extends TestCase
         $this->assertProviderRegistryArgument($expectedResult);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function process_missingAlias_throwException(): void
     {
         $taggedServices = [

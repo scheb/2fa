@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use Lcobucci\JWT\Token\DataSet;
 use Lcobucci\JWT\Token\Plain;
 use Lcobucci\JWT\Token\Signature;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\JwtTokenEncoder;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceToken;
@@ -26,9 +27,7 @@ class TrustedDeviceTokenEncoderTest extends TestCase
         $this->tokenEncoder->now = new DateTimeImmutable('2018-01-01 00:00:00');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function generateToken_parametersGiven_returnTrustedDeviceToken(): void
     {
         $this->jwtEncoder
@@ -41,9 +40,7 @@ class TrustedDeviceTokenEncoderTest extends TestCase
         $this->assertInstanceOf(TrustedDeviceToken::class, $token);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function decodeToken_validToken_returnDecodedTrustedDeviceToken(): void
     {
         $this->jwtEncoder
@@ -55,9 +52,7 @@ class TrustedDeviceTokenEncoderTest extends TestCase
         $this->assertInstanceOf(TrustedDeviceToken::class, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function decodeToken_invalidToken_returnNull(): void
     {
         $this->jwtEncoder

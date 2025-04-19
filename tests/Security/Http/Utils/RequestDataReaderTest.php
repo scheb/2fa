@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\Utils;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Scheb\TwoFactorBundle\Security\Http\Utils\RequestDataReader;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -34,9 +35,7 @@ class RequestDataReaderTest extends TestCase
         return $request;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRequestValue_hasPostParameterSet_returnValue(): void
     {
         $postData = ['param' => 'paramValue'];
@@ -46,9 +45,7 @@ class RequestDataReaderTest extends TestCase
         $this->assertEquals('paramValue', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRequestValue_nestedPostParameterSet_returnValue(): void
     {
         $postData = ['array_object' => ['param' => 'paramValue']];
@@ -58,9 +55,7 @@ class RequestDataReaderTest extends TestCase
         $this->assertEquals('paramValue', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRequestValue_postParameterNotSet_returnNull(): void
     {
         $request = new Request([], []);
@@ -69,9 +64,7 @@ class RequestDataReaderTest extends TestCase
         $this->assertNull($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRequestValue_hasJsonParameterSet_returnValue(): void
     {
         $postData = '{"param":"paramValue"}';
@@ -81,9 +74,7 @@ class RequestDataReaderTest extends TestCase
         $this->assertEquals('paramValue', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRequestValue_nestedJsonParameterSet_returnValue(): void
     {
         $postData = '{"object":{"param":"paramValue"}}';
@@ -93,9 +84,7 @@ class RequestDataReaderTest extends TestCase
         $this->assertEquals('paramValue', $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRequestValue_jsonParameterNotSet_returnNull(): void
     {
         $postData = '{}';
@@ -105,9 +94,7 @@ class RequestDataReaderTest extends TestCase
         $this->assertNull($returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRequestValue_invalidJsonPayload_throwBadRequestException(): void
     {
         $postData = '{';
@@ -118,9 +105,7 @@ class RequestDataReaderTest extends TestCase
         $this->requestDataReader->getRequestValue($request, 'param');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRequestValue_missingJsonPayload_throwBadRequestException(): void
     {
         $postData = '';

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Mailer;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Mailer\SymfonyAuthCodeMailer;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
@@ -23,9 +24,7 @@ class SymfonyAuthCodeMailerTest extends TestCase
         $this->mailer = new SymfonyAuthCodeMailer($this->symfonyMailer, 'sender@example.com', 'Sender Name');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function sendAuthCode_hasAuthCode_sendEmail(): void
     {
         // Stub the user object
@@ -59,9 +58,7 @@ class SymfonyAuthCodeMailerTest extends TestCase
         $this->mailer->sendAuthCode($user);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function sendAuthCode_hasAuthCode_sendEmailWithoutSender(): void
     {
         $mailer = new SymfonyAuthCodeMailer($this->symfonyMailer, null, null);
@@ -99,9 +96,7 @@ class SymfonyAuthCodeMailerTest extends TestCase
         $mailer->sendAuthCode($user);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function sendAuthCode_nullAuthCode_sendEmail(): void
     {
         // Stub the user object

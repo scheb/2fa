@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Email\Generator;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Mailer\AuthCodeMailerInterface;
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
@@ -27,9 +28,7 @@ class CodeGeneratorTest extends TestCase
         $this->authCodeManager->testCode = 12345;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function generateAndSend_useOriginalCodeGenerator_codeBetweenRange(): void
     {
         // Mock the user object
@@ -47,9 +46,7 @@ class CodeGeneratorTest extends TestCase
         $authCodeManager->generateAndSend($user);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function generateAndSend_checkCodeRange_validMinAndMax(): void
     {
         // Stub the user object
@@ -62,9 +59,7 @@ class CodeGeneratorTest extends TestCase
         $this->assertEquals(99999, $this->authCodeManager->lastMax);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function generateAndSend_generateNewCode_persistsCode(): void
     {
         // Mock the user object
@@ -83,9 +78,7 @@ class CodeGeneratorTest extends TestCase
         $this->authCodeManager->generateAndSend($user);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function generateAndSend_generateNewCode_sendMail(): void
     {
         // Stub the user object
@@ -100,9 +93,7 @@ class CodeGeneratorTest extends TestCase
         $this->authCodeManager->generateAndSend($user);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function reSend_whenCalled_sendMail(): void
     {
         // Stub the user object

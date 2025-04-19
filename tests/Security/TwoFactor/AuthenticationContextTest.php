@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContext;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -28,36 +29,28 @@ class AuthenticationContextTest extends TestCase
         $this->authContext = new AuthenticationContext($this->request, $this->token, $this->passport, 'firewallName');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getToken_objectInitialized_returnToken(): void
     {
         $returnValue = $this->authContext->getToken();
         $this->assertEquals($this->token, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getPassport_objectInitialized_returnPassport(): void
     {
         $returnValue = $this->authContext->getPassport();
         $this->assertEquals($this->passport, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRequest_objectInitialized_returnRequest(): void
     {
         $returnValue = $this->authContext->getRequest();
         $this->assertEquals($this->request, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getSession_objectInitialized_returnSession(): void
     {
         $session = $this->createMock(SessionInterface::class);
@@ -70,9 +63,7 @@ class AuthenticationContextTest extends TestCase
         $this->assertEquals($session, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getUser_objectInitialized_returnValid(): void
     {
         $user = $this->createMock(UserInterface::class);
@@ -86,9 +77,7 @@ class AuthenticationContextTest extends TestCase
         $this->assertEquals($user, $returnValue);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFirewallName_hasValue_returnFirewallName(): void
     {
         $returnValue = $this->authContext->getFirewallName();

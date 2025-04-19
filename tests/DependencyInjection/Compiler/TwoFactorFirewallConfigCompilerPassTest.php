@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\DependencyInjection\Compiler;
 
+use PHPUnit\Framework\Attributes\Test;
 use Scheb\TwoFactorBundle\DependencyInjection\Compiler\TwoFactorFirewallConfigCompilerPass;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallContext;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -50,9 +51,7 @@ class TwoFactorFirewallConfigCompilerPassTest extends TestCase
         $this->assertEquals($expectedTags, $configsArgument);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function process_noTaggedServices_replaceArgumentWithEmptyArray(): void
     {
         $taggedServices = [];
@@ -63,9 +62,7 @@ class TwoFactorFirewallConfigCompilerPassTest extends TestCase
         $this->assertTwoFactorFirewallContextArgument([]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function process_taggedServices_replaceArgumentWithServiceList(): void
     {
         $taggedServices = [
@@ -81,9 +78,7 @@ class TwoFactorFirewallConfigCompilerPassTest extends TestCase
         $this->assertTwoFactorFirewallContextArgument($expectedResult);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function process_missingAlias_throwException(): void
     {
         $taggedServices = [
