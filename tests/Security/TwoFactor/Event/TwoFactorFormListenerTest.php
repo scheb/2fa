@@ -11,6 +11,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorFormListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
+use Scheb\TwoFactorBundle\Tests\EventDispatcherTestHelper;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,9 +21,10 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class TwoFactorFormListenerTest extends TestCase
 {
+    use EventDispatcherTestHelper;
+
     private MockObject|TwoFactorFirewallConfig $twoFactorFirewallConfig;
     private MockObject|TokenStorageInterface $tokenStorage;
-    private MockObject|EventDispatcherInterface $eventDispatcher;
     private MockObject|Request $request;
     private TwoFactorFormListener $listener;
 
@@ -59,13 +61,6 @@ class TwoFactorFormListenerTest extends TestCase
             ->method('isAuthFormRequest')
             ->with($this->request)
             ->willReturn($isAuthFormRequest);
-    }
-
-    private function expectNotDispatchEvent(): void
-    {
-        $this->eventDispatcher
-            ->expects($this->never())
-            ->method($this->anything());
     }
 
     private function createRequestEvent(): RequestEvent
@@ -122,10 +117,10 @@ class TwoFactorFormListenerTest extends TestCase
         $this->stubToken(TwoFactorTokenInterface::class);
         $this->stubIsAuthFormPath(true);
 
-        $this->eventDispatcher
-            ->expects($this->once())
-            ->method('dispatch')
-            ->with($this->isInstanceOf(TwoFactorAuthenticationEvent::class), TwoFactorAuthenticationEvents::FORM);
+        $this->expectDispatchOneEvent(
+            $this->isInstanceOf(TwoFactorAuthenticationEvent::class),
+            TwoFactorAuthenticationEvents::FORM,
+        );
 
         $this->listener->onKernelRequest($this->createRequestEvent());
     }

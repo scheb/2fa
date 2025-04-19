@@ -15,6 +15,7 @@ use Scheb\TwoFactorBundle\Security\Http\Authenticator\TwoFactorAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
+use Scheb\TwoFactorBundle\Tests\EventDispatcherTestHelper;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,11 +31,12 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use function assert;
-use function count;
 use function method_exists;
 
 class TwoFactorAuthenticatorTest extends TestCase
 {
+    use EventDispatcherTestHelper;
+
     private const FIREWALL_NAME = 'firewallName';
     private const CODE = '2faCode';
     private const CSRF_TOKEN = 'csrfToken';
@@ -46,7 +48,6 @@ class TwoFactorAuthenticatorTest extends TestCase
     private MockObject|AuthenticationSuccessHandlerInterface $successHandler;
     private MockObject|AuthenticationFailureHandlerInterface $failureHandler;
     private MockObject|AuthenticationRequiredHandlerInterface $authenticationRequiredHandler;
-    private MockObject|EventDispatcherInterface $eventDispatcher;
     private MockObject|Request $request;
     private TwoFactorAuthenticator $authenticator;
 
@@ -192,27 +193,6 @@ class TwoFactorAuthenticatorTest extends TestCase
             ->willReturn($isCheckPath);
     }
 
-    /**
-     * @param string[] $events
-     */
-    private function expectDispatchEvents(array $events): void
-    {
-        $matcher = $this->exactly(count($events));
-        $this->eventDispatcher
-            ->expects($matcher)
-            ->method('dispatch')
-            ->with(
-                $this->isInstanceOf(
-                    TwoFactorAuthenticationEvent::class,
-                ),
-                $this->callback(function ($value) use ($matcher, $events) {
-                    $this->assertEquals($events[$matcher->numberOfInvocations() - 1], $value);
-
-                    return true;
-                }),
-            );
-    }
-
     private function expect2faCompleteFlagSet(MockObject $authenticatedToken): void
     {
         $authenticatedToken
@@ -248,7 +228,10 @@ class TwoFactorAuthenticatorTest extends TestCase
     {
         $this->stubTokenStorageHasTwoFactorToken();
 
-        $this->expectDispatchEvents([TwoFactorAuthenticationEvents::ATTEMPT]);
+        $this->expectDispatchOneEvent(
+            $this->isInstanceOf(TwoFactorAuthenticationEvent::class),
+            TwoFactorAuthenticationEvents::ATTEMPT,
+        );
 
         $this->authenticator->authenticate($this->request);
     }
@@ -387,7 +370,10 @@ class TwoFactorAuthenticatorTest extends TestCase
     #[Test]
     public function onAuthenticationSuccess_authenticationIncomplete_dispatchSuccessAndRequireEvent(): void
     {
-        $this->expectDispatchEvents([TwoFactorAuthenticationEvents::SUCCESS, TwoFactorAuthenticationEvents::REQUIRE]);
+        $this->expectDispatchConsecutiveEvents([
+            [$this->isInstanceOf(TwoFactorAuthenticationEvent::class), TwoFactorAuthenticationEvents::SUCCESS],
+            [$this->isInstanceOf(TwoFactorAuthenticationEvent::class), TwoFactorAuthenticationEvents::REQUIRE],
+        ]);
 
         $this->authenticator->onAuthenticationSuccess($this->request, $this->createTwoFactorToken(), self::FIREWALL_NAME);
     }
@@ -411,7 +397,10 @@ class TwoFactorAuthenticatorTest extends TestCase
     #[Test]
     public function onAuthenticationSuccess_authenticationComplete_dispatchSuccessAndCompleteEvent(): void
     {
-        $this->expectDispatchEvents([TwoFactorAuthenticationEvents::SUCCESS, TwoFactorAuthenticationEvents::COMPLETE]);
+        $this->expectDispatchConsecutiveEvents([
+            [$this->isInstanceOf(TwoFactorAuthenticationEvent::class), TwoFactorAuthenticationEvents::SUCCESS],
+            [$this->isInstanceOf(TwoFactorAuthenticationEvent::class), TwoFactorAuthenticationEvents::COMPLETE],
+        ]);
 
         $this->authenticator->onAuthenticationSuccess($this->request, $this->createMock(TokenInterface::class), self::FIREWALL_NAME);
     }
@@ -437,7 +426,10 @@ class TwoFactorAuthenticatorTest extends TestCase
     {
         $this->stubTokenStorageHasToken($this->createMock(TokenInterface::class));
 
-        $this->expectDispatchEvents([TwoFactorAuthenticationEvents::FAILURE]);
+        $this->expectDispatchOneEvent(
+            $this->isInstanceOf(TwoFactorAuthenticationEvent::class),
+            TwoFactorAuthenticationEvents::FAILURE,
+        );
 
         $this->authenticator->onAuthenticationFailure($this->request, $this->createMock(AuthenticationException::class));
     }

@@ -14,6 +14,7 @@ use Scheb\TwoFactorBundle\Security\Http\Authentication\AuthenticationRequiredHan
 use Scheb\TwoFactorBundle\Security\Http\Firewall\ExceptionListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
+use Scheb\TwoFactorBundle\Tests\EventDispatcherTestHelper;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,11 +28,12 @@ use Throwable;
 
 class ExceptionListenerTest extends TestCase
 {
+    use EventDispatcherTestHelper;
+
     private const FIREWALL_NAME = 'firewallName';
 
     private MockObject|TokenStorageInterface $tokenStorage;
     private MockObject|AuthenticationRequiredHandlerInterface $authenticationRequiredHandler;
-    private MockObject|EventDispatcherInterface $eventDispatcher;
     private MockObject|Request $request;
     private MockObject|Response $response;
     private ExceptionListener $listener;
@@ -62,10 +64,10 @@ class ExceptionListenerTest extends TestCase
 
     private function expectAuthenticationRequireEvent(): void
     {
-        $this->eventDispatcher
-            ->expects($this->any())
-            ->method('dispatch')
-            ->with($this->isInstanceOf(TwoFactorAuthenticationEvent::class), TwoFactorAuthenticationEvents::REQUIRE);
+        $this->expectDispatchOneEvent(
+            $this->isInstanceOf(TwoFactorAuthenticationEvent::class),
+            TwoFactorAuthenticationEvents::REQUIRE,
+        );
     }
 
     private function expectAuthenticationRequiredHandlerCreateResponse(TokenInterface $token, Response $response): void
