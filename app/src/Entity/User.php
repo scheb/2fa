@@ -40,7 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTw
     #[ORM\Column(type: 'boolean')]
     private bool $emailAuthenticationEnabled = true;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'string')]
     private string|null $emailAuthenticationCode = null;
 
     #[ORM\Column(type: 'boolean')]
