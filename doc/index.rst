@@ -3,6 +3,8 @@ SchebTwoFactorBundle
 
 This bundle provides **two-factor authentication (2FA) for Symfony applications**.
 
+`Live demo of 2FA in Symfony <https://2fa.scheb.de>`_
+
 .. image:: 2fa-logo.svg
    :alt: SchebTwoFactorBundle Logo
 

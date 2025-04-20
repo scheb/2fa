@@ -3,6 +3,8 @@ scheb/2fa - app
 
 **Test application and integration tests for [scheb/2fa](https://github.com/scheb/2fa).**
 
+For a live demo of this application, visit [https://2fa.scheb.de](https://2fa.scheb.de).
+
 Setup
 -----
 

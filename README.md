@@ -58,6 +58,8 @@ Demo
 This repository contains a small test application that can be quickly set-up locally to test two-factor authentication
 in a real Symfony environment. Check out the readme file in the [`app` folder](app/README.md) for more details.
 
+For a live demo of this application, visit [https://2fa.scheb.de](https://2fa.scheb.de).
+
 Version Guidance
 ----------------
 
