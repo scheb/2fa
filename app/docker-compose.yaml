@@ -1,0 +1,13 @@
+services:
+    webserver:
+        image: nginx:latest
+        ports:
+            - '8080:80'
+        volumes:
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+    php-fpm:
+        image: scheb42/2fa-app
+        build:
+            dockerfile: app/Dockerfile
+            context: ../
