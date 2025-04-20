@@ -227,3 +227,8 @@ An example how to render the QR code with ``endroid/qr-code`` version 4 can be f
 
     **Security note:** Keep the QR code content within your application. Render the image yourself. Do not pass the
     content to an external service, because this is exposing the secret code to that service.
+
+Events
+------
+
+See :doc:`Events </events>`

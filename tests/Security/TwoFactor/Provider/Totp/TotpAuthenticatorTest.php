@@ -10,13 +10,22 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TotpCodeEvents;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpFactory;
+use Scheb\TwoFactorBundle\Tests\EventDispatcherTestHelper;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use function strlen;
 
 class TotpAuthenticatorTest extends TestCase
 {
+    use EventDispatcherTestHelper;
+
+    private const VALID_AUTH_CODE = 'validCode';
+    private const INVALID_AUTH_CODE = 'invalidCode';
+
     private MockObject|TwoFactorInterface $user;
     private MockObject|TotpFactory $totpFactory;
     private MockObject|TOTP $totp;
@@ -26,6 +35,7 @@ class TotpAuthenticatorTest extends TestCase
     {
         $this->user = $this->createMock(TwoFactorInterface::class);
         $this->totp = $this->createMock(TOTPInterface::class);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
 
         $this->totpFactory = $this->createMock(TotpFactory::class);
         $this->totpFactory
@@ -34,7 +44,7 @@ class TotpAuthenticatorTest extends TestCase
             ->with($this->user)
             ->willReturn($this->totp);
 
-        $this->authenticator = new TotpAuthenticator($this->totpFactory, 123);
+        $this->authenticator = new TotpAuthenticator($this->totpFactory, $this->eventDispatcher, 123);
     }
 
     #[Test]
@@ -51,14 +61,46 @@ class TotpAuthenticatorTest extends TestCase
         $this->assertEquals($expectedReturnValue, $returnValue);
     }
 
+    #[Test]
+    public function checkCode_validCode_dispatchCheckAndValidEvent(): void
+    {
+        $this->totp
+            ->method('verify')
+            ->willReturn(true);
+
+        $event = new TwoFactorCodeEvent($this->user, self::VALID_AUTH_CODE);
+        $this->expectDispatchConsecutiveEvents([
+            [$event, TotpCodeEvents::CHECK],
+            [$event, TotpCodeEvents::VALID],
+        ]);
+
+        $this->authenticator->checkCode($this->user, self::VALID_AUTH_CODE);
+    }
+
+    #[Test]
+    public function checkCode_invalidCode_dispatchCheckAndInvalidEvent(): void
+    {
+        $this->totp
+            ->method('verify')
+            ->willReturn(false);
+
+        $event = new TwoFactorCodeEvent($this->user, self::INVALID_AUTH_CODE);
+        $this->expectDispatchConsecutiveEvents([
+            [$event, TotpCodeEvents::CHECK],
+            [$event, TotpCodeEvents::INVALID],
+        ]);
+
+        $this->authenticator->checkCode($this->user, self::INVALID_AUTH_CODE);
+    }
+
     /**
      * @return array<array<mixed>>
      */
     public static function provideCheckCodeData(): array
     {
         return [
-            ['validCode', true],
-            ['invalidCode', false],
+            [self::VALID_AUTH_CODE, true],
+            [self::INVALID_AUTH_CODE, false],
         ];
     }
 

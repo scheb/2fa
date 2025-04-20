@@ -6,6 +6,9 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google;
 
 use ParagonIE\ConstantTime\Base32;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\GoogleAuthenticatorCodeEvents;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use function random_bytes;
 use function str_replace;
 use function strlen;
@@ -17,6 +20,7 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
 {
     public function __construct(
         private readonly GoogleTotpFactory $totpFactory,
+        private readonly EventDispatcherInterface $eventDispatcher,
         /** @var 0|positive-int */
         private readonly int $leeway,
     ) {
@@ -24,6 +28,9 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
 
     public function checkCode(TwoFactorInterface $user, string $code): bool
     {
+        $event = new TwoFactorCodeEvent($user, $code);
+        $this->eventDispatcher->dispatch($event, GoogleAuthenticatorCodeEvents::CHECK);
+
         // Strip any user added spaces
         $code = str_replace(' ', '', $code);
         if (0 === strlen($code)) {
@@ -31,7 +38,10 @@ class GoogleAuthenticator implements GoogleAuthenticatorInterface
         }
 
         /** @var non-empty-string $code */
-        return $this->totpFactory->createTotpForUser($user)->verify($code, null, $this->leeway);
+        $isValid = $this->totpFactory->createTotpForUser($user)->verify($code, null, $this->leeway);
+        $this->eventDispatcher->dispatch($event, $isValid ? GoogleAuthenticatorCodeEvents::VALID : GoogleAuthenticatorCodeEvents::INVALID);
+
+        return $isValid;
     }
 
     public function getQRContent(TwoFactorInterface $user): string

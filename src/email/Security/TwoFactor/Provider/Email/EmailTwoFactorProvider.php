@@ -6,9 +6,12 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email;
 
 use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\EmailCodeEvents;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use function str_replace;
 
 /**
@@ -19,6 +22,7 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
     public function __construct(
         private readonly CodeGeneratorInterface $codeGenerator,
         private readonly TwoFactorFormRendererInterface $formRenderer,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
@@ -37,6 +41,9 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
         }
 
         $this->codeGenerator->generateAndSend($user);
+
+        $event = new TwoFactorCodeEvent($user, $user->getEmailAuthCode() ?? '');
+        $this->eventDispatcher->dispatch($event, EmailCodeEvents::SENT);
     }
 
     public function validateAuthenticationCode(object $user, string $authenticationCode): bool
@@ -45,10 +52,15 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
             return false;
         }
 
+        $event = new TwoFactorCodeEvent($user, $authenticationCode);
+        $this->eventDispatcher->dispatch($event, EmailCodeEvents::CHECK);
+
         // Strip any user added spaces
         $authenticationCode = str_replace(' ', '', $authenticationCode);
+        $isValid = $user->getEmailAuthCode() === $authenticationCode;
+        $this->eventDispatcher->dispatch($event, $isValid ? EmailCodeEvents::VALID : EmailCodeEvents::INVALID);
 
-        return $user->getEmailAuthCode() === $authenticationCode;
+        return $isValid;
     }
 
     public function getFormRenderer(): TwoFactorFormRendererInterface

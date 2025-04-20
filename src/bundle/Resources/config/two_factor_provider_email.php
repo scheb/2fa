@@ -39,6 +39,7 @@ return static function (ContainerConfigurator $container): void {
             ->args([
                 service('scheb_two_factor.security.email.code_generator'),
                 service('scheb_two_factor.security.email.form_renderer'),
+                service('event_dispatcher'),
             ])
 
         ->alias(CodeGeneratorInterface::class, 'scheb_two_factor.security.email.code_generator')

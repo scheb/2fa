@@ -273,3 +273,8 @@ Then register it as a service and update your configuration:
    scheb_two_factor:
        email:
            form_renderer: acme.custom_form_renderer_service
+
+Events
+------
+
+See :doc:`Events </events>`

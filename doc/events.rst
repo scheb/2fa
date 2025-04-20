@@ -98,3 +98,111 @@ Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\BackupCodeEvents::INV
 Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent``
 
 Is dispatched when the code was deemed to be a invalid backup code.
+
+
+Email Authentication Events
+---------------------------
+
+The following events are dispatched when the email code authentication provider is used:
+
+``scheb_two_factor.provider.email.sent``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\EmailCodeEvents::SENT``
+
+Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent``
+
+Is dispatched whenever a code was sent via email to the user.
+
+``scheb_two_factor.provider.email.check``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\EmailCodeEvents::CHECK``
+
+Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent``
+
+Is dispatched whenever a code is checked if it is a valid email code.
+
+``scheb_two_factor.provider.email.valid``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\EmailCodeEvents::VALID``
+
+Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent``
+
+Is dispatched when the code was deemed to be a valid email code.
+
+``scheb_two_factor.provider.email.invalid``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\EmailCodeEvents::INVALID``
+
+Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent``
+
+Is dispatched when the code was deemed to be a invalid email code.
+
+
+Google Authenticator Events
+---------------------------
+
+The following events are dispatched when the Google Authenticator authentication provider is used:
+
+``scheb_two_factor.provider.google.check``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\GoogleAuthenticatorCodeEvents::CHECK``
+
+Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent``
+
+Is dispatched whenever a code is checked if it is a valid Google Authenticator code.
+
+``scheb_two_factor.provider.google.valid``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\GoogleAuthenticatorCodeEvents::VALID``
+
+Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent``
+
+Is dispatched when the code was deemed to be a valid Google Authenticator code.
+
+``scheb_two_factor.provider.google.invalid``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\GoogleAuthenticatorCodeEvents::INVALID``
+
+Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent``
+
+Is dispatched when the code was deemed to be a invalid Google Authenticator code.
+
+
+TOTP Authentication Events
+--------------------------
+
+The following events are dispatched when the TOTP authentication provider is used:
+
+``scheb_two_factor.provider.totp.check``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TotpCodeEvents::CHECK``
+
+Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent``
+
+Is dispatched whenever a code is checked if it is a valid TOTP code.
+
+``scheb_two_factor.provider.totp.valid``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TotpCodeEvents::VALID``
+
+Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent``
+
+Is dispatched when the code was deemed to be a valid TOTP code.
+
+``scheb_two_factor.provider.totp.invalid``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TotpCodeEvents::INVALID``
+
+Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent``
+
+Is dispatched when the code was deemed to be a invalid TOTP code.
