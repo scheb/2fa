@@ -9,7 +9,7 @@ on:
 jobs:
     build:
         # Run only only the default branch and when the CI build was successful
-        if: ${{ github.ref_name == github.event.repository.default_branch && github.event.workflow_run.conclusion == 'success' }}
+        if: ${{ github.event.workflow_run.head_branch == github.event.repository.default_branch && github.event.workflow_run.conclusion == 'success' }}
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
