@@ -9,6 +9,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Http\Utils\RequestDataReader;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\HttpUtils;
 
@@ -26,6 +27,7 @@ class TwoFactorFirewallConfigTest extends TestCase
         'enable_csrf' => true,
         'csrf_parameter' => 'parameter_name',
         'csrf_token_id' => 'token_id',
+        'csrf_header' => 'header_name',
     ];
 
     private MockObject|HttpUtils $httpUtils;
@@ -129,6 +131,13 @@ class TwoFactorFirewallConfigTest extends TestCase
     {
         $returnValue = $this->createConfig()->getCsrfTokenId();
         $this->assertEquals('token_id', $returnValue);
+    }
+
+    #[Test]
+    public function getCsrfHeader_optionSet_returnThatValue(): void
+    {
+        $returnValue = $this->createConfig()->getCsrfHeader();
+        $this->assertEquals('header_name', $returnValue);
     }
 
     #[Test]
@@ -306,9 +315,10 @@ class TwoFactorFirewallConfigTest extends TestCase
     }
 
     #[Test]
-    public function getCsrfTokenFromRequest_hasParameter_returnValue(): void
+    public function getCsrfTokenFromRequest_hasParameter_returnParameterValue(): void
     {
         $request = $this->createMock(Request::class);
+        $request->headers = $this->createMock(HeaderBag::class);
         $config = $this->createConfig(['csrf_parameter' => 'csrf_code']);
 
         $this->requestDataReader
@@ -319,5 +329,33 @@ class TwoFactorFirewallConfigTest extends TestCase
 
         $returnValue = $config->getCsrfTokenFromRequest($request);
         $this->assertEquals('csrfCodeValue', $returnValue);
+    }
+
+    #[Test]
+    public function getCsrfTokenFromRequest_hasHeader_returnHeaderValue(): void
+    {
+        $headers = $this->createMock(HeaderBag::class);
+        $headers
+            ->expects($this->any())
+            ->method('has')
+            ->with('X-CSRF-Token')
+            ->willReturn(true);
+        $headers
+            ->expects($this->any())
+            ->method('get')
+            ->with('X-CSRF-Token')
+            ->willReturn('header_csrf_code');
+
+        $request = $this->createMock(Request::class);
+        $request->headers = $headers;
+
+        $config = $this->createConfig(['csrf_parameter' => 'csrf_code', 'csrf_header' => 'X-CSRF-Token']);
+
+        $this->requestDataReader
+            ->expects($this->never())
+            ->method($this->anything());
+
+        $returnValue = $config->getCsrfTokenFromRequest($request);
+        $this->assertEquals('header_csrf_code', $returnValue);
     }
 }

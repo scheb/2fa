@@ -149,6 +149,8 @@ Firewall Configuration
                                                     # (supports symfony/property-access notation for nested values)
                    csrf_token_id: two_factor        # The default CSRF token id, for generating the token value, it is
                                                     # advised to use a different id per firewall
+                   csrf_header: ~                   # Name of the header field, in which a CSRF token may be passed.
+                                                    # Default null, so headers are ignored per default.
 
                    # The id of the service used to generate the CSRF tokens. Per default the one provided by Symfony
                    # is used. You can configure a different one, if you need to use a custom CSRF token manager.

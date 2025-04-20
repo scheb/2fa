@@ -76,6 +76,7 @@ two_factor:
     enable_csrf: true
     csrf_parameter: _custom_csrf_token
     csrf_token_id: custom_two_factor
+    csrf_header: x-custom-csrf-header
 EOF;
         $parser = new Parser();
 
@@ -205,6 +206,7 @@ EOF;
         $this->assertFalse($processedConfiguration['enable_csrf']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_PARAMETER, $processedConfiguration['csrf_parameter']);
         $this->assertEquals(TwoFactorFactory::DEFAULT_CSRF_TOKEN_ID, $processedConfiguration['csrf_token_id']);
+        $this->assertNull($processedConfiguration['csrf_header']);
     }
 
     #[Test]
@@ -230,6 +232,7 @@ EOF;
         $this->assertTrue($processedConfiguration['enable_csrf']);
         $this->assertEquals('_custom_csrf_token', $processedConfiguration['csrf_parameter']);
         $this->assertEquals('custom_two_factor', $processedConfiguration['csrf_token_id']);
+        $this->assertEquals('x-custom-csrf-header', $processedConfiguration['csrf_header']);
     }
 
     #[Test]

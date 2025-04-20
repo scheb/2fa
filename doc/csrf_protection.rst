@@ -45,3 +45,15 @@ in your configuration:
                    enable_csrf: true
                    csrf_parameter: _csrf_security_token
                    csrf_token_id: a_private_string
+
+If you need to pass the CSRF token in the HTTP header, you can configure the name of the header:
+
+.. code-block:: yaml
+
+   # config/packages/security.yaml
+   security:
+       firewalls:
+           your_firewall_name:
+               two_factor:
+                   enable_csrf: true
+                   csrf_header: X-CSRF-Token

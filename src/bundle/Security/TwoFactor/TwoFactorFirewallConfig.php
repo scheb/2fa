@@ -65,6 +65,11 @@ class TwoFactorFirewallConfig
         return $this->options['csrf_token_id'] ?? TwoFactorFactory::DEFAULT_CSRF_TOKEN_ID;
     }
 
+    public function getCsrfHeader(): string|null
+    {
+        return $this->options['csrf_header'] ?? null;
+    }
+
     public function getAuthFormPath(): string
     {
         return $this->options['auth_form_path'] ?? TwoFactorFactory::DEFAULT_AUTH_FORM_PATH;
@@ -113,6 +118,11 @@ class TwoFactorFirewallConfig
 
     public function getCsrfTokenFromRequest(Request $request): string
     {
+        $csrfHeaderName = $this->getCsrfHeader();
+        if (null !== $csrfHeaderName && $request->headers->has($csrfHeaderName)) {
+            return (string) $request->headers->get($csrfHeaderName);
+        }
+
         return (string) ($this->requestDataReader->getRequestValue($request, $this->getCsrfParameterName()) ?? '');
     }
 }
