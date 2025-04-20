@@ -1,28 +1,30 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-<p>Please authenticate to get access:</p>
+    <h2>Login</h2>
+    <p>Please authenticate to get access!</p>
+    <p class="notice">Username: <code>user1</code><br />Password: <code>test</code></p>
 
-{% if error %}
-<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-{% endif %}
+    {% if error %}
+        <div class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
 
-<form action="{{ path('_security_login') }}" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="_username" value="{{ last_username }}" />
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="_password" />
-
-    {#
-    If you want to control the URL the user
-    is redirected to on success (more details below)
-    <input type="hidden" name="_target_path" value="/account" />
-    #}
-
-    <input type="checkbox" id="remember_me" name="_remember_me" checked/>
-    <label for="remember_me">Keep me logged in</label>
-
-    <button type="submit" name="submit-button">login</button>
-</form>
+    <form action="{{ path('_security_login') }}" method="post">
+        <p>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="_username" value="{{ last_username }}" />
+        </p>
+        <p>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="_password" />
+        </p>
+        <p>
+            <input type="checkbox" id="remember_me" name="_remember_me" checked/>
+            <label for="remember_me">Keep me logged in</label>
+        </p>
+        <p><button type="submit" name="submit-button">Login</button></p>
+        {% if app.request.get("try") %}
+            <input type="hidden" name="_target_path" value="{{ path("members_area") }}">
+        {% endif %}
+    </form>
 {% endblock %}

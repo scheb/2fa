@@ -58,8 +58,9 @@ $config = [
         ],
     ],
     'access_control' => [
-        ['path' => '^/login', 'role' => 'PUBLIC_ACCESS'],
         ['path' => '^/alwaysAccessible', 'role' => 'PUBLIC_ACCESS'],
+        ['path' => '^/style.css', 'role' => 'PUBLIC_ACCESS'],
+        ['path' => '^/login', 'role' => 'PUBLIC_ACCESS'],
         ['path' => '^/2fa', 'role' => 'IS_AUTHENTICATED_2FA_IN_PROGRESS'],
         ['path' => '^/members', 'role' => ['ROLE_USER', 'ROLE_ADMIN']],
     ],

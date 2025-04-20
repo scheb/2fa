@@ -2,24 +2,27 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}2FA Test Application{% endblock %}</title>
+        <link rel="stylesheet" href="{{ path('stylesheet') }}" />
     </head>
     <body>
-        {% block navigation %}
-            {{ render_esi(controller('App\\Controller\\EsiController::navigation')) }}
-        {% endblock %}
-        <div>
-            {% if is_granted("ROLE_USER") %}
-                Hi {{ app.user.username }} | <a href="{{ path("_security_logout") }}">Logout</a>
-            {% elseif is_granted("IS_AUTHENTICATED_2FA_IN_PROGRESS") %}
-                Hi {{ app.user.username }}, please complete 2fa | <a href="{{ path("_security_logout") }}">Cancel</a>
-            {% else %}
-                <a href="{{ path("_security_login") }}">Login</a>
-            {% endif %}
-            <hr />
-        </div>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        <header>
+            {% block navigation %}
+                {{ render_esi(controller('App\\Controller\\EsiController::navigation')) }}
+            {% endblock %}
+            <h1>Symfony Application with 2FA</h1>
+            <p>
+                {% if is_granted("ROLE_USER") %}
+                    Hello <strong>{{ app.user.username }}</strong> | <a href="{{ path("members_area") }}">Secured Area</a> | <a href="{{ path("_security_logout") }}">Logout</a>
+                {% elseif is_granted("IS_AUTHENTICATED_2FA_IN_PROGRESS") %}
+                    Hello <strong>{{ app.user.username }}</strong>, please complete 2fa | <a href="{{ path("_security_logout") }}">Cancel 2FA</a>
+                {% else %}
+                    Hello Anonymous, please <a href="{{ path("_security_login") }}">login</a>.
+                {% endif %}
+            </p>
+        </header>
+        <main>
+            {% block body %}{% endblock %}
+        </main>
     </body>
 </html>

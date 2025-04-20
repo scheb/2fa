@@ -1,5 +1,40 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-{% include "@SchebTwoFactor/Authentication/form.html.twig" %}
+    <h1>Two-Factor Authentication</h1>
+    <p class="notice">Hint: If you don't have the authentication code, you can always use the backup codes <code>111</code> or <code>222</code> to pass two-factor authentication.</p>
+
+    {% if authenticationError %}
+        <p class="error">{{ authenticationError|trans(authenticationErrorData, 'SchebTwoFactorBundle') }}</p>
+    {% endif %}
+
+    <form class="form" action="{{ checkPathUrl ? checkPathUrl: path(checkPathRoute) }}" method="post">
+        <p class="widget">
+            <label for="_auth_code">Enter authentication code for provider <code>{{ twoFactorProvider }}</code>:</label>
+            <input id="_auth_code" type="text" name="{{ authCodeParameterName }}" autocomplete="one-time-code" autofocus />
+            <button type="submit" name="submit-button">Send Code</button> or <a href="{{ logoutPath }}">Cancel 2FA</a>
+        </p>
+
+        {% if twoFactorProvider == "email" %}
+            <p>Hint: The current authentication code is: <code>{{ app.user.emailAuthCode }}</code></p>
+        {% endif %}
+
+        {% if displayTrustedOption %}
+            <p><label for="_trusted"><input id="_trusted" type="checkbox" name="{{ trustedParameterName }}" /> {{ "trusted"|trans({}, 'SchebTwoFactorBundle') }}</label></p>
+        {% endif %}
+
+        {% if availableTwoFactorProviders|length > 1 %}
+            <hr/>
+            <p>Choose authentication method:
+                {% for provider in availableTwoFactorProviders %}
+                    <a href="{{ path("2fa_login", {"preferProvider": provider}) }}">{{ provider }}</a>
+                    {% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+        {% endif %}
+
+        {% if isCsrfProtectionEnabled %}
+            <input type="hidden" name="{{ csrfParameterName }}" value="{{ csrf_token(csrfTokenId) }}">
+        {% endif %}
+    </form>
 {% endblock %}

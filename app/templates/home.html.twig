@@ -1,5 +1,10 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-Home
+    <p>This is a test application to demonstrate two-factor authentication (2FA) in a <a href="https://symfony.com/" target="_blank">Symfony</a> application, using the <a href="https://packagist.org/packages/scheb/2fa-bundle" target="_blank">scheb/2fa-bundle</a> package.</p>
+    <p>User for testing:</p>
+    <p>Username: <code>user1</code><br />Password: <code>test</code></p>
+    <p>Backup codes to pass two-factor authentication, that are <em>always</em> valid: <code>111</code> and <code>222</code></p>
+    <p>While two-factor authentication via email is active, it does not send any emails. The code will be shown on the page instead. Just imagine you'd have received an email with the code ;)</p>
+    <p><a href="{{ path("_security_login") }}?try=1" class="button">Try it out</a></p>
 {% endblock %}

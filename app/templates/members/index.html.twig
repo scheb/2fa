@@ -1,17 +1,26 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <h1>Welcome to Member's Area</h1>
-    <p>This is a secured page, only accessible when 2fa has been completed</p>
+    <h2>Welcome to the Secured Area</h2>
+    <p class="notice">
+        If you can see this, you've successfully logged in and completed two-factor authentication!
+    </p>
+    <p>As a reward, you can now add Google Authenticator or a generic TOTP app to properly test two-factor authentication — no backup codes needed!</p>
+
     {% if displayQrCodeGa %}
-        <hr/>
-        <p>GA secret: {{ app.user.googleAuthenticatorSecret }}</p>
+        <h3>Google Authenticator</h3>
+        <p>Secret: <code>{{ app.user.googleAuthenticatorSecret }}</code></p>
         <p><img src="{{ path("qr_code_ga") }}" /></p>
     {% endif %}
 
     {% if displayQrCodeTotp %}
-        <hr/>
-        <p>TOTP:</p>
+        <h3>TOTP</h3>
+        <ul>
+            <li>Secret: <code>{{ app.user.totpAuthenticationConfiguration.secret }}</code></li>
+            <li>Algorithm: <code>{{ app.user.totpAuthenticationConfiguration.algorithm }}</code></li>
+            <li>Digits: <code>{{ app.user.totpAuthenticationConfiguration.digits }}</code></li>
+            <li>Period: <code>{{ app.user.totpAuthenticationConfiguration.period }}</code></li>
+        </ul>
         <p><img src="{{ path("qr_code_totp") }}" /></p>
     {% endif %}
 {% endblock %}
