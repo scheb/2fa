@@ -8,6 +8,8 @@ The bundle dispatches the following events during the authentication process:
 
 Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents::REQUIRE``
 
+Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent``
+
 Is dispatched when two-factor authentication is required for the user. This happens when you try to access a path that
 requires you to be fully authenticated. It also happens when you successfully complete a two-factor authentication step,
 but there's another two-factor step required (multi-factor authentication).
@@ -19,6 +21,8 @@ Usually, when this event is dispatched, the request is redirected to the two-fac
 
 Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents::FORM``
 
+Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent``
+
 Is dispatched when the two-factor authentication form is shown.
 
 ``scheb_two_factor.authentication.attempt``
@@ -26,12 +30,16 @@ Is dispatched when the two-factor authentication form is shown.
 
 Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents::ATTEMPT``
 
+Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent``
+
 Is dispatched when two-factor authentication is attempted, right before checking the code.
 
 ``scheb_two_factor.authentication.success``
 -------------------------------------------
 
 Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents::SUCCESS``
+
+Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent``
 
 Is dispatched when two-factor authentication was successful for a single provider. That doesn't mean the entire
 two-factor process is completed.
@@ -41,12 +49,16 @@ two-factor process is completed.
 
 Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents::FAILURE``
 
+Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent``
+
 Is dispatched when the given two-factor authentication code was incorrect.
 
 ``scheb_two_factor.authentication.complete``
 --------------------------------------------
 
 Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents::COMPLETE``
+
+Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent``
 
 Is dispatched when the entire two-factor authentication process was completed successfully, that means two-factor
 authentication code was correct for all providers required and the user is now fully authenticated.
