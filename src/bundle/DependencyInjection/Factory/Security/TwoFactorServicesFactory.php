@@ -71,9 +71,11 @@ class TwoFactorServicesFactory
      */
     public function getCsrfTokenManagerId(array $config): string
     {
+        $csrfTokenManagerId = $config['csrf_token_manager'] ?? TwoFactorFactory::DEFAULT_CSRF_TOKEN_MANAGER;
+
         /** @psalm-suppress RiskyTruthyFalsyComparison */
         return $config['enable_csrf'] ?? false
-            ? 'scheb_two_factor.csrf_token_manager'
+            ? $csrfTokenManagerId
             : 'scheb_two_factor.null_csrf_token_manager';
     }
 

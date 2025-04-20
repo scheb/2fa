@@ -34,6 +34,7 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
     public const DEFAULT_ENABLE_CSRF = false;
     public const DEFAULT_CSRF_PARAMETER = '_csrf_token';
     public const DEFAULT_CSRF_TOKEN_ID = 'two_factor';
+    public const DEFAULT_CSRF_TOKEN_MANAGER = 'scheb_two_factor.csrf_token_manager';
 
     public const AUTHENTICATOR_ID_PREFIX = 'security.authenticator.two_factor.';
     public const AUTHENTICATION_TOKEN_CREATED_LISTENER_ID_PREFIX = 'security.authentication.token_created_listener.two_factor.';
@@ -88,6 +89,7 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
                 ->scalarNode('enable_csrf')->defaultValue(self::DEFAULT_ENABLE_CSRF)->end()
                 ->scalarNode('csrf_parameter')->defaultValue(self::DEFAULT_CSRF_PARAMETER)->end()
                 ->scalarNode('csrf_token_id')->defaultValue(self::DEFAULT_CSRF_TOKEN_ID)->end()
+                ->scalarNode('csrf_token_manager')->defaultValue(self::DEFAULT_CSRF_TOKEN_MANAGER)->end()
                 // Fake node for SecurityExtension, which requires a provider to be set when multiple user providers are registered
                 ->scalarNode('provider')->defaultNull()->end()
             ->end();

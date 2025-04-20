@@ -150,6 +150,10 @@ Firewall Configuration
                    csrf_token_id: two_factor        # The default CSRF token id, for generating the token value, it is
                                                     # advised to use a different id per firewall
 
+                   # The id of the service used to generate the CSRF tokens. Per default the one provided by Symfony
+                   # is used. You can configure a different one, if you need to use a custom CSRF token manager.
+                   csrf_token_manager: security.csrf.token_manager
+
                    # If you have multiple user providers registered, Symfony's security extension requires you to configure
                    # a user provider. You're forced to configure this node, although it doesn't have any effect on the
                    # TwoFactorBundle. So set this to any of your user providers, it doesn't matter which one.

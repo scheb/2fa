@@ -139,6 +139,13 @@ class TwoFactorServicesFactoryTest extends TestCase
     }
 
     #[Test]
+    public function getCsrfTokenManagerId_customCsrfManagerConfigured_useCustomCsrfManager(): void
+    {
+        $returnValue = $this->servicesFactory->getCsrfTokenManagerId(['enable_csrf' => true, 'csrf_token_manager' => 'custom_csrf_manager_id']);
+        $this->assertEquals('custom_csrf_manager_id', $returnValue);
+    }
+
+    #[Test]
     public function createTwoFactorFirewallConfig_configGiven_createFirewallConfigDefinition(): void
     {
         $returnValue = $this->servicesFactory->createTwoFactorFirewallConfig(
