@@ -14,7 +14,7 @@ COPY app/composer.*       ./
 COPY app/data             ./data
 COPY app/.env             ./.env
 COPY app/config           ./config
-COPY app/public/index.php ./public/
+COPY app/public           ./public/
 COPY app/src              ./src
 COPY app/templates        ./templates
 COPY src                  ./../src
