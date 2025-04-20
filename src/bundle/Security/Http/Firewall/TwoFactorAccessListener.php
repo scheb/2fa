@@ -37,20 +37,20 @@ class TwoFactorAccessListener extends AbstractListener implements FirewallListen
 
     public function authenticate(RequestEvent $event): void
     {
-        // When the firewall is lazy, the token is not initialized in the "supports" stage, so this check does only work
-        // within the "authenticate" stage.
-        $token = $this->tokenStorage->getToken();
-        if (!($token instanceof TwoFactorTokenInterface)) {
-            // No need to check for firewall name here, the listener is bound to the firewall context
-            return;
-        }
-
         $request = $event->getRequest();
         if ($this->twoFactorFirewallConfig->isCheckPathRequest($request)) {
             return;
         }
 
         if ($this->twoFactorFirewallConfig->isAuthFormRequest($request)) {
+            return;
+        }
+
+        // When the firewall is lazy, the token is not initialized in the "supports" stage, so this check does only work
+        // within the "authenticate" stage.
+        $token = $this->tokenStorage->getToken();
+        if (!($token instanceof TwoFactorTokenInterface)) {
+            // No need to check for firewall name here, the listener is bound to the firewall context
             return;
         }
 
@@ -65,7 +65,7 @@ class TwoFactorAccessListener extends AbstractListener implements FirewallListen
     public static function getPriority(): int
     {
         // When the class is injected via FirewallListenerFactoryInterface
-        // Inject before Symfony's AccessListener (-255) and after the LogoutListener (-127)
+        //        // Inject before Symfony's AccessListener (-255) and after the LogoutListener (-127)
         return -191;
     }
 }
