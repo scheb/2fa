@@ -206,3 +206,23 @@ Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TotpCodeEvents::INVAL
 Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent``
 
 Is dispatched when the code was deemed to be a invalid TOTP code.
+
+TOTP Check Events
+-----------------
+
+The following events are dispatched before the TOTP authentication provider is used
+
+``TwoFactorCodeCheckEvent``
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Event class: ``\Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeCheckEvent``
+
+Is dispatched before the TOTP authentication provider is used to check the code for plausibility
+
+``TwoFactorCodeReusedEvent``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Event class: ``\Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeReusedEvent``
+
+Is dispatched when the code has been used already within the last 30 seconds.
+This requires a caching backend to be available
