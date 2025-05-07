@@ -58,6 +58,8 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('two_factor_token_factory')->defaultValue('scheb_two_factor.default_token_factory')->end()
                 ->scalarNode('two_factor_provider_decider')->defaultValue('scheb_two_factor.default_provider_decider')->end()
                 ->scalarNode('two_factor_condition')->defaultNull()->end()
+                ->scalarNode('code_reuse_cache')->defaultNull()->end()
+                ->scalarNode('code_reuse_default_handler')->defaultValue('scheb_two_factor.security.listener.throw_exception_on_two_factor_code_reuse')->end()
             ->end();
 
         /** @psalm-suppress ArgumentTypeCoercion */
