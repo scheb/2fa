@@ -8,15 +8,16 @@ provider offers more configuration options, but that means your configuration is
 
 Several parameters can be customized:
 
-* The number of digits (default = ``6``)
-* The digest (default = ``sha1``)
-* The period (default = ``30`` seconds)
+* The number of digits (e.g. ``6``)
+* The digest (e.g. ``sha1``)
+* The period (e.g. ``30`` seconds)
 * Custom parameters can be added
 
 .. tip::
 
-    Use the default values to configure TOTP compatible with Google Authenticator (6 digits, sha1 algorithm, 30 seconds
-    period).
+    To configure TOTP compatible with Google Authenticator use digits ``6``, digest ``sha1`` and period ``30``. This is
+    the common configuration for TOTP, but you're free to choose any combination you like.
+
 
 How authentication works
 ------------------------
