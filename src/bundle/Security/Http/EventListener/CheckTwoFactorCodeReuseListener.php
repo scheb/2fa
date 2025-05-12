@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\Http\EventListener;
 
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeCheckEvent;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeReusedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use function sha1;
 
 /**
@@ -27,7 +28,7 @@ class CheckTwoFactorCodeReuseListener implements EventSubscriberInterface
     ) {
     }
 
-    public function checkForCodeReuse(TwoFactorCodeCheckEvent $event): void
+    public function checkForCodeReuse(TwoFactorCodeEvent $event): void
     {
         if (null === $this->cache) {
             return;
@@ -49,8 +50,12 @@ class CheckTwoFactorCodeReuseListener implements EventSubscriberInterface
         $cacheItem->set(true);
         $this->cache->save($cacheItem);
 
+        // phpcs:ignore SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed
         if ($cacheItem->isHit()) {
-            $this->eventDispatcher->dispatch(new TwoFactorCodeReusedEvent($event->getUser(), $event->getCode()));
+            $this->eventDispatcher->dispatch(
+                new TwoFactorCodeReusedEvent($event->getUser(), $event->getCode()),
+                TwoFactorAuthenticationEvents::CODE_REUSED,
+            );
         }
     }
 
@@ -59,6 +64,6 @@ class CheckTwoFactorCodeReuseListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents(): array
     {
-        return [TwoFactorCodeCheckEvent::class => ['checkForCodeReuse', self::LISTENER_PRIORITY]];
+        return [TwoFactorAuthenticationEvents::CHECK => ['checkForCodeReuse', self::LISTENER_PRIORITY]];
     }
 }

@@ -7,14 +7,15 @@ namespace Scheb\TwoFactorBundle\Tests\Security\Http\EventListener;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\InvalidTwoFactorCodeException;
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\TwoFactorProviderNotFoundException;
 use Scheb\TwoFactorBundle\Security\Http\EventListener\CheckTwoFactorCodeListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeCheckEvent;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @property CheckTwoFactorCodeListener $listener
@@ -67,7 +68,7 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
         $this->eventDispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with(new TwoFactorCodeCheckEvent($this->user, self::CODE));
+            ->with(new TwoFactorCodeEvent($this->user, self::CODE), TwoFactorAuthenticationEvents::CHECK);
 
         $this->providerRegistry
             ->expects($this->once())
@@ -89,7 +90,7 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
         $this->eventDispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with(new TwoFactorCodeCheckEvent($this->user, self::CODE));
+            ->with(new TwoFactorCodeEvent($this->user, self::CODE), TwoFactorAuthenticationEvents::CHECK);
 
         $authenticationProvider = $this->stubTwoFactorAuthenticationProvider();
         $authenticationProvider
@@ -111,7 +112,7 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
         $this->eventDispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with(new TwoFactorCodeCheckEvent($this->user, self::CODE));
+            ->with(new TwoFactorCodeEvent($this->user, self::CODE), TwoFactorAuthenticationEvents::CHECK);
 
         $authenticationProvider = $this->stubTwoFactorAuthenticationProvider();
         $authenticationProvider

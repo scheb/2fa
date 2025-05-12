@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\ReusedTwoFactorCodeException;
 use Scheb\TwoFactorBundle\Security\Http\EventListener\CheckTwoFactorCodeListener;
 use Scheb\TwoFactorBundle\Security\Http\EventListener\ThrowExceptionOnTwoFactorCodeReuseListener;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeReusedEvent;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -40,7 +41,7 @@ class ThrowExceptionOnTwoFactorReuseListenerTest extends TestCase
     public function EventIsHandledWithCorrectPriority(): void
     {
         $this->assertSame([
-            TwoFactorCodeReusedEvent::class => ['handle', -256],
+            TwoFactorAuthenticationEvents::CODE_REUSED => ['handle', -256],
         ], ThrowExceptionOnTwoFactorCodeReuseListener::getSubscribedEvents());
     }
 }
