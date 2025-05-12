@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\EventListener;
 
 use Closure;
+use DateInterval;
+use DateTimeInterface;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Cache\CacheItemInterface;
@@ -120,22 +122,51 @@ class CheckTwoFactorCodeReuseListenerTest extends TestCase
     #[Test]
     public function checkForCodeReuse_validCacheProviderNoCacheHit_cacheItemIsSaved(): void
     {
+        $cacheItem = new class() implements CacheItemInterface {
+            private mixed $value;
+
+            public DateTimeInterface|null $expiresAt;
+
+            public DateInterval|int|float|null $expiresAfter;
+            public function getKey(): string
+            {
+                return '';
+            }
+
+            public function get(): mixed
+            {
+                return $this->value;
+            }
+            public function isHit(): bool
+            {
+                return false;
+            }
+
+            public function set(mixed $value): static
+            {
+                $this->value = $value;
+                return $this;
+            }
+
+            public function expiresAt(?DateTimeInterface $expiration): static
+            {
+                $this->expiresAt = $expiration;
+                return $this;
+            }
+
+            public function expiresAfter(\DateInterval|int|null $time): static
+            {
+                $this->expiresAfter = $time;
+                return $this;
+            }
+        };
+
         $cacheProvider = $this->createMock(CacheItemPoolInterface::class);
         $cacheProvider->expects($this->once())
             ->method('save')
-            ->willReturnCallback(function (CacheItem $item) {
-                $this->assertFalse($item->isHit());
-                $this->assertSame(true, $item->get());
-                $sweetsThief = Closure::bind(function (CacheItem $item) {
-                    return $item->expiry;
-                }, null, CacheItem::class);
-                $this->assertGreaterThanOrEqual(time() + 20, $sweetsThief($item));
-                $this->assertLessThanOrEqual(time() + 21, $sweetsThief($item));
+            ->with($cacheItem)
+            ->willReturn(true);
 
-                return true;
-            });
-
-        $cacheItem = new CacheItem();
         $cacheItem->set(true);
         $cacheItem->expiresAfter(60);
         $cacheProvider->expects($this->once())
@@ -144,8 +175,11 @@ class CheckTwoFactorCodeReuseListenerTest extends TestCase
             ->willReturn($cacheItem);
 
         $listener = new CheckTwoFactorCodeReuseListener($this->eventDispatcher, $cacheProvider, 20, $this->logger);
-        $this->expectDoNothing();
 
         $listener->checkForCodeReuse(new TwoFactorCodeCheckEvent($this->user, self::MFA_CODE));
+
+        $this->assertSame(20, $cacheItem->expiresAfter);
+        $this->assertSame(true, $cacheItem->get());
+
     }
 }
