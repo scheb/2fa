@@ -87,7 +87,7 @@ Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticati
 
 Event class: ``\Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeReusedEvent``
 
-Is dispatched when the code has been used already within the last 30 seconds.
+Is dispatched when the code has already been used within the configured time frame.
 This requires a caching backend to be available
 
 
