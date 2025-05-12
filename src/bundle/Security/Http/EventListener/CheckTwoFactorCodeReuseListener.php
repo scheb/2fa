@@ -34,24 +34,20 @@ class CheckTwoFactorCodeReuseListener implements EventSubscriberInterface
             return;
         }
 
-        $cacheItem = null;
-        $cacheKey = 'scheb_two_factor_code_reuse.'
-            .sha1($event->getUser()->getUserIdentifier().'.'.$event->getCode());
-
-        if ($this->cache instanceof CacheItemPoolInterface) {
-            $cacheItem = $this->cache->getItem($cacheKey);
-            $cacheItem->expiresAfter($this->cacheDuration);
-            $cacheItem->set(true);
-            $this->cache->save($cacheItem);
-        }
-
-        if (!$cacheItem instanceof CacheItemInterface) {
+        if (! $this->cache instanceof CacheItemPoolInterface) {
             if ($this->logger instanceof LoggerInterface) {
                 $this->logger->error('Your logger-cache seems to be configured wrongly! Provide a CacheItemPoolInterface as the cache object if you want to disallow reusing 2FA-codes!');
             }
-
             return;
         }
+
+        $cacheKey = 'scheb_two_factor_code_reuse.'
+            .sha1($event->getUser()->getUserIdentifier().'.'.$event->getCode());
+
+        $cacheItem = $this->cache->getItem($cacheKey);
+        $cacheItem->expiresAfter($this->cacheDuration);
+        $cacheItem->set(true);
+        $this->cache->save($cacheItem);
 
         if ($cacheItem->isHit()) {
             $this->eventDispatcher->dispatch(new TwoFactorCodeReusedEvent($event->getUser(), $event->getCode()));
