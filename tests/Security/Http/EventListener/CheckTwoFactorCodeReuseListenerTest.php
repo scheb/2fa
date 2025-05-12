@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\EventListener;
 
-use Closure;
 use DateInterval;
 use DateTimeInterface;
 use PHPUnit\Framework\Attributes\Test;
@@ -21,7 +20,6 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 use stdClass;
 use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\Security\Core\User\UserInterface;
-use function time;
 
 /**
  * @property CheckTwoFactorCodeListener $listener
@@ -122,12 +120,13 @@ class CheckTwoFactorCodeReuseListenerTest extends TestCase
     #[Test]
     public function checkForCodeReuse_validCacheProviderNoCacheHit_cacheItemIsSaved(): void
     {
-        $cacheItem = new class() implements CacheItemInterface {
+        $cacheItem = new class () implements CacheItemInterface {
             private mixed $value;
 
             public DateTimeInterface|null $expiresAt;
 
             public DateInterval|int|float|null $expiresAfter;
+
             public function getKey(): string
             {
                 return '';
@@ -137,6 +136,7 @@ class CheckTwoFactorCodeReuseListenerTest extends TestCase
             {
                 return $this->value;
             }
+
             public function isHit(): bool
             {
                 return false;
@@ -145,18 +145,21 @@ class CheckTwoFactorCodeReuseListenerTest extends TestCase
             public function set(mixed $value): static
             {
                 $this->value = $value;
+
                 return $this;
             }
 
-            public function expiresAt(?DateTimeInterface $expiration): static
+            public function expiresAt(DateTimeInterface|null $expiration): static
             {
                 $this->expiresAt = $expiration;
+
                 return $this;
             }
 
-            public function expiresAfter(\DateInterval|int|null $time): static
+            public function expiresAfter(DateInterval|int|null $time): static
             {
                 $this->expiresAfter = $time;
+
                 return $this;
             }
         };
@@ -180,6 +183,5 @@ class CheckTwoFactorCodeReuseListenerTest extends TestCase
 
         $this->assertSame(20, $cacheItem->expiresAfter);
         $this->assertSame(true, $cacheItem->get());
-
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\Http\EventListener;
 
-use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
@@ -38,6 +37,7 @@ class CheckTwoFactorCodeReuseListener implements EventSubscriberInterface
             if ($this->logger instanceof LoggerInterface) {
                 $this->logger->error('Your logger-cache seems to be configured wrongly! Provide a CacheItemPoolInterface as the cache object if you want to disallow reusing 2FA-codes!');
             }
+
             return;
         }
 
