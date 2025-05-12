@@ -34,7 +34,7 @@ class CheckTwoFactorCodeReuseListener implements EventSubscriberInterface
             return;
         }
 
-        if (! $this->cache instanceof CacheItemPoolInterface) {
+        if (!$this->cache instanceof CacheItemPoolInterface) {
             if ($this->logger instanceof LoggerInterface) {
                 $this->logger->error('Your logger-cache seems to be configured wrongly! Provide a CacheItemPoolInterface as the cache object if you want to disallow reusing 2FA-codes!');
             }

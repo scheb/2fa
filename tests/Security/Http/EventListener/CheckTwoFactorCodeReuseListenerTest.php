@@ -120,7 +120,7 @@ class CheckTwoFactorCodeReuseListenerTest extends TestCase
     #[Test]
     public function checkForCodeReuse_validCacheProviderNoCacheHit_cacheItemIsSaved(): void
     {
-        $cacheItem = new class () implements CacheItemInterface {
+        $cacheItem = new class implements CacheItemInterface {
             private mixed $value;
 
             public DateTimeInterface|null $expiresAt;
