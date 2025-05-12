@@ -53,11 +53,9 @@ class CheckTwoFactorCodeReuseListener implements EventSubscriberInterface
             return;
         }
 
-        if (!$cacheItem->isHit()) {
-            return;
+        if ($cacheItem->isHit()) {
+            $this->eventDispatcher->dispatch(new TwoFactorCodeReusedEvent($event->getUser(), $event->getCode()));
         }
-
-        $this->eventDispatcher->dispatch(new TwoFactorCodeReusedEvent($event->getUser(), $event->getCode()));
     }
 
     /**
