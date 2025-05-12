@@ -7,10 +7,10 @@ namespace Scheb\TwoFactorBundle\Security\Http\EventListener;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Log\LoggerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeCheckEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeReusedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use function assert;
 use function sha1;
 
 /**
@@ -22,7 +22,9 @@ class CheckTwoFactorCodeReuseListener implements EventSubscriberInterface
 
     public function __construct(
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly mixed $cache = null,
+        private readonly mixed $cache,
+        private readonly int $cacheDuration,
+        private readonly LoggerInterface|null $logger,
     ) {
     }
 
@@ -33,18 +35,21 @@ class CheckTwoFactorCodeReuseListener implements EventSubscriberInterface
         }
 
         $cacheItem = null;
-        assert($cacheItem instanceof CacheItemInterface || null === $cacheItem);
         $cacheKey = 'scheb_two_factor_code_reuse.'
             .sha1($event->getUser()->getUserIdentifier().'.'.$event->getCode());
 
         if ($this->cache instanceof CacheItemPoolInterface) {
             $cacheItem = $this->cache->getItem($cacheKey);
-            $cacheItem->expiresAfter(60);
+            $cacheItem->expiresAfter($this->cacheDuration);
             $cacheItem->set(true);
             $this->cache->save($cacheItem);
         }
 
         if (!$cacheItem instanceof CacheItemInterface) {
+            if ($this->logger instanceof LoggerInterface) {
+                $this->logger->error('Your logger-cache seems to be configured wrongly! Provide a CacheItemPoolInterface as the cache object if you want to disallow reusing 2FA-codes!');
+            }
+
             return;
         }
 

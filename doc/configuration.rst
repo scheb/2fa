@@ -111,6 +111,12 @@ Bundle Configuration
        # Remove the key or set the value to an empty string to disable this check
        code_reuse_cache: acme.custom_code_reuse_cache
 
+       # By default the time to cache a 2FA-code is 60 seconds. After that the 2FA code should be
+       # invalidated by the 2FA provider anyhow. Should your 2FA provider allow valid codes for
+       # more than that, you should increase this amount!
+       # The minimum value is 30 seconds.
+       code_reuse_cache_duration: 60
+
        # If you need to handle reused codes differently you can create your own EventListener for the
        # Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeReusedEvent
        # The default handler throws a Scheb\TwoFactorBundle\Security\Authentication\Exception\ReusedTwoFactorCodeException

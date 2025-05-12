@@ -17,17 +17,23 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class ThrowExceptionOnTwoFactorReuseListenerTest extends TestCase
 {
+    private const MFA_CODE = '123456';
+
     #[Test]
-    public function throwExceptionWhenUsed(): void
+    public function handle_codeReuseIsTriggered_exceptionIsThrown(): void
     {
         $listener = new ThrowExceptionOnTwoFactorCodeReuseListener();
 
-        $this->expectException(ReusedTwoFactorCodeException::class);
-
-        $listener->handle(new TwoFactorCodeReusedEvent(
-            $this->createMock(UserInterface::class),
-            '123456',
-        ));
+        try {
+            $listener->handle(new TwoFactorCodeReusedEvent(
+                $this->createMock(UserInterface::class),
+                self::MFA_CODE,
+            ));
+        } catch (ReusedTwoFactorCodeException $exception) {
+            $this->assertSame(0, $exception->getCode());
+            $this->assertSame('code_reused', $exception->getMessageKey());
+            $this->assertSame('', $exception->getMessage());
+        }
     }
 
     #[Test]

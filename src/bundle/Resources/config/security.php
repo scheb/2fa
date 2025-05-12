@@ -76,6 +76,8 @@ return static function (ContainerConfigurator $container): void {
             ->args([
                 service('event_dispatcher'),
                 service('scheb_two_factor.code_reuse_cache')->nullOnInvalid(),
+                '%scheb_two_factor.code_reuse_cache_duration%',
+                service('logger')->nullOnInvalid(),
             ])
 
         ->set('scheb_two_factor.security.listener.throw_exception_on_two_factor_code_reuse', ThrowExceptionOnTwoFactorCodeReuseListener::class)

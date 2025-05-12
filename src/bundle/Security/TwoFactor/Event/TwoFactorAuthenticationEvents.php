@@ -40,4 +40,15 @@ class TwoFactorAuthenticationEvents
      * was successful for all providers and the user is now fully authenticated.
      */
     public const COMPLETE = 'scheb_two_factor.authentication.complete';
+
+    /**
+     * When the two-factor authentication code is checked, right before the two-factor code is handed to the
+     * actual providers.
+     */
+    public const CHECK = 'scheb_two_factor.authentication.check';
+
+    /**
+     * When the two-factor code has been used already.
+     */
+    public const CODE_REUSED = 'scheb_two_factor.authentication.code_reused';
 }
