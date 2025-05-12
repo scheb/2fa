@@ -118,7 +118,7 @@ class CheckTwoFactorCodeReuseListenerTest extends TestCase
     }
 
     #[Test]
-    public function checkForCodeREuse_validCacheProviderNoCachewHit_CacheItemIsSaved(): void
+    public function checkForCodeReuse_validCacheProviderNoCacheHit_cacheItemIsSaved(): void
     {
         $cacheProvider = $this->createMock(CacheItemPoolInterface::class);
         $cacheProvider->expects($this->once())
