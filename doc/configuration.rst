@@ -117,7 +117,7 @@ Bundle Configuration
        code_reuse_cache_duration: 60
 
        # If you need to handle reused codes differently you can create your own EventListener for the
-       # Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeReusedEvent
+       # Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents::CODE_REUSED event
        # The default handler throws a Scheb\TwoFactorBundle\Security\Authentication\Exception\ReusedTwoFactorCodeException
        # If that is not what you want, you can provide a different default handler here.
        code_reuse_default_handler: Scheb\TwoFactorBundle\Security\Http\EventListener\ThrowExceptionOnTwoFactorCodeReuseListener
