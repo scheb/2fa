@@ -248,11 +248,15 @@ class SchebTwoFactorExtension extends Extension
 
         $container->setAlias('scheb_two_factor.code_reuse_cache', $config['code_reuse_cache']);
 
-        if (!(($config['code_reuse_default_handler'] ?? null) !== null)) {
+        if (($config['code_reuse_default_handler'] ?? null) === null) {
             return;
         }
 
-        $container->setAlias('scheb_two_factor.security.listener.default_code_reuse_listener', $config['code_reuse_default_handler']);
+        if ('scheb_two_factor.security.listener.throw_exception_on_two_factor_code_reuse' === $config['code_reuse_default_handler']) {
+            return;
+        }
+
+        $container->removeDefinition('scheb_two_factor.security.listener.throw_exception_on_two_factor_code_reuse');
     }
 
     private function resolveFeatureFlag(ContainerBuilder $container, bool|string $value): bool

@@ -83,8 +83,6 @@ return static function (ContainerConfigurator $container): void {
         ->set('scheb_two_factor.security.listener.throw_exception_on_two_factor_code_reuse', ThrowExceptionOnTwoFactorCodeReuseListener::class)
             ->tag('kernel.event_subscriber')
 
-        ->alias('scheb_two_factor.security.listener.default_code_reuse_listener', 'scheb_two_factor.security.listener.throw_exception_on_two_factor_code_reuse')
-
         ->set('scheb_two_factor.security.listener.suppress_remember_me', SuppressRememberMeListener::class)
             ->tag('kernel.event_subscriber')
 

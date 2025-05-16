@@ -60,7 +60,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('two_factor_condition')->defaultNull()->end()
                 ->scalarNode('code_reuse_cache')->defaultNull()->end()
                 ->integerNode('code_reuse_cache_duration')->defaultValue(60)->end()
-                ->scalarNode('code_reuse_default_handler')->defaultValue('scheb_two_factor.security.listener.throw_exception_on_two_factor_code_reuse')->end()
+                ->scalarNode('code_reuse_default_handler')->defaultNull()->end()
             ->end();
 
         /** @psalm-suppress ArgumentTypeCoercion */
