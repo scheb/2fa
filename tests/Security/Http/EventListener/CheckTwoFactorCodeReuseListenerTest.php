@@ -26,15 +26,12 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class CheckTwoFactorCodeReuseListenerTest extends TestCase
 {
-    private MockObject&EventDispatcherInterface $eventDispatcher;
-
-    private MockObject&LoggerInterface $logger;
-
-    private MockObject|UserInterface $user;
-
     private const MFA_CODE = '123456';
-
     private const USER_IDENTIFIER = 'jdoe@example.com';
+
+    private MockObject|EventDispatcherInterface $eventDispatcher;
+    private MockObject|LoggerInterface $logger;
+    private MockObject|UserInterface $user;
 
     protected function setUp(): void
     {
@@ -71,7 +68,7 @@ class CheckTwoFactorCodeReuseListenerTest extends TestCase
         $this->logger->expects($this->once())
             ->method('error')
             ->with(
-                'Your logger-cache seems to be configured wrongly! Provide a CacheItemPoolInterface '
+                'Your reuse-cache seems to be configured wrongly! Provide a CacheItemPoolInterface '
                 .'as the cache object if you want to disallow reusing 2FA-codes!',
             );
 

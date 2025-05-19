@@ -23,7 +23,6 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
 {
     private MockObject|BackupCodeManagerInterface $providerRegistry;
-
     private MockObject|EventDispatcherInterface $eventDispatcher;
 
     protected function setUp(): void
