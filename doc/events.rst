@@ -66,6 +66,30 @@ Event class: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthentic
 Is dispatched when the entire two-factor authentication process was completed successfully, that means two-factor
 authentication code was correct for all providers required and the user is now fully authenticated.
 
+Code Check Events
+-----------------
+
+The following events are dispatched before the actual authentication provider is used
+
+``scheb_two_factor.authentication.check``
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents::CHECK``
+
+Event class: ``\Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeCheckEvent``
+
+Is dispatched before the TOTP authentication provider is used to check the code for plausibility
+
+``scheb_two_factor.authentication.code_reused``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents::CODE_REUSED``
+
+Event class: ``\Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeReusedEvent``
+
+Is dispatched when the code has already been used within the configured time frame.
+This requires a caching backend to be available
+
 
 Backup Code Events
 ------------------

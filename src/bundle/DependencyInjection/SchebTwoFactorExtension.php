@@ -56,6 +56,7 @@ class SchebTwoFactorExtension extends Extension
         $this->configureIpWhitelistProvider($container, $config);
         $this->configureTokenFactory($container, $config);
         $this->configureProviderDecider($container, $config);
+        $this->configureCodeReuseCache($container, $config);
 
         if (isset($config['trusted_device']['enabled']) && $this->resolveFeatureFlag($container, $config['trusted_device']['enabled'])) {
             $this->configureTrustedDeviceManager($container, $config);
@@ -232,6 +233,30 @@ class SchebTwoFactorExtension extends Extension
         }
 
         $container->setAlias('scheb_two_factor.security.totp.form_renderer', $config['totp']['form_renderer']);
+    }
+
+    /**
+     * @param array<string,mixed> $config
+     */
+    private function configureCodeReuseCache(ContainerBuilder $container, array $config): void
+    {
+        if (($config['code_reuse_cache'] ?? null) === null) {
+            $config['code_reuse_cache'] = '';
+        }
+
+        $container->setParameter('scheb_two_factor.code_reuse_cache_duration', $config['code_reuse_cache_duration']);
+
+        $container->setAlias('scheb_two_factor.code_reuse_cache', $config['code_reuse_cache']);
+
+        if (($config['code_reuse_default_handler'] ?? null) === null) {
+            return;
+        }
+
+        if ('scheb_two_factor.security.listener.throw_exception_on_two_factor_code_reuse' === $config['code_reuse_default_handler']) {
+            return;
+        }
+
+        $container->removeDefinition('scheb_two_factor.security.listener.throw_exception_on_two_factor_code_reuse');
     }
 
     private function resolveFeatureFlag(ContainerBuilder $container, bool|string $value): bool

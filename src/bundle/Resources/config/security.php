@@ -10,7 +10,9 @@ use Scheb\TwoFactorBundle\Security\Http\Authentication\DefaultAuthenticationRequ
 use Scheb\TwoFactorBundle\Security\Http\Authentication\DefaultAuthenticationSuccessHandler;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\TwoFactorAuthenticator;
 use Scheb\TwoFactorBundle\Security\Http\EventListener\CheckTwoFactorCodeListener;
+use Scheb\TwoFactorBundle\Security\Http\EventListener\CheckTwoFactorCodeReuseListener;
 use Scheb\TwoFactorBundle\Security\Http\EventListener\SuppressRememberMeListener;
+use Scheb\TwoFactorBundle\Security\Http\EventListener\ThrowExceptionOnTwoFactorCodeReuseListener;
 use Scheb\TwoFactorBundle\Security\Http\Firewall\ExceptionListener;
 use Scheb\TwoFactorBundle\Security\Http\Firewall\TwoFactorAccessListener;
 use Scheb\TwoFactorBundle\Security\Http\Utils\RequestDataReader;
@@ -67,7 +69,19 @@ return static function (ContainerConfigurator $container): void {
             ->args([
                 service('scheb_two_factor.provider_preparation_recorder'),
                 service('scheb_two_factor.provider_registry'),
+                service('event_dispatcher'),
             ])
+        ->set('scheb_two_factor.security.listener.check_two_factor_code_reuse', CheckTwoFactorCodeReuseListener::class)
+            ->tag('kernel.event_subscriber')
+            ->args([
+                service('event_dispatcher'),
+                service('scheb_two_factor.code_reuse_cache')->nullOnInvalid(),
+                '%scheb_two_factor.code_reuse_cache_duration%',
+                service('logger')->nullOnInvalid(),
+            ])
+
+        ->set('scheb_two_factor.security.listener.throw_exception_on_two_factor_code_reuse', ThrowExceptionOnTwoFactorCodeReuseListener::class)
+            ->tag('kernel.event_subscriber')
 
         ->set('scheb_two_factor.security.listener.suppress_remember_me', SuppressRememberMeListener::class)
             ->tag('kernel.event_subscriber')

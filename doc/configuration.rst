@@ -105,6 +105,24 @@ Bundle Configuration
        # Must implement  Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderDeciderInterface
        two_factor_provider_decider: acme.custom_two_factor_provider_decider
 
+       # If you want to disable multiple uses of the same two-factor code (as recommended by
+       # NIST) you can provide a Cache-implementation that will be used to cache the used codes
+       # Must implement Psr\Cache\CacheItemPoolInterface or Symfony\Contracts\Cache\CacheInterface
+       # Remove the key or set the value to an empty string to disable this check
+       code_reuse_cache: acme.custom_code_reuse_cache
+
+       # By default the time to cache a 2FA-code is 60 seconds. After that the 2FA code should be
+       # invalidated by the 2FA provider anyhow. Should your 2FA provider allow valid codes for
+       # more than that, you should increase this amount!
+       code_reuse_cache_duration: 60
+
+       # If you need to handle reused codes differently you can create your own EventListener for the
+       # Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents::CODE_REUSED event
+       # The default handler throws a Scheb\TwoFactorBundle\Security\Authentication\Exception\ReusedTwoFactorCodeException
+       # If that is not what you want, you can provide a different default handler here.
+       code_reuse_default_handler: scheb_two_factor.security.listener.throw_exception_on_two_factor_code_reuse
+
+
 Firewall Configuration
 ----------------------
 

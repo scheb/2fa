@@ -11,8 +11,11 @@ use Scheb\TwoFactorBundle\Security\Authentication\Exception\InvalidTwoFactorCode
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\TwoFactorProviderNotFoundException;
 use Scheb\TwoFactorBundle\Security\Http\EventListener\CheckTwoFactorCodeListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @property CheckTwoFactorCodeListener $listener
@@ -21,17 +24,27 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
 {
     private MockObject|BackupCodeManagerInterface $providerRegistry;
 
+    private MockObject|EventDispatcherInterface $eventDispatcher;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
-        $this->listener = new CheckTwoFactorCodeListener($this->preparationRecorder, $this->providerRegistry);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->listener = new CheckTwoFactorCodeListener(
+            $this->preparationRecorder,
+            $this->providerRegistry,
+            $this->eventDispatcher,
+        );
     }
 
     protected function expectDoNothing(): void
     {
         $this->providerRegistry
+            ->expects($this->never())
+            ->method($this->anything());
+        $this->eventDispatcher
             ->expects($this->never())
             ->method($this->anything());
     }
@@ -52,6 +65,11 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
     {
         $this->stubAllPreconditionsFulfilled();
 
+        $this->eventDispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with(new TwoFactorCodeEvent($this->user, self::CODE), TwoFactorAuthenticationEvents::CHECK);
+
         $this->providerRegistry
             ->expects($this->once())
             ->method('getProvider')
@@ -69,6 +87,11 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
     {
         $this->stubAllPreconditionsFulfilled();
 
+        $this->eventDispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with(new TwoFactorCodeEvent($this->user, self::CODE), TwoFactorAuthenticationEvents::CHECK);
+
         $authenticationProvider = $this->stubTwoFactorAuthenticationProvider();
         $authenticationProvider
             ->expects($this->once())
@@ -85,6 +108,11 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
     public function checkPassport_invalidCode_unresolvedCredentials(): void
     {
         $this->stubAllPreconditionsFulfilled();
+
+        $this->eventDispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with(new TwoFactorCodeEvent($this->user, self::CODE), TwoFactorAuthenticationEvents::CHECK);
 
         $authenticationProvider = $this->stubTwoFactorAuthenticationProvider();
         $authenticationProvider
