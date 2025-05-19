@@ -106,8 +106,9 @@ Bundle Configuration
        two_factor_provider_decider: acme.custom_two_factor_provider_decider
 
        # If you want to disable multiple uses of the same two-factor code (as recommended by
-       # NIST) you can provide a Cache-implementation that will be used to cache the used codes
+       # NIST) you can provide a cache implementation that will be used to cache the used codes
        # Must implement Psr\Cache\CacheItemPoolInterface or Symfony\Contracts\Cache\CacheInterface
+       # You can use "cache.app", which is a preconfigured cache pool coming with Symfony framework.
        # Remove the key or set the value to an empty string to disable this check
        code_reuse_cache: acme.custom_code_reuse_cache
 
