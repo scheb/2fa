@@ -120,7 +120,7 @@ Bundle Configuration
        # Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents::CODE_REUSED event
        # The default handler throws a Scheb\TwoFactorBundle\Security\Authentication\Exception\ReusedTwoFactorCodeException
        # If that is not what you want, you can provide a different default handler here.
-       code_reuse_default_handler: Scheb\TwoFactorBundle\Security\Http\EventListener\ThrowExceptionOnTwoFactorCodeReuseListener
+       code_reuse_default_handler: scheb_two_factor.security.listener.throw_exception_on_two_factor_code_reuse
 
 
 Firewall Configuration
