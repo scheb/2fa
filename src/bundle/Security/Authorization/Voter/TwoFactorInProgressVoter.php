@@ -21,7 +21,7 @@ class TwoFactorInProgressVoter implements CacheableVoterInterface
     /**
      * {@inheritDoc}
      */
-    public function vote(TokenInterface $token, mixed $subject, array $attributes, ?Vote $vote = null): int
+    public function vote(TokenInterface $token, mixed $subject, array $attributes, Vote|null $vote = null): int
     {
         if (!($token instanceof TwoFactorTokenInterface)) {
             return VoterInterface::ACCESS_ABSTAIN;
