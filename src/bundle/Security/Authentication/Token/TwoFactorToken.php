@@ -88,6 +88,7 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return $this->credentials;
     }
 
+    #[\Deprecated]
     public function eraseCredentials(): void
     {
         $this->credentials = null;
