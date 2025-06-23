@@ -8,6 +8,7 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Core\Authorization\Voter\CacheableVoterInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
@@ -20,7 +21,7 @@ class TwoFactorInProgressVoter implements CacheableVoterInterface
     /**
      * {@inheritDoc}
      */
-    public function vote(TokenInterface $token, mixed $subject, array $attributes): int
+    public function vote(TokenInterface $token, mixed $subject, array $attributes, Vote|null $vote = null): int
     {
         if (!($token instanceof TwoFactorTokenInterface)) {
             return VoterInterface::ACCESS_ABSTAIN;

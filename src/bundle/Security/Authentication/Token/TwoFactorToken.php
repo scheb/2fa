@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\Authentication\Token;
 
+use Deprecated;
 use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
@@ -88,6 +89,7 @@ class TwoFactorToken implements TwoFactorTokenInterface
         return $this->credentials;
     }
 
+    #[Deprecated]
     public function eraseCredentials(): void
     {
         $this->credentials = null;
