@@ -32,7 +32,7 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
     public const RESPONSE_LISTENER_PRIORITY = 1;
 
     private TwoFactorTokenInterface|null $twoFactorToken = null;
-    private LoggerInterface $logger;
+    private readonly LoggerInterface $logger;
 
     public function __construct(
         private readonly TwoFactorProviderRegistry $providerRegistry,
