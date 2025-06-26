@@ -47,7 +47,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('ip_whitelist')
                     ->beforeNormalization()
                         ->ifArray()
-                        ->then(static fn(array $value): array => iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator($value)), false))
+                        ->then(static fn (array $value): array => iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator($value)), false))
                     ->end()
                     ->defaultValue([])
                     ->prototype('scalar')->end()

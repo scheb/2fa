@@ -72,7 +72,7 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::ATTEMPT, $request, $currentToken);
 
         $credentials = new TwoFactorCodeCredentials($currentToken, $this->twoFactorFirewallConfig->getAuthCodeFromRequest($request));
-        $userLoader = (static fn(): UserInterface => $currentToken->getUser());
+        $userLoader = (static fn (): UserInterface => $currentToken->getUser());
         $userBadge = new UserBadge($currentToken->getUserIdentifier(), $userLoader);
         $passport = new Passport($userBadge, $credentials, []);
         if ($currentToken->hasAttribute(TwoFactorTokenInterface::ATTRIBUTE_NAME_USE_REMEMBER_ME)) {
