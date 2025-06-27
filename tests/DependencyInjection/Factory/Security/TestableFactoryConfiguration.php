@@ -13,7 +13,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class TestableFactoryConfiguration implements ConfigurationInterface
 {
-    public function __construct(private TwoFactorFactory $factory)
+    public function __construct(private readonly TwoFactorFactory $factory)
     {
     }
 

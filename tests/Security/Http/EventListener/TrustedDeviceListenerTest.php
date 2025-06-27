@@ -60,9 +60,7 @@ class TrustedDeviceListenerTest extends TestCase
         $passport
             ->expects($this->any())
             ->method('hasBadge')
-            ->willReturnCallback(function (string $badgeClass) {
-                return in_array($badgeClass, $this->availableBadges);
-            });
+            ->willReturnCallback(fn (string $badgeClass) => in_array($badgeClass, $this->availableBadges));
 
         return $passport;
     }

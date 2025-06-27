@@ -11,6 +11,8 @@ use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
 use Symfony\Component\Yaml\Parser;
 use function array_map;
 use function sprintf;
@@ -60,8 +62,8 @@ class SchebTwoFactorExtensionTest extends TestCase
         $this->assertHasNotParameter('scheb_two_factor.trusted_device.cookie_domain');
         $this->assertHasNotParameter('scheb_two_factor.trusted_device.cookie_path');
         $this->assertHasParameter([
-            'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken',
-            'Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken',
+            UsernamePasswordToken::class,
+            PostAuthenticationToken::class,
         ], 'scheb_two_factor.security_tokens');
         $this->assertHasParameter([], 'scheb_two_factor.ip_whitelist');
     }
@@ -707,8 +709,6 @@ EOF;
         $conditionsArgument = $this->container->getDefinition('scheb_two_factor.condition_registry')->getArgument(0);
         $this->assertInstanceOf(IteratorArgument::class, $conditionsArgument);
 
-        return array_map(static function (Reference $serviceReference) {
-            return (string) $serviceReference;
-        }, $conditionsArgument->getValues());
+        return array_map(static fn (Reference $serviceReference) => (string) $serviceReference, $conditionsArgument->getValues());
     }
 }

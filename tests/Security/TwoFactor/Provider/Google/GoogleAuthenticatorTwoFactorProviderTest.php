@@ -51,7 +51,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
         $authContext
             ->expects($this->any())
             ->method('getUser')
-            ->willReturn($user ? $user : $this->createUser());
+            ->willReturn($user ?: $this->createUser());
 
         return $authContext;
     }

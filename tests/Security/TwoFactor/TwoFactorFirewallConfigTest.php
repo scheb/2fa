@@ -57,9 +57,7 @@ class TwoFactorFirewallConfigTest extends TestCase
         $request
             ->expects($this->any())
             ->method('isMethod')
-            ->willReturnCallback(static function (string $arg) use ($method) {
-                return $arg === $method;
-            });
+            ->willReturnCallback(static fn (string $arg) => $arg === $method);
     }
 
     private function stubCheckRequestPath(MockObject|Request $request, string $pathToCheck, bool $result): void
