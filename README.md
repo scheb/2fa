@@ -27,6 +27,7 @@ Core features are provided by `scheb/2fa-bundle`:
 - Trusted IPs
 - Multi-factor authentication (more than 2 steps)
 - CSRF protection
+- Brute-force protection
 - Whitelisted routes (accessible during two-factor authentication)
 - Fully customizable conditions when to perform two-factor authentication
 
