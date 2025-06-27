@@ -56,7 +56,7 @@ class TrustedCookieResponseListener implements EventSubscriberInterface
             $this->getValidUntil(),
             $this->cookiePath,
             $domain,
-            null === $this->cookieSecure ? $event->getRequest()->isSecure() : $this->cookieSecure,
+            $this->cookieSecure ?? $event->getRequest()->isSecure(),
             true,
             false,
             $this->cookieSameSite,

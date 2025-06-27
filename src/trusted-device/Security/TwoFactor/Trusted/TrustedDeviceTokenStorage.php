@@ -39,9 +39,7 @@ class TrustedDeviceTokenStorage implements ResetInterface
 
     public function getCookieValue(): string|null
     {
-        return implode(self::TOKEN_DELIMITER, array_map(static function (TrustedDeviceToken $token): string {
-            return $token->serialize();
-        }, $this->getTrustedTokenList()));
+        return implode(self::TOKEN_DELIMITER, array_map(static fn (TrustedDeviceToken $token): string => $token->serialize(), $this->getTrustedTokenList()));
     }
 
     public function hasTrustedToken(string $username, string $firewall, int $version): bool

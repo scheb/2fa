@@ -25,7 +25,7 @@ class JwtTokenEncoder
     public const CLAIM_FIREWALL = 'fwl';
     public const CLAIM_VERSION = 'vsn';
 
-    private Clock $clock;
+    private readonly Clock $clock;
 
     public function __construct(private readonly Configuration $configuration, Clock|null $clock = null)
     {

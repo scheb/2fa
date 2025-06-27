@@ -39,7 +39,7 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
 {
     public const FLAG_2FA_COMPLETE = '2fa_complete';
 
-    private LoggerInterface $logger;
+    private readonly LoggerInterface $logger;
 
     public function __construct(
         private readonly TwoFactorFirewallConfig $twoFactorFirewallConfig,
@@ -72,9 +72,7 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::ATTEMPT, $request, $currentToken);
 
         $credentials = new TwoFactorCodeCredentials($currentToken, $this->twoFactorFirewallConfig->getAuthCodeFromRequest($request));
-        $userLoader = static function () use ($currentToken): UserInterface {
-            return $currentToken->getUser();
-        };
+        $userLoader = (static fn (): UserInterface => $currentToken->getUser());
         $userBadge = new UserBadge($currentToken->getUserIdentifier(), $userLoader);
         $passport = new Passport($userBadge, $credentials, []);
         if ($currentToken->hasAttribute(TwoFactorTokenInterface::ATTRIBUTE_NAME_USE_REMEMBER_ME)) {

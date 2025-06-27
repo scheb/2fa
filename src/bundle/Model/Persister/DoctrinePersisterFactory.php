@@ -15,7 +15,7 @@ use Scheb\TwoFactorBundle\Model\PersisterInterface;
  */
 class DoctrinePersisterFactory
 {
-    private ManagerRegistry $managerRegistry;
+    private readonly ManagerRegistry $managerRegistry;
 
     public function __construct(
         ManagerRegistry|null $managerRegistry,
