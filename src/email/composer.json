@@ -15,6 +15,9 @@
         "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
         "scheb/2fa-bundle": "self.version"
     },
+    "suggest": {
+        "symfony/mailer": "Needed if you want to use the default mailer implementation"
+    },
     "autoload": {
         "psr-4": {
             "Scheb\\TwoFactorBundle\\": ""
