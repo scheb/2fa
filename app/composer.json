@@ -11,22 +11,22 @@
         "lcobucci/clock": "^3.0",
         "lcobucci/jwt": "^5.0",
         "spomky-labs/otphp": "^11.0",
-        "symfony/dotenv": "^6.4 || ^7.0",
-        "symfony/mailer": "^6.4 || ^7.0",
+        "symfony/dotenv": "^6.4 || ^7.0 || ^8.0",
+        "symfony/mailer": "^6.4 || ^7.0 || ^8.0",
         "symfony/monolog-bundle": "^3.1",
-        "symfony/rate-limiter": "^6.4 || ^7.0",
-        "symfony/runtime": "^6.4 || ^7.0",
-        "symfony/security-bundle": "^6.4 || ^7.0",
-        "symfony/translation": "^6.4 || ^7.0",
-        "symfony/twig-bundle": "^6.4 || ^7.0",
-        "symfony/web-profiler-bundle": "^6.4 || ^7.0",
-        "symfony/yaml": "^6.4 || ^7.0"
+        "symfony/rate-limiter": "^6.4 || ^7.0 || ^8.0",
+        "symfony/runtime": "^6.4 || ^7.0 || ^8.0",
+        "symfony/security-bundle": "^6.4 || ^7.0 || ^8.0",
+        "symfony/translation": "^6.4 || ^7.0 || ^8.0",
+        "symfony/twig-bundle": "^6.4 || ^7.0 || ^8.0",
+        "symfony/web-profiler-bundle": "^6.4 || ^7.0 || ^8.0",
+        "symfony/yaml": "^6.4 || ^7.0 || ^8.0"
     },
     "require-dev": {
         "masterminds/html5": "^2.8",
         "phpunit/phpunit": "^10.1",
-        "symfony/browser-kit": "^6.4 || ^7.0",
-        "symfony/css-selector": "^6.4 || ^7.0"
+        "symfony/browser-kit": "^6.4 || ^7.0 || ^8.0",
+        "symfony/css-selector": "^6.4 || ^7.0 || ^8.0"
     },
     "config": {
         "preferred-install": {

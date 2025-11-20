@@ -46,7 +46,7 @@ class TwoFactorAccessDecider
         // Originally compatibility for Symfony < 6.0, true flag to support multiple attributes
         // Still needed for compatibility with Symfony 7
         /** @psalm-suppress TooManyArguments */
-        if (null !== $attributes && $this->accessDecisionManager->decide($token, $attributes, $request, true)) {
+        if (null !== $attributes && $this->accessDecisionManager->decide($token, $attributes, $request, null)) {
             return true;
         }
 

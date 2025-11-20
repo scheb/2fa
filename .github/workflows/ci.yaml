@@ -72,6 +72,10 @@ jobs:
                     -   php-version: '8.5'
                         symfony-version: '7.*'
 
+                    # Test against Symfony 8 on highest PHP version
+                    -   php-version: '8.5'
+                        symfony-version: '8.*'
+
         steps:
             -   name: 'Checkout code'
                 uses: actions/checkout@v5
@@ -113,6 +117,10 @@ jobs:
                     # Test against Symfony 7 on highest PHP version
                     -   php-version: '8.5'
                         symfony-version: '7.*'
+
+                    # Test against Symfony 8 on highest PHP version
+                    -   php-version: '8.5'
+                        symfony-version: '8.*'
         steps:
             -   name: 'Checkout code'
                 uses: actions/checkout@v5
