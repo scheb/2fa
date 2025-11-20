@@ -68,7 +68,7 @@ runs:
 
         -   name: "Remove Psalm from dependencies"
             shell: bash
-            run: composer remove --dev vimeo/psalm
+            run: composer remove --dev vimeo/psalm --no-install
 
         -   name: "Validate composer.json"
             shell: bash
