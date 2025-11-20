@@ -73,6 +73,6 @@
             "composer/package-versions-deprecated": false
         }
     },
-    "minimum-stability": "rc",
+    "minimum-stability": "RC",
     "prefer-stable": false
 }
