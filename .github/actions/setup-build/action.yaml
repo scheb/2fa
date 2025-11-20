@@ -75,12 +75,12 @@ runs:
             run: composer validate --no-check-publish --no-check-lock --working-dir=${{ inputs.composer-working-dir }}
 
         -   name: 'Install Composer dependencies'
-            uses: ramsey/composer-install@v2
+            uses: ramsey/composer-install@v3
             env:
                 SYMFONY_REQUIRE: ${{ inputs.symfony-version }}
             with:
                 composer-options: '--prefer-dist --working-dir=${{ inputs.composer-working-dir }}'
-                dependency-versions: '${{ inputs.composer-dependency-versions }}'
+                dependency-versions: "${{ inputs.composer-dependency-versions || 'highest' }}"  # "highest" as default forces a potential lock file to be ignored
                 custom-cache-suffix: '${{ inputs.symfony-version }}'  # Consider forced Symfony version part of the cache key
 
         -   name: 'Display dependencies versions'
