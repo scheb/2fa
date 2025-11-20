@@ -81,6 +81,7 @@ runs:
             with:
                 composer-options: '--prefer-dist --working-dir=${{ inputs.composer-working-dir }}'
                 dependency-versions: '${{ inputs.composer-dependency-versions }}'
+                custom-cache-suffix: '${{ inputs.symfony-version }}'  # Consider forced Symfony version part of the cache key
 
         -   name: 'Display dependencies versions'
             shell: bash
