@@ -56,27 +56,19 @@ jobs:
                         dependency-versions: 'lowest'
                         symfony-version: '6.4.*'
 
-                    # Test against Symfony 6.4
-                    -   php-version: '8.3'
+                    # Test against Symfony 6.4 on minimum PHP version
+                    -   php-version: '8.2'
                         symfony-version: '6.4.*'
 
-                    # Test against Symfony 6.4 on PHP8.4
-                    -   php-version: '8.4'
-                        symfony-version: '6.4.*'
-
-                    # Test against Symfony 6.4 on PHP8.5
+                    # Test against Symfony 6.4 on highest PHP version
                     -   php-version: '8.5'
                         symfony-version: '6.4.*'
 
-                    # Test against Symfony 7
-                    -   php-version: '8.3'
+                    # Test against Symfony 7 on minimum PHP version
+                    -   php-version: '8.2'
                         symfony-version: '7.*'
 
-                    # Test against Symfony 7 on PHP8.4
-                    -   php-version: '8.4'
-                        symfony-version: '7.*'
-
-                    # Test against Symfony 7 on PHP8.5
+                    # Test against Symfony 7 on highest PHP version
                     -   php-version: '8.5'
                         symfony-version: '7.*'
 
@@ -106,27 +98,19 @@ jobs:
             fail-fast: false
             matrix:
                 include:
-                    # Minimum PHP version
-                    -   php-version: '8.3'
+                    # Test against Symfony 6.4 on minimum PHP version
+                    -   php-version: '8.2'
                         symfony-version: '6.4.*'
 
-                    # Test against Symfony 7.*
-                    -   php-version: '8.3'
-                        symfony-version: '7.*'
-
-                    # Minimum PHP version
-                    -   php-version: '8.4'
-                        symfony-version: '6.4.*'
-
-                    # Test against Symfony 7.*
-                    -   php-version: '8.4'
-                        symfony-version: '7.*'
-
-                    # Minimum PHP version
+                    # Test against Symfony 6.4 on highest PHP version
                     -   php-version: '8.5'
                         symfony-version: '6.4.*'
 
-                    # Test against Symfony 7.*
+                    # Test against Symfony 7 on minimum PHP version
+                    -   php-version: '8.2'
+                        symfony-version: '7.*'
+
+                    # Test against Symfony 7 on highest PHP version
                     -   php-version: '8.5'
                         symfony-version: '7.*'
         steps:
