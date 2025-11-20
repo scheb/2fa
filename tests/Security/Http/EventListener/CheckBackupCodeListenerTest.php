@@ -59,9 +59,7 @@ class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTestSetup
         $this->listener->checkPassport($this->checkPassportEvent);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkPassport_validBackupCode_dispatchCheckAndInvalidateEvent(): void
     {
         $this->stubAllPreconditionsFulfilled();
@@ -100,9 +98,7 @@ class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTestSetup
         $this->listener->checkPassport($this->checkPassportEvent);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkPassport_invalidBackupCode_dispatchCheckEvent(): void
     {
         $this->stubAllPreconditionsFulfilled();
