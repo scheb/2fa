@@ -43,10 +43,8 @@ class TwoFactorAccessDecider
         }
 
         // Let routes pass, e.g. if a route needs to be callable during two-factor authentication
-        // Originally compatibility for Symfony < 6.0, true flag to support multiple attributes
-        // Still needed for compatibility with Symfony 7
         /** @psalm-suppress TooManyArguments */
-        if (null !== $attributes && $this->accessDecisionManager->decide($token, $attributes, $request, true)) {
+        if (null !== $attributes && $this->accessDecisionManager->decide($token, $attributes, $request)) {
             return true;
         }
 
