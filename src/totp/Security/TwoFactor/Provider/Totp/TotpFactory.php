@@ -7,7 +7,6 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp;
 use OTPHP\TOTP;
 use OTPHP\TOTPInterface;
 use Psr\Clock\ClockInterface;
-use ReflectionClass;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
 use function strlen;
@@ -40,25 +39,14 @@ class TotpFactory
             throw new TwoFactorProviderLogicException('Cannot initialize TOTP, no secret code provided.');
         }
 
-        // Compatibility for spomky-labs/otphp version 12
-        if ((new ReflectionClass(TOTP::class))->hasProperty('clock')) {
-            /** @psalm-suppress ArgumentTypeCoercion */
-            $totp = TOTP::create(
-                $secret,
-                $totpConfiguration->getPeriod(),
-                $totpConfiguration->getAlgorithm(),
-                $totpConfiguration->getDigits(),
-                clock: $this->clock,
-            );
-        } else {
-            /** @psalm-suppress ArgumentTypeCoercion */
-            $totp = TOTP::create(
-                $secret,
-                $totpConfiguration->getPeriod(),
-                $totpConfiguration->getAlgorithm(),
-                $totpConfiguration->getDigits(),
-            );
-        }
+        /** @psalm-suppress ArgumentTypeCoercion */
+        $totp = TOTP::create(
+            $secret,
+            $totpConfiguration->getPeriod(),
+            $totpConfiguration->getAlgorithm(),
+            $totpConfiguration->getDigits(),
+            clock: $this->clock,
+        );
 
         $userAndHost = $user->getTotpAuthenticationUsername().(null !== $this->server && $this->server ? '@'.$this->server : '');
         $totp->setLabel($userAndHost);

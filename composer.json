@@ -16,7 +16,7 @@
         "ext-json": "*",
         "lcobucci/clock": "^3.0",
         "lcobucci/jwt": "^5.0",
-        "spomky-labs/otphp": "^11.0",
+        "spomky-labs/otphp": "^11.3",
         "symfony/config": "^7.4 || ^8.0",
         "symfony/dependency-injection": "^7.4 || ^8.0",
         "symfony/event-dispatcher": "^7.4 || ^8.0",
