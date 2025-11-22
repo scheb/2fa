@@ -23,7 +23,7 @@
             <label for="remember_me">Keep me logged in</label>
         </p>
         <p><button type="submit" name="submit-button">Login</button></p>
-        {% if app.request.get("try") %}
+        {% if app.request.query.has("try") %}
             <input type="hidden" name="_target_path" value="{{ path("members_area") }}">
         {% endif %}
     </form>
