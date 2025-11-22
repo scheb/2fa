@@ -48,11 +48,7 @@ class TwoFactorAccessDecider
             return true;
         }
 
-        // Compatibility for Symfony < 7.0
         // This block of code ensures requests to the logout route can pass.
-        // The bundle's TwoFactorAccessListener prioritized after the LogoutListener. Though the Firewall class is still
-        // sorting the LogoutListener in programmatically. When a lazy firewall is used, the LogoutListener is executed
-        // last, because all other listeners are encapsulated into LazyFirewallContext, which is invoked first.
         $logoutPath = $this->removeQueryParameters(
             $this->makeRelativeToBaseUrl($this->logoutUrlGenerator->getLogoutPath(), $request),
         );
