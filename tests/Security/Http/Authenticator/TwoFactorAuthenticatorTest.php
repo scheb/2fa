@@ -31,7 +31,6 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use function assert;
-use function method_exists;
 
 class TwoFactorAuthenticatorTest extends TestCase
 {
@@ -125,19 +124,15 @@ class TwoFactorAuthenticatorTest extends TestCase
     private function createTwoFactorToken(TokenInterface|null $authenticatedToken = null, bool $allProvidersAuthenticated = false): MockObject|TwoFactorTokenInterface
     {
         $user = $this->createMock(UserInterface::class);
-        // Compatibility for Symfony < 6.0
-        if (method_exists(UserInterface::class, 'getUserIdentifier')) {
-            $user
-                ->expects($this->any())
-                ->method('getUserIdentifier')
-                ->willReturn(self::USERNAME);
-        }
-
         $token = $this->createMock(TwoFactorTokenInterface::class);
         $token
             ->expects($this->any())
             ->method('getUser')
             ->willReturn($user);
+        $token
+            ->expects($this->any())
+            ->method('getUserIdentifier')
+            ->willReturn(self::USERNAME);
         $token
             ->expects($this->any())
             ->method('getAuthenticatedToken')
