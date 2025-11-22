@@ -52,7 +52,9 @@ runs:
         -   name: "Composer allow dev dependencies"
             if: ${{ inputs.composer-allow-dev }}
             shell: bash
-            run: composer config minimum-stability dev && composer config prefer-stable true --working-dir=${{ inputs.composer-working-dir }}
+            run: |
+                composer config minimum-stability dev --working-dir=${{ inputs.composer-working-dir }}
+                composer config prefer-stable true --working-dir=${{ inputs.composer-working-dir }}
 
         -   name: "Install Flex to require specific Symfony version"
             if: ${{ inputs.symfony-version }}
