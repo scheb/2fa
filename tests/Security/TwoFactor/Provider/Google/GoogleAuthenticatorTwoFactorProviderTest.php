@@ -18,7 +18,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
 {
-    private const SECRET = 'SECRET';
+    private const string SECRET = 'SECRET';
 
     private MockObject|GoogleAuthenticatorInterface $authenticator;
     private GoogleAuthenticatorTwoFactorProvider $provider;

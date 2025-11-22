@@ -21,7 +21,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class ExceptionListener implements EventSubscriberInterface
 {
     // Just before the firewall's Symfony\Component\Security\Http\Firewall\ExceptionListener
-    private const LISTENER_PRIORITY = 2;
+    private const int LISTENER_PRIORITY = 2;
 
     public function __construct(
         private readonly string $firewallName,

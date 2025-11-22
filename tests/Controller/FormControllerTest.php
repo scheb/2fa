@@ -29,13 +29,13 @@ use Throwable;
 
 class FormControllerTest extends TestCase
 {
-    private const CURRENT_TWO_FACTOR_PROVIDER = 'provider1';
-    private const AUTH_CODE_PARAM_NAME = 'auth_code_param_name';
-    private const TRUSTED_PARAM_NAME = 'trusted_param_name';
-    private const FIREWALL_NAME = 'firewallName';
-    private const CSRF_PARAMETER = 'csrf_parameter';
-    private const CSRF_TOKEN_ID = 'csrf_token_id';
-    private const LOGOUT_PATH = '/logout';
+    private const string CURRENT_TWO_FACTOR_PROVIDER = 'provider1';
+    private const string AUTH_CODE_PARAM_NAME = 'auth_code_param_name';
+    private const string TRUSTED_PARAM_NAME = 'trusted_param_name';
+    private const string FIREWALL_NAME = 'firewallName';
+    private const string CSRF_PARAMETER = 'csrf_parameter';
+    private const string CSRF_TOKEN_ID = 'csrf_token_id';
+    private const string LOGOUT_PATH = '/logout';
 
     private MockObject|TokenStorageInterface $tokenStorage;
     private MockObject|TwoFactorProviderRegistry $providerRegistry;

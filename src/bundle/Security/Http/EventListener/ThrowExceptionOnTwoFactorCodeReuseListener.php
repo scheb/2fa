@@ -14,7 +14,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class ThrowExceptionOnTwoFactorCodeReuseListener implements EventSubscriberInterface
 {
-    public const LISTENER_PRIORITY = -256;
+    public const int LISTENER_PRIORITY = -256;
 
     public function handle(TwoFactorCodeReusedEvent $event): void
     {

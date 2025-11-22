@@ -17,9 +17,9 @@ use function sprintf;
 
 class JwtTokenEncoderTest extends TestCase
 {
-    private const CLAIM = 'test';
-    private const TOKEN_ID = 'tokenId';
-    private const APPLICATION_SECRET = 'oW2+MyKdgOf+iS1+qqgqb0FK5+1oZjDYGBemymEuzgU=';
+    private const string CLAIM = 'test';
+    private const string TOKEN_ID = 'tokenId';
+    private const string APPLICATION_SECRET = 'oW2+MyKdgOf+iS1+qqgqb0FK5+1oZjDYGBemymEuzgU=';
 
     private JwtTokenEncoder $encoder;
     private Configuration $configuration;

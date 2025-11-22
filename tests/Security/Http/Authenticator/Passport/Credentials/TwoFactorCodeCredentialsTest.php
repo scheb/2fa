@@ -13,7 +13,7 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TwoFactorCodeCredentialsTest extends TestCase
 {
-    private const CODE = 'theCode';
+    private const string CODE = 'theCode';
 
     private MockObject|TwoFactorTokenInterface $twoFactorToken;
     private TwoFactorCodeCredentials $credentials;

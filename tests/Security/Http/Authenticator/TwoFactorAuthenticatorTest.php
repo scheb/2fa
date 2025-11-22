@@ -36,11 +36,11 @@ class TwoFactorAuthenticatorTest extends TestCase
 {
     use EventDispatcherTestHelper;
 
-    private const FIREWALL_NAME = 'firewallName';
-    private const CODE = '2faCode';
-    private const CSRF_TOKEN = 'csrfToken';
-    private const CSRF_TOKEN_ID = 'csrfTokenId';
-    private const USERNAME = 'username';
+    private const string FIREWALL_NAME = 'firewallName';
+    private const string CODE = '2faCode';
+    private const string CSRF_TOKEN = 'csrfToken';
+    private const string CSRF_TOKEN_ID = 'csrfTokenId';
+    private const string USERNAME = 'username';
 
     private MockObject|TwoFactorFirewallConfig $twoFactorFirewallConfig;
     private MockObject|TokenStorageInterface $tokenStorage;

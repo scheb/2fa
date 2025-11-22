@@ -11,8 +11,8 @@ use Symfony\Component\Security\Core\Exception\BadCredentialsException;
  */
 class ReusedTwoFactorCodeException extends BadCredentialsException
 {
-    public const MESSAGE = 'Reused two-factor authentication code.';
-    private const MESSAGE_KEY = 'code_reused';
+    public const string MESSAGE = 'Reused two-factor authentication code.';
+    private const string MESSAGE_KEY = 'code_reused';
 
     public function getMessageKey(): string
     {

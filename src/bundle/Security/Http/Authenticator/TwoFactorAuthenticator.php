@@ -37,7 +37,7 @@ use function class_exists;
  */
 class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthenticatorInterface
 {
-    public const FLAG_2FA_COMPLETE = '2fa_complete';
+    public const string FLAG_2FA_COMPLETE = '2fa_complete';
 
     private readonly LoggerInterface $logger;
 

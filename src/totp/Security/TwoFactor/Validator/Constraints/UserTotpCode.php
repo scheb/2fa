@@ -15,9 +15,9 @@ use Symfony\Component\Validator\Constraint;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 class UserTotpCode extends Constraint
 {
-    public const INVALID_TOTP_CODE_ERROR = 'f79333fd-6eef-4394-ab6b-54827e2865b6';
+    public const string INVALID_TOTP_CODE_ERROR = 'f79333fd-6eef-4394-ab6b-54827e2865b6';
 
-    protected const ERROR_NAMES = [self::INVALID_TOTP_CODE_ERROR => 'INVALID_TOTP_CODE_ERROR'];
+    protected const array ERROR_NAMES = [self::INVALID_TOTP_CODE_ERROR => 'INVALID_TOTP_CODE_ERROR'];
 
     public string $message = 'code_invalid';
     public string $translationDomain = 'SchebTwoFactorBundle';

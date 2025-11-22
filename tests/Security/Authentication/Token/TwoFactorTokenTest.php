@@ -18,7 +18,7 @@ use function unserialize;
 
 class TwoFactorTokenTest extends TestCase
 {
-    private const FIREWALL_NAME = 'firewallName';
+    private const string FIREWALL_NAME = 'firewallName';
 
     private TwoFactorToken $twoFactorToken;
 

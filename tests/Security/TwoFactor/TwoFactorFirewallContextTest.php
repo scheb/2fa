@@ -12,7 +12,7 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TwoFactorFirewallContextTest extends TestCase
 {
-    private const FIREWALL_NAME = 'firewallName';
+    private const string FIREWALL_NAME = 'firewallName';
 
     private TwoFactorFirewallContext $firewallContext;
 

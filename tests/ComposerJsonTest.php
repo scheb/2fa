@@ -18,7 +18,7 @@ use function str_starts_with;
 
 class ComposerJsonTest extends TestCase
 {
-    private const SRC_DIR = __DIR__.'/../src';
+    private const string SRC_DIR = __DIR__.'/../src';
 
     #[Test]
     public function packageDependenciesEqualRootDependencies(): void

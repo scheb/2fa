@@ -24,8 +24,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class TwoFactorProviderPreparationListenerTest extends TestCase
 {
-    private const FIREWALL_NAME = 'firewallName';
-    private const CURRENT_PROVIDER_NAME = 'currentProviderName';
+    private const string FIREWALL_NAME = 'firewallName';
+    private const string CURRENT_PROVIDER_NAME = 'currentProviderName';
 
     private MockObject|TwoFactorProviderRegistry $providerRegistry;
     private MockObject|Request $request;

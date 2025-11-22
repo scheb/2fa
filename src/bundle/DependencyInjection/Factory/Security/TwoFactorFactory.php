@@ -18,46 +18,46 @@ use function assert;
  */
 class TwoFactorFactory implements FirewallListenerFactoryInterface, AuthenticatorFactoryInterface
 {
-    public const AUTHENTICATOR_PRIORITY = -100;
-    public const AUTHENTICATION_PROVIDER_KEY = 'two_factor';
+    public const int AUTHENTICATOR_PRIORITY = -100;
+    public const string AUTHENTICATION_PROVIDER_KEY = 'two_factor';
 
-    public const DEFAULT_CHECK_PATH = '/2fa_check';
-    public const DEFAULT_POST_ONLY = true;
-    public const DEFAULT_AUTH_FORM_PATH = '/2fa';
-    public const DEFAULT_ALWAYS_USE_DEFAULT_TARGET_PATH = false;
-    public const DEFAULT_TARGET_PATH = '/';
-    public const DEFAULT_AUTH_CODE_PARAMETER_NAME = '_auth_code';
-    public const DEFAULT_TRUSTED_PARAMETER_NAME = '_trusted';
-    public const DEFAULT_REMEMBER_ME_SETS_TRUSTED = false;
-    public const DEFAULT_MULTI_FACTOR = false;
-    public const DEFAULT_PREPARE_ON_LOGIN = false;
-    public const DEFAULT_PREPARE_ON_ACCESS_DENIED = false;
-    public const DEFAULT_ENABLE_CSRF = false;
-    public const DEFAULT_CSRF_PARAMETER = '_csrf_token';
-    public const DEFAULT_CSRF_TOKEN_ID = 'two_factor';
-    public const DEFAULT_CSRF_TOKEN_MANAGER = 'scheb_two_factor.csrf_token_manager';
+    public const string DEFAULT_CHECK_PATH = '/2fa_check';
+    public const true DEFAULT_POST_ONLY = true;
+    public const string DEFAULT_AUTH_FORM_PATH = '/2fa';
+    public const false DEFAULT_ALWAYS_USE_DEFAULT_TARGET_PATH = false;
+    public const string DEFAULT_TARGET_PATH = '/';
+    public const string DEFAULT_AUTH_CODE_PARAMETER_NAME = '_auth_code';
+    public const string DEFAULT_TRUSTED_PARAMETER_NAME = '_trusted';
+    public const false DEFAULT_REMEMBER_ME_SETS_TRUSTED = false;
+    public const false DEFAULT_MULTI_FACTOR = false;
+    public const false DEFAULT_PREPARE_ON_LOGIN = false;
+    public const false DEFAULT_PREPARE_ON_ACCESS_DENIED = false;
+    public const false DEFAULT_ENABLE_CSRF = false;
+    public const string DEFAULT_CSRF_PARAMETER = '_csrf_token';
+    public const string DEFAULT_CSRF_TOKEN_ID = 'two_factor';
+    public const string DEFAULT_CSRF_TOKEN_MANAGER = 'scheb_two_factor.csrf_token_manager';
 
-    public const AUTHENTICATOR_ID_PREFIX = 'security.authenticator.two_factor.';
-    public const AUTHENTICATION_TOKEN_CREATED_LISTENER_ID_PREFIX = 'security.authentication.token_created_listener.two_factor.';
-    public const SUCCESS_HANDLER_ID_PREFIX = 'security.authentication.success_handler.two_factor.';
-    public const FAILURE_HANDLER_ID_PREFIX = 'security.authentication.failure_handler.two_factor.';
-    public const AUTHENTICATION_REQUIRED_HANDLER_ID_PREFIX = 'security.authentication.authentication_required_handler.two_factor.';
-    public const FIREWALL_CONFIG_ID_PREFIX = 'security.firewall_config.two_factor.';
-    public const PROVIDER_PREPARATION_LISTENER_ID_PREFIX = 'security.authentication.provider_preparation_listener.two_factor.';
-    public const KERNEL_EXCEPTION_LISTENER_ID_PREFIX = 'security.authentication.kernel_exception_listener.two_factor.';
-    public const KERNEL_ACCESS_LISTENER_ID_PREFIX = 'security.authentication.access_listener.two_factor.';
-    public const FORM_LISTENER_ID_PREFIX = 'security.authentication.form_listener.two_factor.';
+    public const string AUTHENTICATOR_ID_PREFIX = 'security.authenticator.two_factor.';
+    public const string AUTHENTICATION_TOKEN_CREATED_LISTENER_ID_PREFIX = 'security.authentication.token_created_listener.two_factor.';
+    public const string SUCCESS_HANDLER_ID_PREFIX = 'security.authentication.success_handler.two_factor.';
+    public const string FAILURE_HANDLER_ID_PREFIX = 'security.authentication.failure_handler.two_factor.';
+    public const string AUTHENTICATION_REQUIRED_HANDLER_ID_PREFIX = 'security.authentication.authentication_required_handler.two_factor.';
+    public const string FIREWALL_CONFIG_ID_PREFIX = 'security.firewall_config.two_factor.';
+    public const string PROVIDER_PREPARATION_LISTENER_ID_PREFIX = 'security.authentication.provider_preparation_listener.two_factor.';
+    public const string KERNEL_EXCEPTION_LISTENER_ID_PREFIX = 'security.authentication.kernel_exception_listener.two_factor.';
+    public const string KERNEL_ACCESS_LISTENER_ID_PREFIX = 'security.authentication.access_listener.two_factor.';
+    public const string FORM_LISTENER_ID_PREFIX = 'security.authentication.form_listener.two_factor.';
 
-    public const AUTHENTICATOR_DEFINITION_ID = 'scheb_two_factor.security.authenticator';
-    public const AUTHENTICATION_TOKEN_CREATED_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.listener.token_created';
-    public const SUCCESS_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.success_handler';
-    public const FAILURE_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.failure_handler';
-    public const AUTHENTICATION_REQUIRED_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.authentication_required_handler';
-    public const FIREWALL_CONFIG_DEFINITION_ID = 'scheb_two_factor.security.firewall_config';
-    public const PROVIDER_PREPARATION_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.provider_preparation_listener';
-    public const KERNEL_EXCEPTION_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.kernel_exception_listener';
-    public const KERNEL_ACCESS_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.access_listener';
-    public const FORM_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.form_listener';
+    public const string AUTHENTICATOR_DEFINITION_ID = 'scheb_two_factor.security.authenticator';
+    public const string AUTHENTICATION_TOKEN_CREATED_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.listener.token_created';
+    public const string SUCCESS_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.success_handler';
+    public const string FAILURE_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.failure_handler';
+    public const string AUTHENTICATION_REQUIRED_HANDLER_DEFINITION_ID = 'scheb_two_factor.security.authentication.authentication_required_handler';
+    public const string FIREWALL_CONFIG_DEFINITION_ID = 'scheb_two_factor.security.firewall_config';
+    public const string PROVIDER_PREPARATION_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.provider_preparation_listener';
+    public const string KERNEL_EXCEPTION_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.kernel_exception_listener';
+    public const string KERNEL_ACCESS_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.access_listener';
+    public const string FORM_LISTENER_DEFINITION_ID = 'scheb_two_factor.security.form_listener';
 
     public function __construct(private readonly TwoFactorServicesFactory $twoFactorServicesFactory)
     {

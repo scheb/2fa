@@ -20,8 +20,8 @@ use function in_array;
 #[ORM\Table(name: 'user')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, EmailTwoFactorInterface, GoogleTwoFactorInterface, TotpTwoFactorInterface, TrustedDeviceInterface, BackupCodeInterface
 {
-    private const BACKUP_CODES = [111, 222];
-    public const TRUSTED_TOKEN_VERSION = 1;
+    private const array BACKUP_CODES = [111, 222];
+    public const int TRUSTED_TOKEN_VERSION = 1;
 
     #[ORM\Column(type: 'integer')]
     #[ORM\Id]

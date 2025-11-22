@@ -18,9 +18,9 @@ use Symfony\Component\Security\Http\SecurityRequestAttributes;
 
 class DefaultAuthenticationSuccessHandlerTest extends TestCase
 {
-    private const FIREWALL_NAME = 'firewallName';
-    private const DEFAULT_TARGET_PATH = '/defaultTargetPath';
-    private const SESSION_TARGET_PATH = '/sessionTargetPath';
+    private const string FIREWALL_NAME = 'firewallName';
+    private const string DEFAULT_TARGET_PATH = '/defaultTargetPath';
+    private const string SESSION_TARGET_PATH = '/sessionTargetPath';
 
     private MockObject|HttpUtils $httpUtils;
     private MockObject|TwoFactorFirewallConfig $twoFactorFirewallConfig;

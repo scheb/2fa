@@ -21,7 +21,7 @@ use function in_array;
 
 class TrustedDeviceListenerTest extends TestCase
 {
-    private const FIREWALL_NAME = 'firewallName';
+    private const string FIREWALL_NAME = 'firewallName';
 
     private MockObject|LoginSuccessEvent $loginSuccessEvent;
     private MockObject|Request $request;

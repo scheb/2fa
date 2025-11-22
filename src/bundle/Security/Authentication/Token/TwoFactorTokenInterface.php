@@ -12,7 +12,7 @@ interface TwoFactorTokenInterface extends TokenInterface
     /**
      * @internal
      */
-    public const ATTRIBUTE_NAME_USE_REMEMBER_ME = 'use_remember_me';
+    public const string ATTRIBUTE_NAME_USE_REMEMBER_ME = 'use_remember_me';
 
     /**
      * Return the authenticated token.

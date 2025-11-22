@@ -21,10 +21,10 @@ use function defined;
 
 class TwoFactorAccessDeciderTest extends TestCase
 {
-    private const BASE_URL = '/app_dev.php';
-    private const LOGOUT_PATH = '/logout';
-    private const LOGOUT_PATH_WITH_BASE_URL = self::BASE_URL.self::LOGOUT_PATH;
-    private const ACCESS_MAP_ATTRIBUTES = [TwoFactorInProgressVoter::IS_AUTHENTICATED_2FA_IN_PROGRESS];
+    private const string BASE_URL = '/app_dev.php';
+    private const string LOGOUT_PATH = '/logout';
+    private const string LOGOUT_PATH_WITH_BASE_URL = self::BASE_URL.self::LOGOUT_PATH;
+    private const array ACCESS_MAP_ATTRIBUTES = [TwoFactorInProgressVoter::IS_AUTHENTICATED_2FA_IN_PROGRESS];
 
     private MockObject|Request $request;
     private MockObject|TokenInterface $token;

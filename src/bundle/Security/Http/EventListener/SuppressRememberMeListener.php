@@ -16,7 +16,7 @@ use function assert;
 class SuppressRememberMeListener implements EventSubscriberInterface
 {
     // Just before Symfony's RememberMeListener
-    private const PRIORITY = -63;
+    private const int PRIORITY = -63;
 
     public function onSuccessfulLogin(LoginSuccessEvent $event): void
     {

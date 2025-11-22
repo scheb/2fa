@@ -16,18 +16,18 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TotpFactoryTest extends TestCase
 {
-    private const ISSUER = 'Issuer Name';
-    private const SERVER = 'Server Name';
+    private const string ISSUER = 'Issuer Name';
+    private const string SERVER = 'Server Name';
 
-    private const CUSTOM_PARAMETER_NAME = 'image';
-    private const CUSTOM_PARAMETER_VALUE = 'logo.png';
-    private const CUSTOM_PARAMETERS = [self::CUSTOM_PARAMETER_NAME => self::CUSTOM_PARAMETER_VALUE];
+    private const string CUSTOM_PARAMETER_NAME = 'image';
+    private const string CUSTOM_PARAMETER_VALUE = 'logo.png';
+    private const array CUSTOM_PARAMETERS = [self::CUSTOM_PARAMETER_NAME => self::CUSTOM_PARAMETER_VALUE];
 
-    private const USER_NAME = 'User Name';
-    private const SECRET = 'SECRET';
-    private const PERIOD = 20;
-    private const DIGITS = 8;
-    private const ALGORITHM = TotpConfiguration::ALGORITHM_SHA256;
+    private const string USER_NAME = 'User Name';
+    private const string SECRET = 'SECRET';
+    private const int PERIOD = 20;
+    private const int DIGITS = 8;
+    private const string ALGORITHM = TotpConfiguration::ALGORITHM_SHA256;
 
     private function createUserMock(bool $hasTotpConfiguration = true, string|null $secret = self::SECRET): MockObject|TwoFactorInterface
     {

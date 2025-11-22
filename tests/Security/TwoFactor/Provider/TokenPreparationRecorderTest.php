@@ -17,8 +17,8 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class TokenPreparationRecorderTest extends TestCase
 {
-    private const FIREWALL_NAME = 'firewallName';
-    private const PROVIDER_NAME = 'providerName';
+    private const string FIREWALL_NAME = 'firewallName';
+    private const string PROVIDER_NAME = 'providerName';
 
     private MockObject|TokenStorageInterface $tokenStorage;
     private TokenPreparationRecorder $recorder;

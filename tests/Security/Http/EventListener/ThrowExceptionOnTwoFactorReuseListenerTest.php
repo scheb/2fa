@@ -18,7 +18,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class ThrowExceptionOnTwoFactorReuseListenerTest extends TestCase
 {
-    private const MFA_CODE = '123456';
+    private const string MFA_CODE = '123456';
 
     #[Test]
     public function handle_codeReuseIsTriggered_exceptionIsThrown(): void

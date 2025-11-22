@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class TrustedDeviceManager implements TrustedDeviceManagerInterface
 {
-    private const DEFAULT_TOKEN_VERSION = 0;
+    private const int DEFAULT_TOKEN_VERSION = 0;
 
     public function __construct(private readonly TrustedDeviceTokenStorage $trustedTokenStorage)
     {

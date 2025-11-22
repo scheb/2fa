@@ -18,7 +18,7 @@ class CheckBackupCodeListener extends AbstractCheckCodeListener
 {
     // Must be called before CheckTwoFactorCodeListener, because CheckTwoFactorCodeListener will throw an exception
     // when the code is wrong.
-    public const LISTENER_PRIORITY = CheckTwoFactorCodeListener::LISTENER_PRIORITY + 16;
+    public const int LISTENER_PRIORITY = CheckTwoFactorCodeListener::LISTENER_PRIORITY + 16;
 
     public function __construct(
         PreparationRecorderInterface $preparationRecorder,

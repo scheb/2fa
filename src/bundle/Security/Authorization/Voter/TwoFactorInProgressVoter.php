@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
  */
 class TwoFactorInProgressVoter implements CacheableVoterInterface
 {
-    public const IS_AUTHENTICATED_2FA_IN_PROGRESS = 'IS_AUTHENTICATED_2FA_IN_PROGRESS';
+    public const string IS_AUTHENTICATED_2FA_IN_PROGRESS = 'IS_AUTHENTICATED_2FA_IN_PROGRESS';
 
     /**
      * {@inheritDoc}

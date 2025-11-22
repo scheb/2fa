@@ -19,9 +19,9 @@ use Symfony\Component\Security\Http\Event\CheckPassportEvent;
 
 abstract class AbstractCheckCodeListenerTestSetup extends TestCase
 {
-    protected const FIREWALL_NAME = 'firewallName';
-    protected const TWO_FACTOR_PROVIDER_ID = 'providerId';
-    protected const CODE = '2faCode';
+    protected const string FIREWALL_NAME = 'firewallName';
+    protected const string TWO_FACTOR_PROVIDER_ID = 'providerId';
+    protected const string CODE = '2faCode';
 
     protected MockObject|CheckPassportEvent $checkPassportEvent;
     protected MockObject|PreparationRecorderInterface $preparationRecorder;

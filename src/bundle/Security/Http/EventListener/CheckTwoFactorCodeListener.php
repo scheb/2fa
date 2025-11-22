@@ -19,7 +19,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class CheckTwoFactorCodeListener extends AbstractCheckCodeListener
 {
-    public const LISTENER_PRIORITY = 0;
+    public const int LISTENER_PRIORITY = 0;
 
     public function __construct(
         PreparationRecorderInterface $preparationRecorder,

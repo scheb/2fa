@@ -18,7 +18,7 @@ use function sha1;
  */
 class CheckTwoFactorCodeReuseListener implements EventSubscriberInterface
 {
-    public const LISTENER_PRIORITY = 0;
+    public const int LISTENER_PRIORITY = 0;
 
     public function __construct(
         private readonly EventDispatcherInterface $eventDispatcher,

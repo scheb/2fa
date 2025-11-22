@@ -13,10 +13,10 @@ use function sprintf;
  */
 class TotpConfiguration implements TotpConfigurationInterface
 {
-    public const ALGORITHM_MD5 = 'md5';
-    public const ALGORITHM_SHA1 = 'sha1';
-    public const ALGORITHM_SHA256 = 'sha256';
-    public const ALGORITHM_SHA512 = 'sha512';
+    public const string ALGORITHM_MD5 = 'md5';
+    public const string ALGORITHM_SHA1 = 'sha1';
+    public const string ALGORITHM_SHA256 = 'sha256';
+    public const string ALGORITHM_SHA512 = 'sha512';
 
     /**
      * @param string $secret    Base32 encoded secret key

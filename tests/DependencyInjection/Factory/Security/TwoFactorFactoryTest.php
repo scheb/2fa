@@ -18,16 +18,16 @@ use function array_merge;
 
 class TwoFactorFactoryTest extends TestCase
 {
-    private const FIREWALL_NAME = 'firewallName';
-    private const DEFAULT_CONFIG = ['config' => 'value'];
-    private const USER_PROVIDER = 'userProvider';
-    private const DEFAULT_ENTRY_POINT = 'defaultEntryPoint';
+    private const string FIREWALL_NAME = 'firewallName';
+    private const array DEFAULT_CONFIG = ['config' => 'value'];
+    private const string USER_PROVIDER = 'userProvider';
+    private const string DEFAULT_ENTRY_POINT = 'defaultEntryPoint';
 
-    private const SUCCESS_HANDLER_ID = 'success_handler_id';
-    private const FAILURE_HANDLER_ID = 'failure_handler_id';
-    private const AUTH_REQUIRED_HANDLER_ID = 'auth_required_handler_id';
-    private const CSRF_TOKEN_MANAGER_ID = 'csrf_token_manager_id';
-    private const TWO_FACTOR_FIREWALL_CONFIG_ID = 'firewall_config_id';
+    private const string SUCCESS_HANDLER_ID = 'success_handler_id';
+    private const string FAILURE_HANDLER_ID = 'failure_handler_id';
+    private const string AUTH_REQUIRED_HANDLER_ID = 'auth_required_handler_id';
+    private const string CSRF_TOKEN_MANAGER_ID = 'csrf_token_manager_id';
+    private const string TWO_FACTOR_FIREWALL_CONFIG_ID = 'firewall_config_id';
 
     private MockObject|TwoFactorServicesFactory $servicesFactory;
     private TwoFactorFactory $factory;

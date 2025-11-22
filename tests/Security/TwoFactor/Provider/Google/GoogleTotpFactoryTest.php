@@ -15,12 +15,12 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class GoogleTotpFactoryTest extends TestCase
 {
-    private const USER_NAME = 'User Name';
-    private const SECRET = 'SECRET';
-    private const ISSUER = 'Issuer Name';
-    private const SERVER = 'Server';
-    private const CUSTOM_DIGITS = 8;
-    private const DEFAULT_DIGITS = 6;
+    private const string USER_NAME = 'User Name';
+    private const string SECRET = 'SECRET';
+    private const string ISSUER = 'Issuer Name';
+    private const string SERVER = 'Server';
+    private const int CUSTOM_DIGITS = 8;
+    private const int DEFAULT_DIGITS = 6;
 
     private function createUserMock(string|null $secret = self::SECRET): MockObject|TwoFactorInterface
     {

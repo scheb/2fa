@@ -18,7 +18,7 @@ use Symfony\Component\Security\Http\SecurityRequestAttributes;
 
 class DefaultAuthenticationFailureHandlerTest extends TestCase
 {
-    private const AUTH_FORM_PATH = '/auth_form_path';
+    private const string AUTH_FORM_PATH = '/auth_form_path';
 
     private MockObject|HttpUtils $httpUtils;
     private MockObject|TwoFactorFirewallConfig $twoFactorFirewallConfig;

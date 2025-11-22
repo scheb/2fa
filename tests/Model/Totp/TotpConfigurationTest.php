@@ -11,10 +11,10 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TotpConfigurationTest extends TestCase
 {
-    private const SECRET = 'secret';
-    private const ALGORITHM = TotpConfiguration::ALGORITHM_SHA1;
-    private const PERIOD = 20;
-    private const DIGITS = 8;
+    private const string SECRET = 'secret';
+    private const string ALGORITHM = TotpConfiguration::ALGORITHM_SHA1;
+    private const int PERIOD = 20;
+    private const int DIGITS = 8;
 
     #[Test]
     public function construct_fullyConfigured_returnValues(): void

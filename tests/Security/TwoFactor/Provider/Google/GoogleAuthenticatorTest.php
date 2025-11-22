@@ -23,8 +23,8 @@ class GoogleAuthenticatorTest extends TestCase
 {
     use EventDispatcherTestHelper;
 
-    private const VALID_AUTH_CODE = 'validCode';
-    private const INVALID_AUTH_CODE = 'invalidCode';
+    private const string VALID_AUTH_CODE = 'validCode';
+    private const string INVALID_AUTH_CODE = 'invalidCode';
 
     private MockObject|TwoFactorInterface $user;
     private MockObject|GoogleTotpFactory $totpFactory;

@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
  */
 class TwoFactorProviderNotFoundException extends AuthenticationException
 {
-    public const MESSAGE_KEY = 'Two-factor provider not found.';
+    public const string MESSAGE_KEY = 'Two-factor provider not found.';
 
     /** @psalm-suppress PropertyNotSetInConstructor */
     private string|null $provider = null;

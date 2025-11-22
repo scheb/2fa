@@ -26,10 +26,10 @@ use const PHP_INT_MAX;
 class TwoFactorProviderPreparationListener implements EventSubscriberInterface
 {
     // This must trigger very first, followed by AuthenticationSuccessEventSuppressor
-    public const AUTHENTICATION_SUCCESS_LISTENER_PRIORITY = PHP_INT_MAX;
+    public const int AUTHENTICATION_SUCCESS_LISTENER_PRIORITY = PHP_INT_MAX;
 
     // Execute right before ContextListener, which is serializing the security token into the session
-    public const RESPONSE_LISTENER_PRIORITY = 1;
+    public const int RESPONSE_LISTENER_PRIORITY = 1;
 
     private TwoFactorTokenInterface|null $twoFactorToken = null;
     private readonly LoggerInterface $logger;

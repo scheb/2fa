@@ -11,8 +11,8 @@ use Symfony\Component\Security\Core\Exception\BadCredentialsException;
  */
 class InvalidTwoFactorCodeException extends BadCredentialsException
 {
-    public const MESSAGE = 'Invalid two-factor authentication code.';
-    private const MESSAGE_KEY = 'code_invalid';
+    public const string MESSAGE = 'Invalid two-factor authentication code.';
+    private const string MESSAGE_KEY = 'code_invalid';
 
     public function getMessageKey(): string
     {

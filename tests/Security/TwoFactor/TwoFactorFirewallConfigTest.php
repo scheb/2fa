@@ -15,8 +15,8 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 class TwoFactorFirewallConfigTest extends TestCase
 {
-    private const FIREWALL_NAME = 'firewallName';
-    private const FULL_OPTIONS = [
+    private const string FIREWALL_NAME = 'firewallName';
+    private const array FULL_OPTIONS = [
         'check_path' => 'check_path_route_name',
         'post_only' => false,
         'auth_form_path' => 'auth_form_path_route_name',

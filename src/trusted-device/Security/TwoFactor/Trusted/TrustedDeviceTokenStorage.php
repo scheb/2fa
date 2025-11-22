@@ -17,7 +17,7 @@ use function implode;
  */
 class TrustedDeviceTokenStorage implements ResetInterface
 {
-    private const TOKEN_DELIMITER = ';';
+    private const string TOKEN_DELIMITER = ';';
 
     /** @var TrustedDeviceToken[] */
     private array|null $trustedTokenList;

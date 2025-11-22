@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 abstract class AbstractAuthenticationContextTestCase extends TestCase
 {
-    protected const FIREWALL_NAME = 'firewallName';
+    protected const string FIREWALL_NAME = 'firewallName';
 
     protected function createAuthenticationContext(Request|null $request = null, TokenInterface|null $token = null, UserInterface|null $user = null): MockObject|AuthenticationContextInterface
     {

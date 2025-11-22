@@ -30,7 +30,7 @@ class ExceptionListenerTest extends TestCase
 {
     use EventDispatcherTestHelper;
 
-    private const FIREWALL_NAME = 'firewallName';
+    private const string FIREWALL_NAME = 'firewallName';
 
     private MockObject|TokenStorageInterface $tokenStorage;
     private MockObject|AuthenticationRequiredHandlerInterface $authenticationRequiredHandler;

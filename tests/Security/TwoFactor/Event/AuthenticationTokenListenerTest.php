@@ -22,7 +22,7 @@ use Symfony\Component\Security\Http\Event\AuthenticationTokenCreatedEvent;
 
 class AuthenticationTokenListenerTest extends TestCase
 {
-    private const FIREWALL_NAME = 'firewallName';
+    private const string FIREWALL_NAME = 'firewallName';
 
     private MockObject|TwoFactorConditionRegistry $twoFactorConditionRegistry;
     private MockObject|TwoFactorProviderInitiator $twoFactorProviderInitiator;

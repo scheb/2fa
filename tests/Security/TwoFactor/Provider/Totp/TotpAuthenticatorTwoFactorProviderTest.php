@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class TotpAuthenticatorTwoFactorProviderTest extends TestCase
 {
-    private const SECRET = 'SECRET';
+    private const string SECRET = 'SECRET';
 
     private MockObject|TotpAuthenticatorInterface $authenticator;
     private TotpAuthenticatorTwoFactorProvider $provider;

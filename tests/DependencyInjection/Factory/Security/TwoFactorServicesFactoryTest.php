@@ -12,11 +12,11 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class TwoFactorServicesFactoryTest extends TestCase
 {
-    private const FIREWALL_NAME = 'firewallName';
-    private const DEFAULT_CONFIG = ['config' => 'value'];
+    private const string FIREWALL_NAME = 'firewallName';
+    private const array DEFAULT_CONFIG = ['config' => 'value'];
 
-    private const AUTH_REQUIRED_HANDLER_ID = 'auth_required_handler_id';
-    private const TWO_FACTOR_FIREWALL_CONFIG_ID = 'firewall_config_id';
+    private const string AUTH_REQUIRED_HANDLER_ID = 'auth_required_handler_id';
+    private const string TWO_FACTOR_FIREWALL_CONFIG_ID = 'firewall_config_id';
 
     private TwoFactorServicesFactory $servicesFactory;
     private ContainerBuilder $container;

@@ -22,9 +22,9 @@ class EmailTwoFactorProviderTest extends TestCase
 {
     use EventDispatcherTestHelper;
 
-    private const VALID_AUTH_CODE = 'validCode';
-    private const INVALID_AUTH_CODE = 'invalidCode';
-    private const VALID_AUTH_CODE_WITH_SPACES = ' valid Code ';
+    private const string VALID_AUTH_CODE = 'validCode';
+    private const string INVALID_AUTH_CODE = 'invalidCode';
+    private const string VALID_AUTH_CODE_WITH_SPACES = ' valid Code ';
 
     private MockObject|CodeGeneratorInterface $generator;
     private EmailTwoFactorProvider $provider;

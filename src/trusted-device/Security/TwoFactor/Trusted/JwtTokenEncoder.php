@@ -21,9 +21,9 @@ use function strlen;
  */
 class JwtTokenEncoder
 {
-    public const CLAIM_USERNAME = 'usr';
-    public const CLAIM_FIREWALL = 'fwl';
-    public const CLAIM_VERSION = 'vsn';
+    public const string CLAIM_USERNAME = 'usr';
+    public const string CLAIM_FIREWALL = 'fwl';
+    public const string CLAIM_VERSION = 'vsn';
 
     private readonly Clock $clock;
 
