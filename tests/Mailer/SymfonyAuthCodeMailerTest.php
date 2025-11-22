@@ -15,7 +15,7 @@ use function current;
 
 class SymfonyAuthCodeMailerTest extends TestCase
 {
-    private MockObject|MailerInterface $symfonyMailer;
+    private MockObject&MailerInterface $symfonyMailer;
     private SymfonyAuthCodeMailer $mailer;
 
     protected function setUp(): void

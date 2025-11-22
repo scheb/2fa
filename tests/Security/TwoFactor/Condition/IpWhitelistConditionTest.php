@@ -33,7 +33,7 @@ class IpWhitelistConditionTest extends AbstractAuthenticationContextTestCase
         $this->ipWhitelistHandler = new IpWhitelistCondition($ipWhitelistProvider);
     }
 
-    private function createRequestWithIp(string $ip): MockObject|Request
+    private function createRequestWithIp(string $ip): MockObject&Request
     {
         $request = $this->createRequest();
         $request

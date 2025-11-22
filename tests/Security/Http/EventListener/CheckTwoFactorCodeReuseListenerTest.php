@@ -29,9 +29,9 @@ class CheckTwoFactorCodeReuseListenerTest extends TestCase
     private const string MFA_CODE = '123456';
     private const string USER_IDENTIFIER = 'jdoe@example.com';
 
-    private MockObject|EventDispatcherInterface $eventDispatcher;
-    private MockObject|LoggerInterface $logger;
-    private MockObject|UserInterface $user;
+    private MockObject&EventDispatcherInterface $eventDispatcher;
+    private MockObject&LoggerInterface $logger;
+    private MockObject&UserInterface $user;
 
     protected function setUp(): void
     {

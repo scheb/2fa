@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 class UserGoogleTotpCodeValidatorTest extends ConstraintValidatorTestCase
 {
     private TokenStorageInterface $tokenStorage;
-    private GoogleAuthenticatorInterface|MockObject $googleAuthenticator;
+    private GoogleAuthenticatorInterface&MockObject $googleAuthenticator;
 
     protected function createValidator(): UserGoogleTotpCodeValidator
     {

@@ -23,10 +23,10 @@ abstract class AbstractCheckCodeListenerTestSetup extends TestCase
     protected const string TWO_FACTOR_PROVIDER_ID = 'providerId';
     protected const string CODE = '2faCode';
 
-    protected MockObject|CheckPassportEvent $checkPassportEvent;
-    protected MockObject|PreparationRecorderInterface $preparationRecorder;
-    protected MockObject|TwoFactorCodeCredentials $credentialsBadge;
-    protected MockObject|UserInterface $user;
+    protected MockObject&CheckPassportEvent $checkPassportEvent;
+    protected MockObject&PreparationRecorderInterface $preparationRecorder;
+    protected MockObject&TwoFactorCodeCredentials $credentialsBadge;
+    protected MockObject&UserInterface $user;
     protected AbstractCheckCodeListener $listener;
 
     protected function setUp(): void
@@ -62,7 +62,7 @@ abstract class AbstractCheckCodeListenerTestSetup extends TestCase
         $this->stubPreparationPrepared(true);
     }
 
-    private function createTwoFactorToken(string|null $currentProvider): MockObject|TwoFactorTokenInterface
+    private function createTwoFactorToken(string|null $currentProvider): MockObject&TwoFactorTokenInterface
     {
         $token = $this->createMock(TwoFactorTokenInterface::class);
         $token

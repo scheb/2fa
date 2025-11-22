@@ -16,7 +16,7 @@ use function method_exists;
 
 class TrustedDeviceManagerTest extends TestCase
 {
-    private MockObject|TrustedDeviceTokenStorage $trustedTokenStorage;
+    private MockObject&TrustedDeviceTokenStorage $trustedTokenStorage;
     private TrustedDeviceManager $trustedDeviceManager;
 
     protected function setUp(): void

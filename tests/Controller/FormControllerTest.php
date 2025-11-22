@@ -37,16 +37,16 @@ class FormControllerTest extends TestCase
     private const string CSRF_TOKEN_ID = 'csrf_token_id';
     private const string LOGOUT_PATH = '/logout';
 
-    private MockObject|TokenStorageInterface $tokenStorage;
-    private MockObject|TwoFactorProviderRegistry $providerRegistry;
-    private MockObject|SessionInterface $session;
-    private MockObject|Request $request;
-    private MockObject|TwoFactorFormRendererInterface $formRenderer;
-    private MockObject|TwoFactorTokenInterface $twoFactorToken;
-    private MockObject|TwoFactorFirewallConfig $firewallConfig;
-    private MockObject|TwoFactorFirewallContext $twoFactorFirewallContext;
-    private MockObject|LogoutUrlGenerator $logoutUrlGenerator;
-    private MockObject|TrustedDeviceManagerInterface $trustedDeviceManager;
+    private MockObject&TokenStorageInterface $tokenStorage;
+    private MockObject&TwoFactorProviderRegistry $providerRegistry;
+    private MockObject&SessionInterface $session;
+    private MockObject&Request $request;
+    private MockObject&TwoFactorFormRendererInterface $formRenderer;
+    private MockObject&TwoFactorTokenInterface $twoFactorToken;
+    private MockObject&TwoFactorFirewallConfig $firewallConfig;
+    private MockObject&TwoFactorFirewallContext $twoFactorFirewallContext;
+    private MockObject&LogoutUrlGenerator $logoutUrlGenerator;
+    private MockObject&TrustedDeviceManagerInterface $trustedDeviceManager;
     private FormController $controller;
 
     protected function setUp(): void

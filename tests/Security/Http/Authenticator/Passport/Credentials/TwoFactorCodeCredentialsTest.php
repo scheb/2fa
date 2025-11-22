@@ -15,7 +15,7 @@ class TwoFactorCodeCredentialsTest extends TestCase
 {
     private const string CODE = 'theCode';
 
-    private MockObject|TwoFactorTokenInterface $twoFactorToken;
+    private MockObject&TwoFactorTokenInterface $twoFactorToken;
     private TwoFactorCodeCredentials $credentials;
 
     protected function setUp(): void

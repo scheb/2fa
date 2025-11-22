@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class AuthenticationTrustResolverTest extends TestCase
 {
-    private MockObject|AuthenticationTrustResolverInterface $decoratedTrustResolver;
+    private MockObject&AuthenticationTrustResolverInterface $decoratedTrustResolver;
     private AuthenticationTrustResolver $trustResolver;
 
     protected function setUp(): void

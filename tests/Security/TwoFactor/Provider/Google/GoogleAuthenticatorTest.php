@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Google;
 
-use OTPHP\TOTP;
 use OTPHP\TOTPInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -26,9 +25,9 @@ class GoogleAuthenticatorTest extends TestCase
     private const string VALID_AUTH_CODE = 'validCode';
     private const string INVALID_AUTH_CODE = 'invalidCode';
 
-    private MockObject|TwoFactorInterface $user;
-    private MockObject|GoogleTotpFactory $totpFactory;
-    private MockObject|TOTP $totp;
+    private MockObject&TwoFactorInterface $user;
+    private MockObject&GoogleTotpFactory $totpFactory;
+    private MockObject&TOTPInterface $totp;
     private GoogleAuthenticator $authenticator;
 
     protected function setUp(): void

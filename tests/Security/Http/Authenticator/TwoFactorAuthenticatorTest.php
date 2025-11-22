@@ -42,12 +42,12 @@ class TwoFactorAuthenticatorTest extends TestCase
     private const string CSRF_TOKEN_ID = 'csrfTokenId';
     private const string USERNAME = 'username';
 
-    private MockObject|TwoFactorFirewallConfig $twoFactorFirewallConfig;
-    private MockObject|TokenStorageInterface $tokenStorage;
-    private MockObject|AuthenticationSuccessHandlerInterface $successHandler;
-    private MockObject|AuthenticationFailureHandlerInterface $failureHandler;
-    private MockObject|AuthenticationRequiredHandlerInterface $authenticationRequiredHandler;
-    private MockObject|Request $request;
+    private MockObject&TwoFactorFirewallConfig $twoFactorFirewallConfig;
+    private MockObject&TokenStorageInterface $tokenStorage;
+    private MockObject&AuthenticationSuccessHandlerInterface $successHandler;
+    private MockObject&AuthenticationFailureHandlerInterface $failureHandler;
+    private MockObject&AuthenticationRequiredHandlerInterface $authenticationRequiredHandler;
+    private MockObject&Request $request;
     private TwoFactorAuthenticator $authenticator;
 
     protected function setUp(): void
@@ -121,7 +121,7 @@ class TwoFactorAuthenticatorTest extends TestCase
             ->willReturn($rememberMeSetsTrusted);
     }
 
-    private function createTwoFactorToken(TokenInterface|null $authenticatedToken = null, bool $allProvidersAuthenticated = false): MockObject|TwoFactorTokenInterface
+    private function createTwoFactorToken(TokenInterface|null $authenticatedToken = null, bool $allProvidersAuthenticated = false): MockObject&TwoFactorTokenInterface
     {
         $user = $this->createMock(UserInterface::class);
         $token = $this->createMock(TwoFactorTokenInterface::class);
@@ -153,7 +153,7 @@ class TwoFactorAuthenticatorTest extends TestCase
             ->willReturn($token);
     }
 
-    private function stubTokenStorageHasTwoFactorToken(): MockObject|TwoFactorTokenInterface
+    private function stubTokenStorageHasTwoFactorToken(): MockObject&TwoFactorTokenInterface
     {
         $token = $this->createTwoFactorToken();
         $this->stubTokenStorageHasToken($token);
@@ -161,7 +161,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         return $token;
     }
 
-    private function createPassportWithTwoFactorCredentials(TwoFactorTokenInterface $twoFactorToken): MockObject|Passport
+    private function createPassportWithTwoFactorCredentials(TwoFactorTokenInterface $twoFactorToken): MockObject&Passport
     {
         $credentials = $this->createMock(TwoFactorCodeCredentials::class);
         $credentials

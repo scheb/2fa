@@ -13,8 +13,8 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TwoFactorProviderRegistryTest extends TestCase
 {
-    private MockObject|TwoFactorProviderInterface $twoFactorProvider2;
-    private MockObject|TwoFactorProviderInterface $twoFactorProvider1;
+    private MockObject&TwoFactorProviderInterface $twoFactorProvider2;
+    private MockObject&TwoFactorProviderInterface $twoFactorProvider1;
     private TwoFactorProviderRegistry $providerRegistry;
 
     protected function setUp(): void

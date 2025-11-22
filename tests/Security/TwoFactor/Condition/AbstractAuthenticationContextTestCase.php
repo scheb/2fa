@@ -17,7 +17,7 @@ abstract class AbstractAuthenticationContextTestCase extends TestCase
 {
     protected const string FIREWALL_NAME = 'firewallName';
 
-    protected function createAuthenticationContext(Request|null $request = null, TokenInterface|null $token = null, UserInterface|null $user = null): MockObject|AuthenticationContextInterface
+    protected function createAuthenticationContext(Request|null $request = null, TokenInterface|null $token = null, UserInterface|null $user = null): MockObject&AuthenticationContextInterface
     {
         $context = $this->createMock(AuthenticationContextInterface::class);
         $context
@@ -43,17 +43,17 @@ abstract class AbstractAuthenticationContextTestCase extends TestCase
         return $context;
     }
 
-    protected function createRequest(): MockObject|Request
+    protected function createRequest(): MockObject&Request
     {
         return $this->createMock(Request::class);
     }
 
-    protected function createToken(): MockObject|TokenInterface
+    protected function createToken(): MockObject&TokenInterface
     {
         return $this->createMock(TokenInterface::class);
     }
 
-    protected function createUser(): MockObject|UserInterface
+    protected function createUser(): MockObject&UserInterface
     {
         return $this->createMock(UserInterface::class);
     }

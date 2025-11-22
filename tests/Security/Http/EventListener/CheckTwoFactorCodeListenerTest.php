@@ -10,7 +10,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\InvalidTwoFactorCodeException;
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\TwoFactorProviderNotFoundException;
 use Scheb\TwoFactorBundle\Security\Http\EventListener\CheckTwoFactorCodeListener;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
@@ -22,8 +21,8 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
 {
-    private MockObject|BackupCodeManagerInterface $providerRegistry;
-    private MockObject|EventDispatcherInterface $eventDispatcher;
+    private MockObject&TwoFactorProviderRegistry $providerRegistry;
+    private MockObject&EventDispatcherInterface $eventDispatcher;
 
     protected function setUp(): void
     {
@@ -48,7 +47,7 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
             ->method($this->anything());
     }
 
-    private function stubTwoFactorAuthenticationProvider(): MockObject|TwoFactorProviderInterface
+    private function stubTwoFactorAuthenticationProvider(): MockObject&TwoFactorProviderInterface
     {
         $authenticationProvider = $this->createMock(TwoFactorProviderInterface::class);
         $this->providerRegistry

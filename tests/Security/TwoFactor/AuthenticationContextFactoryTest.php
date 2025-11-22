@@ -15,9 +15,9 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 
 class AuthenticationContextFactoryTest extends TestCase
 {
-    private MockObject|Request $request;
-    private MockObject|TokenInterface $token;
-    private MockObject|Passport $passport;
+    private MockObject&Request $request;
+    private MockObject&TokenInterface $token;
+    private MockObject&Passport $passport;
     private AuthenticationContextFactory $authenticationContextFactory;
 
     protected function setUp(): void

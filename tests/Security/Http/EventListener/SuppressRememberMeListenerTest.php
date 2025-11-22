@@ -23,7 +23,7 @@ class SuppressRememberMeListenerTest extends TestCase
         $this->suppressRememberMeListener = new SuppressRememberMeListener();
     }
 
-    private function createRememberMeBadge(bool $isEnabled): MockObject|RememberMeBadge
+    private function createRememberMeBadge(bool $isEnabled): MockObject&RememberMeBadge
     {
         $badge = $this->createMock(RememberMeBadge::class);
         $badge
@@ -35,7 +35,7 @@ class SuppressRememberMeListenerTest extends TestCase
         return $badge;
     }
 
-    private function createPassportWithRememberMeBadge(RememberMeBadge|null $badge): MockObject|Passport
+    private function createPassportWithRememberMeBadge(RememberMeBadge|null $badge): MockObject&Passport
     {
         $passport = $this->createMock(Passport::class);
         $passport
@@ -52,12 +52,12 @@ class SuppressRememberMeListenerTest extends TestCase
         return $passport;
     }
 
-    private function createTwoFactorToken(): MockObject|TwoFactorTokenInterface
+    private function createTwoFactorToken(): MockObject&TwoFactorTokenInterface
     {
         return $this->createMock(TwoFactorTokenInterface::class);
     }
 
-    private function createLoginSuccessEvent(MockObject $passport, TokenInterface $token): MockObject|LoginSuccessEvent
+    private function createLoginSuccessEvent(MockObject $passport, TokenInterface $token): MockObject&LoginSuccessEvent
     {
         $event = $this->createMock(LoginSuccessEvent::class);
         $event

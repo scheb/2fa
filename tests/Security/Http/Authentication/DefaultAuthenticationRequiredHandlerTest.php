@@ -22,11 +22,11 @@ class DefaultAuthenticationRequiredHandlerTest extends TestCase
     private const string OTHER_PATH = '/otherPath';
     private const string FIREWALL_NAME = 'firewallName';
 
-    private MockObject|HttpUtils $httpUtils;
-    private MockObject|TwoFactorFirewallConfig $twoFactorFirewallConfig;
-    private MockObject|Request $request;
+    private MockObject&HttpUtils $httpUtils;
+    private MockObject&TwoFactorFirewallConfig $twoFactorFirewallConfig;
+    private MockObject&Request $request;
     private DefaultAuthenticationRequiredHandler $handler;
-    private MockObject|RedirectResponse $authFormRedirectResponse;
+    private MockObject&RedirectResponse $authFormRedirectResponse;
 
     protected function setUp(): void
     {

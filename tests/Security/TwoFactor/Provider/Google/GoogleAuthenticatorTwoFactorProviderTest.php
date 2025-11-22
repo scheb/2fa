@@ -20,7 +20,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
 {
     private const string SECRET = 'SECRET';
 
-    private MockObject|GoogleAuthenticatorInterface $authenticator;
+    private MockObject&GoogleAuthenticatorInterface $authenticator;
     private GoogleAuthenticatorTwoFactorProvider $provider;
 
     protected function setUp(): void
@@ -30,7 +30,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
         $this->provider = new GoogleAuthenticatorTwoFactorProvider($this->authenticator, $formRenderer);
     }
 
-    private function createUser(bool $enabled = true, string|null $secret = self::SECRET): MockObject|UserWithTwoFactorInterface
+    private function createUser(bool $enabled = true, string|null $secret = self::SECRET): MockObject&UserWithTwoFactorInterface
     {
         $user = $this->createMock(UserWithTwoFactorInterface::class);
         $user
@@ -45,7 +45,7 @@ class GoogleAuthenticatorTwoFactorProviderTest extends TestCase
         return $user;
     }
 
-    private function createAuthenticationContext(UserInterface|null $user = null): MockObject|AuthenticationContextInterface
+    private function createAuthenticationContext(UserInterface|null $user = null): MockObject&AuthenticationContextInterface
     {
         $authContext = $this->createMock(AuthenticationContextInterface::class);
         $authContext

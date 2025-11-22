@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 class UserTotpCodeValidatorTest extends ConstraintValidatorTestCase
 {
     private TokenStorageInterface $tokenStorage;
-    private TotpAuthenticatorInterface|MockObject $totpAuthenticator;
+    private TotpAuthenticatorInterface&MockObject $totpAuthenticator;
 
     protected function createValidator(): UserTotpCodeValidator
     {

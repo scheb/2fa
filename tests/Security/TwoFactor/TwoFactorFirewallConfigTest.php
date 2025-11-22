@@ -30,8 +30,8 @@ class TwoFactorFirewallConfigTest extends TestCase
         'csrf_header' => 'header_name',
     ];
 
-    private MockObject|HttpUtils $httpUtils;
-    private MockObject|RequestDataReader $requestDataReader;
+    private MockObject&HttpUtils $httpUtils;
+    private MockObject&RequestDataReader $requestDataReader;
 
     protected function setUp(): void
     {
@@ -52,7 +52,7 @@ class TwoFactorFirewallConfigTest extends TestCase
         );
     }
 
-    private function stubRequestMethod(MockObject|Request $request, string $method): void
+    private function stubRequestMethod(MockObject&Request $request, string $method): void
     {
         $request
             ->expects($this->any())
@@ -60,7 +60,7 @@ class TwoFactorFirewallConfigTest extends TestCase
             ->willReturnCallback(static fn (string $arg) => $arg === $method);
     }
 
-    private function stubCheckRequestPath(MockObject|Request $request, string $pathToCheck, bool $result): void
+    private function stubCheckRequestPath(MockObject&Request $request, string $pathToCheck, bool $result): void
     {
         $this->httpUtils
             ->expects($this->any())

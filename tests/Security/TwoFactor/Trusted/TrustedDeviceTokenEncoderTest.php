@@ -17,7 +17,7 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class TrustedDeviceTokenEncoderTest extends TestCase
 {
-    private MockObject|JwtTokenEncoder $jwtEncoder;
+    private MockObject&JwtTokenEncoder $jwtEncoder;
     private TestableTrustedDeviceTokenEncoder $tokenEncoder;
 
     protected function setUp(): void

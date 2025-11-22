@@ -20,11 +20,11 @@ class DefaultAuthenticationFailureHandlerTest extends TestCase
 {
     private const string AUTH_FORM_PATH = '/auth_form_path';
 
-    private MockObject|HttpUtils $httpUtils;
-    private MockObject|TwoFactorFirewallConfig $twoFactorFirewallConfig;
+    private MockObject&HttpUtils $httpUtils;
+    private MockObject&TwoFactorFirewallConfig $twoFactorFirewallConfig;
     private DefaultAuthenticationFailureHandler $failureHandler;
-    private MockObject|Request $request;
-    private MockObject|SessionInterface $session;
+    private MockObject&Request $request;
+    private MockObject&SessionInterface $session;
 
     protected function setUp(): void
     {

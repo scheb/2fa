@@ -11,7 +11,7 @@ use function count;
 
 trait EventDispatcherTestHelper
 {
-    protected MockObject|EventDispatcherInterface $eventDispatcher;
+    protected MockObject&EventDispatcherInterface $eventDispatcher;
 
     protected function expectDispatchOneEvent(mixed $eventObjectAssertion, string $eventNameAssertion): void
     {

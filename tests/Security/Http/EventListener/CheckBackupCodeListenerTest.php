@@ -20,7 +20,7 @@ class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTestSetup
 {
     use EventDispatcherTestHelper;
 
-    private MockObject|BackupCodeManagerInterface $backupCodeManager;
+    private MockObject&BackupCodeManagerInterface $backupCodeManager;
 
     protected function setUp(): void
     {

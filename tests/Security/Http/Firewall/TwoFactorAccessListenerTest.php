@@ -19,10 +19,10 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class TwoFactorAccessListenerTest extends TestCase
 {
-    private MockObject|TwoFactorFirewallConfig $twoFactorFirewallConfig;
-    private MockObject|TokenStorageInterface $tokenStorage;
-    private MockObject|TwoFactorAccessDecider $twoFactorAccessDecider;
-    private MockObject|Request $request;
+    private MockObject&TwoFactorFirewallConfig $twoFactorFirewallConfig;
+    private MockObject&TokenStorageInterface $tokenStorage;
+    private MockObject&TwoFactorAccessDecider $twoFactorAccessDecider;
+    private MockObject&Request $request;
     private TwoFactorAccessListener $accessListener;
 
     protected function setUp(): void
@@ -39,7 +39,7 @@ class TwoFactorAccessListenerTest extends TestCase
         );
     }
 
-    private function createTwoFactorToken(): MockObject|TwoFactorTokenInterface
+    private function createTwoFactorToken(): MockObject&TwoFactorTokenInterface
     {
         return $this->createMock(TwoFactorTokenInterface::class);
     }

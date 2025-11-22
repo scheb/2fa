@@ -11,7 +11,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManager;
 
 class TrustedDeviceConditionTest extends AbstractAuthenticationContextTestCase
 {
-    private MockObject|TrustedDeviceManager $trustedDeviceManager;
+    private MockObject&TrustedDeviceManager $trustedDeviceManager;
     private TrustedDeviceCondition $trustedHandler;
 
     protected function setUp(): void

@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class TrustedCookieResponseListenerTest extends TestCase
 {
-    private MockObject|TrustedDeviceTokenStorage $trustedTokenStorage;
+    private MockObject&TrustedDeviceTokenStorage $trustedTokenStorage;
     private TrustedCookieResponseListener $cookieResponseListener;
     private Response $response;
 

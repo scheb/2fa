@@ -29,7 +29,7 @@ class TwoFactorFactoryTest extends TestCase
     private const string CSRF_TOKEN_MANAGER_ID = 'csrf_token_manager_id';
     private const string TWO_FACTOR_FIREWALL_CONFIG_ID = 'firewall_config_id';
 
-    private MockObject|TwoFactorServicesFactory $servicesFactory;
+    private MockObject&TwoFactorServicesFactory $servicesFactory;
     private TwoFactorFactory $factory;
     private ContainerBuilder $container;
 

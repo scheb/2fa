@@ -29,7 +29,7 @@ class TotpFactoryTest extends TestCase
     private const int DIGITS = 8;
     private const string ALGORITHM = TotpConfiguration::ALGORITHM_SHA256;
 
-    private function createUserMock(bool $hasTotpConfiguration = true, string|null $secret = self::SECRET): MockObject|TwoFactorInterface
+    private function createUserMock(bool $hasTotpConfiguration = true, string|null $secret = self::SECRET): MockObject&TwoFactorInterface
     {
         $user = $this->createMock(TwoFactorInterface::class);
         $user

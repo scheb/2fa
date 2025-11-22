@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Tests\Security\Http\Utils;
 
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Http\Utils\JsonRequestUtils;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -14,7 +13,7 @@ use function json_encode;
 
 class JsonRequestUtilsTest extends TestCase
 {
-    private MockObject|Request $request;
+    private Request $request;
 
     protected function setUp(): void
     {

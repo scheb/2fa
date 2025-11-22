@@ -17,10 +17,10 @@ use Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Condition\AbstractAuthenticat
 
 class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCase
 {
-    private MockObject|TwoFactorTokenFactoryInterface $twoFactorTokenFactory;
-    private MockObject|TwoFactorProviderInterface $provider1;
-    private MockObject|TwoFactorProviderInterface $provider2;
-    private MockObject|TwoFactorProviderDeciderInterface $providerDecider;
+    private MockObject&TwoFactorTokenFactoryInterface $twoFactorTokenFactory;
+    private MockObject&TwoFactorProviderInterface $provider1;
+    private MockObject&TwoFactorProviderInterface $provider2;
+    private MockObject&TwoFactorProviderDeciderInterface $providerDecider;
     private TwoFactorProviderInitiator $initiator;
 
     protected function setUp(): void
@@ -44,12 +44,12 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
         $this->initiator = new TwoFactorProviderInitiator($providerRegistry, $this->twoFactorTokenFactory, $this->providerDecider);
     }
 
-    private function createTwoFactorToken(): MockObject|TwoFactorTokenInterface
+    private function createTwoFactorToken(): MockObject&TwoFactorTokenInterface
     {
         return $this->createMock(TwoFactorTokenInterface::class);
     }
 
-    private function createUserWithPreferredProvider(string $preferredProvider): MockObject|UserWithPreferredProviderInterface
+    private function createUserWithPreferredProvider(string $preferredProvider): MockObject&UserWithPreferredProviderInterface
     {
         $user = $this->createMock(UserWithPreferredProviderInterface::class);
         $user

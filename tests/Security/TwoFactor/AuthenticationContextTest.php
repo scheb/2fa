@@ -16,10 +16,10 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 
 class AuthenticationContextTest extends TestCase
 {
-    private MockObject|Request $request;
-    private MockObject|TokenInterface $token;
+    private MockObject&Request $request;
+    private MockObject&TokenInterface $token;
     private AuthenticationContext $authContext;
-    private MockObject|Passport $passport;
+    private MockObject&Passport $passport;
 
     protected function setUp(): void
     {

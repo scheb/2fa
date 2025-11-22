@@ -15,7 +15,7 @@ class DefaultTwoFactorFormRendererTest extends TestCase
 {
     private const string TEMPLATE = 'template.html.twig';
 
-    private MockObject|Environment $twig;
+    private MockObject&Environment $twig;
     private DefaultTwoFactorFormRenderer $formRender;
 
     protected function setUp(): void

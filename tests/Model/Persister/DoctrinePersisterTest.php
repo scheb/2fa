@@ -13,7 +13,7 @@ use stdClass;
 
 class DoctrinePersisterTest extends TestCase
 {
-    private MockObject|ObjectManager $objectManager;
+    private MockObject&ObjectManager $objectManager;
     private DoctrinePersister $persister;
 
     protected function setUp(): void

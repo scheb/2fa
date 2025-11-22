@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class TrustedDeviceTokenStorageTest extends TestCase
 {
     private Request $request;
-    private MockObject|TrustedDeviceTokenEncoder $tokenEncoder;
+    private MockObject&TrustedDeviceTokenEncoder $tokenEncoder;
     private TrustedDeviceTokenStorage $tokenStorage;
 
     protected function setUp(): void
@@ -53,7 +53,7 @@ class TrustedDeviceTokenStorageTest extends TestCase
             ->willReturnOnConsecutiveCalls(...$serializedValues);
     }
 
-    private function createTokenWithProperties(string $serializedValue, bool $authenticatesRealm, bool $versionMatches, bool $isExpired): MockObject|TrustedDeviceToken
+    private function createTokenWithProperties(string $serializedValue, bool $authenticatesRealm, bool $versionMatches, bool $isExpired): MockObject&TrustedDeviceToken
     {
         $jwtToken = $this->createMock(TrustedDeviceToken::class);
         $jwtToken

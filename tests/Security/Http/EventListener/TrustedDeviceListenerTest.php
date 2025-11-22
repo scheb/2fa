@@ -23,10 +23,10 @@ class TrustedDeviceListenerTest extends TestCase
 {
     private const string FIREWALL_NAME = 'firewallName';
 
-    private MockObject|LoginSuccessEvent $loginSuccessEvent;
-    private MockObject|Request $request;
-    private MockObject|UserInterface $user;
-    private MockObject|TrustedDeviceManagerInterface $trustedDeviceManager;
+    private MockObject&LoginSuccessEvent $loginSuccessEvent;
+    private MockObject&Request $request;
+    private MockObject&UserInterface $user;
+    private MockObject&TrustedDeviceManagerInterface $trustedDeviceManager;
     private TrustedDeviceListener $trustedDeviceListener;
 
     /** @var string[] */
@@ -54,7 +54,7 @@ class TrustedDeviceListenerTest extends TestCase
         $this->trustedDeviceListener = new TrustedDeviceListener($this->trustedDeviceManager);
     }
 
-    private function createPassportMock(): MockObject|Passport
+    private function createPassportMock(): MockObject&Passport
     {
         $passport = $this->createMock(Passport::class);
         $passport

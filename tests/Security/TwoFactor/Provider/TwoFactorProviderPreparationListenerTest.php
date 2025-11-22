@@ -27,11 +27,11 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
     private const string FIREWALL_NAME = 'firewallName';
     private const string CURRENT_PROVIDER_NAME = 'currentProviderName';
 
-    private MockObject|TwoFactorProviderRegistry $providerRegistry;
-    private MockObject|Request $request;
-    private MockObject|PreparationRecorderInterface $preparationRecorder;
-    private MockObject|TwoFactorToken $token;
-    private MockObject|UserInterface $user;
+    private MockObject&TwoFactorProviderRegistry $providerRegistry;
+    private MockObject&Request $request;
+    private MockObject&PreparationRecorderInterface $preparationRecorder;
+    private MockObject&TwoFactorToken $token;
+    private MockObject&UserInterface $user;
     private TwoFactorProviderPreparationListener|null $listener = null;
 
     protected function setUp(): void

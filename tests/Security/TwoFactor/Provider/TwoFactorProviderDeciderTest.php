@@ -15,8 +15,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class TwoFactorProviderDeciderTest extends AbstractAuthenticationContextTestCase
 {
-    private MockObject|TwoFactorProviderDeciderInterface $twoFactorProviderDecider;
-    private MockObject|TwoFactorTokenInterface $twoFactorToken;
+    private TwoFactorProviderDeciderInterface $twoFactorProviderDecider;
+    private MockObject&TwoFactorTokenInterface $twoFactorToken;
 
     protected function setUp(): void
     {
@@ -55,7 +55,7 @@ class TwoFactorProviderDeciderTest extends AbstractAuthenticationContextTestCase
         );
     }
 
-    private function createUserWithPreferredProvider(string|null $preferredProvider): MockObject|UserWithPreferredProviderInterface
+    private function createUserWithPreferredProvider(string|null $preferredProvider): MockObject&UserWithPreferredProviderInterface
     {
         $user = $this->createMock(UserWithPreferredProviderInterface::class);
         $user
@@ -66,7 +66,7 @@ class TwoFactorProviderDeciderTest extends AbstractAuthenticationContextTestCase
         return $user;
     }
 
-    private function createAuthContext(object $user): MockObject|AuthenticationContextInterface
+    private function createAuthContext(object $user): MockObject&AuthenticationContextInterface
     {
         $authContext = $this->createMock(AuthenticationContextInterface::class);
         $authContext

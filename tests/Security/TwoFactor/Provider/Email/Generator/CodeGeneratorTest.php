@@ -14,8 +14,8 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class CodeGeneratorTest extends TestCase
 {
-    private MockObject|PersisterInterface $persister;
-    private MockObject|AuthCodeMailerInterface $mailer;
+    private MockObject&PersisterInterface $persister;
+    private MockObject&AuthCodeMailerInterface $mailer;
     private TestableCodeGenerator $authCodeManager;
 
     protected function setUp(): void

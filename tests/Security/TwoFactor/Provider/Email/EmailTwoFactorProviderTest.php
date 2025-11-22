@@ -26,7 +26,7 @@ class EmailTwoFactorProviderTest extends TestCase
     private const string INVALID_AUTH_CODE = 'invalidCode';
     private const string VALID_AUTH_CODE_WITH_SPACES = ' valid Code ';
 
-    private MockObject|CodeGeneratorInterface $generator;
+    private MockObject&CodeGeneratorInterface $generator;
     private EmailTwoFactorProvider $provider;
 
     protected function setUp(): void
@@ -37,7 +37,7 @@ class EmailTwoFactorProviderTest extends TestCase
         $this->provider = new EmailTwoFactorProvider($this->generator, $formRenderer, $this->eventDispatcher);
     }
 
-    private function createUser(bool $emailAuthEnabled = true): MockObject|UserWithTwoFactorInterface
+    private function createUser(bool $emailAuthEnabled = true): MockObject&UserWithTwoFactorInterface
     {
         $user = $this->createMock(UserWithTwoFactorInterface::class);
         $user
@@ -52,7 +52,7 @@ class EmailTwoFactorProviderTest extends TestCase
         return $user;
     }
 
-    private function createAuthenticationContext(UserInterface|null $user = null): MockObject|AuthenticationContextInterface
+    private function createAuthenticationContext(UserInterface|null $user = null): MockObject&AuthenticationContextInterface
     {
         $authContext = $this->createMock(AuthenticationContextInterface::class);
         $authContext

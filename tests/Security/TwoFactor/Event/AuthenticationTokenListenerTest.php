@@ -24,9 +24,9 @@ class AuthenticationTokenListenerTest extends TestCase
 {
     private const string FIREWALL_NAME = 'firewallName';
 
-    private MockObject|TwoFactorConditionRegistry $twoFactorConditionRegistry;
-    private MockObject|TwoFactorProviderInitiator $twoFactorProviderInitiator;
-    private MockObject|AuthenticationContextFactoryInterface $authenticationContextFactory;
+    private MockObject&TwoFactorConditionRegistry $twoFactorConditionRegistry;
+    private MockObject&TwoFactorProviderInitiator $twoFactorProviderInitiator;
+    private MockObject&AuthenticationContextFactoryInterface $authenticationContextFactory;
     private AuthenticationTokenListener $listener;
 
     protected function setUp(): void
@@ -50,7 +50,7 @@ class AuthenticationTokenListenerTest extends TestCase
         );
     }
 
-    private function createEvent(MockObject $token): MockObject|AuthenticationTokenCreatedEvent
+    private function createEvent(MockObject $token): MockObject&AuthenticationTokenCreatedEvent
     {
         $event = $this->createMock(AuthenticationTokenCreatedEvent::class);
         $event

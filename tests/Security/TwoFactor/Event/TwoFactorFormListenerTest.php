@@ -23,9 +23,9 @@ class TwoFactorFormListenerTest extends TestCase
 {
     use EventDispatcherTestHelper;
 
-    private MockObject|TwoFactorFirewallConfig $twoFactorFirewallConfig;
-    private MockObject|TokenStorageInterface $tokenStorage;
-    private MockObject|Request $request;
+    private MockObject&TwoFactorFirewallConfig $twoFactorFirewallConfig;
+    private MockObject&TokenStorageInterface $tokenStorage;
+    private MockObject&Request $request;
     private TwoFactorFormListener $listener;
 
     protected function setUp(): void
