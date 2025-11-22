@@ -13,5 +13,5 @@ splits:
       target: "https://${GH_TOKEN}@github.com/scheb/2fa-trusted-device.git"
 
 origins:
-    - ^7\.x$
-    - ^v7\.\d+\.\d+.*$
+    - ^8\.x$
+    - ^v8\.\d+\.\d+.*$
