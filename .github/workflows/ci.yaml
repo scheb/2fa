@@ -16,7 +16,7 @@ jobs:
             fail-fast: false
             matrix:
                 php-version:
-                    - '8.2'
+                    - '8.4'
 
         steps:
             -   name: 'Checkout code'
@@ -52,25 +52,25 @@ jobs:
             matrix:
                 include:
                     # Lowest possible configuration
-                    -   php-version: '8.2'
+                    -   php-version: '8.4'
                         dependency-versions: 'lowest'
-                        symfony-version: '6.4.*'
+                        symfony-version: '7.4.*'
 
                     # Test against Symfony 6.4 on minimum PHP version
-                    -   php-version: '8.2'
-                        symfony-version: '6.4.*'
+                    -   php-version: '8.4'
+                        symfony-version: '7.4.*'
 
                     # Test against Symfony 6.4 on highest PHP version
                     -   php-version: '8.5'
-                        symfony-version: '6.4.*'
+                        symfony-version: '7.4.*'
 
                     # Test against Symfony 7 on minimum PHP version
-                    -   php-version: '8.2'
-                        symfony-version: '7.*'
+                    -   php-version: '8.4'
+                        symfony-version: '8.*'
 
                     # Test against Symfony 7 on highest PHP version
                     -   php-version: '8.5'
-                        symfony-version: '7.*'
+                        symfony-version: '8.*'
 
         steps:
             -   name: 'Checkout code'
@@ -99,20 +99,20 @@ jobs:
             matrix:
                 include:
                     # Test against Symfony 6.4 on minimum PHP version
-                    -   php-version: '8.2'
-                        symfony-version: '6.4.*'
+                    -   php-version: '8.4'
+                        symfony-version: '7.4.*'
 
                     # Test against Symfony 6.4 on highest PHP version
                     -   php-version: '8.5'
-                        symfony-version: '6.4.*'
+                        symfony-version: '7.4.*'
 
                     # Test against Symfony 7 on minimum PHP version
-                    -   php-version: '8.2'
-                        symfony-version: '7.*'
+                    -   php-version: '8.4'
+                        symfony-version: '8.*'
 
                     # Test against Symfony 7 on highest PHP version
                     -   php-version: '8.5'
-                        symfony-version: '7.*'
+                        symfony-version: '8.*'
         steps:
             -   name: 'Checkout code'
                 uses: actions/checkout@v5
@@ -139,7 +139,7 @@ jobs:
             fail-fast: false
             matrix:
                 php-version:
-                    - '8.2'
+                    - '8.4'
 
         steps:
             -   name: 'Checkout code'
