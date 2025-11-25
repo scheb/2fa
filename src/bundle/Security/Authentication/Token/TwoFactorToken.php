@@ -90,6 +90,9 @@ class TwoFactorToken implements Stringable, TwoFactorTokenInterface
         return $this->credentials;
     }
 
+    /**
+     * Compatibility with Symfony 7.4, method was removed from the interface in Symfony 8.
+     */
     #[Deprecated]
     public function eraseCredentials(): void
     {
