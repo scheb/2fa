@@ -60,7 +60,7 @@ and the period of the temporary codes.
 
 .. configuration-block::
 
-    .. code-block:: php
+    .. code-block:: php-annotations
 
        <?php
 
