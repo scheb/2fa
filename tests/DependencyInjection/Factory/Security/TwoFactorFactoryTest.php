@@ -116,25 +116,25 @@ EOF;
         $this->servicesFactory
             ->expects($this->once())
             ->method('createSuccessHandler')
-            ->with($this->container, self::FIREWALL_NAME, $this->isType('array'), self::TWO_FACTOR_FIREWALL_CONFIG_ID)
+            ->with($this->container, self::FIREWALL_NAME, $this->isArray(), self::TWO_FACTOR_FIREWALL_CONFIG_ID)
             ->willReturn(self::SUCCESS_HANDLER_ID);
 
         $this->servicesFactory
             ->expects($this->once())
             ->method('createFailureHandler')
-            ->with($this->container, self::FIREWALL_NAME, $this->isType('array'), self::TWO_FACTOR_FIREWALL_CONFIG_ID)
+            ->with($this->container, self::FIREWALL_NAME, $this->isArray(), self::TWO_FACTOR_FIREWALL_CONFIG_ID)
             ->willReturn(self::FAILURE_HANDLER_ID);
 
         $this->servicesFactory
             ->expects($this->once())
             ->method('createAuthenticationRequiredHandler')
-            ->with($this->container, self::FIREWALL_NAME, $this->isType('array'), self::TWO_FACTOR_FIREWALL_CONFIG_ID)
+            ->with($this->container, self::FIREWALL_NAME, $this->isArray(), self::TWO_FACTOR_FIREWALL_CONFIG_ID)
             ->willReturn(self::AUTH_REQUIRED_HANDLER_ID);
 
         $this->servicesFactory
             ->expects($this->once())
             ->method('createTwoFactorFirewallConfig')
-            ->with($this->container, self::FIREWALL_NAME, $this->isType('array'))
+            ->with($this->container, self::FIREWALL_NAME, $this->isArray())
             ->willReturn(self::TWO_FACTOR_FIREWALL_CONFIG_ID);
 
         $this->servicesFactory
@@ -155,7 +155,7 @@ EOF;
         $this->servicesFactory
             ->expects($this->once())
             ->method('createProviderPreparationListener')
-            ->with($this->container, self::FIREWALL_NAME, $this->isType('array'));
+            ->with($this->container, self::FIREWALL_NAME, $this->isArray());
     }
 
     /**
