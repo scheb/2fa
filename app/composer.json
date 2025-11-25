@@ -58,7 +58,5 @@
     },
     "scripts": {
         "post-update-cmd": "bin/console cache:clear"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
