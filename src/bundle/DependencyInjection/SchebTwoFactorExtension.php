@@ -240,12 +240,10 @@ class SchebTwoFactorExtension extends Extension
      */
     private function configureCodeReuseCache(ContainerBuilder $container, array $config): void
     {
-        if (($config['code_reuse_cache'] ?? null) === null) {
-            $config['code_reuse_cache'] = '';
-        }
-
         $container->setParameter('scheb_two_factor.code_reuse_cache_duration', $config['code_reuse_cache_duration']);
-        $container->setAlias('scheb_two_factor.code_reuse_cache', $config['code_reuse_cache']);
+        if (($config['code_reuse_cache'] ?? null) !== null) {
+            $container->setAlias('scheb_two_factor.code_reuse_cache', $config['code_reuse_cache']);
+        }
 
         if (($config['code_reuse_default_handler'] ?? null) === null) {
             return;
