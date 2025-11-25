@@ -1,5 +1,0 @@
-monolog:
-    handlers:
-        main:
-            type:   test
-            level:  debug
