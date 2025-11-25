@@ -143,7 +143,7 @@ class TrustedDeviceTokenStorage implements ResetInterface
 
     private function readCookieValue(): string|null
     {
-        return $this->getRequest()->cookies->get($this->cookieName, null);
+        return $this->getRequest()->cookies->get($this->cookieName);
     }
 
     private function getRequest(): Request

@@ -16,7 +16,7 @@ class SecurityController extends AbstractController
     #[Route('/login', name: '_security_login')]
     public function login(AuthenticationUtils $authUtils): Response
     {
-        if ($this->getUser()) {
+        if (null !== $this->getUser()) {
             return $this->redirectToRoute('members_area');
         }
 

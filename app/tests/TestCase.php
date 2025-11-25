@@ -36,7 +36,7 @@ abstract class TestCase extends WebTestCase
 
     // //////////////////// CONFIGURATION
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -136,9 +136,7 @@ abstract class TestCase extends WebTestCase
 
     private function getEntityManager(): EntityManager
     {
-        $em = self::getContainer()->get('doctrine')->getManager();
-
-        return $em;
+        return self::getContainer()->get('doctrine')->getManager();
     }
 
     private function getTestUser(EntityManager $em): User
