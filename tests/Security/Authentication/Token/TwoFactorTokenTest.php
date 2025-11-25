@@ -51,10 +51,9 @@ class TwoFactorTokenTest extends TestCase
 
         $credentialsToken = $this->twoFactorToken->createWithCredentials('credentials');
         $this->assertNotSame($this->twoFactorToken, $credentialsToken);
+        $this->assertTrue($credentialsToken->isTwoFactorProviderPrepared('provider1'));
+        $this->assertEquals('attributeValue', $credentialsToken->getAttribute('attributeName'));
         $this->assertEquals('credentials', $credentialsToken->getCredentials());
-
-        $credentialsToken->eraseCredentials();
-        $this->assertEquals($this->twoFactorToken, $credentialsToken);
     }
 
     #[Test]
