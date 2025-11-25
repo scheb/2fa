@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\Authentication\Exception;
 
+use Override;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
@@ -16,6 +17,7 @@ class TwoFactorProviderNotFoundException extends AuthenticationException
     /** @psalm-suppress PropertyNotSetInConstructor */
     private string|null $provider = null;
 
+    #[Override]
     public function getMessageKey(): string
     {
         return self::MESSAGE_KEY;
@@ -34,6 +36,7 @@ class TwoFactorProviderNotFoundException extends AuthenticationException
     /**
      * @return array<string,string|null>
      */
+    #[Override]
     public function getMessageData(): array
     {
         return ['{{ provider }}' => $this->provider];
@@ -42,6 +45,7 @@ class TwoFactorProviderNotFoundException extends AuthenticationException
     /**
      * @return mixed[]
      */
+    #[Override]
     public function __serialize(): array
     {
         return [$this->provider, parent::__serialize()];
@@ -50,6 +54,7 @@ class TwoFactorProviderNotFoundException extends AuthenticationException
     /**
      * @param mixed[] $data
      */
+    #[Override]
     public function __unserialize(array $data): void
     {
         [$this->provider, $parentData] = $data;

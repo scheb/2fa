@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Security\Http\Firewall;
 
+use Override;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Authorization\TwoFactorAccessDecider;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
@@ -62,6 +63,7 @@ class TwoFactorAccessListener extends AbstractListener implements FirewallListen
         }
     }
 
+    #[Override]
     public static function getPriority(): int
     {
         // When the class is injected via FirewallListenerFactoryInterface

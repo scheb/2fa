@@ -7,6 +7,7 @@ namespace App\Tests;
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Monolog\Handler\TestHandler;
+use Override;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorToken;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleTotpFactory;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceTokenEncoder;
@@ -49,6 +50,7 @@ abstract class TestCase extends WebTestCase
         self::getContainer()->get('security.token_storage')->disableUsageTracking();
     }
 
+    #[Override]
     protected function tearDown(): void
     {
         parent::tearDown();

@@ -20,7 +20,7 @@ return static function (ContainerConfigurator $container): void {
                 '%scheb_two_factor.google.server_name%',
                 '%scheb_two_factor.google.issuer%',
                 '%scheb_two_factor.google.digits%',
-                (new ReferenceConfigurator('clock'))->nullOnInvalid(),
+                new ReferenceConfigurator('clock')->nullOnInvalid(),
             ])
 
         ->set('scheb_two_factor.security.google_authenticator', GoogleAuthenticator::class)
