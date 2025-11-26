@@ -57,12 +57,12 @@
         }
     },
     "replace": {
-        "scheb/2fa-backup-code": "^6.0",
-        "scheb/2fa-bundle": "^6.0",
-        "scheb/2fa-email": "^6.0",
-        "scheb/2fa-google-authenticator": "^6.0",
-        "scheb/2fa-totp": "^6.0",
-        "scheb/2fa-trusted-device": "^6.0"
+        "scheb/2fa-backup-code": "^7.0",
+        "scheb/2fa-bundle": "^7.0",
+        "scheb/2fa-email": "^7.0",
+        "scheb/2fa-google-authenticator": "^7.0",
+        "scheb/2fa-totp": "^7.0",
+        "scheb/2fa-trusted-device": "^7.0"
     },
     "conflict": {
         "scheb/two-factor-bundle": "*"
