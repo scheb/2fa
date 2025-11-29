@@ -9,6 +9,7 @@ use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
+use Stringable;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use function array_key_exists;
@@ -22,7 +23,7 @@ use function sprintf;
 /**
  * @api Part of the bundle's public API, may be extended
  */
-class TwoFactorToken implements TwoFactorTokenInterface
+class TwoFactorToken implements Stringable, TwoFactorTokenInterface
 {
     /** @var array<string,mixed> */
     private array $attributes = [];

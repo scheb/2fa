@@ -145,7 +145,7 @@ class TrustedDeviceTokenStorage implements ResetInterface
     {
         $cookieValue = $this->getRequest()->cookies->get($this->cookieName, null);
 
-        return null === $cookieValue ? null : (string) $cookieValue;
+        return null === $cookieValue ? null : $cookieValue;
     }
 
     private function getRequest(): Request
