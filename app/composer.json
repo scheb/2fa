@@ -4,7 +4,7 @@
     "require": {
         "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
         "ext-json": "*",
-        "doctrine/doctrine-bundle": "^2.0.3",
+        "doctrine/doctrine-bundle": "^2.0.3 || ^3.0",
         "doctrine/orm": "^2.9 || ^3.0",
         "egulias/email-validator": "^4.0",
         "endroid/qr-code": "^4.0",
