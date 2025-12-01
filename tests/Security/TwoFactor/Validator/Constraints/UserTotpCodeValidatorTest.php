@@ -6,6 +6,7 @@ namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Validator\Constraints;
 
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfigurationInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInterface;
@@ -40,11 +41,12 @@ class UserTotpCodeValidatorTest extends ConstraintValidatorTestCase
         parent::setUp();
     }
 
+    #[Test]
     #[DataProvider('provideConstraints')]
-    public function testTotpCodeIsValid(UserTotpCode $constraint): void
+    public function validate_validCode_noViolation(UserTotpCode $constraint): void
     {
         $this->totpAuthenticator
-            ->expects(self::any())
+            ->expects($this->any())
             ->method('checkCode')
             ->willReturn(true);
 
@@ -53,11 +55,12 @@ class UserTotpCodeValidatorTest extends ConstraintValidatorTestCase
         $this->assertNoViolation();
     }
 
+    #[Test]
     #[DataProvider('provideConstraints')]
-    public function testTotpCodeIsNotValid(UserTotpCode $constraint): void
+    public function validate_invalidCode_raisedViolation(UserTotpCode $constraint): void
     {
         $this->totpAuthenticator
-            ->expects(self::any())
+            ->expects($this->any())
             ->method('checkCode')
             ->willReturn(false);
 
@@ -79,8 +82,9 @@ class UserTotpCodeValidatorTest extends ConstraintValidatorTestCase
         yield 'named arguments' => [new UserTotpCode(message: 'myMessage', translationDomain: 'myDomain')];
     }
 
+    #[Test]
     #[DataProvider('emptyTotpCodeData')]
-    public function testEmptyTotpCodesAreNotValid(string|null $code): void
+    public function validate_emptyCode_raisedViolation(string|null $code): void
     {
         $constraint = new UserTotpCode(['message' => 'myMessage']);
 
@@ -103,8 +107,10 @@ class UserTotpCodeValidatorTest extends ConstraintValidatorTestCase
         ];
     }
 
-    public function testUserIsNotValid(): void
+    #[Test]
+    public function validate_invalidUser_throwsException(): void
     {
+        // Create a user that doesn't implement TwoFactorInterface
         $user = $this->createMock(UserInterface::class);
 
         $this->tokenStorage = $this->createTokenStorage($user);
@@ -127,7 +133,7 @@ class UserTotpCodeValidatorTest extends ConstraintValidatorTestCase
 
         $mock = $this->createMock(UserWithTwoFactorInterface::class);
         $mock
-            ->expects(self::any())
+            ->expects($this->any())
             ->method('getTotpAuthenticationConfiguration')
             ->willReturn($configuration);
 
@@ -145,7 +151,7 @@ class UserTotpCodeValidatorTest extends ConstraintValidatorTestCase
 
         $mock = $this->createMock(TokenStorageInterface::class);
         $mock
-            ->expects(self::any())
+            ->expects($this->any())
             ->method('getToken')
             ->willReturn($token);
 
@@ -156,7 +162,7 @@ class UserTotpCodeValidatorTest extends ConstraintValidatorTestCase
     {
         $mock = $this->createMock(TokenInterface::class);
         $mock
-            ->expects(self::any())
+            ->expects($this->any())
             ->method('getUser')
             ->willReturn($user);
 
