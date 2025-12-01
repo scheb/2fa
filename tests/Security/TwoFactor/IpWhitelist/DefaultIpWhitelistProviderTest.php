@@ -12,7 +12,7 @@ use Scheb\TwoFactorBundle\Tests\TestCase;
 class DefaultIpWhitelistProviderTest extends TestCase
 {
     #[Test]
-    public function testGetWhitelistedIps_hasIpsConfigured_returnThoseIps(): void
+    public function getWhitelistedIps_hasIpsConfigured_returnThoseIps(): void
     {
         $ipWhitelist = ['1.0.0.0', '2.0.0.0'];
         $context = $this->createMock(AuthenticationContextInterface::class);
