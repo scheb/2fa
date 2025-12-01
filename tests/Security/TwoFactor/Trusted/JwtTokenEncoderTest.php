@@ -30,7 +30,7 @@ class JwtTokenEncoderTest extends TestCase
         $this->encoder = new JwtTokenEncoder($this->configuration);
     }
 
-    protected function createToken(DateTimeImmutable $expirationDate): string
+    private function createToken(DateTimeImmutable $expirationDate): string
     {
         return $this->configuration->builder()
             ->withClaim(self::CLAIM, self::TOKEN_ID)
@@ -39,7 +39,7 @@ class JwtTokenEncoderTest extends TestCase
             ->toString();
     }
 
-    protected function assertJwtClaim(Plain $jwtToken, string $name, mixed $expectedValue): void
+    private function assertJwtClaim(Plain $jwtToken, string $name, mixed $expectedValue): void
     {
         $this->assertEquals($expectedValue, $jwtToken->claims()->get($name, false));
     }
