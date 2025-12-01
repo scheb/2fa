@@ -7,6 +7,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorTwoFactorProvider;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleTotpFactory;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Validator\Constraints\UserGoogleTotpCodeValidator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -42,6 +43,12 @@ return static function (ContainerConfigurator $container): void {
             ->args([
                 service('scheb_two_factor.security.google_authenticator'),
                 service('scheb_two_factor.security.google.form_renderer'),
+            ])
+
+        ->set('scheb_two_factor.security.totp.validator.user_google_totp_code', UserGoogleTotpCodeValidator::class)
+            ->args([
+                service('security.token_storage'),
+                service('scheb_two_factor.security.google_authenticator'),
             ])
 
         ->alias('scheb_two_factor.security.google.form_renderer', 'scheb_two_factor.security.google.default_form_renderer')
