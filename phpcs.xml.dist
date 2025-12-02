@@ -37,6 +37,9 @@
         <!-- We don't want this -->
 		<exclude name="Generic.Formatting.MultipleStatementAlignment"/>
 		<exclude name="SlevomatCodingStandard.Commenting.RequireOneLineDocComment.MultiLineDocComment"/>
+
+        <!-- PHP-CS-Fixer has different rules -->
+        <exclude name="SlevomatCodingStandard.Commenting.DocCommentSpacing.IncorrectAnnotationsGroup"/>
 	</rule>
 
     <!-- Align with php-cs-fixer config -->
