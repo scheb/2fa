@@ -14,6 +14,6 @@ class UserTotpCodeDummy
     #[UserTotpCode(message: 'myMessage', translationDomain: 'myDomain', service: 'my_service')]
     public string $b;
 
-    #[UserTotpCode(groups: ['my_group'], payload: 'some attached data')]
+    #[UserTotpCode(['groups' => ['my_group'], 'payload' => 'some attached data'])]
     public string $c;
 }

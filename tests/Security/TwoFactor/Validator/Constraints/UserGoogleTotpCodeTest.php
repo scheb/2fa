@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Validator\Constraints;
 
-use Generator;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Validator\Constraints\UserGoogleTotpCode;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Mapping\Loader\AttributeLoader;
@@ -15,44 +12,20 @@ use Symfony\Component\Validator\Mapping\Loader\AttributeLoader;
 class UserGoogleTotpCodeTest extends TestCase
 {
     #[Test]
-    public function validatedBy_objectInitialized_returnDefault(): void
-    {
-        $constraint = new UserGoogleTotpCode();
-
-        $this->assertSame('scheb_two_factor.security.totp.validator.user_google_totp_code', $constraint->validatedBy());
-    }
-
-    #[Test]
-    #[DataProvider('provideServiceValidatedConstraints')]
-    public function validatedBy_customValue_returnValid(UserGoogleTotpCode $constraint): void
-    {
-        $this->assertSame('my_service', $constraint->validatedBy());
-    }
-
-    /**
-     * @return Generator<string, list{UserGoogleTotpCode}>
-     */
-    public static function provideServiceValidatedConstraints(): iterable
-    {
-        yield 'Doctrine style' => [new UserGoogleTotpCode(['service' => 'my_service'])];
-
-        yield 'named arguments' => [new UserGoogleTotpCode(service: 'my_service')];
-
-        $metadata = new ClassMetadata(UserGoogleTotpCodeDummy::class);
-        self::assertTrue((new AttributeLoader())->loadClassMetadata($metadata));
-
-        yield 'attribute' => [$metadata->getPropertyMetadata('b')[0]->getConstraints()[0]];
-    }
-
-    #[Test]
     public function configureConstraintFromAttribute_configurationIsCorrect(): void
     {
         $metadata = new ClassMetadata(UserGoogleTotpCodeDummy::class);
         $this->assertTrue((new AttributeLoader())->loadClassMetadata($metadata));
 
+        [$aConstraint] = $metadata->getPropertyMetadata('a')[0]->getConstraints();
+        $this->assertSame('code_invalid', $aConstraint->message);
+        $this->assertSame('SchebTwoFactorBundle', $aConstraint->translationDomain);
+        $this->assertSame('scheb_two_factor.security.totp.validator.user_google_totp_code', $aConstraint->validatedBy());
+
         [$bConstraint] = $metadata->getPropertyMetadata('b')[0]->getConstraints();
         $this->assertSame('myMessage', $bConstraint->message);
         $this->assertSame('myDomain', $bConstraint->translationDomain);
+        $this->assertSame('my_service', $bConstraint->validatedBy());
         $this->assertSame(['Default', 'UserGoogleTotpCodeDummy'], $bConstraint->groups);
         $this->assertNull($bConstraint->payload);
 
