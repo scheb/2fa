@@ -24,8 +24,8 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
  */
 class UserTotpCodeValidatorTest extends ConstraintValidatorTestCase
 {
-    protected TokenStorageInterface $tokenStorage;
-    protected TotpAuthenticatorInterface&MockObject $totpAuthenticator;
+    private TokenStorageInterface $tokenStorage;
+    private TotpAuthenticatorInterface&MockObject $totpAuthenticator;
 
     protected function createValidator(): UserTotpCodeValidator
     {
@@ -122,12 +122,12 @@ class UserTotpCodeValidatorTest extends ConstraintValidatorTestCase
         $this->validator->validate('secret', new UserTotpCode());
     }
 
-    protected function createTotpConfiguration(): TotpConfigurationInterface
+    private function createTotpConfiguration(): TotpConfigurationInterface
     {
         return $this->createMock(TotpConfigurationInterface::class);
     }
 
-    protected function createUser(): UserWithTwoFactorInterface
+    private function createUser(): UserWithTwoFactorInterface
     {
         $configuration = $this->createTotpConfiguration();
 
@@ -140,12 +140,12 @@ class UserTotpCodeValidatorTest extends ConstraintValidatorTestCase
         return $mock;
     }
 
-    protected function createTotpAuthenticator(): TotpAuthenticatorInterface&MockObject
+    private function createTotpAuthenticator(): TotpAuthenticatorInterface&MockObject
     {
         return $this->createMock(TotpAuthenticatorInterface::class);
     }
 
-    protected function createTokenStorage(UserInterface|null $user = null): TokenStorageInterface
+    private function createTokenStorage(UserInterface|null $user = null): TokenStorageInterface
     {
         $token = $this->createAuthenticationToken($user);
 
@@ -158,7 +158,7 @@ class UserTotpCodeValidatorTest extends ConstraintValidatorTestCase
         return $mock;
     }
 
-    protected function createAuthenticationToken(UserInterface|null $user = null): TokenInterface
+    private function createAuthenticationToken(UserInterface|null $user = null): TokenInterface
     {
         $mock = $this->createMock(TokenInterface::class);
         $mock

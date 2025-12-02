@@ -23,8 +23,8 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
  */
 class UserGoogleTotpCodeValidatorTest extends ConstraintValidatorTestCase
 {
-    protected TokenStorageInterface $tokenStorage;
-    protected GoogleAuthenticatorInterface&MockObject $googleAuthenticator;
+    private TokenStorageInterface $tokenStorage;
+    private GoogleAuthenticatorInterface&MockObject $googleAuthenticator;
 
     protected function createValidator(): UserGoogleTotpCodeValidator
     {
@@ -121,17 +121,17 @@ class UserGoogleTotpCodeValidatorTest extends ConstraintValidatorTestCase
         $this->validator->validate('secret', new UserGoogleTotpCode());
     }
 
-    protected function createUser(): UserWithTwoFactorInterface
+    private function createUser(): UserWithTwoFactorInterface
     {
         return $this->createMock(UserWithTwoFactorInterface::class);
     }
 
-    protected function createGoogleAuthenticator(): GoogleAuthenticatorInterface&MockObject
+    private function createGoogleAuthenticator(): GoogleAuthenticatorInterface&MockObject
     {
         return $this->createMock(GoogleAuthenticatorInterface::class);
     }
 
-    protected function createTokenStorage(UserInterface|null $user = null): TokenStorageInterface
+    private function createTokenStorage(UserInterface|null $user = null): TokenStorageInterface
     {
         $token = $this->createAuthenticationToken($user);
 
@@ -144,7 +144,7 @@ class UserGoogleTotpCodeValidatorTest extends ConstraintValidatorTestCase
         return $mock;
     }
 
-    protected function createAuthenticationToken(UserInterface|null $user = null): TokenInterface
+    private function createAuthenticationToken(UserInterface|null $user = null): TokenInterface
     {
         $mock = $this->createMock(TokenInterface::class);
         $mock
