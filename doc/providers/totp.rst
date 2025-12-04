@@ -251,3 +251,8 @@ Events
 ------
 
 See :doc:`Events </events>`
+
+Validating TOTP Codes in Forms
+------------------------------
+
+See :doc:`Validating Two-Factor Codes in Forms </validator_constraints>`

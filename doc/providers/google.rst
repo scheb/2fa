@@ -232,3 +232,8 @@ Events
 ------
 
 See :doc:`Events </events>`
+
+Validating Google Authenticator Codes in Forms
+----------------------------------------------
+
+See :doc:`Validating Two-Factor Codes in Forms </validator_constraints>`
