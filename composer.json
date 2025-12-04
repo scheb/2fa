@@ -36,6 +36,7 @@
         "psr/container": ">=1.1",
         "squizlabs/php_codesniffer": "^4.0",
         "symfony/mailer": "^6.4 || ^7.0",
+        "symfony/validator": "^6.4 || ^7.0",
         "symfony/yaml": "^6.4 || ^7.0",
         "vimeo/psalm": "^6.0"
     },

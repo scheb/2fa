@@ -7,6 +7,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorTwoFactorProvider;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpFactory;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Validator\Constraints\UserTotpCodeValidator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -43,6 +44,12 @@ return static function (ContainerConfigurator $container): void {
             ->args([
                 service('scheb_two_factor.security.totp_authenticator'),
                 service('scheb_two_factor.security.totp.form_renderer'),
+            ])
+
+        ->set('scheb_two_factor.security.totp.validator.user_totp_code', UserTotpCodeValidator::class)
+            ->args([
+                service('security.token_storage'),
+                service('scheb_two_factor.security.totp_authenticator'),
             ])
 
         ->alias('scheb_two_factor.security.totp.form_renderer', 'scheb_two_factor.security.totp.default_form_renderer')
