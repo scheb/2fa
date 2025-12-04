@@ -13,6 +13,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInte
 use Scheb\TwoFactorBundle\Security\TwoFactor\Validator\Constraints\UserTotpCode;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Validator\Constraints\UserTotpCodeValidator;
 use Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Totp\UserWithTwoFactorInterface;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -77,7 +78,10 @@ class UserTotpCodeValidatorTest extends ConstraintValidatorTestCase
      */
     public static function provideConstraints(): iterable
     {
-        yield 'Doctrine style' => [new UserTotpCode(['message' => 'myMessage', 'translationDomain' => 'myDomain'])];
+        // Test backwards compatibility with Symfony 7.4
+        if (Kernel::VERSION_ID < 80000) {
+            yield 'Doctrine style' => [new UserTotpCode(['message' => 'myMessage', 'translationDomain' => 'myDomain'])];
+        }
 
         yield 'named arguments' => [new UserTotpCode(message: 'myMessage', translationDomain: 'myDomain')];
     }
@@ -86,7 +90,7 @@ class UserTotpCodeValidatorTest extends ConstraintValidatorTestCase
     #[DataProvider('emptyTotpCodeData')]
     public function validate_emptyCode_raisedViolation(string|null $code): void
     {
-        $constraint = new UserTotpCode(['message' => 'myMessage']);
+        $constraint = new UserTotpCode(message: 'myMessage');
 
         $this->validator->validate($code, $constraint);
 

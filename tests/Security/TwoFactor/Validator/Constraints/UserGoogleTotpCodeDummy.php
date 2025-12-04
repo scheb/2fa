@@ -14,6 +14,11 @@ class UserGoogleTotpCodeDummy
     #[UserGoogleTotpCode(message: 'myMessage', translationDomain: 'myDomain', service: 'my_service')]
     public string $b;
 
-    #[UserGoogleTotpCode(['groups' => ['my_group'], 'payload' => 'some attached data'])]
+    #[UserGoogleTotpCode(groups: ['my_group'], payload: 'some attached data')]
     public string $c;
+
+    // Test backwards compatibility with Symfony 7.4
+    // Associative arrays are only supported under Symfony 7.4
+    #[UserGoogleTotpCode(['groups' => ['my_group'], 'payload' => 'some attached data'])]
+    public string $c74;
 }

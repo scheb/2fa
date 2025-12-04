@@ -12,6 +12,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator
 use Scheb\TwoFactorBundle\Security\TwoFactor\Validator\Constraints\UserGoogleTotpCode;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Validator\Constraints\UserGoogleTotpCodeValidator;
 use Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Provider\Google\UserWithTwoFactorInterface;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -76,7 +77,10 @@ class UserGoogleTotpCodeValidatorTest extends ConstraintValidatorTestCase
      */
     public static function provideConstraints(): iterable
     {
-        yield 'Doctrine style' => [new UserGoogleTotpCode(['message' => 'myMessage', 'translationDomain' => 'myDomain'])];
+        // Test backwards compatibility with Symfony 7.4
+        if (Kernel::VERSION_ID < 80000) {
+            yield 'Doctrine style' => [new UserGoogleTotpCode(['message' => 'myMessage', 'translationDomain' => 'myDomain'])];
+        }
 
         yield 'named arguments' => [new UserGoogleTotpCode(message: 'myMessage', translationDomain: 'myDomain')];
     }
@@ -85,7 +89,7 @@ class UserGoogleTotpCodeValidatorTest extends ConstraintValidatorTestCase
     #[DataProvider('emptyTotpCodeData')]
     public function validate_emptyCode_raisedViolation(string|null $code): void
     {
-        $constraint = new UserGoogleTotpCode(['message' => 'myMessage']);
+        $constraint = new UserGoogleTotpCode(message: 'myMessage');
 
         $this->validator->validate($code, $constraint);
 

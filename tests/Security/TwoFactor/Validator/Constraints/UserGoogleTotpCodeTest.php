@@ -6,6 +6,7 @@ namespace Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Validator\Constraints;
 
 use PHPUnit\Framework\Attributes\Test;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Mapping\Loader\AttributeLoader;
 
@@ -32,5 +33,13 @@ class UserGoogleTotpCodeTest extends TestCase
         [$cConstraint] = $metadata->getPropertyMetadata('c')[0]->getConstraints();
         $this->assertSame(['my_group'], $cConstraint->groups);
         $this->assertSame('some attached data', $cConstraint->payload);
+
+        // Backwards compatibility for Symfony 7.4
+        // @phpcs:ignore SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed
+        if (Kernel::VERSION_ID < 80000) {
+            [$cConstraint] = $metadata->getPropertyMetadata('c')[0]->getConstraints();
+            $this->assertSame(['my_group'], $cConstraint->groups);
+            $this->assertSame('some attached data', $cConstraint->payload);
+        }
     }
 }
