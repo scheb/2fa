@@ -10,6 +10,31 @@ Priority of the two-factor authenticator has changed from `0` to `-100`. Please 
 is still working fine, especially when you're using custom (non-official) authenticators. You might need to adjust
 the priority of your custom authenticator.
 
+When using the validator constraints `UserTotpCode` or `UserGoogleTotpCode` under Symfony 8, you can no longer pass the
+options as an associative array. Use constructor arguments instead. You can use named arguments.
+
+Before:
+
+```php
+// Attribute
+#[UserTotpCode(['message': 'The authentication code is invalid'])]
+public string $code;
+
+// Programmatic
+new UserTotpCode(['message': 'The authentication code is invalid'])
+```
+
+After:
+
+```php
+// Attribute
+#[UserTotpCode(message: 'The authentication code is invalid')]
+public string $code;
+
+// Programmatic
+new UserTotpCode(message: 'The authentication code is invalid')
+```
+
 
 6.x to 7.x
 ----------
