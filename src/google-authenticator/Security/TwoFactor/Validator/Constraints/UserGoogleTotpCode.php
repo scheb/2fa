@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Scheb\TwoFactorBundle\Security\TwoFactor\Validator\Constraints;
 
 use Attribute;
+use Symfony\Component\Validator\Attribute\HasNamedArguments;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -23,6 +24,7 @@ class UserGoogleTotpCode extends Constraint
     public string $translationDomain = 'SchebTwoFactorBundle';
     public string $service = 'scheb_two_factor.security.totp.validator.user_google_totp_code';
 
+    #[HasNamedArguments]
     public function __construct(array|null $options = null, string|null $message = null, string|null $translationDomain = null, string|null $service = null, array|null $groups = null, mixed $payload = null)
     {
         parent::__construct($options, $groups, $payload);
