@@ -1,6 +1,8 @@
 FROM phpdockerio/php:8.4-fpm
 WORKDIR /application
 
+ARG GIT_COMMIT_ID=""
+
 # Install selected extensions and other stuff
 RUN apt-get update \
     && apt-get -y --no-install-recommends install \
@@ -19,9 +21,11 @@ COPY app/src              ./src
 COPY app/templates        ./templates
 COPY src                  ./../src
 
-RUN composer install --no-dev --no-scripts; \
-    composer clear-cache; \
-    composer dump-autoload --optimize --classmap-authoritative; \
-    bin/console cache:warmup; \
-    chown -R www-data:www-data ./var/; \
-    chown -R www-data:www-data ./data/
+RUN composer install --no-dev --no-scripts \
+    && composer clear-cache \
+    && composer dump-autoload --optimize --classmap-authoritative \
+    && bin/console cache:warmup \
+    && chown -R www-data:www-data ./var/ \
+    && chown -R www-data:www-data ./data \
+    && echo "VERSION_COMMIT_ID=${GIT_COMMIT_ID}" >> .env \
+    && date +"VERSION_DATE=\"%Y-%m-%d %H:%M:%S\"" >> .env

@@ -24,5 +24,10 @@
         <main>
             {% block body %}{% endblock %}
         </main>
+        {% if VERSION_COMMIT_ID %}
+        <footer>
+            Version: <a href="https://github.com/scheb/2fa/commit/{{ VERSION_COMMIT_ID }}">{{ VERSION_COMMIT_ID|slice(0, 7) }}</a>, Build: {{ VERSION_DATE }}
+        </footer>
+        {% endif %}
     </body>
 </html>

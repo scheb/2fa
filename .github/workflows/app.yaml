@@ -36,6 +36,7 @@ jobs:
                 with:
                     context: .
                     file: app/Dockerfile
+                    build-args: GIT_COMMIT_ID=${{ github.sha }}
                     tags: ${{ steps.meta.outputs.tags }}
                     labels: ${{ steps.meta.outputs.labels }}
                     push: true
