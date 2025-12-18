@@ -12,6 +12,7 @@
         "lcobucci/jwt": "^5.0",
         "spomky-labs/otphp": "^11.0",
         "symfony/dotenv": "^6.4 || ^7.0",
+        "symfony/form": "^6.4 || ^7.0",
         "symfony/mailer": "^6.4 || ^7.0",
         "symfony/monolog-bundle": "^3.1",
         "symfony/rate-limiter": "^6.4 || ^7.0",
@@ -19,6 +20,7 @@
         "symfony/security-bundle": "^6.4 || ^7.0",
         "symfony/translation": "^6.4 || ^7.0",
         "symfony/twig-bundle": "^6.4 || ^7.0",
+        "symfony/validator": "^6.4 || ^7.0",
         "symfony/web-profiler-bundle": "^6.4 || ^7.0",
         "symfony/yaml": "^6.4 || ^7.0"
     },
