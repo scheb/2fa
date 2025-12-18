@@ -14,6 +14,7 @@
         "symfony/console": "^7.4 || ^8.0",
         "symfony/doctrine-bridge": "^7.4 || ^8.0",
         "symfony/dotenv": "^7.4 || ^8.0",
+        "symfony/form": "^7.4 || ^8.0",
         "symfony/framework-bundle": "^7.4 || ^8.0",
         "symfony/http-kernel": "^7.4 || ^8.0",
         "symfony/mailer": "^7.4 || ^8.0",
@@ -23,6 +24,7 @@
         "symfony/security-bundle": "^7.4 || ^8.0",
         "symfony/translation": "^7.4 || ^8.0",
         "symfony/twig-bundle": "^7.4 || ^8.0",
+        "symfony/validator": "^7.4 || ^8.0",
         "symfony/web-profiler-bundle": "^7.4 || ^8.0",
         "symfony/yaml": "^7.4 || ^8.0"
     },

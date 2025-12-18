@@ -32,7 +32,7 @@ abstract class TestCase extends WebTestCase
     private const TRUSTED_DEVICE_COOKIE_NAME = 'trusted_device';
     private const REMEMBER_ME_COOKIE_NAME = 'REMEMBERME';
 
-    private KernelBrowser $client;
+    protected KernelBrowser $client;
 
     // //////////////////// CONFIGURATION
 
@@ -224,6 +224,11 @@ abstract class TestCase extends WebTestCase
         return $this->client->request('GET', '/2fa');
     }
 
+    protected function navigateToValidatorsForm(): Crawler
+    {
+        return $this->client->request('GET', '/members/validators');
+    }
+
     // //////////////////// ASSERTS
 
     protected function assertLoggerHasInfo(string $message): void
@@ -337,7 +342,7 @@ abstract class TestCase extends WebTestCase
         $this->assertNotNull($this->client->getCookieJar()->get(self::TRUSTED_DEVICE_COOKIE_NAME), 'Trusted device cookie must be set');
     }
 
-    private function assertResponseStatusCode(int $code): void
+    protected function assertResponseStatusCode(int $code): void
     {
         $this->assertEquals(
             $code,

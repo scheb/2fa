@@ -1,0 +1,12 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h2>Form Validators</h2>
+    {% if isValid %}
+        <p class="notice">All codes valid!</p>
+    {% endif %}
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <p><button type="submit" name="submit-button">Check Codes</button></p>
+    {{ form_end(form) }}
+{% endblock %}
