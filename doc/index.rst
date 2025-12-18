@@ -18,6 +18,7 @@ Documentation Index
 * :doc:`Brute Force Protection </brute_force_protection>`
 * :doc:`CSRF Protection </csrf_protection>`
 * :doc:`Events </events>`
+* :doc:`Validator Constraints </validator_constraints>`
 * :doc:`Troubleshooting (common issues) </troubleshooting>`
 
 How-to's
