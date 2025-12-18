@@ -46,6 +46,7 @@ return static function (ContainerConfigurator $container): void {
             ])
 
         ->set('scheb_two_factor.security.totp.validator.user_google_totp_code', UserGoogleTotpCodeValidator::class)
+            ->tag('validator.constraint_validator', ['alias' => 'scheb_two_factor.security.totp.validator.user_google_totp_code'])
             ->args([
                 service('security.token_storage'),
                 service('scheb_two_factor.security.google_authenticator'),
