@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Scheb\TwoFactorBundle\Security\Http\EventListener\CheckBackupCodeListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManager;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\NullBackupCodeManager;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -21,5 +22,7 @@ return static function (ContainerConfigurator $container): void {
                 service('scheb_two_factor.provider_preparation_recorder'),
                 service('scheb_two_factor.backup_code_manager'),
                 service('event_dispatcher'),
-            ]);
+            ])
+
+        ->alias(BackupCodeManagerInterface::class, 'scheb_two_factor.default_backup_code_manager');
 };
