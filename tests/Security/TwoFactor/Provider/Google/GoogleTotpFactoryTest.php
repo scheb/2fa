@@ -22,13 +22,13 @@ class GoogleTotpFactoryTest extends TestCase
     private const int CUSTOM_DIGITS = 8;
     private const int DEFAULT_DIGITS = 6;
 
-    private function createUserMock(string|null $secret = self::SECRET): MockObject&TwoFactorInterface
+    private function createUserMock(string|null $secret = self::SECRET, string|null $username = self::USER_NAME): MockObject&TwoFactorInterface
     {
         $user = $this->createMock(TwoFactorInterface::class);
         $user
             ->expects($this->any())
             ->method('getGoogleAuthenticatorUsername')
-            ->willReturn(self::USER_NAME);
+            ->willReturn($username);
         $user
             ->expects($this->any())
             ->method('getGoogleAuthenticatorSecret')
@@ -70,9 +70,9 @@ class GoogleTotpFactoryTest extends TestCase
 
     #[Test]
     #[DataProvider('provideHostnameAndIssuer')]
-    public function getProvisioningUri_hostnameAndIssuerGiven_returnProvisioningUri(string|null $hostname, string|null $issuer, int $digits, string $expectedUrl): void
+    public function getProvisioningUri_hostnameAndIssuerGiven_returnProvisioningUri(string|null $username, string|null $hostname, string|null $issuer, int $digits, string $expectedUrl): void
     {
-        $user = $this->createUserMock();
+        $user = $this->createUserMock(username: $username);
         $totp = (new GoogleTotpFactory($hostname, $issuer, $digits))->createTotpForUser($user);
 
         $returnValue = $totp->getProvisioningUri();
@@ -85,11 +85,13 @@ class GoogleTotpFactoryTest extends TestCase
     public static function provideHostnameAndIssuer(): array
     {
         return [
-            [null, null, self::DEFAULT_DIGITS, 'otpauth://totp/User%20Name?secret=SECRET'],
-            [self::SERVER, null, self::DEFAULT_DIGITS, 'otpauth://totp/User%20Name%40Server?secret=SECRET'],
-            [null, self::ISSUER, self::DEFAULT_DIGITS, 'otpauth://totp/Issuer%20Name%3AUser%20Name?issuer=Issuer%20Name&secret=SECRET'],
-            [self::SERVER, self::ISSUER, self::DEFAULT_DIGITS, 'otpauth://totp/Issuer%20Name%3AUser%20Name%40Server?issuer=Issuer%20Name&secret=SECRET'],
-            [self::SERVER, self::ISSUER, self::CUSTOM_DIGITS, 'otpauth://totp/Issuer%20Name%3AUser%20Name%40Server?digits=8&issuer=Issuer%20Name&secret=SECRET'],
+            [null, null, self::ISSUER, self::DEFAULT_DIGITS, 'otpauth://totp/Issuer%20Name?secret=SECRET'],
+            [null, self::SERVER, self::ISSUER, self::DEFAULT_DIGITS, 'otpauth://totp/Issuer%20Name%3AServer?issuer=Issuer%20Name&secret=SECRET'],
+            [self::USER_NAME, null, null, self::DEFAULT_DIGITS, 'otpauth://totp/User%20Name?secret=SECRET'],
+            [self::USER_NAME, self::SERVER, null, self::DEFAULT_DIGITS, 'otpauth://totp/User%20Name%40Server?secret=SECRET'],
+            [self::USER_NAME, null, self::ISSUER, self::DEFAULT_DIGITS, 'otpauth://totp/Issuer%20Name%3AUser%20Name?issuer=Issuer%20Name&secret=SECRET'],
+            [self::USER_NAME, self::SERVER, self::ISSUER, self::DEFAULT_DIGITS, 'otpauth://totp/Issuer%20Name%3AUser%20Name%40Server?issuer=Issuer%20Name&secret=SECRET'],
+            [self::USER_NAME, self::SERVER, self::ISSUER, self::CUSTOM_DIGITS, 'otpauth://totp/Issuer%20Name%3AUser%20Name%40Server?digits=8&issuer=Issuer%20Name&secret=SECRET'],
         ];
     }
 }

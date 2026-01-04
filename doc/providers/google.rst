@@ -76,7 +76,7 @@ Authenticator for a user, generate a secret code and persist it with the user en
                return null !== $this->googleAuthenticatorSecret;
            }
 
-           public function getGoogleAuthenticatorUsername(): string
+           public function getGoogleAuthenticatorUsername(): ?string
            {
                return $this->username;
            }
@@ -114,7 +114,7 @@ Authenticator for a user, generate a secret code and persist it with the user en
                return null !== $this->googleAuthenticatorSecret;
            }
 
-           public function getGoogleAuthenticatorUsername(): string
+           public function getGoogleAuthenticatorUsername(): ?string
            {
                return $this->username;
            }

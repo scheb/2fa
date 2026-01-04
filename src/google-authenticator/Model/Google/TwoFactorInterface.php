@@ -14,7 +14,7 @@ interface TwoFactorInterface
     /**
      * Return the user name. This is used in QR code generation to display the username in the TOTP app.
      */
-    public function getGoogleAuthenticatorUsername(): string;
+    public function getGoogleAuthenticatorUsername(): string|null;
 
     /**
      * Return the Google Authenticator secret

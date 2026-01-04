@@ -29,13 +29,13 @@ class TotpFactoryTest extends TestCase
     private const int DIGITS = 8;
     private const string ALGORITHM = TotpConfiguration::ALGORITHM_SHA256;
 
-    private function createUserMock(bool $hasTotpConfiguration = true, string|null $secret = self::SECRET): MockObject&TwoFactorInterface
+    private function createUserMock(bool $hasTotpConfiguration = true, string|null $secret = self::SECRET, string|null $username = self::USER_NAME): MockObject&TwoFactorInterface
     {
         $user = $this->createMock(TwoFactorInterface::class);
         $user
             ->expects($this->any())
             ->method('getTotpAuthenticationUsername')
-            ->willReturn(self::USER_NAME);
+            ->willReturn($username);
 
         $config = $hasTotpConfiguration ? new TotpConfiguration($secret, self::ALGORITHM, self::PERIOD, self::DIGITS) : null;
         $user
@@ -86,9 +86,9 @@ class TotpFactoryTest extends TestCase
      */
     #[Test]
     #[DataProvider('provideHostnameAndIssuer')]
-    public function getProvisioningUri_hostnameAndIssuerGiven_returnProvisioningUri(string|null $hostname, string|null $issuer, array $customParameters, string $expectedUrl): void
+    public function getProvisioningUri_hostnameAndIssuerGiven_returnProvisioningUri(string|null $username, string|null $hostname, string|null $issuer, array $customParameters, string $expectedUrl): void
     {
-        $user = $this->createUserMock();
+        $user = $this->createUserMock(username: $username);
         $totp = (new TotpFactory($hostname, $issuer, $customParameters))->createTotpForUser($user);
 
         $returnValue = $totp->getProvisioningUri();
@@ -101,12 +101,14 @@ class TotpFactoryTest extends TestCase
     public static function provideHostnameAndIssuer(): array
     {
         return [
-            [null, null, [], 'otpauth://totp/User%20Name?algorithm=sha256&digits=8&period=20&secret=SECRET'],
-            [self::SERVER, null, [], 'otpauth://totp/User%20Name%40Server%20Name?algorithm=sha256&digits=8&period=20&secret=SECRET'],
-            [null, self::ISSUER, [], 'otpauth://totp/Issuer%20Name%3AUser%20Name?algorithm=sha256&digits=8&issuer=Issuer%20Name&period=20&secret=SECRET'],
-            [null, null, self::CUSTOM_PARAMETERS, 'otpauth://totp/User%20Name?algorithm=sha256&digits=8&image=logo.png&period=20&secret=SECRET'],
-            [self::SERVER, self::ISSUER, [], 'otpauth://totp/Issuer%20Name%3AUser%20Name%40Server%20Name?algorithm=sha256&digits=8&issuer=Issuer%20Name&period=20&secret=SECRET'],
-            [self::SERVER, self::ISSUER, self::CUSTOM_PARAMETERS, 'otpauth://totp/Issuer%20Name%3AUser%20Name%40Server%20Name?algorithm=sha256&digits=8&image=logo.png&issuer=Issuer%20Name&period=20&secret=SECRET'],
+            [null, null, self::ISSUER, [], 'otpauth://totp/Issuer%20Name?algorithm=sha256&digits=8&period=20&secret=SECRET'],
+            [null, self::SERVER, self::ISSUER, [], 'otpauth://totp/Issuer%20Name%3AServer%20Name?algorithm=sha256&digits=8&issuer=Issuer%20Name&period=20&secret=SECRET'],
+            [self::USER_NAME, null, null, [], 'otpauth://totp/User%20Name?algorithm=sha256&digits=8&period=20&secret=SECRET'],
+            [self::USER_NAME, self::SERVER, null, [], 'otpauth://totp/User%20Name%40Server%20Name?algorithm=sha256&digits=8&period=20&secret=SECRET'],
+            [self::USER_NAME, null, self::ISSUER, [], 'otpauth://totp/Issuer%20Name%3AUser%20Name?algorithm=sha256&digits=8&issuer=Issuer%20Name&period=20&secret=SECRET'],
+            [self::USER_NAME, null, null, self::CUSTOM_PARAMETERS, 'otpauth://totp/User%20Name?algorithm=sha256&digits=8&image=logo.png&period=20&secret=SECRET'],
+            [self::USER_NAME, self::SERVER, self::ISSUER, [], 'otpauth://totp/Issuer%20Name%3AUser%20Name%40Server%20Name?algorithm=sha256&digits=8&issuer=Issuer%20Name&period=20&secret=SECRET'],
+            [self::USER_NAME, self::SERVER, self::ISSUER, self::CUSTOM_PARAMETERS, 'otpauth://totp/Issuer%20Name%3AUser%20Name%40Server%20Name?algorithm=sha256&digits=8&image=logo.png&issuer=Issuer%20Name&period=20&secret=SECRET'],
         ];
     }
 }

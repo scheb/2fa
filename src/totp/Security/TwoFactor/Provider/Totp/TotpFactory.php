@@ -9,6 +9,7 @@ use OTPHP\TOTPInterface;
 use Psr\Clock\ClockInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
+use function assert;
 use function strlen;
 
 /**
@@ -48,13 +49,22 @@ class TotpFactory
             clock: $this->clock,
         );
 
-        $userAndHost = $user->getTotpAuthenticationUsername().(null !== $this->server && $this->server ? '@'.$this->server : '');
+        $usernameLabel = $user->getTotpAuthenticationUsername() ?? '';
+        $serverLabel = $this->server ?? '';
+        $userAndHost = $usernameLabel.('' !== $usernameLabel && '' !== $serverLabel ? '@' : '').$serverLabel;
         if ('' !== $userAndHost) {
             $totp->setLabel($userAndHost);
         }
 
-        if (null !== $this->issuer && $this->issuer) {
+        if (null !== $this->issuer && '' !== $this->issuer) {
             $totp->setIssuer($this->issuer);
+
+            // Omit the issuer parameter, when the issuer is the only value set.
+            // Otherwise FreeOTP app will show the issuer name twice.
+            if (null === $totp->getLabel()) {
+                $totp = $totp->withIssuerIncludedAsParameter(false);
+                assert($totp instanceof TOTP);
+            }
         }
 
         foreach ($this->customParameters as $key => $value) {

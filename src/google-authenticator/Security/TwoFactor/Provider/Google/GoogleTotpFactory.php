@@ -9,6 +9,7 @@ use OTPHP\TOTPInterface;
 use Psr\Clock\ClockInterface;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
+use function assert;
 use function strlen;
 
 /**
@@ -34,13 +35,22 @@ class GoogleTotpFactory
         /** @psalm-suppress ArgumentTypeCoercion */
         $totp = TOTP::create($secret, 30, 'sha1', $this->digits, clock: $this->clock);
 
-        $userAndHost = $user->getGoogleAuthenticatorUsername().(null !== $this->server && $this->server ? '@'.$this->server : '');
+        $usernameLabel = $user->getGoogleAuthenticatorUsername() ?? '';
+        $serverLabel = $this->server ?? '';
+        $userAndHost = $usernameLabel.('' !== $usernameLabel && '' !== $serverLabel ? '@' : '').$serverLabel;
         if ('' !== $userAndHost) {
             $totp->setLabel($userAndHost);
         }
 
-        if (null !== $this->issuer && $this->issuer) {
+        if (null !== $this->issuer && '' !== $this->issuer) {
             $totp->setIssuer($this->issuer);
+
+            // Omit the issuer parameter, when the issuer is the only value set.
+            // Otherwise FreeOTP app will show the issuer name twice.
+            if (null === $totp->getLabel()) {
+                $totp = $totp->withIssuerIncludedAsParameter(false);
+                assert($totp instanceof TOTP);
+            }
         }
 
         return $totp;

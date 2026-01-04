@@ -15,7 +15,7 @@ interface TwoFactorInterface
      * Return the user name. This is used in QR code generation to display the username in the TOTP app. Return an
      * empty string, if you don't want it to show up in the app.
      */
-    public function getTotpAuthenticationUsername(): string;
+    public function getTotpAuthenticationUsername(): string|null;
 
     /**
      * Return the configuration for TOTP authentication.
