@@ -17,7 +17,7 @@ use function strlen;
 class TotpFactory
 {
     /**
-     * @param array<string,mixed> $customParameters
+     * @param array<non-empty-string,mixed> $customParameters
      */
     public function __construct(
         private readonly string|null $server,
@@ -49,7 +49,9 @@ class TotpFactory
         );
 
         $userAndHost = $user->getTotpAuthenticationUsername().(null !== $this->server && $this->server ? '@'.$this->server : '');
-        $totp->setLabel($userAndHost);
+        if ('' !== $userAndHost) {
+            $totp->setLabel($userAndHost);
+        }
 
         if (null !== $this->issuer && $this->issuer) {
             $totp->setIssuer($this->issuer);

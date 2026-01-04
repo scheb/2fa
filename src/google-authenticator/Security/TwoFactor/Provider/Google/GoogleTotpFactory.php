@@ -35,7 +35,9 @@ class GoogleTotpFactory
         $totp = TOTP::create($secret, 30, 'sha1', $this->digits, clock: $this->clock);
 
         $userAndHost = $user->getGoogleAuthenticatorUsername().(null !== $this->server && $this->server ? '@'.$this->server : '');
-        $totp->setLabel($userAndHost);
+        if ('' !== $userAndHost) {
+            $totp->setLabel($userAndHost);
+        }
 
         if (null !== $this->issuer && $this->issuer) {
             $totp->setIssuer($this->issuer);

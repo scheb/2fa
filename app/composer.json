@@ -10,7 +10,7 @@
         "endroid/qr-code": "^6.0",
         "lcobucci/clock": "^3.0",
         "lcobucci/jwt": "^5.0",
-        "spomky-labs/otphp": "^11.3",
+        "spomky-labs/otphp": "^11.4",
         "symfony/console": "^7.4 || ^8.0",
         "symfony/doctrine-bridge": "^7.4 || ^8.0",
         "symfony/dotenv": "^7.4 || ^8.0",
