@@ -1,4 +1,4 @@
-FROM phpdockerio/php:8.4-fpm
+FROM phpdockerio/php:8.5-fpm
 WORKDIR /application
 
 ARG GIT_COMMIT_ID=""
@@ -6,9 +6,9 @@ ARG GIT_COMMIT_ID=""
 # Install selected extensions and other stuff
 RUN apt-get update \
     && apt-get -y --no-install-recommends install \
-        php8.4-sqlite \
-        php8.4-intl \
-        php8.4-gd \
+        php8.5-sqlite \
+        php8.5-intl \
+        php8.5-gd \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/log/* /var/cache/* /usr/share/doc/*
 
 COPY app/bin/console      ./bin/
