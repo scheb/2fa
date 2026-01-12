@@ -26,7 +26,9 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
     protected function setUp(): void
     {
         $this->provider1 = $this->createMock(TwoFactorProviderInterface::class);
+        $this->provider1->method('needsPreparation')->willReturn(true);
         $this->provider2 = $this->createMock(TwoFactorProviderInterface::class);
+        $this->provider2->method('needsPreparation')->willReturn(false);
 
         $providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
         $providerRegistry
@@ -36,6 +38,16 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
                 'test1' => $this->provider1,
                 'test2' => $this->provider2,
             ]);
+        $providerRegistry
+            ->expects($this->any())
+            ->method('getProvider')
+            ->willReturnCallback(function (string $name) {
+                return match ($name) {
+                    'test1' => $this->provider1,
+                    'test2' => $this->provider2,
+                    default => null,
+                };
+            });
 
         $this->twoFactorTokenFactory = $this->createMock(TwoFactorTokenFactory::class);
 
@@ -152,6 +164,23 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
             ->expects($this->once())
             ->method('preferTwoFactorProvider')
             ->with('preferredProvider');
+
+        $this->initiator->beginTwoFactorAuthentication($context);
+    }
+
+    #[Test]
+    public function beginAuthentication_statelessProviderPrepared_setThatProviderIsPrepared(): void
+    {
+        $originalToken = $this->createToken();
+        $context = $this->createAuthenticationContext(null, $originalToken);
+        $this->stubProvidersReturn(true, true);
+
+        $twoFactorToken = $this->createTwoFactorToken();
+        $this->stubTwoFactorTokenFactoryReturns($twoFactorToken);
+        $twoFactorToken
+            ->expects($this->once())
+            ->method('setTwoFactorProviderPrepared')
+            ->with('test2');
 
         $this->initiator->beginTwoFactorAuthentication($context);
     }

@@ -8,6 +8,8 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenFactoryInt
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
+use function array_walk;
+use function count;
 
 /**
  * @final
@@ -21,12 +23,9 @@ class TwoFactorProviderInitiator
     ) {
     }
 
-    /**
-     * @return string[]
-     */
-    private function getActiveTwoFactorProviders(AuthenticationContextInterface $context): array
+    public function beginTwoFactorAuthentication(AuthenticationContextInterface $context): TwoFactorTokenInterface|null
     {
-        $activeTwoFactorProviders = [];
+        $activeTwoFactorProviders = $statelessProviders = [];
 
         // Iterate over two-factor providers and begin the two-factor authentication process.
         foreach ($this->providerRegistry->getAllProviders() as $providerName => $provider) {
@@ -35,32 +34,32 @@ class TwoFactorProviderInitiator
             }
 
             $activeTwoFactorProviders[] = $providerName;
-        }
-
-        return $activeTwoFactorProviders;
-    }
-
-    public function beginTwoFactorAuthentication(AuthenticationContextInterface $context): TwoFactorTokenInterface|null
-    {
-        $activeTwoFactorProviders = $this->getActiveTwoFactorProviders($context);
-
-        $authenticatedToken = $context->getToken();
-        if ($activeTwoFactorProviders) {
-            $twoFactorToken = $this->twoFactorTokenFactory->create($authenticatedToken, $context->getFirewallName(), $activeTwoFactorProviders);
-
-            $preferredProvider = $this->twoFactorProviderDecider->getPreferredTwoFactorProvider($activeTwoFactorProviders, $twoFactorToken, $context);
-
-            if (null !== $preferredProvider) {
-                try {
-                    $twoFactorToken->preferTwoFactorProvider($preferredProvider);
-                } catch (UnknownTwoFactorProviderException) {
-                    // Bad user input
-                }
+            if ($provider->needsPreparation()) {
+                continue;
             }
 
-            return $twoFactorToken;
+            $statelessProviders[] = $providerName;
         }
 
-        return null;
+        if (0 === count($activeTwoFactorProviders)) {
+            return null;
+        }
+
+        $authenticatedToken = $context->getToken();
+        $twoFactorToken = $this->twoFactorTokenFactory->create($authenticatedToken, $context->getFirewallName(), $activeTwoFactorProviders);
+
+        array_walk($statelessProviders, static fn (string $providerName) => $twoFactorToken->setTwoFactorProviderPrepared($providerName));
+
+        $preferredProvider = $this->twoFactorProviderDecider->getPreferredTwoFactorProvider($activeTwoFactorProviders, $twoFactorToken, $context);
+
+        if (null !== $preferredProvider) {
+            try {
+                $twoFactorToken->preferTwoFactorProvider($preferredProvider);
+            } catch (UnknownTwoFactorProviderException) {
+                // Bad user input
+            }
+        }
+
+        return $twoFactorToken;
     }
 }
