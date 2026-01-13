@@ -10,6 +10,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
 use function array_walk;
 use function count;
+use function method_exists;
+use function trigger_error;
+use const E_USER_DEPRECATED;
 
 /**
  * @final
@@ -34,7 +37,15 @@ class TwoFactorProviderInitiator
             }
 
             $activeTwoFactorProviders[] = $providerName;
-            if ($provider->needsPreparation()) {
+
+            if (!method_exists($provider, 'needsPreparation')) {
+                @trigger_error(
+                    'Two-factor provider "'.$providerName.'" does not implement needsPreparation() method. This method will be required in the next major version.',
+                    E_USER_DEPRECATED,
+                );
+            }
+
+            if (!method_exists($provider, 'needsPreparation') || $provider->needsPreparation()) {
                 continue;
             }
 

@@ -15,8 +15,12 @@ interface TwoFactorProviderInterface
 
     /**
      * Determine whether this Provider needs to be prepared (if the prepareAuthentication method needs to be called).
+     *
+     * In version 9, this method will be introduced, and all providers will need to implement it.
+     * Currently, it will be called, but is not required.
+     *
+     * public function needsPreparation(): bool;
      */
-    public function needsPreparation(): bool;
 
     /**
      * Do all steps necessary to prepare authentication, e.g. generate & send a code.
