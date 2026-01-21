@@ -6,6 +6,9 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider;
 
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 
+/**
+ * @method bool needsPreparation()
+ */
 interface TwoFactorProviderInterface
 {
     /**
