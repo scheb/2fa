@@ -48,7 +48,7 @@ class ExceptionListener implements EventSubscriberInterface
     private function handleAccessDeniedException(ExceptionEvent $exceptionEvent): void
     {
         $token = $this->tokenStorage->getToken();
-        if (!($token instanceof TwoFactorTokenInterface)) {
+        if (!$token instanceof TwoFactorTokenInterface) {
             return;
         }
 

@@ -27,7 +27,7 @@ class BackupCodeManager implements BackupCodeManagerInterface
 
     public function invalidateBackupCode(object $user, string $code): void
     {
-        if (!($user instanceof BackupCodeInterface)) {
+        if (!$user instanceof BackupCodeInterface) {
             return;
         }
 
