@@ -49,7 +49,7 @@ class TwoFactorAccessListener extends AbstractListener implements FirewallListen
         // When the firewall is lazy, the token is not initialized in the "supports" stage, so this check does only work
         // within the "authenticate" stage.
         $token = $this->tokenStorage->getToken();
-        if (!($token instanceof TwoFactorTokenInterface)) {
+        if (!$token instanceof TwoFactorTokenInterface) {
             // No need to check for firewall name here, the listener is bound to the firewall context
             return;
         }

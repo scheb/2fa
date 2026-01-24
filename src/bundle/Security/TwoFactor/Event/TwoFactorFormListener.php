@@ -36,7 +36,7 @@ class TwoFactorFormListener implements EventSubscriberInterface
         }
 
         $token = $this->tokenStorage->getToken();
-        if (!($token instanceof TwoFactorTokenInterface)) {
+        if (!$token instanceof TwoFactorTokenInterface) {
             return;
         }
 

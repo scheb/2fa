@@ -52,7 +52,7 @@ class FormController
     protected function getTwoFactorToken(): TwoFactorTokenInterface
     {
         $token = $this->tokenStorage->getToken();
-        if (!($token instanceof TwoFactorTokenInterface)) {
+        if (!$token instanceof TwoFactorTokenInterface) {
             throw new AccessDeniedException('User is not in a two-factor authentication process.');
         }
 

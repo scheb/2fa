@@ -48,7 +48,7 @@ class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
 
     public function validateAuthenticationCode(object $user, string $authenticationCode): bool
     {
-        if (!($user instanceof TwoFactorInterface)) {
+        if (!$user instanceof TwoFactorInterface) {
             return false;
         }
 

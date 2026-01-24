@@ -24,7 +24,7 @@ class AuthenticationSuccessEventSuppressor implements EventSubscriberInterface
 
         // We have a TwoFactorToken, make sure the security.authentication.success is not propagated to other
         // listeners, since we do not have a successful login (yet)
-        if (!($token instanceof TwoFactorTokenInterface)) {
+        if (!$token instanceof TwoFactorTokenInterface) {
             return;
         }
 

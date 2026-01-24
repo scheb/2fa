@@ -32,7 +32,7 @@ class SuppressRememberMeListener implements EventSubscriberInterface
         }
 
         $token = $event->getAuthenticatedToken();
-        if (!($token instanceof TwoFactorTokenInterface)) {
+        if (!$token instanceof TwoFactorTokenInterface) {
             return; // We're not in a 2fa process
         }
 

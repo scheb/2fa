@@ -26,7 +26,7 @@ class TrustedDeviceManager implements TrustedDeviceManagerInterface
 
     public function addTrustedDevice(object $user, string $firewallName): void
     {
-        if (!($user instanceof UserInterface)) {
+        if (!$user instanceof UserInterface) {
             return;
         }
 
@@ -37,7 +37,7 @@ class TrustedDeviceManager implements TrustedDeviceManagerInterface
 
     public function isTrustedDevice(object $user, string $firewallName): bool
     {
-        if (!($user instanceof UserInterface)) {
+        if (!$user instanceof UserInterface) {
             return false;
         }
 

@@ -92,7 +92,7 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
         $twoFactorToken = $this->twoFactorToken;
         $this->twoFactorToken = null;
 
-        if (!($twoFactorToken instanceof TwoFactorTokenInterface)) {
+        if (!$twoFactorToken instanceof TwoFactorTokenInterface) {
             return;
         }
 

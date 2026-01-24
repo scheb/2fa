@@ -23,7 +23,7 @@ class TwoFactorInProgressVoter implements CacheableVoterInterface
      */
     public function vote(TokenInterface $token, mixed $subject, array $attributes, Vote|null $vote = null): int
     {
-        if (!($token instanceof TwoFactorTokenInterface)) {
+        if (!$token instanceof TwoFactorTokenInterface) {
             return VoterInterface::ACCESS_ABSTAIN;
         }
 

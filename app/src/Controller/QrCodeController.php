@@ -25,7 +25,7 @@ class QrCodeController extends AbstractController
     public function displayGoogleAuthenticatorQrCode(TokenStorageInterface $tokenStorage, GoogleAuthenticatorInterface $googleAuthenticator): Response
     {
         $user = $tokenStorage->getToken()->getUser();
-        if (!($user instanceof GoogleAuthenticatorTwoFactorInterface)) {
+        if (!$user instanceof GoogleAuthenticatorTwoFactorInterface) {
             throw new NotFoundHttpException('Cannot display QR code');
         }
 
@@ -36,7 +36,7 @@ class QrCodeController extends AbstractController
     public function displayTotpQrCode(TokenStorageInterface $tokenStorage, TotpAuthenticatorInterface $totpAuthenticator): Response
     {
         $user = $tokenStorage->getToken()->getUser();
-        if (!($user instanceof TotpTwoFactorInterface)) {
+        if (!$user instanceof TotpTwoFactorInterface) {
             throw new NotFoundHttpException('Cannot display QR code');
         }
 

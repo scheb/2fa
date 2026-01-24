@@ -24,7 +24,7 @@ class TokenPreparationRecorder implements PreparationRecorderInterface
     public function isTwoFactorProviderPrepared(string $firewallName, string $providerName): bool
     {
         $token = $this->tokenStorage->getToken();
-        if (!($token instanceof TwoFactorTokenInterface)) {
+        if (!$token instanceof TwoFactorTokenInterface) {
             throw new UnexpectedTokenException('The security token has to be an instance of TwoFactorTokenInterface.');
         }
 
@@ -39,7 +39,7 @@ class TokenPreparationRecorder implements PreparationRecorderInterface
     public function setTwoFactorProviderPrepared(string $firewallName, string $providerName): void
     {
         $token = $this->tokenStorage->getToken();
-        if (!($token instanceof TwoFactorTokenInterface)) {
+        if (!$token instanceof TwoFactorTokenInterface) {
             throw new UnexpectedTokenException('The security token has to be an instance of TwoFactorTokenInterface.');
         }
 

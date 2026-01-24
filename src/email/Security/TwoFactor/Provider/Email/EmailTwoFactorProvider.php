@@ -36,7 +36,7 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
 
     public function prepareAuthentication(object $user): void
     {
-        if (!($user instanceof TwoFactorInterface)) {
+        if (!$user instanceof TwoFactorInterface) {
             return;
         }
 
@@ -48,7 +48,7 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
 
     public function validateAuthenticationCode(object $user, string $authenticationCode): bool
     {
-        if (!($user instanceof TwoFactorInterface)) {
+        if (!$user instanceof TwoFactorInterface) {
             return false;
         }
 

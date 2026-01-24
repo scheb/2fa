@@ -63,7 +63,7 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         // When the firewall is lazy, the token is not initialized in the "supports" stage, so this check does only work
         // within the "authenticate" stage.
         $currentToken = $this->tokenStorage->getToken();
-        if (!($currentToken instanceof TwoFactorTokenInterface)) {
+        if (!$currentToken instanceof TwoFactorTokenInterface) {
             // This should only happen when the check path is called outside of a 2fa process
             // access_control can't handle this, as it's called after the authenticator
             throw new AccessDeniedException('User is not in a two-factor authentication process.');
