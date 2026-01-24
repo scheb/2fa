@@ -18,24 +18,48 @@ use Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Condition\AbstractAuthenticat
 class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCase
 {
     private MockObject&TwoFactorTokenFactoryInterface $twoFactorTokenFactory;
-    private MockObject&TwoFactorProviderInterface $provider1;
-    private MockObject&TwoFactorProviderInterface $provider2;
+    private MockObject&TwoFactorProviderWithNeedsPreparationInterface $statefulProvider;
+    private MockObject&TwoFactorProviderWithNeedsPreparationInterface $statelessProvider;
+    private MockObject&TwoFactorProviderInterface $withoutNeedsPreparationProvider;
     private MockObject&TwoFactorProviderDeciderInterface $providerDecider;
     private TwoFactorProviderInitiator $initiator;
 
     protected function setUp(): void
     {
-        $this->provider1 = $this->createMock(TwoFactorProviderInterface::class);
-        $this->provider2 = $this->createMock(TwoFactorProviderInterface::class);
+        $this->statefulProvider = $this->createMock(TwoFactorProviderWithNeedsPreparationInterface::class);
+        $this->statefulProvider
+            ->expects($this->any())
+            ->method('needsPreparation')
+            ->willReturn(true);
+
+        $this->statelessProvider = $this->createMock(TwoFactorProviderWithNeedsPreparationInterface::class);
+        $this->statelessProvider
+            ->expects($this->any())
+            ->method('needsPreparation')
+            ->willReturn(false);
+
+        $this->withoutNeedsPreparationProvider = $this->createMock(TwoFactorProviderInterface::class);
 
         $providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
         $providerRegistry
             ->expects($this->any())
             ->method('getAllProviders')
             ->willReturn([
-                'test1' => $this->provider1,
-                'test2' => $this->provider2,
+                'statefulProvider' => $this->statefulProvider,
+                'statelessProvider' => $this->statelessProvider,
+                'withoutNeedsPreparation' => $this->withoutNeedsPreparationProvider,
             ]);
+        $providerRegistry
+            ->expects($this->any())
+            ->method('getProvider')
+            ->willReturnCallback(function (string $name) {
+                return match ($name) {
+                    'statefulProvider' => $this->statefulProvider,
+                    'statelessProvider' => $this->statelessProvider,
+                    'withoutNeedsPreparation' => $this->withoutNeedsPreparationProvider,
+                    default => null,
+                };
+            });
 
         $this->twoFactorTokenFactory = $this->createMock(TwoFactorTokenFactory::class);
 
@@ -60,17 +84,22 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
         return $user;
     }
 
-    private function stubProvidersReturn(bool $provider1Returns, bool $provider2Returns): void
+    private function stubProvidersReturn(bool $statefulProviderReturns, bool $statelessProviderReturns, bool $legacyProviderReturns): void
     {
-        $this->provider1
-            ->expects($this->any())
+        $this->statefulProvider
+            ->expects($this->once())
             ->method('beginAuthentication')
-            ->willReturn($provider1Returns);
+            ->willReturn($statefulProviderReturns);
 
-        $this->provider2
-            ->expects($this->any())
+        $this->statelessProvider
+            ->expects($this->once())
             ->method('beginAuthentication')
-            ->willReturn($provider2Returns);
+            ->willReturn($statelessProviderReturns);
+
+        $this->withoutNeedsPreparationProvider
+            ->expects($this->once())
+            ->method('beginAuthentication')
+            ->willReturn($legacyProviderReturns);
     }
 
     private function stubTwoFactorTokenFactoryReturns(MockObject $token): void
@@ -94,12 +123,17 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
     {
         $context = $this->createAuthenticationContext();
 
-        $this->provider1
+        $this->statefulProvider
             ->expects($this->once())
             ->method('beginAuthentication')
             ->with($context);
 
-        $this->provider2
+        $this->statelessProvider
+            ->expects($this->once())
+            ->method('beginAuthentication')
+            ->with($context);
+
+        $this->withoutNeedsPreparationProvider
             ->expects($this->once())
             ->method('beginAuthentication')
             ->with($context);
@@ -112,13 +146,13 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
     {
         $originalToken = $this->createToken();
         $context = $this->createAuthenticationContext(null, $originalToken);
-        $this->stubProvidersReturn(false, true);
+        $this->stubProvidersReturn(false, true, false);
 
         $twoFactorToken = $this->createMock(TwoFactorTokenInterface::class);
         $this->twoFactorTokenFactory
             ->expects($this->once())
             ->method('create')
-            ->with($originalToken, self::FIREWALL_NAME, ['test2'])
+            ->with($originalToken, self::FIREWALL_NAME, ['statelessProvider'])
             ->willReturn($twoFactorToken);
 
         $returnValue = $this->initiator->beginTwoFactorAuthentication($context);
@@ -130,7 +164,7 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
     {
         $originalToken = $this->createToken();
         $context = $this->createAuthenticationContext(null, $originalToken);
-        $this->stubProvidersReturn(false, false);
+        $this->stubProvidersReturn(false, false, false);
 
         $returnValue = $this->initiator->beginTwoFactorAuthentication($context);
         $this->assertNull($returnValue);
@@ -144,7 +178,7 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
         $twoFactorToken = $this->createTwoFactorToken();
 
         $context = $this->createAuthenticationContext(null, $originalToken, $user);
-        $this->stubProvidersReturn(true, true);
+        $this->stubProvidersReturn(true, true, true);
         $this->stubTwoFactorTokenFactoryReturns($twoFactorToken);
         $this->stubTwoFactorProviderDeciderReturns('preferredProvider');
 
@@ -152,6 +186,23 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
             ->expects($this->once())
             ->method('preferTwoFactorProvider')
             ->with('preferredProvider');
+
+        $this->initiator->beginTwoFactorAuthentication($context);
+    }
+
+    #[Test]
+    public function beginAuthentication_statelessProviderPrepared_setThatProviderIsPrepared(): void
+    {
+        $originalToken = $this->createToken();
+        $context = $this->createAuthenticationContext(null, $originalToken);
+        $this->stubProvidersReturn(true, true, true);
+
+        $twoFactorToken = $this->createTwoFactorToken();
+        $this->stubTwoFactorTokenFactoryReturns($twoFactorToken);
+        $twoFactorToken
+            ->expects($this->once())
+            ->method('setTwoFactorProviderPrepared')
+            ->with('statelessProvider');
 
         $this->initiator->beginTwoFactorAuthentication($context);
     }
