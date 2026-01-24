@@ -33,6 +33,9 @@ authentication token, the user entity and other information.
 The method has to decide if the user should be asked for two-factor authentication from that provider. In that case
 return ``true``, otherwise ``false``.
 
+prepareAuthentication
+~~~~~~~~~~~~~~~~~~~~~
+
 .. code-block:: php
 
    public function prepareAuthentication(object $user): void;
