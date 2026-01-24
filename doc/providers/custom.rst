@@ -33,6 +33,17 @@ authentication token, the user entity and other information.
 The method has to decide if the user should be asked for two-factor authentication from that provider. In that case
 return ``true``, otherwise ``false``.
 
+needsPreparation
+~~~~~~~~~~~~~~~~
+
+.. code-block:: php
+
+   public function needsPreparation(): bool;
+
+The method determines if the provider needs to be prepared. If ``false`` is returned, the ``prepareAuthentication`` will
+not be called and the provider is considered "prepared" right from the start. This is valuable for authentication
+providers such as TOTP, which can then be used in a stateless firewall.
+
 prepareAuthentication
 ~~~~~~~~~~~~~~~~~~~~~
 
