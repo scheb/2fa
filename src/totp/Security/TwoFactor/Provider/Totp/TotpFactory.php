@@ -9,7 +9,6 @@ use OTPHP\TOTPInterface;
 use Psr\Clock\ClockInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
-use function assert;
 use function strlen;
 
 /**
@@ -63,7 +62,6 @@ class TotpFactory
             // Otherwise FreeOTP app will show the issuer name twice.
             if (null === $totp->getLabel()) {
                 $totp = $totp->withIssuerIncludedAsParameter(false);
-                assert($totp instanceof TOTP);
             }
         }
 
