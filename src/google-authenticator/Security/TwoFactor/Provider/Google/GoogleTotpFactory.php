@@ -42,7 +42,9 @@ class GoogleTotpFactory
         }
 
         $userAndHost = $user->getGoogleAuthenticatorUsername().(null !== $this->server && $this->server ? '@'.$this->server : '');
-        $totp->setLabel($userAndHost);
+        if ('' !== $userAndHost) {
+            $totp->setLabel($userAndHost);
+        }
 
         if (null !== $this->issuer && $this->issuer) {
             $totp->setIssuer($this->issuer);
