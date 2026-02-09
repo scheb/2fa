@@ -4,7 +4,7 @@ Installation
 Prerequisites
 -------------
 
-You're currently looking at the documentation of **SchebTwoFactorBundle version 7**. This bundle version is
+You're currently looking at the documentation of **SchebTwoFactorBundle version 8**. This bundle version is
 **compatible with Symfony 7.4 or Symfony 8.x**.
 
 If you're using anything other than Doctrine ORM to manage the user entity you will have to implement a
