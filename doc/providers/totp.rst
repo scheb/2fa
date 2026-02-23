@@ -94,7 +94,7 @@ and the period of the temporary codes.
            public function getTotpAuthenticationConfiguration(): ?TotpConfigurationInterface
            {
                // You could persist the other configuration options in the user entity to make it individual per user.
-               $period = 20;
+               $period = 30;
                $digits = 6;
                return null !== $this->totpSecret ? new TotpConfiguration($this->totpSecret, TotpConfiguration::ALGORITHM_SHA1, $period, $digits) : null;
            }
@@ -132,7 +132,9 @@ and the period of the temporary codes.
            public function getTotpAuthenticationConfiguration(): ?TotpConfigurationInterface
            {
                // You could persist the other configuration options in the user entity to make it individual per user.
-               return new TotpConfiguration($this->totpSecret, TotpConfiguration::ALGORITHM_SHA1, 20, 8);
+               $period = 30;
+               $digits = 6;
+               return null !== $this->totpSecret ? new TotpConfiguration($this->totpSecret, TotpConfiguration::ALGORITHM_SHA1, $period, $digits) : null;
            }
        }
 
