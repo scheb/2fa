@@ -230,4 +230,19 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
         $this->listener->onTwoFactorForm($event);
         $this->listener->onKernelResponse($this->createResponseEvent());
     }
+
+    #[Test]
+    public function reset_tokenPreviouslySetted_resetToken(): void
+    {
+        $this->initTwoFactorProviderPreparationListener(true, false);
+        $event = $this->createAuthenticationEvent();
+
+        $this->expectNotPrepareCurrentProvider();
+
+        $this->listener->onLogin($event);
+
+        $this->listener->reset();
+
+        $this->listener->onKernelResponse($this->createResponseEvent());
+    }
 }

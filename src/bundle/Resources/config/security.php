@@ -87,6 +87,7 @@ return static function (ContainerConfigurator $container): void {
             ->tag('kernel.event_subscriber')
 
         ->set('scheb_two_factor.security.provider_preparation_listener', TwoFactorProviderPreparationListener::class)
+            ->tag('kernel.reset', ['method' => 'reset'])
             ->args([
                 service('scheb_two_factor.provider_registry'),
                 service('scheb_two_factor.provider_preparation_recorder'),

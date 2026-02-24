@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\AuthenticationEvents;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
+use Symfony\Contracts\Service\ResetInterface;
 use function assert;
 use function sprintf;
 use const PHP_INT_MAX;
@@ -23,7 +24,7 @@ use const PHP_INT_MAX;
 /**
  * @final
  */
-class TwoFactorProviderPreparationListener implements EventSubscriberInterface
+class TwoFactorProviderPreparationListener implements EventSubscriberInterface, ResetInterface
 {
     // This must trigger very first, followed by AuthenticationSuccessEventSuppressor
     public const int AUTHENTICATION_SUCCESS_LISTENER_PRIORITY = PHP_INT_MAX;
@@ -135,5 +136,10 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface
             TwoFactorAuthenticationEvents::FORM => 'onTwoFactorForm',
             KernelEvents::RESPONSE => ['onKernelResponse', self::RESPONSE_LISTENER_PRIORITY],
         ];
+    }
+
+    public function reset(): void
+    {
+        $this->twoFactorToken = null;
     }
 }
