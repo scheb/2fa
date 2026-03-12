@@ -36,7 +36,7 @@ class TwoFactorProviderPreparationListener implements EventSubscriberInterface, 
     private readonly LoggerInterface $logger;
 
     public function __construct(
-        private readonly TwoFactorProviderRegistry $providerRegistry,
+        private readonly TwoFactorProviderRegistryInterface $providerRegistry,
         private readonly PreparationRecorderInterface $preparationRecorder,
         LoggerInterface|null $logger,
         private readonly string $firewallName,

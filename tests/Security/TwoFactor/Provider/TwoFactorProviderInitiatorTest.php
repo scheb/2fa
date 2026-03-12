@@ -12,7 +12,7 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderDeciderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInitiator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistryInterface;
 use Scheb\TwoFactorBundle\Tests\Security\TwoFactor\Condition\AbstractAuthenticationContextTestCase;
 
 class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCase
@@ -40,7 +40,7 @@ class TwoFactorProviderInitiatorTest extends AbstractAuthenticationContextTestCa
 
         $this->withoutNeedsPreparationProvider = $this->createMock(TwoFactorProviderInterface::class);
 
-        $providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
+        $providerRegistry = $this->createMock(TwoFactorProviderRegistryInterface::class);
         $providerRegistry
             ->expects($this->any())
             ->method('getAllProviders')

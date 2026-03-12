@@ -12,7 +12,7 @@ use Scheb\TwoFactorBundle\Security\Authentication\Exception\TwoFactorProviderNot
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistryInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallContext;
@@ -38,7 +38,7 @@ class FormControllerTest extends TestCase
     private const string LOGOUT_PATH = '/logout';
 
     private MockObject&TokenStorageInterface $tokenStorage;
-    private MockObject&TwoFactorProviderRegistry $providerRegistry;
+    private MockObject&TwoFactorProviderRegistryInterface $providerRegistry;
     private MockObject&SessionInterface $session;
     private MockObject&Request $request;
     private MockObject&TwoFactorFormRendererInterface $formRenderer;
@@ -68,7 +68,7 @@ class FormControllerTest extends TestCase
 
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
 
-        $this->providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
+        $this->providerRegistry = $this->createMock(TwoFactorProviderRegistryInterface::class);
         $this->providerRegistry
             ->expects($this->any())
             ->method('getProvider')

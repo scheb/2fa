@@ -9,7 +9,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 /**
  * @final
  */
-class TwoFactorConditionRegistry
+class TwoFactorConditionRegistry implements TwoFactorConditionRegistryInterface
 {
     /**
      * @param TwoFactorConditionInterface[] $conditions

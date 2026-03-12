@@ -20,7 +20,7 @@ use const E_USER_DEPRECATED;
 class TwoFactorProviderInitiator
 {
     public function __construct(
-        private readonly TwoFactorProviderRegistry $providerRegistry,
+        private readonly TwoFactorProviderRegistryInterface $providerRegistry,
         private readonly TwoFactorTokenFactoryInterface $twoFactorTokenFactory,
         private readonly TwoFactorProviderDeciderInterface $twoFactorProviderDecider,
     ) {

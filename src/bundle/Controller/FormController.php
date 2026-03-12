@@ -6,7 +6,7 @@ namespace Scheb\TwoFactorBundle\Controller;
 
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactorProviderException;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistryInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallContext;
@@ -28,7 +28,7 @@ class FormController
 {
     public function __construct(
         private readonly TokenStorageInterface $tokenStorage,
-        private readonly TwoFactorProviderRegistry $providerRegistry,
+        private readonly TwoFactorProviderRegistryInterface $providerRegistry,
         private readonly TwoFactorFirewallContext $twoFactorFirewallContext,
         private readonly LogoutUrlGenerator $logoutUrlGenerator,
         private readonly TrustedDeviceManagerInterface|null $trustedDeviceManager,

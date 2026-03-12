@@ -10,7 +10,7 @@ use function sprintf;
 /**
  * @final
  */
-class TwoFactorProviderRegistry
+class TwoFactorProviderRegistry implements TwoFactorProviderRegistryInterface
 {
     /**
      * @param iterable<string,TwoFactorProviderInterface> $providers
@@ -20,7 +20,7 @@ class TwoFactorProviderRegistry
     }
 
     /**
-     * @return iterable<string,TwoFactorProviderInterface>
+     * {@inheritDoc}
      */
     public function getAllProviders(): iterable
     {

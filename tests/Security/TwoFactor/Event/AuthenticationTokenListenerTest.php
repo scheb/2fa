@@ -10,7 +10,7 @@ use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\TwoFactorAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextFactoryInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionRegistry;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionRegistryInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\AuthenticationTokenListener;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInitiator;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -24,14 +24,14 @@ class AuthenticationTokenListenerTest extends TestCase
 {
     private const string FIREWALL_NAME = 'firewallName';
 
-    private MockObject&TwoFactorConditionRegistry $twoFactorConditionRegistry;
+    private MockObject&TwoFactorConditionRegistryInterface $twoFactorConditionRegistry;
     private MockObject&TwoFactorProviderInitiator $twoFactorProviderInitiator;
     private MockObject&AuthenticationContextFactoryInterface $authenticationContextFactory;
     private AuthenticationTokenListener $listener;
 
     protected function setUp(): void
     {
-        $this->twoFactorConditionRegistry = $this->createMock(TwoFactorConditionRegistry::class);
+        $this->twoFactorConditionRegistry = $this->createMock(TwoFactorConditionRegistryInterface::class);
         $this->twoFactorProviderInitiator = $this->createMock(TwoFactorProviderInitiator::class);
         $this->authenticationContextFactory = $this->createMock(AuthenticationContextFactoryInterface::class);
 

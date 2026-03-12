@@ -13,7 +13,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnexpectedTokenE
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\PreparationRecorderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderPreparationListener;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistryInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +27,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
     private const string FIREWALL_NAME = 'firewallName';
     private const string CURRENT_PROVIDER_NAME = 'currentProviderName';
 
-    private MockObject&TwoFactorProviderRegistry $providerRegistry;
+    private MockObject&TwoFactorProviderRegistryInterface $providerRegistry;
     private MockObject&Request $request;
     private MockObject&PreparationRecorderInterface $preparationRecorder;
     private MockObject&TwoFactorToken $token;
@@ -54,7 +54,7 @@ class TwoFactorProviderPreparationListenerTest extends TestCase
 
         $this->preparationRecorder = $this->createMock(PreparationRecorderInterface::class);
 
-        $this->providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
+        $this->providerRegistry = $this->createMock(TwoFactorProviderRegistryInterface::class);
     }
 
     private function initTwoFactorProviderPreparationListener(bool $prepareOnLogin, bool $prepareOnAccessDenied): void

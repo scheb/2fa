@@ -8,7 +8,7 @@ use RuntimeException;
 use Scheb\TwoFactorBundle\Security\Authentication\Token\TwoFactorTokenInterface;
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\TwoFactorAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextFactoryInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionRegistry;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionRegistryInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInitiator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ class AuthenticationTokenListener implements EventSubscriberInterface
 {
     public function __construct(
         private readonly string $firewallName,
-        private readonly TwoFactorConditionRegistry $twoFactorConditionRegistry,
+        private readonly TwoFactorConditionRegistryInterface $twoFactorConditionRegistry,
         private readonly TwoFactorProviderInitiator $twoFactorProviderInitiator,
         private readonly AuthenticationContextFactoryInterface $authenticationContextFactory,
         private readonly RequestStack $requestStack,

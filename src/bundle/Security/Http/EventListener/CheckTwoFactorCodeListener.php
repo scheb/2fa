@@ -10,7 +10,7 @@ use Scheb\TwoFactorBundle\Security\Authentication\Exception\TwoFactorProviderNot
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\PreparationRecorderInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistryInterface;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -23,7 +23,7 @@ class CheckTwoFactorCodeListener extends AbstractCheckCodeListener
 
     public function __construct(
         PreparationRecorderInterface $preparationRecorder,
-        private readonly TwoFactorProviderRegistry $providerRegistry,
+        private readonly TwoFactorProviderRegistryInterface $providerRegistry,
         private readonly EventDispatcherInterface $eventDispatcher,
     ) {
         parent::__construct($preparationRecorder);

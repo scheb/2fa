@@ -13,7 +13,7 @@ use Scheb\TwoFactorBundle\Security\Http\EventListener\CheckTwoFactorCodeListener
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistryInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -21,14 +21,14 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
 {
-    private MockObject&TwoFactorProviderRegistry $providerRegistry;
+    private MockObject&TwoFactorProviderRegistryInterface $providerRegistry;
     private MockObject&EventDispatcherInterface $eventDispatcher;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
+        $this->providerRegistry = $this->createMock(TwoFactorProviderRegistryInterface::class);
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->listener = new CheckTwoFactorCodeListener(
             $this->preparationRecorder,
