@@ -51,4 +51,9 @@ class TwoFactorAuthenticationEvents
      * When the two-factor code has been used already.
      */
     public const string CODE_REUSED = 'scheb_two_factor.authentication.code_reused';
+
+    /**
+     * When the two-factor process will not start because at least one 2fa condition is not met.
+     */
+    public const string SKIPPED = 'scheb_two_factor.authentication.skipped';
 }

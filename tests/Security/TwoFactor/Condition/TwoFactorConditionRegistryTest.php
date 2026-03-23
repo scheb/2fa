@@ -10,10 +10,16 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionRegistry;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
+use Scheb\TwoFactorBundle\Tests\EventDispatcherTestHelper;
 use Scheb\TwoFactorBundle\Tests\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class TwoFactorConditionRegistryTest extends TestCase
 {
+    use EventDispatcherTestHelper;
+
     private MockObject&AuthenticationContextInterface $context;
     private MockObject&TwoFactorConditionInterface $condition1;
     private MockObject&TwoFactorConditionInterface $condition2;
@@ -26,11 +32,15 @@ class TwoFactorConditionRegistryTest extends TestCase
         $this->condition1 = $this->createMock(TwoFactorConditionInterface::class);
         $this->condition2 = $this->createMock(TwoFactorConditionInterface::class);
         $this->condition3 = $this->createMock(TwoFactorConditionInterface::class);
-        $this->registry = new TwoFactorConditionRegistry(new ArrayIterator([
-            $this->condition1,
-            $this->condition2,
-            $this->condition3,
-        ]));
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->registry = new TwoFactorConditionRegistry(
+            new ArrayIterator([
+                $this->condition1,
+                $this->condition2,
+                $this->condition3,
+            ]),
+            $this->eventDispatcher,
+        );
     }
 
     private function conditionReturns(MockObject $condition, bool $result): void
@@ -56,6 +66,7 @@ class TwoFactorConditionRegistryTest extends TestCase
         $this->conditionReturns($this->condition2, true);
         $this->conditionReturns($this->condition3, true);
 
+        $this->expectNotDispatchEvent();
         $returnValue = $this->registry->shouldPerformTwoFactorAuthentication($this->context);
         $this->assertTrue($returnValue);
     }
@@ -67,6 +78,10 @@ class TwoFactorConditionRegistryTest extends TestCase
         $this->conditionReturns($this->condition2, false);
         $this->conditionNotCalled($this->condition3);
 
+        $this->expectDispatchOneEvent(
+            $this->isInstanceOf(TwoFactorAuthenticationEvent::class),
+            TwoFactorAuthenticationEvents::SKIPPED,
+        );
         $returnValue = $this->registry->shouldPerformTwoFactorAuthentication($this->context);
         $this->assertFalse($returnValue);
     }
