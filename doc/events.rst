@@ -90,6 +90,15 @@ Event class: ``\Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeReus
 Is dispatched when the code has already been used within the configured time frame.
 This requires a caching backend to be available
 
+``scheb_two_factor.authentication.skipped``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents::SKIPPED``
+
+Event class: ``\Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent``
+
+Is dispatched when any ``\Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionInterface`` prevent the two factor process to start by returning false.
+
 
 Backup Code Events
 ------------------

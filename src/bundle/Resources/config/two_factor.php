@@ -39,6 +39,7 @@ return static function (ContainerConfigurator $container): void {
             ->lazy(true)
             ->args([
                 abstract_arg('Two-factor conditions'),
+                service('event_dispatcher'),
             ])
 
         ->set('scheb_two_factor.authenticated_token_condition', AuthenticatedTokenCondition::class)
