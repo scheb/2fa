@@ -30,8 +30,10 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use function array_values;
 use function assert;
 use function method_exists;
+use function reset;
 
 class TwoFactorAuthenticatorTest extends TestCase
 {
@@ -196,9 +198,36 @@ class TwoFactorAuthenticatorTest extends TestCase
     private function expect2faCompleteFlagSet(MockObject $authenticatedToken): void
     {
         $authenticatedToken
-            ->expects($this->any())
+            ->expects($this->atLeastOnce())
             ->method('setAttribute')
             ->with(TwoFactorAuthenticator::FLAG_2FA_COMPLETE, true);
+    }
+
+    /** @param string[] $providerNames */
+    private function stubTwoFactorTokenProviders(MockObject&TwoFactorTokenInterface $twoFactorToken, array $providerNames): void
+    {
+        $twoFactorToken
+            ->expects($this->any())
+            ->method('getTwoFactorProviders')
+            ->willReturnCallback(static function () use (&$providerNames) {
+                return array_values($providerNames);
+            });
+        $twoFactorToken
+            ->method('getCurrentTwoFactorProvider')
+            ->willReturnCallback(static function () use (&$providerNames): string|null {
+                return empty($providerNames) ? null : reset($providerNames);
+            });
+        $twoFactorToken
+            ->method('setTwoFactorProviderComplete')
+            ->willReturnCallback(static function (string $provider) use (&$providerNames): void {
+                foreach ($providerNames as $i => $providerName) {
+                    if ($providerName !== $provider) {
+                        continue;
+                    }
+
+                    unset($providerNames[$i]);
+                }
+            });
     }
 
     #[Test]
@@ -375,7 +404,12 @@ class TwoFactorAuthenticatorTest extends TestCase
             [$this->isInstanceOf(TwoFactorAuthenticationEvent::class), TwoFactorAuthenticationEvents::REQUIRE],
         ]);
 
-        $this->authenticator->onAuthenticationSuccess($this->request, $this->createTwoFactorToken(), self::FIREWALL_NAME);
+        $passport = $this->createPassportWithTwoFactorCredentials($token = $this->createTwoFactorToken());
+        $this->stubTwoFactorTokenProviders($token, ['totp', 'email']);
+
+        $this->authenticator->reset();
+        $this->authenticator->createToken($passport, self::FIREWALL_NAME);
+        $this->authenticator->onAuthenticationSuccess($this->request, $token, self::FIREWALL_NAME);
     }
 
     #[Test]
@@ -402,7 +436,18 @@ class TwoFactorAuthenticatorTest extends TestCase
             [$this->isInstanceOf(TwoFactorAuthenticationEvent::class), TwoFactorAuthenticationEvents::COMPLETE],
         ]);
 
-        $this->authenticator->onAuthenticationSuccess($this->request, $this->createMock(TokenInterface::class), self::FIREWALL_NAME);
+        $passport = $this->createPassportWithTwoFactorCredentials($token = $this->createTwoFactorToken());
+        $token
+            ->method('getCurrentTwoFactorProvider')
+            ->willReturn('totp');
+        $token
+            ->expects($this->once())
+            ->method('setTwoFactorProviderComplete')
+            ->with('totp');
+
+        $this->authenticator->reset();
+        $this->authenticator->createToken($passport, self::FIREWALL_NAME);
+        $this->authenticator->onAuthenticationSuccess($this->request, $token->getAuthenticatedToken(), self::FIREWALL_NAME);
     }
 
     #[Test]

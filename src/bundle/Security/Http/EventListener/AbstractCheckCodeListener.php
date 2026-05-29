@@ -50,7 +50,7 @@ abstract class AbstractCheckCodeListener implements EventSubscriberInterface
             return;
         }
 
-        $token->setTwoFactorProviderComplete($providerName);
+        // Badge is resolved, but authentication for provider is not complete yet
         $credentialsBadge->markResolved();
     }
 
