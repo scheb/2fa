@@ -81,7 +81,7 @@ runs:
             env:
                 SYMFONY_REQUIRE: ${{ inputs.symfony-version }}
             with:
-                composer-options: '--prefer-dist --working-dir=${{ inputs.composer-working-dir }}'
+                composer-options: '--prefer-dist --no-blocking --working-dir=${{ inputs.composer-working-dir }}'
                 dependency-versions: "${{ inputs.composer-dependency-versions || 'highest' }}"  # "highest" as default forces a potential lock file to be ignored
                 custom-cache-suffix: '${{ inputs.symfony-version }}'  # Consider forced Symfony version part of the cache key
 
