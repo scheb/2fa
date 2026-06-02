@@ -17,7 +17,6 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Trusted\TrustedDeviceManagerInterfa
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallContext;
 use Scheb\TwoFactorBundle\Tests\TestCase;
-use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -40,7 +39,7 @@ class FormControllerTest extends TestCase
     private MockObject&TokenStorageInterface $tokenStorage;
     private MockObject&TwoFactorProviderRegistry $providerRegistry;
     private MockObject&SessionInterface $session;
-    private MockObject&Request $request;
+    private Request $request;
     private MockObject&TwoFactorFormRendererInterface $formRenderer;
     private MockObject&TwoFactorTokenInterface $twoFactorToken;
     private MockObject&TwoFactorFirewallConfig $firewallConfig;
@@ -52,12 +51,8 @@ class FormControllerTest extends TestCase
     protected function setUp(): void
     {
         $this->session = $this->createMock(SessionInterface::class);
-        $this->request = $this->createMock(Request::class);
-        $this->request
-            ->expects($this->any())
-            ->method('getSession')
-            ->willReturn($this->session);
-        $this->request->query = new InputBag();
+        $this->request = new Request();
+        $this->request->setSession($this->session);
 
         $this->formRenderer = $this->createMock(TwoFactorFormRendererInterface::class);
         $twoFactorProvider = $this->createMock(TwoFactorProviderInterface::class);

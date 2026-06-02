@@ -9,7 +9,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Security\Http\Utils\RequestDataReader;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Scheb\TwoFactorBundle\Tests\TestCase;
-use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\HttpUtils;
 
@@ -52,15 +51,7 @@ class TwoFactorFirewallConfigTest extends TestCase
         );
     }
 
-    private function stubRequestMethod(MockObject&Request $request, string $method): void
-    {
-        $request
-            ->expects($this->any())
-            ->method('isMethod')
-            ->willReturnCallback(static fn (string $arg) => $arg === $method);
-    }
-
-    private function stubCheckRequestPath(MockObject&Request $request, string $pathToCheck, bool $result): void
+    private function stubCheckRequestPath(Request $request, string $pathToCheck, bool $result): void
     {
         $this->httpUtils
             ->expects($this->any())
@@ -204,9 +195,8 @@ class TwoFactorFirewallConfigTest extends TestCase
     #[Test]
     public function isCheckPathRequest_pathNotMatches_returnFalse(): void
     {
-        $request = $this->createMock(Request::class);
-        $this->stubRequestMethod($request, 'POST');
-        $this->stubcheckRequestPath($request, '/check_path', false);
+        $request = Request::create('http://example.com/check_path', 'GET');
+        $this->stubCheckRequestPath($request, '/check_path', false);
 
         $config = $this->createConfig([
             'check_path' => '/check_path',
@@ -218,9 +208,8 @@ class TwoFactorFirewallConfigTest extends TestCase
     #[Test]
     public function isCheckPathRequest_pathMatchesButWrongMethod_returnFalse(): void
     {
-        $request = $this->createMock(Request::class);
-        $this->stubRequestMethod($request, 'GET');
-        $this->stubcheckRequestPath($request, '/check_path', true);
+        $request = Request::create('http://example.com/check_path', 'GET');
+        $this->stubCheckRequestPath($request, '/check_path', true);
 
         $config = $this->createConfig([
             'check_path' => '/check_path',
@@ -232,9 +221,8 @@ class TwoFactorFirewallConfigTest extends TestCase
     #[Test]
     public function isCheckPathRequest_pathMatchesAndCorrectMethod_returnTrue(): void
     {
-        $request = $this->createMock(Request::class);
-        $this->stubRequestMethod($request, 'POST');
-        $this->stubcheckRequestPath($request, '/check_path', true);
+        $request = Request::create('http://example.com/check_path', 'POST');
+        $this->stubCheckRequestPath($request, '/check_path', true);
 
         $config = $this->createConfig([
             'check_path' => '/check_path',
@@ -247,8 +235,8 @@ class TwoFactorFirewallConfigTest extends TestCase
     #[Test]
     public function isAuthFormRequest_pathMatches_returnTrue(): void
     {
-        $request = $this->createMock(Request::class);
-        $this->stubcheckRequestPath($request, '/auth_form_path', true);
+        $request = Request::create('http://example.com/auth_form_path', 'GET');
+        $this->stubCheckRequestPath($request, '/auth_form_path', true);
         $config = $this->createConfig(['auth_form_path' => '/auth_form_path']);
 
         $this->assertTrue($config->isAuthFormRequest($request));
@@ -257,8 +245,8 @@ class TwoFactorFirewallConfigTest extends TestCase
     #[Test]
     public function isAuthFormRequest_differentPath_returnFalse(): void
     {
-        $request = $this->createMock(Request::class);
-        $this->stubcheckRequestPath($request, '/auth_form_path', false);
+        $request = Request::create('http://example.com/auth_form_path', 'GET');
+        $this->stubCheckRequestPath($request, '/auth_form_path', false);
         $config = $this->createConfig(['auth_form_path' => '/auth_form_path']);
 
         $this->assertFalse($config->isAuthFormRequest($request));
@@ -267,7 +255,7 @@ class TwoFactorFirewallConfigTest extends TestCase
     #[Test]
     public function getAuthCodeFromRequest_parameterConfigured_returnRequestData(): void
     {
-        $request = $this->createMock(Request::class);
+        $request = Request::create('http://example.com/', 'GET');
         $config = $this->createConfig(['auth_code_parameter_name' => 'auth_code']);
 
         $this->requestDataReader
@@ -283,7 +271,7 @@ class TwoFactorFirewallConfigTest extends TestCase
     #[Test]
     public function hasTrustedDeviceParameterInRequest_trueLikeValue_returnTrue(): void
     {
-        $request = $this->createMock(Request::class);
+        $request = Request::create('http://example.com/', 'GET');
         $config = $this->createConfig(['trusted_parameter_name' => 'trusted_flag']);
 
         $this->requestDataReader
@@ -299,7 +287,7 @@ class TwoFactorFirewallConfigTest extends TestCase
     #[Test]
     public function hasTrustedDeviceParameterInRequest_falseLikeValue_returnFalse(): void
     {
-        $request = $this->createMock(Request::class);
+        $request = Request::create('http://example.com/', 'GET');
         $config = $this->createConfig(['trusted_parameter_name' => 'trusted_flag']);
 
         $this->requestDataReader
@@ -315,8 +303,7 @@ class TwoFactorFirewallConfigTest extends TestCase
     #[Test]
     public function getCsrfTokenFromRequest_hasParameter_returnParameterValue(): void
     {
-        $request = $this->createMock(Request::class);
-        $request->headers = $this->createMock(HeaderBag::class);
+        $request = Request::create('http://example.com/', 'GET');
         $config = $this->createConfig(['csrf_parameter' => 'csrf_code']);
 
         $this->requestDataReader
@@ -332,20 +319,8 @@ class TwoFactorFirewallConfigTest extends TestCase
     #[Test]
     public function getCsrfTokenFromRequest_hasHeader_returnHeaderValue(): void
     {
-        $headers = $this->createMock(HeaderBag::class);
-        $headers
-            ->expects($this->any())
-            ->method('has')
-            ->with('X-CSRF-Token')
-            ->willReturn(true);
-        $headers
-            ->expects($this->any())
-            ->method('get')
-            ->with('X-CSRF-Token')
-            ->willReturn('header_csrf_code');
-
-        $request = $this->createMock(Request::class);
-        $request->headers = $headers;
+        $request = Request::create('http://example.com/', 'GET');
+        $request->headers->set('X-CSRF-Token', 'header_csrf_code');
 
         $config = $this->createConfig(['csrf_parameter' => 'csrf_code', 'csrf_header' => 'X-CSRF-Token']);
 
