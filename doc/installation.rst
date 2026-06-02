@@ -60,7 +60,7 @@ Enable this bundle in your ``config/bundles.php``:
    ];
 
 Step 3: Define routes
-^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~
 
 .. note::
 
