@@ -80,6 +80,24 @@ Event class: ``\Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEven
 
 Is dispatched right before authentication provider is used to check the code.
 
+``scheb_two_factor.authentication.code_valid``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents::CODE_VALID``
+
+Event class: ``\Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent``
+
+Is dispatch right after the authentication provider validating the code, when the code was *valid*.
+
+``scheb_two_factor.authentication.code_invalid``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents::CODE_INVALID``
+
+Event class: ``\Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent``
+
+Is dispatch right after the authentication provider validating the code, when the code was *invalid*.
+
 ``scheb_two_factor.authentication.code_reused``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 

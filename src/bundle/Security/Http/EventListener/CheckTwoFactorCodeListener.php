@@ -45,11 +45,21 @@ class CheckTwoFactorCodeListener extends AbstractCheckCodeListener
             throw $exception;
         }
 
-        if (!$authenticationProvider->validateAuthenticationCode($user, $code)) {
-            throw new InvalidTwoFactorCodeException(InvalidTwoFactorCodeException::MESSAGE);
+        if ($authenticationProvider->validateAuthenticationCode($user, $code)) {
+            $this->eventDispatcher->dispatch(
+                new TwoFactorCodeEvent($user, $code),
+                TwoFactorAuthenticationEvents::CODE_VALID,
+            );
+
+            return true;
         }
 
-        return true;
+        $this->eventDispatcher->dispatch(
+            new TwoFactorCodeEvent($user, $code),
+            TwoFactorAuthenticationEvents::CODE_INVALID,
+        );
+
+        throw new InvalidTwoFactorCodeException(InvalidTwoFactorCodeException::MESSAGE);
     }
 
     /**

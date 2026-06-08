@@ -14,6 +14,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
+use Scheb\TwoFactorBundle\Tests\EventDispatcherTestHelper;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -21,8 +22,9 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
 {
+    use EventDispatcherTestHelper;
+
     private MockObject&TwoFactorProviderRegistry $providerRegistry;
-    private MockObject&EventDispatcherInterface $eventDispatcher;
 
     protected function setUp(): void
     {
@@ -85,10 +87,10 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
     {
         $this->stubAllPreconditionsFulfilled();
 
-        $this->eventDispatcher
-            ->expects($this->once())
-            ->method('dispatch')
-            ->with(new TwoFactorCodeEvent($this->user, self::CODE), TwoFactorAuthenticationEvents::CHECK);
+        $this->expectDispatchConsecutiveEvents([
+            [new TwoFactorCodeEvent($this->user, self::CODE), TwoFactorAuthenticationEvents::CHECK],
+            [new TwoFactorCodeEvent($this->user, self::CODE), TwoFactorAuthenticationEvents::CODE_VALID],
+        ]);
 
         $authenticationProvider = $this->stubTwoFactorAuthenticationProvider();
         $authenticationProvider
@@ -107,10 +109,10 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
     {
         $this->stubAllPreconditionsFulfilled();
 
-        $this->eventDispatcher
-            ->expects($this->once())
-            ->method('dispatch')
-            ->with(new TwoFactorCodeEvent($this->user, self::CODE), TwoFactorAuthenticationEvents::CHECK);
+        $this->expectDispatchConsecutiveEvents([
+            [new TwoFactorCodeEvent($this->user, self::CODE), TwoFactorAuthenticationEvents::CHECK],
+            [new TwoFactorCodeEvent($this->user, self::CODE), TwoFactorAuthenticationEvents::CODE_INVALID],
+        ]);
 
         $authenticationProvider = $this->stubTwoFactorAuthenticationProvider();
         $authenticationProvider
