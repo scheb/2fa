@@ -17,7 +17,6 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeReusedEvent;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use stdClass;
-use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -27,6 +26,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class CheckTwoFactorCodeReuseListenerTest extends TestCase
 {
     private const MFA_CODE = '123456';
+    private const CACHE_KEY = 'scheb_two_factor_code_reuse.3468ccbd044e2fdfb0769b68b5c85d7660c6c12c';
     private const USER_IDENTIFIER = 'jdoe@example.com';
 
     private MockObject|EventDispatcherInterface $eventDispatcher;
@@ -44,7 +44,21 @@ class CheckTwoFactorCodeReuseListenerTest extends TestCase
         $this->logger = $this->createMock(LoggerInterface::class);
     }
 
-    protected function expectDoNothing(): void
+    private function stubCacheItemIsHit(CacheItemPoolInterface&MockObject $cacheProvider, bool $isHit): void
+    {
+        $cacheItem = $this->createMock(CacheItemInterface::class);
+        $cacheItem
+            ->expects($this->any())
+            ->method('isHit')
+            ->willReturn($isHit);
+
+        $cacheProvider->expects($this->once())
+            ->method('getItem')
+            ->with(self::CACHE_KEY)
+            ->willReturn($cacheItem);
+    }
+
+    private function expectDoNothing(): void
     {
         $this->eventDispatcher
             ->expects($this->never())
@@ -79,13 +93,7 @@ class CheckTwoFactorCodeReuseListenerTest extends TestCase
     public function checkForCodeReuse_validCacheProviderAndNoHit_nothingHappens(): void
     {
         $cacheProvider = $this->createMock(CacheItemPoolInterface::class);
-        $cacheItem = new CacheItem();
-        $cacheItem->set(true);
-        $cacheItem->expiresAfter(60);
-        $cacheProvider->expects($this->once())
-            ->method('getItem')
-            ->with('scheb_two_factor_code_reuse.3468ccbd044e2fdfb0769b68b5c85d7660c6c12c')
-            ->willReturn($cacheItem);
+        $this->stubCacheItemIsHit($cacheProvider, false);
 
         $listener = new CheckTwoFactorCodeReuseListener($this->eventDispatcher, $cacheProvider, 20, $this->logger);
         $this->expectDoNothing();
@@ -97,13 +105,7 @@ class CheckTwoFactorCodeReuseListenerTest extends TestCase
     public function checkForCodeReuse_validCacheProviderWithCacheHit_eventIsDispatched(): void
     {
         $cacheProvider = $this->createMock(CacheItemPoolInterface::class);
-
-        $cacheItem = $this->createMock(CacheItemInterface::class);
-        $cacheItem->expects($this->once())->method('isHit')->willReturn(true);
-
-        $cacheProvider->expects($this->once())
-            ->method('getItem')
-            ->willReturn($cacheItem);
+        $this->stubCacheItemIsHit($cacheProvider, true);
 
         $this->eventDispatcher->expects($this->once())
             ->method('dispatch')
@@ -115,7 +117,7 @@ class CheckTwoFactorCodeReuseListenerTest extends TestCase
     }
 
     #[Test]
-    public function checkForCodeReuse_validCacheProviderNoCacheHit_cacheItemIsSaved(): void
+    public function rememberCode_validCacheProvider_cacheItemIsSaved(): void
     {
         $cacheItem = new class implements CacheItemInterface {
             private mixed $value;
@@ -171,12 +173,12 @@ class CheckTwoFactorCodeReuseListenerTest extends TestCase
         $cacheItem->expiresAfter(60);
         $cacheProvider->expects($this->once())
             ->method('getItem')
-            ->with('scheb_two_factor_code_reuse.3468ccbd044e2fdfb0769b68b5c85d7660c6c12c')
+            ->with(self::CACHE_KEY)
             ->willReturn($cacheItem);
 
         $listener = new CheckTwoFactorCodeReuseListener($this->eventDispatcher, $cacheProvider, 20, $this->logger);
 
-        $listener->checkForCodeReuse(new TwoFactorCodeEvent($this->user, self::MFA_CODE));
+        $listener->rememberCode(new TwoFactorCodeEvent($this->user, self::MFA_CODE));
 
         $this->assertSame(20, $cacheItem->expiresAfter);
         $this->assertSame(true, $cacheItem->get());

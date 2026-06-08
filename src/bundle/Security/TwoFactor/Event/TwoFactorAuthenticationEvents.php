@@ -48,6 +48,16 @@ class TwoFactorAuthenticationEvents
     public const CHECK = 'scheb_two_factor.authentication.check';
 
     /**
+     * Right after a two-factor authentication code was checked, when the code was valid.
+     */
+    public const CODE_VALID = 'scheb_two_factor.authentication.code_valid';
+
+    /**
+     * Right after a two-factor authentication code was checked, when the code was invalid.
+     */
+    public const CODE_INVALID = 'scheb_two_factor.authentication.code_invalid';
+
+    /**
      * When the two-factor code has been used already.
      */
     public const CODE_REUSED = 'scheb_two_factor.authentication.code_reused';
