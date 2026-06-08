@@ -76,9 +76,9 @@ The following events are dispatched before the actual authentication provider is
 
 Constant: ``Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents::CHECK``
 
-Event class: ``\Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeCheckEvent``
+Event class: ``\Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent``
 
-Is dispatched before the TOTP authentication provider is used to check the code for plausibility
+Is dispatched right before authentication provider is used to check the code.
 
 ``scheb_two_factor.authentication.code_reused``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
