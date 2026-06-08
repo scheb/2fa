@@ -123,6 +123,9 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         if ($this->isAuthenticationComplete($twoFactorToken)) {
             $authenticatedToken = $twoFactorToken->getAuthenticatedToken(); // Authentication complete, unwrap the token
             $authenticatedToken->setAttribute(self::FLAG_2FA_COMPLETE, true);
+
+            // Backwards compatibility for bundle version <=8
+            // Remember the token to set the provider complete in onAuthenticationSuccess
             $this->onCompleteTokens[spl_object_hash($authenticatedToken)] = $twoFactorToken;
 
             return $authenticatedToken;
@@ -156,13 +159,17 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
             return $this->authenticationRequiredHandler->onAuthenticationRequired($request, $token);
         }
 
+        // Backwards compatibility for bundle version <=8
+        // In case the two-factor process was completed, $token is no longer a TwoFactorToken
+        // Set the provider completed on the remembered TwoFactorToken
         $twoFactorToken = $this->onCompleteTokens[spl_object_hash($token)] ?? null;
         if (null !== $twoFactorToken) {
-            unset($this->onCompleteTokens[spl_object_hash($token)]);
             $currentProvider = $twoFactorToken->getCurrentTwoFactorProvider();
             if (null !== $currentProvider) {
                 $twoFactorToken->setTwoFactorProviderComplete($currentProvider);
             }
+
+            unset($this->onCompleteTokens[spl_object_hash($token)]);
         }
 
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::COMPLETE, $request, $token);
