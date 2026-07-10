@@ -13,7 +13,6 @@
     ],
     "require": {
         "php": "~8.4.0 || ~8.5.0",
-        "ext-json": "*",
         "lcobucci/clock": "^3.0",
         "lcobucci/jwt": "^5.0",
         "spomky-labs/otphp": "^11.4",
