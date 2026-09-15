@@ -14,6 +14,9 @@ use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFa
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\TwoFactorAuthenticator;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\AuthenticationMethodProviderInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Scheb\TwoFactorBundle\Tests\EventDispatcherTestHelper;
 use Scheb\TwoFactorBundle\Tests\TestCase;
@@ -26,11 +29,13 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\AuthenticationMethodBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use function assert;
+use function class_exists;
 
 class TwoFactorAuthenticatorTest extends TestCase
 {
@@ -48,6 +53,7 @@ class TwoFactorAuthenticatorTest extends TestCase
     private MockObject&AuthenticationFailureHandlerInterface $failureHandler;
     private MockObject&AuthenticationRequiredHandlerInterface $authenticationRequiredHandler;
     private MockObject&Request $request;
+    private MockObject&TwoFactorProviderRegistry $providerRegistry;
     private TwoFactorAuthenticator $authenticator;
 
     protected function setUp(): void
@@ -59,6 +65,7 @@ class TwoFactorAuthenticatorTest extends TestCase
         $this->authenticationRequiredHandler = $this->createMock(AuthenticationRequiredHandlerInterface::class);
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->request = $this->createMock(Request::class);
+        $this->providerRegistry = $this->createMock(TwoFactorProviderRegistry::class);
 
         $this->twoFactorFirewallConfig
             ->expects($this->any())
@@ -85,6 +92,7 @@ class TwoFactorAuthenticatorTest extends TestCase
             $this->authenticationRequiredHandler,
             $this->eventDispatcher,
             $this->createMock(LoggerInterface::class),
+            $this->providerRegistry,
         );
     }
 
@@ -243,6 +251,57 @@ class TwoFactorAuthenticatorTest extends TestCase
         $credentials = $returnValue->getBadge(TwoFactorCodeCredentials::class);
         assert($credentials instanceof TwoFactorCodeCredentials);
         $this->assertEquals(self::CODE, $credentials->getCode());
+    }
+
+    #[Test]
+    public function authenticate_providerDeclaresItsAuthenticationMethod_createTwoFactorPassportWithAuthenticationMethodBadge(): void
+    {
+        if (!class_exists(AuthenticationMethodBadge::class)) {
+            $this->markTestSkipped('Requires the AuthenticationMethodBadge of Symfony 8.2');
+        }
+
+        $this->stubCurrentProviderIs('totp', $this->createProviderWithAuthenticationMethod('otp'));
+
+        $returnValue = $this->authenticator->authenticate($this->request);
+
+        $badge = $returnValue->getBadge(AuthenticationMethodBadge::class);
+        $this->assertInstanceOf(AuthenticationMethodBadge::class, $badge);
+        $this->assertEquals(['otp'], $badge->methods);
+    }
+
+    #[Test]
+    public function authenticate_providerWithoutAuthenticationMethod_noAuthenticationMethodBadge(): void
+    {
+        $this->stubCurrentProviderIs('custom', $this->createMock(TwoFactorProviderInterface::class));
+
+        $returnValue = $this->authenticator->authenticate($this->request);
+
+        $this->assertFalse($returnValue->hasBadge(AuthenticationMethodBadge::class));
+    }
+
+    private function stubCurrentProviderIs(string $providerName, TwoFactorProviderInterface $provider): void
+    {
+        $twoFactorToken = $this->stubTokenStorageHasTwoFactorToken();
+        $twoFactorToken
+            ->expects($this->any())
+            ->method('getCurrentTwoFactorProvider')
+            ->willReturn($providerName);
+        $this->providerRegistry
+            ->expects($this->any())
+            ->method('getProvider')
+            ->with($providerName)
+            ->willReturn($provider);
+    }
+
+    private function createProviderWithAuthenticationMethod(string $method): TwoFactorProviderInterface&AuthenticationMethodProviderInterface
+    {
+        $provider = $this->createMock(AuthenticationMethodTwoFactorProviderInterface::class);
+        $provider
+            ->expects($this->any())
+            ->method('getAuthenticationMethod')
+            ->willReturn($method);
+
+        return $provider;
     }
 
     #[Test]

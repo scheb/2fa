@@ -156,4 +156,10 @@ class TotpAuthenticatorTwoFactorProviderTest extends TestCase
             [false],
         ];
     }
+
+    #[Test]
+    public function getAuthenticationMethod_always_returnOtp(): void
+    {
+        $this->assertEquals('otp', $this->provider->getAuthenticationMethod());
+    }
 }

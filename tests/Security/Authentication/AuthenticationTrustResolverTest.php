@@ -48,6 +48,56 @@ class AuthenticationTrustResolverTest extends TestCase
         $this->assertEquals($returnedResult, $returnValue);
     }
 
+    /**
+     * @return array<array<string>>
+     */
+    public static function provideRecencyMethods(): array
+    {
+        return [
+            ['isAuthenticatedRecently'],
+            ['isAuthenticatedVeryRecently'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('provideRecencyMethods')]
+    public function isAuthenticatedRecently_twoFactorToken_returnFalse(string $method): void
+    {
+        $decoratedTrustResolver = new RecencyAwareTrustResolver();
+        $decoratedTrustResolver->result = true;
+        $trustResolver = new AuthenticationTrustResolver($decoratedTrustResolver);
+
+        $returnValue = $trustResolver->$method($this->createMock(TwoFactorTokenInterface::class));
+        $this->assertFalse($returnValue);
+        $this->assertNull($decoratedTrustResolver->calledMethod);
+    }
+
+    #[Test]
+    #[DataProvider('provideRecencyMethods')]
+    public function isAuthenticatedRecently_decoratedTrustResolverWithoutTheMethod_returnFalse(string $method): void
+    {
+        // The method exists on the interface since Symfony 8.2 only
+        $this->decoratedTrustResolver
+            ->expects($this->never())
+            ->method($this->anything());
+
+        $returnValue = $this->trustResolver->$method($this->createMock(TokenInterface::class));
+        $this->assertFalse($returnValue);
+    }
+
+    #[Test]
+    #[DataProvider('provideRecencyMethods')]
+    public function isAuthenticatedRecently_notTwoFactorToken_returnResultFromDecoratedTrustResolver(string $method): void
+    {
+        $decoratedTrustResolver = new RecencyAwareTrustResolver();
+        $decoratedTrustResolver->result = true;
+        $trustResolver = new AuthenticationTrustResolver($decoratedTrustResolver);
+
+        $returnValue = $trustResolver->$method($this->createMock(TokenInterface::class));
+        $this->assertTrue($returnValue);
+        $this->assertEquals($method, $decoratedTrustResolver->calledMethod);
+    }
+
     #[Test]
     public function isFullFledged_twoFactorToken_returnFalse(): void
     {

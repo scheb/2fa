@@ -8,6 +8,7 @@ use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\EmailCodeEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\AuthenticationMethodProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Email\Generator\CodeGeneratorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
@@ -18,7 +19,7 @@ use function str_replace;
 /**
  * @final
  */
-class EmailTwoFactorProvider implements TwoFactorProviderInterface
+class EmailTwoFactorProvider implements TwoFactorProviderInterface, AuthenticationMethodProviderInterface
 {
     public function __construct(
         private readonly CodeGeneratorInterface $codeGenerator,
@@ -77,5 +78,11 @@ class EmailTwoFactorProvider implements TwoFactorProviderInterface
     public function getFormRenderer(): TwoFactorFormRendererInterface
     {
         return $this->formRenderer;
+    }
+
+    public function getAuthenticationMethod(): string
+    {
+        // AuthenticationMethod::ONE_TIME_PASSWORD of Symfony 8.2, which cannot be referenced on older versions
+        return 'otp';
     }
 }
