@@ -6,6 +6,7 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp;
 
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\AuthenticationMethodProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
@@ -14,7 +15,7 @@ use function strlen;
 /**
  * @final
  */
-class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
+class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface, AuthenticationMethodProviderInterface
 {
     public function __construct(
         private readonly TotpAuthenticatorInterface $authenticator,
@@ -63,5 +64,11 @@ class TotpAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
     public function getFormRenderer(): TwoFactorFormRendererInterface
     {
         return $this->formRenderer;
+    }
+
+    public function getAuthenticationMethod(): string
+    {
+        // AuthenticationMethod::ONE_TIME_PASSWORD of Symfony 8.2, which cannot be referenced on older versions
+        return 'otp';
     }
 }
