@@ -17,6 +17,7 @@ use function array_keys;
 use function array_search;
 use function array_unshift;
 use function count;
+use function method_exists;
 use function reset;
 use function sprintf;
 
@@ -71,6 +72,36 @@ class TwoFactorToken implements Stringable, TwoFactorTokenInterface
     public function getRoleNames(): array
     {
         return [];
+    }
+
+    /**
+     * Symfony 8.2 records on the token which authentication methods were proven and when.
+     * The proofs belong to the token that is authenticated once 2fa completes, so they are
+     * delegated to it: the first factor is recorded while this token is the current one.
+     *
+     * @return array<string, int>
+     */
+    public function getAuthenticationProofs(): array
+    {
+        if (!method_exists($this->authenticatedToken, 'getAuthenticationProofs')) {
+            return [];
+        }
+
+        /** @psalm-suppress MixedAssignment, MixedMethodCall */
+        return $this->authenticatedToken->getAuthenticationProofs();
+    }
+
+    /**
+     * @param array<string, int> $proofs
+     */
+    public function setAuthenticationProofs(array $proofs): void
+    {
+        if (!method_exists($this->authenticatedToken, 'setAuthenticationProofs')) {
+            return;
+        }
+
+        /** @psalm-suppress MixedMethodCall */
+        $this->authenticatedToken->setAuthenticationProofs($proofs);
     }
 
     public function createWithCredentials(string $credentials): TwoFactorTokenInterface

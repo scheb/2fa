@@ -12,6 +12,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\UnknownTwoFactor
 use Scheb\TwoFactorBundle\Tests\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use function serialize;
 use function unserialize;
@@ -195,5 +196,43 @@ class TwoFactorTokenTest extends TestCase
         $unserializedToken = unserialize(serialize($twoFactorToken));
 
         $this->assertEquals($twoFactorToken, $unserializedToken);
+    }
+
+    #[Test]
+    public function getAuthenticationProofs_authenticatedTokenHoldsProofs_returnProofsOfAuthenticatedToken(): void
+    {
+        $authenticatedToken = $this->createProofsAwareToken();
+        $authenticatedToken->setAuthenticationProofs(['pwd' => 100]);
+        $twoFactorToken = new TwoFactorToken($authenticatedToken, null, self::FIREWALL_NAME, ['provider1']);
+
+        $this->assertEquals(['pwd' => 100], $twoFactorToken->getAuthenticationProofs());
+    }
+
+    #[Test]
+    public function setAuthenticationProofs_authenticatedTokenHoldsProofs_recordOnAuthenticatedToken(): void
+    {
+        // The proofs belong to the token that is authenticated once 2fa completes, and
+        // Symfony records the ones of the first factor while the TwoFactorToken is current
+        $authenticatedToken = $this->createProofsAwareToken();
+        $twoFactorToken = new TwoFactorToken($authenticatedToken, null, self::FIREWALL_NAME, ['provider1']);
+
+        $twoFactorToken->setAuthenticationProofs(['pwd' => 100]);
+
+        $this->assertEquals(['pwd' => 100], $authenticatedToken->getAuthenticationProofs());
+    }
+
+    #[Test]
+    public function getAuthenticationProofs_authenticatedTokenWithoutProofs_returnEmptyArray(): void
+    {
+        // A token of Symfony below 8.2 has no proofs
+        $this->twoFactorToken->setAuthenticationProofs(['pwd' => 100]);
+
+        $this->assertEquals([], $this->twoFactorToken->getAuthenticationProofs());
+    }
+
+    private function createProofsAwareToken(): UsernamePasswordToken
+    {
+        // A token of Symfony 8.2, where the methods are declared on the interface
+        return new ProofsAwareToken(new InMemoryUser('username', null), self::FIREWALL_NAME);
     }
 }

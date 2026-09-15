@@ -38,6 +38,7 @@ return static function (ContainerConfigurator $container): void {
                 abstract_arg('Authentication required handler'),
                 service('event_dispatcher'),
                 service('logger')->nullOnInvalid(),
+                service('scheb_two_factor.provider_registry'),
             ])
 
         ->set('scheb_two_factor.security.authentication.trust_resolver', AuthenticationTrustResolver::class)

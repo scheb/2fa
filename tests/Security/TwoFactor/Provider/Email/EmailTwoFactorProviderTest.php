@@ -194,4 +194,10 @@ class EmailTwoFactorProviderTest extends TestCase
 
         $this->provider->validateAuthenticationCode($user, self::INVALID_AUTH_CODE);
     }
+
+    #[Test]
+    public function getAuthenticationMethod_always_returnOtp(): void
+    {
+        $this->assertEquals('otp', $this->provider->getAuthenticationMethod());
+    }
 }
