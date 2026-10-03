@@ -7,6 +7,9 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Renders the authentication form of a two-factor provider.
+ */
 interface TwoFactorFormRendererInterface
 {
     /**
