@@ -8,6 +8,8 @@ use InvalidArgumentException;
 use function sprintf;
 
 /**
+ * Returns the two-factor configuration of a firewall.
+ *
  * @final
  */
 class TwoFactorFirewallContext
