@@ -8,6 +8,7 @@ use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFa
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\PreparationRecorderInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
 use function assert;
 use function sprintf;
@@ -46,7 +47,7 @@ abstract class AbstractCheckCodeListener implements EventSubscriberInterface
             throw new AuthenticationException(sprintf('The two-factor provider "%s" has not been prepared.', $providerName));
         }
 
-        if (!$this->isValidCode($providerName, $token->getUser(), $credentialsBadge->getCode())) {
+        if (!$this->isValidCode($passport, $providerName, $token->getUser(), $credentialsBadge->getCode())) {
             return;
         }
 
@@ -54,5 +55,5 @@ abstract class AbstractCheckCodeListener implements EventSubscriberInterface
         $credentialsBadge->markResolved();
     }
 
-    abstract protected function isValidCode(string $providerName, object $user, string $code): bool;
+    abstract protected function isValidCode(Passport $passport, string $providerName, object $user, string $code): bool;
 }

@@ -106,27 +106,7 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
             $passport->addBadge(new TrustedDeviceBadge());
         }
 
-        // Symfony 8.2 records on the token which authentication methods were proven, from that badge
-        $authenticationMethod = $this->getAuthenticationMethod($currentToken);
-        /** @psalm-suppress UndefinedClass */
-        if (null !== $authenticationMethod && class_exists(AuthenticationMethodBadge::class)) {
-            /** @psalm-suppress UndefinedClass, InvalidArgument, MixedMethodCall, MixedArgument */
-            $passport->addBadge(new AuthenticationMethodBadge($authenticationMethod));
-        }
-
         return $passport;
-    }
-
-    private function getAuthenticationMethod(TwoFactorTokenInterface $token): string|null
-    {
-        $providerName = $token->getCurrentTwoFactorProvider();
-        if (null === $providerName || null === $this->providerRegistry) {
-            return null;
-        }
-
-        $provider = $this->providerRegistry->getProvider($providerName);
-
-        return $provider instanceof AuthenticationMethodProviderInterface ? $provider->getAuthenticationMethod() : null;
     }
 
     private function shouldSetTrustedDevice(Request $request, Passport $passport): bool

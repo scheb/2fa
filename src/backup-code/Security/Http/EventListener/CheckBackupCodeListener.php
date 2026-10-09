@@ -8,6 +8,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\BackupCodeEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\PreparationRecorderInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -28,10 +29,16 @@ class CheckBackupCodeListener extends AbstractCheckCodeListener
         parent::__construct($preparationRecorder);
     }
 
-    protected function isValidCode(string $providerName, object $user, string $code): bool
+    protected function isValidCode(Passport $passport, string $providerName, object $user, string $code): bool
     {
         $event = new TwoFactorCodeEvent($user, $code);
         $this->eventDispatcher->dispatch($event, BackupCodeEvents::CHECK);
+
+        // Symfony 8.2 records on the token which authentication methods were proven, from that badge
+        if (class_exists(AuthenticationMethodBadge::class)) {
+            /** @psalm-suppress UndefinedClass, InvalidArgument, MixedMethodCall, MixedArgument */
+            $passport->addBadge(new AuthenticationMethodBadge('otp'));
+        }
 
         if ($this->backupCodeManager->isBackupCode($user, $code)) {
             $this->eventDispatcher->dispatch($event, BackupCodeEvents::VALID);
