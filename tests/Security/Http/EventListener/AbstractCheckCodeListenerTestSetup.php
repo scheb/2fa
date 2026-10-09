@@ -52,7 +52,7 @@ abstract class AbstractCheckCodeListenerTestSetup extends TestCase
             ->method('markResolved');
     }
 
-    protected function stubAllPreconditionsFulfilled(): void
+    protected function stubAllPreconditionsFulfilled(): MockObject&Passport
     {
         $passport = $this->createMock(Passport::class);
         $token = $this->createTwoFactorToken(self::TWO_FACTOR_PROVIDER_ID);
@@ -60,6 +60,8 @@ abstract class AbstractCheckCodeListenerTestSetup extends TestCase
         $this->stubPassport($passport);
         $this->stubPassportHasCredentialsBadge($passport, $token, false);
         $this->stubPreparationPrepared(true);
+
+        return $passport;
     }
 
     private function createTwoFactorToken(string|null $currentProvider): MockObject&TwoFactorTokenInterface

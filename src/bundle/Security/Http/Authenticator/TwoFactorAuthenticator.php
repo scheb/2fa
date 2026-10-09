@@ -12,8 +12,6 @@ use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Badge\TrustedDevi
 use Scheb\TwoFactorBundle\Security\Http\Authenticator\Passport\Credentials\TwoFactorCodeCredentials;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\AuthenticationMethodProviderInterface;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Scheb\TwoFactorBundle\Security\TwoFactor\TwoFactorFirewallConfig;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +24,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerI
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\InteractiveAuthenticatorInterface;
-use Symfony\Component\Security\Http\Authenticator\Passport\Badge\AuthenticationMethodBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
@@ -57,7 +54,6 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         private readonly AuthenticationRequiredHandlerInterface $authenticationRequiredHandler,
         private readonly EventDispatcherInterface $eventDispatcher,
         LoggerInterface|null $logger = null,
-        private readonly TwoFactorProviderRegistry|null $providerRegistry = null,
     ) {
         $this->logger = $logger ?? new NullLogger();
     }
@@ -106,27 +102,7 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
             $passport->addBadge(new TrustedDeviceBadge());
         }
 
-        // Symfony 8.2 records on the token which authentication methods were proven, from that badge
-        $authenticationMethod = $this->getAuthenticationMethod($currentToken);
-        /** @psalm-suppress UndefinedClass */
-        if (null !== $authenticationMethod && class_exists(AuthenticationMethodBadge::class)) {
-            /** @psalm-suppress UndefinedClass, InvalidArgument, MixedMethodCall, MixedArgument */
-            $passport->addBadge(new AuthenticationMethodBadge($authenticationMethod));
-        }
-
         return $passport;
-    }
-
-    private function getAuthenticationMethod(TwoFactorTokenInterface $token): string|null
-    {
-        $providerName = $token->getCurrentTwoFactorProvider();
-        if (null === $providerName || null === $this->providerRegistry) {
-            return null;
-        }
-
-        $provider = $this->providerRegistry->getProvider($providerName);
-
-        return $provider instanceof AuthenticationMethodProviderInterface ? $provider->getAuthenticationMethod() : null;
     }
 
     private function shouldSetTrustedDevice(Request $request, Passport $passport): bool

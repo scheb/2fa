@@ -15,7 +15,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Scheb\TwoFactorBundle\Tests\EventDispatcherTestHelper;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\AuthenticationMethodBadge;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use function class_exists;
 
 /**
  * @property CheckTwoFactorCodeListener $listener
@@ -123,6 +125,56 @@ class CheckTwoFactorCodeListenerTest extends AbstractCheckCodeListenerTestSetup
 
         $this->expectCredentialsUnresolved();
         $this->expectException(InvalidTwoFactorCodeException::class);
+
+        $this->listener->checkPassport($this->checkPassportEvent);
+    }
+
+    #[Test]
+    public function checkPassport_validCodeOfProviderWithAuthenticationMethod_addAuthenticationMethodBadge(): void
+    {
+        if (!class_exists(AuthenticationMethodBadge::class)) {
+            $this->markTestSkipped('Requires the AuthenticationMethodBadge of Symfony 8.2');
+        }
+
+        $passport = $this->stubAllPreconditionsFulfilled();
+
+        $authenticationProvider = $this->createMock(AuthenticationMethodTwoFactorProviderInterface::class);
+        $authenticationProvider
+            ->expects($this->any())
+            ->method('validateAuthenticationCode')
+            ->willReturn(true);
+        $authenticationProvider
+            ->expects($this->any())
+            ->method('getAuthenticationMethod')
+            ->willReturn('otp');
+        $this->providerRegistry
+            ->expects($this->any())
+            ->method('getProvider')
+            ->with(self::TWO_FACTOR_PROVIDER_ID)
+            ->willReturn($authenticationProvider);
+
+        $passport
+            ->expects($this->once())
+            ->method('addBadge')
+            ->with(new AuthenticationMethodBadge('otp'));
+
+        $this->listener->checkPassport($this->checkPassportEvent);
+    }
+
+    #[Test]
+    public function checkPassport_validCodeOfProviderWithoutAuthenticationMethod_noAuthenticationMethodBadge(): void
+    {
+        $passport = $this->stubAllPreconditionsFulfilled();
+
+        $authenticationProvider = $this->stubTwoFactorAuthenticationProvider();
+        $authenticationProvider
+            ->expects($this->any())
+            ->method('validateAuthenticationCode')
+            ->willReturn(true);
+
+        $passport
+            ->expects($this->never())
+            ->method('addBadge');
 
         $this->listener->checkPassport($this->checkPassportEvent);
     }
