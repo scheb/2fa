@@ -9,6 +9,7 @@ use Scheb\TwoFactorBundle\Security\Authentication\Exception\InvalidTwoFactorCode
 use Scheb\TwoFactorBundle\Security\Authentication\Exception\TwoFactorProviderNotFoundException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorAuthenticationEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\AuthenticationMethodProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\PreparationRecorderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderRegistry;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
@@ -60,6 +61,13 @@ class CheckTwoFactorCodeListener extends AbstractCheckCodeListener
         );
 
         throw new InvalidTwoFactorCodeException(InvalidTwoFactorCodeException::MESSAGE);
+    }
+
+    protected function getAuthenticationMethod(string $providerName): string|null
+    {
+        $authenticationProvider = $this->providerRegistry->getProvider($providerName);
+
+        return $authenticationProvider instanceof AuthenticationMethodProviderInterface ? $authenticationProvider->getAuthenticationMethod() : null;
     }
 
     /**
