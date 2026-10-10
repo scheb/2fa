@@ -27,6 +27,8 @@ jobs:
                 with:
                     php-version: '${{ matrix.php-version }}'
                     composer-token: ${{ secrets.GITHUB_TOKEN }}
+                    composer-allow-dev: true
+                    symfony-version: 8.2.*
 
             -   name: "PHP Coding Standards Fixer"
                 run: php-cs-fixer fix --dry-run --diff --using-cache=no
@@ -72,6 +74,11 @@ jobs:
                     -   php-version: '8.5'
                         symfony-version: '8.*'
 
+                    # Test against Symfony 8.2@dev on highest PHP version
+                    -   php-version: '8.5'
+                        symfony-version: '8.2.*'
+                        composer-allow-dev: true
+
         steps:
             -   name: 'Checkout code'
                 uses: actions/checkout@v5
@@ -83,6 +90,7 @@ jobs:
                     composer-token: ${{ secrets.GITHUB_TOKEN }}
                     composer-dependency-versions: '${{ matrix.dependency-versions }}'
                     composer-require: '${{ matrix.composer-require }}'
+                    composer-allow-dev: '${{ matrix.composer-allow-dev }}'
                     symfony-version: '${{ matrix.symfony-version }}'
 
             -   name: 'Run tests'
@@ -113,6 +121,11 @@ jobs:
                     # Test against Symfony 8 on highest PHP version
                     -   php-version: '8.5'
                         symfony-version: '8.*'
+
+                    # Test against Symfony 8.2@dev on highest PHP version
+                    -   php-version: '8.5'
+                        symfony-version: '8.2.*'
+                        composer-allow-dev: true
         steps:
             -   name: 'Checkout code'
                 uses: actions/checkout@v5
@@ -124,6 +137,7 @@ jobs:
                     composer-token: ${{ secrets.GITHUB_TOKEN }}
                     composer-working-dir: app
                     composer-require: '${{ matrix.composer-require }}'
+                    composer-allow-dev: '${{ matrix.composer-allow-dev }}'
                     symfony-version: '${{ matrix.symfony-version }}'
 
             -   name: 'Run tests'
