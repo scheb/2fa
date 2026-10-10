@@ -12,14 +12,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Http\Attribute\FirewallListenerOrder;
 use Symfony\Component\Security\Http\Firewall\AbstractListener;
+use Symfony\Component\Security\Http\Firewall\AccessListener;
 use Symfony\Component\Security\Http\Firewall\FirewallListenerInterface;
+use Symfony\Component\Security\Http\Firewall\LogoutListener;
 
 /**
  * Handles access control in the "2fa in progress" phase.
  *
  * @final
  */
+#[FirewallListenerOrder(before: AccessListener::class, after: LogoutListener::class)]
 class TwoFactorAccessListener extends AbstractListener implements FirewallListenerInterface
 {
     public function __construct(
