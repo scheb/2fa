@@ -11,7 +11,9 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Backup\BackupCodeManagerInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\BackupCodeEvents;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
 use Scheb\TwoFactorBundle\Tests\EventDispatcherTestHelper;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\AuthenticationMethodBadge;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use function class_exists;
 
 /**
  * @property CheckBackupCodeListener $listener
@@ -113,6 +115,45 @@ class CheckBackupCodeListenerTest extends AbstractCheckCodeListenerTestSetup
             [$event, BackupCodeEvents::CHECK],
             [$event, BackupCodeEvents::INVALID],
         ]);
+
+        $this->listener->checkPassport($this->checkPassportEvent);
+    }
+
+    #[Test]
+    public function checkPassport_validBackupCode_addOtpAuthenticationMethodBadge(): void
+    {
+        if (!class_exists(AuthenticationMethodBadge::class)) {
+            $this->markTestSkipped('Requires the AuthenticationMethodBadge of Symfony 8.2');
+        }
+
+        $passport = $this->stubAllPreconditionsFulfilled();
+
+        $this->backupCodeManager
+            ->expects($this->any())
+            ->method('isBackupCode')
+            ->willReturn(true);
+
+        $passport
+            ->expects($this->once())
+            ->method('addBadge')
+            ->with(new AuthenticationMethodBadge('otp'));
+
+        $this->listener->checkPassport($this->checkPassportEvent);
+    }
+
+    #[Test]
+    public function checkPassport_invalidBackupCode_noAuthenticationMethodBadge(): void
+    {
+        $passport = $this->stubAllPreconditionsFulfilled();
+
+        $this->backupCodeManager
+            ->expects($this->any())
+            ->method('isBackupCode')
+            ->willReturn(false);
+
+        $passport
+            ->expects($this->never())
+            ->method('addBadge');
 
         $this->listener->checkPassport($this->checkPassportEvent);
     }

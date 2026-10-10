@@ -6,6 +6,7 @@ namespace Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google;
 
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\AuthenticationMethodProviderInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorFormRendererInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\TwoFactorProviderInterface;
@@ -14,7 +15,7 @@ use function strlen;
 /**
  * @final
  */
-class GoogleAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
+class GoogleAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface, AuthenticationMethodProviderInterface
 {
     public function __construct(
         private readonly GoogleAuthenticatorInterface $authenticator,
@@ -59,5 +60,11 @@ class GoogleAuthenticatorTwoFactorProvider implements TwoFactorProviderInterface
     public function getFormRenderer(): TwoFactorFormRendererInterface
     {
         return $this->formRenderer;
+    }
+
+    public function getAuthenticationMethod(): string
+    {
+        // AuthenticationMethod::ONE_TIME_PASSWORD of Symfony 8.2, which cannot be referenced on older versions
+        return 'otp';
     }
 }

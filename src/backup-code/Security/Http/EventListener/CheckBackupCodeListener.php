@@ -45,6 +45,12 @@ class CheckBackupCodeListener extends AbstractCheckCodeListener
         return false;
     }
 
+    protected function getAuthenticationMethod(string $providerName): string
+    {
+        // AuthenticationMethod::ONE_TIME_PASSWORD of Symfony 8.2, which cannot be referenced on older versions
+        return 'otp';
+    }
+
     /**
      * {@inheritDoc}
      */
