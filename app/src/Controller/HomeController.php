@@ -21,4 +21,14 @@ class HomeController extends AbstractController
     {
         return new Response('This page is accessible for any user any time');
     }
+
+    #[Route('/cacheable', name: 'cacheable')]
+    public function cacheable(): Response
+    {
+        $response = new Response('This page is the same for any user');
+        $response->setPublic();
+        $response->setMaxAge(3600);
+
+        return $response;
+    }
 }

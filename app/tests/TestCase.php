@@ -209,6 +209,11 @@ abstract class TestCase extends WebTestCase
         return $this->client->request('GET', '/');
     }
 
+    protected function navigateToCacheablePathWithoutAnyAccessControl(): Crawler
+    {
+        return $this->client->request('GET', '/cacheable');
+    }
+
     protected function navigateToPathWithAnonymousAccessControl()
     {
         return $this->client->request('GET', '/alwaysAccessible');
@@ -315,6 +320,21 @@ abstract class TestCase extends WebTestCase
             $page->html(),
             'The page shown must "Invalid CSRF token" message'
         );
+    }
+
+    protected function assertIsCacheablePage(Crawler $page): void
+    {
+        $this->assertResponseStatusCode(200);
+        $this->assertStringContainsString(
+            'This page is the same for any user',
+            $page->html(),
+            'The page shown must be the "cacheable" page'
+        );
+    }
+
+    protected function assertResponseIsPubliclyCacheable(): void
+    {
+        $this->assertSame('max-age=3600, public', $this->client->getResponse()->headers->get('Cache-Control'));
     }
 
     protected function assertResponseIs403Forbidden()
