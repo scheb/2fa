@@ -28,6 +28,24 @@ class TwoFactorAccessControlTest extends TestCase
         $this->assert2faIsRequired($page);
     }
 
+    public function test2faProtectsCacheablePathWithoutAnyAccessControl(): void
+    {
+        $this->setAll2faProvidersEnabled(true);
+
+        $pageAfterLogin = $this->performLogin();
+        $this->assert2faIsRequired($pageAfterLogin);
+
+        $page = $this->navigateToCacheablePathWithoutAnyAccessControl();
+        $this->assert2faIsRequired($page);
+    }
+
+    public function testAnonymousAccessToPathWithoutAnyAccessControlKeepsResponseCacheable(): void
+    {
+        $page = $this->navigateToCacheablePathWithoutAnyAccessControl();
+        $this->assertIsCacheablePage($page);
+        $this->assertResponseIsPubliclyCacheable();
+    }
+
     public function test2faAllowsAccessToPageWithAccessControlAnonymous(): void
     {
         $this->setAll2faProvidersEnabled(true);

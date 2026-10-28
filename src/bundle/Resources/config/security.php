@@ -118,7 +118,9 @@ return static function (ContainerConfigurator $container): void {
         ->set('scheb_two_factor.security.access_listener', TwoFactorAccessListener::class)
             ->args([
                 abstract_arg('Two-factor firewall config'),
-                service('security.token_storage'),
+                // Untracked, like Symfony's firewall listeners: reading the token on every request must not flag the
+                // session as used, which would make every response private (lazy firewalls)
+                service('security.untracked_token_storage'),
                 service('scheb_two_factor.security.access.access_decider'),
             ])
 
