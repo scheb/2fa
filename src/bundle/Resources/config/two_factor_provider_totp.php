@@ -22,6 +22,7 @@ return static function (ContainerConfigurator $container): void {
                 '%scheb_two_factor.totp.issuer%',
                 '%scheb_two_factor.totp.parameters%',
                 new ReferenceConfigurator('clock')->nullOnInvalid(),
+                service('scheb_two_factor.security.totp.secret_decryptor')->nullOnInvalid(),
             ])
 
         ->set('scheb_two_factor.security.totp_authenticator', TotpAuthenticator::class)

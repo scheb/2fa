@@ -50,6 +50,7 @@ Bundle Configuration
            leeway: 0                      # Acceptable time drift in seconds, must be less or equal than 30 seconds
            template: security/2fa_form.html.twig   # Template used to render the authentication form
            form_renderer: acme.custom_form_renderer  # Use a custom form renderer service
+           secret_decryptor: acme.secret_decryptor  # Service to decrypt a secret code that is stored encrypted
 
        # TOTP authentication config
        totp:
@@ -61,6 +62,7 @@ Bundle Configuration
                image: 'https://my-service/img/logo.png'
            template: security/2fa_form.html.twig   # Template used to render the authentication form
            form_renderer: acme.custom_form_renderer  # Use a custom form renderer service
+           secret_decryptor: acme.secret_decryptor  # Service to decrypt a secret code that is stored encrypted
 
        # The service which is used to persist data in the user object. By default Doctrine is used. If your entity is
        # managed by something else (e.g. an API), you have to implement a custom persister.

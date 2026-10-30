@@ -150,6 +150,7 @@ Configuration Options
            parameters:                    # Additional parameters added in the QR code
                image: 'https://my-service/img/logo.png'
            template: security/2fa_form.html.twig   # Template used to render the authentication form
+           secret_decryptor: acme.secret_decryptor  # Service to decrypt a secret code that is stored encrypted
 
 Additional parameter
 --------------------
@@ -227,6 +228,42 @@ also possible.
 .. code-block:: php
 
    $secret = $container->get("scheb_two_factor.security.totp_authenticator")->generateSecret();
+
+Storing the Secret Code Encrypted
+---------------------------------
+
+By default, the bundle expects the secret code in the user entity as plain text. If you want to store it encrypted,
+encrypt the secret yourself before you persist it. Then tell the bundle how to decrypt it.
+
+Create a class implementing ``Scheb\TwoFactorBundle\Security\TwoFactor\Provider\SecretDecryptorInterface``:
+
+.. code-block:: php
+
+   <?php
+
+   namespace Acme\Demo\Security;
+
+   use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\SecretDecryptorInterface;
+
+   class MySecretDecryptor implements SecretDecryptorInterface
+   {
+       public function decrypt(string $secret): string
+       {
+           // Return the plain Base32 secret
+       }
+   }
+
+Then register it as a service and update your configuration:
+
+.. code-block:: yaml
+
+   # config/packages/scheb_2fa.yaml
+   scheb_two_factor:
+       totp:
+           secret_decryptor: acme.secret_decryptor
+
+The bundle decrypts the secret every time it checks a code or creates the QR code content. ``generateSecret()`` still
+returns a plain secret, so encrypt it before you store it.
 
 QR Codes
 --------

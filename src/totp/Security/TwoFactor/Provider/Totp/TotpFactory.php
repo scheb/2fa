@@ -9,6 +9,7 @@ use OTPHP\TOTPInterface;
 use Psr\Clock\ClockInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\SecretDecryptorInterface;
 use function strlen;
 
 /**
@@ -24,6 +25,7 @@ class TotpFactory
         private readonly string|null $issuer,
         private readonly array $customParameters,
         private readonly ClockInterface|null $clock = null,
+        private readonly SecretDecryptorInterface|null $secretDecryptor = null,
     ) {
     }
 
@@ -37,6 +39,10 @@ class TotpFactory
         $secret = $totpConfiguration->getSecret();
         if (0 === strlen($secret)) {
             throw new TwoFactorProviderLogicException('Cannot initialize TOTP, no secret code provided.');
+        }
+
+        if (null !== $this->secretDecryptor) {
+            $secret = $this->secretDecryptor->decrypt($secret);
         }
 
         /** @psalm-suppress ArgumentTypeCoercion */

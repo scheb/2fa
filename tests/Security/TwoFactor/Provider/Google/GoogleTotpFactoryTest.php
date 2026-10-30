@@ -11,12 +11,14 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleTotpFactory;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\SecretDecryptorInterface;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 
 class GoogleTotpFactoryTest extends TestCase
 {
     private const string USER_NAME = 'User Name';
     private const string SECRET = 'SECRET';
+    private const string DECRYPTED_SECRET = 'DECRYPTEDSECRET';
     private const string ISSUER = 'Issuer Name';
     private const string SERVER = 'Server';
     private const int CUSTOM_DIGITS = 8;
@@ -66,6 +68,22 @@ class GoogleTotpFactoryTest extends TestCase
         $this->assertEquals(self::USER_NAME.'@'.self::SERVER, $returnValue->getLabel());
         $this->assertEquals(self::ISSUER, $returnValue->getIssuer());
         $this->assertEquals(self::SECRET, $returnValue->getSecret());
+    }
+
+    #[Test]
+    public function createTotpForUser_secretDecryptorGiven_returnTotpWithDecryptedSecret(): void
+    {
+        $user = $this->createUserMock();
+        $secretDecryptor = $this->createMock(SecretDecryptorInterface::class);
+        $secretDecryptor
+            ->expects($this->once())
+            ->method('decrypt')
+            ->with(self::SECRET)
+            ->willReturn(self::DECRYPTED_SECRET);
+
+        $returnValue = (new GoogleTotpFactory(self::SERVER, self::ISSUER, self::CUSTOM_DIGITS, secretDecryptor: $secretDecryptor))->createTotpForUser($user);
+
+        $this->assertEquals(self::DECRYPTED_SECRET, $returnValue->getSecret());
     }
 
     #[Test]

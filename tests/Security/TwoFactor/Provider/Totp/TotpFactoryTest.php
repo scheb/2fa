@@ -11,6 +11,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\SecretDecryptorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpFactory;
 use Scheb\TwoFactorBundle\Tests\TestCase;
 
@@ -25,6 +26,7 @@ class TotpFactoryTest extends TestCase
 
     private const string USER_NAME = 'User Name';
     private const string SECRET = 'SECRET';
+    private const string DECRYPTED_SECRET = 'DECRYPTEDSECRET';
     private const int PERIOD = 20;
     private const int DIGITS = 8;
     private const string ALGORITHM = TotpConfiguration::ALGORITHM_SHA256;
@@ -79,6 +81,22 @@ class TotpFactoryTest extends TestCase
         $this->assertEquals(self::USER_NAME.'@'.self::SERVER, $returnValue->getLabel());
         $this->assertEquals(self::ISSUER, $returnValue->getIssuer());
         $this->assertEquals(self::CUSTOM_PARAMETER_VALUE, $returnValue->getParameter(self::CUSTOM_PARAMETER_NAME));
+    }
+
+    #[Test]
+    public function createTotpForUser_secretDecryptorGiven_returnTotpWithDecryptedSecret(): void
+    {
+        $user = $this->createUserMock();
+        $secretDecryptor = $this->createMock(SecretDecryptorInterface::class);
+        $secretDecryptor
+            ->expects($this->once())
+            ->method('decrypt')
+            ->with(self::SECRET)
+            ->willReturn(self::DECRYPTED_SECRET);
+
+        $returnValue = (new TotpFactory(self::SERVER, self::ISSUER, self::CUSTOM_PARAMETERS, secretDecryptor: $secretDecryptor))->createTotpForUser($user);
+
+        $this->assertEquals(self::DECRYPTED_SECRET, $returnValue->getSecret());
     }
 
     /**
