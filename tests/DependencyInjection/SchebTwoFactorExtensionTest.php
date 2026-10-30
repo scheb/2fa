@@ -229,6 +229,25 @@ EOF;
     }
 
     #[Test]
+    public function load_noGoogleAuthSecretDecryptor_hasNoSecretDecryptorAlias(): void
+    {
+        $config = $this->getEmptyConfig();
+        $config['google']['enabled'] = true;
+        $this->extension->load([$config], $this->container);
+
+        $this->assertNotHasAlias('scheb_two_factor.security.google.secret_decryptor');
+    }
+
+    #[Test]
+    public function load_customGoogleAuthSecretDecryptor_hasCustomAlias(): void
+    {
+        $config = $this->getFullConfig();
+        $this->extension->load([$config], $this->container);
+
+        $this->assertHasAlias('scheb_two_factor.security.google.secret_decryptor', 'acme_test.google_secret_decryptor');
+    }
+
+    #[Test]
     public function load_totpAuthEnabled_loadTotpFactoryServices(): void
     {
         $config = $this->getFullConfig();
@@ -257,6 +276,25 @@ EOF;
         $this->extension->load([$config], $this->container);
 
         $this->assertHasAlias('scheb_two_factor.security.totp.form_renderer', 'acme_test.totp_form_renderer');
+    }
+
+    #[Test]
+    public function load_noTotpSecretDecryptor_hasNoSecretDecryptorAlias(): void
+    {
+        $config = $this->getEmptyConfig();
+        $config['totp']['enabled'] = true;
+        $this->extension->load([$config], $this->container);
+
+        $this->assertNotHasAlias('scheb_two_factor.security.totp.secret_decryptor');
+    }
+
+    #[Test]
+    public function load_customTotpSecretDecryptor_hasCustomAlias(): void
+    {
+        $config = $this->getFullConfig();
+        $this->extension->load([$config], $this->container);
+
+        $this->assertHasAlias('scheb_two_factor.security.totp.secret_decryptor', 'acme_test.totp_secret_decryptor');
     }
 
     #[Test]
@@ -602,6 +640,7 @@ google:
     server_name: Server Name Google
     template: AcmeTestBundle:Authentication:googleForm.html.twig
     form_renderer: acme_test.google_form_renderer
+    secret_decryptor: acme_test.google_secret_decryptor
     digits: 8
     leeway: 20
 totp:
@@ -613,6 +652,7 @@ totp:
         image: http://foo/bar.png
     template: AcmeTestBundle:Authentication:totpForm.html.twig
     form_renderer: acme_test.totp_form_renderer
+    secret_decryptor: acme_test.totp_secret_decryptor
 EOF;
         $parser = new Parser();
 

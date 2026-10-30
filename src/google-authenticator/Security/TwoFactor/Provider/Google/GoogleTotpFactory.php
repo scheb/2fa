@@ -9,6 +9,7 @@ use OTPHP\TOTPInterface;
 use Psr\Clock\ClockInterface;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Exception\TwoFactorProviderLogicException;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\SecretDecryptorInterface;
 use function strlen;
 
 /**
@@ -21,6 +22,7 @@ class GoogleTotpFactory
         private readonly string|null $issuer,
         private readonly int $digits,
         private readonly ClockInterface|null $clock = null,
+        private readonly SecretDecryptorInterface|null $secretDecryptor = null,
     ) {
     }
 
@@ -29,6 +31,10 @@ class GoogleTotpFactory
         $secret = $user->getGoogleAuthenticatorSecret();
         if (null === $secret || 0 === strlen($secret)) {
             throw new TwoFactorProviderLogicException('Cannot initialize TOTP, no secret code provided.');
+        }
+
+        if (null !== $this->secretDecryptor) {
+            $secret = $this->secretDecryptor->decrypt($secret);
         }
 
         /** @psalm-suppress ArgumentTypeCoercion */

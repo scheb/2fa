@@ -207,6 +207,10 @@ class SchebTwoFactorExtension extends Extension
         $container->setParameter('scheb_two_factor.google.digits', $config['google']['digits']);
         $container->setParameter('scheb_two_factor.google.leeway', $config['google']['leeway']);
 
+        if (null !== $config['google']['secret_decryptor']) {
+            $container->setAlias('scheb_two_factor.security.google.secret_decryptor', $config['google']['secret_decryptor']);
+        }
+
         if (null === $config['google']['form_renderer']) {
             return;
         }
@@ -227,6 +231,10 @@ class SchebTwoFactorExtension extends Extension
         $container->setParameter('scheb_two_factor.totp.parameters', $config['totp']['parameters']);
         $container->setParameter('scheb_two_factor.totp.template', $config['totp']['template']);
         $container->setParameter('scheb_two_factor.totp.leeway', $config['totp']['leeway']);
+
+        if (null !== $config['totp']['secret_decryptor']) {
+            $container->setAlias('scheb_two_factor.security.totp.secret_decryptor', $config['totp']['secret_decryptor']);
+        }
 
         if (null === $config['totp']['form_renderer']) {
             return;
