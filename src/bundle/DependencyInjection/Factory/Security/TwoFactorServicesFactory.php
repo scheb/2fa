@@ -107,7 +107,8 @@ class TwoFactorServicesFactory
             ->replaceArgument(3, $firewallName)
             ->replaceArgument(4, $config['prepare_on_login'] ?? TwoFactorFactory::DEFAULT_PREPARE_ON_LOGIN)
             ->replaceArgument(5, $config['prepare_on_access_denied'] ?? TwoFactorFactory::DEFAULT_PREPARE_ON_ACCESS_DENIED)
-            ->addTag('kernel.event_subscriber');
+            ->addTag('kernel.event_subscriber')
+            ->addTag('kernel.reset', ['method' => 'reset']);
     }
 
     public function createKernelExceptionListener(ContainerBuilder $container, string $firewallName, string $authRequiredHandlerId): void

@@ -30,6 +30,7 @@ return static function (ContainerConfigurator $container): void {
     $container->services()
         ->set('scheb_two_factor.security.authenticator', TwoFactorAuthenticator::class)
             ->tag('monolog.logger', ['channel' => 'security'])
+            ->tag('kernel.reset', ['method' => 'reset'])
             ->args([
                 abstract_arg('Two-factor firewall config'),
                 service('security.token_storage'),

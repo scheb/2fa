@@ -136,7 +136,8 @@ class TwoFactorFactory implements FirewallListenerFactoryInterface, Authenticato
             ->replaceArgument(0, new Reference($twoFactorFirewallConfigId))
             ->replaceArgument(2, new Reference($successHandlerId))
             ->replaceArgument(3, new Reference($failureHandlerId))
-            ->replaceArgument(4, new Reference($authRequiredHandlerId));
+            ->replaceArgument(4, new Reference($authRequiredHandlerId))
+            ->addTag('kernel.reset', ['method' => 'reset']);
 
         return $authenticatorId;
     }
