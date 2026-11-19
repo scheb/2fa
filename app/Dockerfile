@@ -1,14 +1,25 @@
-FROM phpdockerio/php:8.5-fpm
+FROM php:8.5-fpm
 WORKDIR /application
 
 ARG GIT_COMMIT_ID=""
 
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
 # Install selected extensions and other stuff
 RUN apt-get update \
     && apt-get -y --no-install-recommends install \
-        php8.5-sqlite \
-        php8.5-intl \
-        php8.5-gd \
+        git \
+        libfreetype-dev \
+        libicu-dev \
+        libjpeg-dev \
+        libpng-dev \
+        libzip-dev \
+        unzip \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) \
+        gd \
+        intl \
+        zip \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/log/* /var/cache/* /usr/share/doc/*
 
 COPY app/bin/console      ./bin/
