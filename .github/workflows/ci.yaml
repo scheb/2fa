@@ -61,7 +61,7 @@ jobs:
                         symfony-version: '7.4.*'
 
                     # Test against Symfony 7.4 on highest PHP version
-                    -   php-version: '8.5'
+                    -   php-version: '8.6'
                         symfony-version: '7.4.*'
 
                     # Test against Symfony 8 on minimum PHP version
@@ -69,7 +69,7 @@ jobs:
                         symfony-version: '8.*'
 
                     # Test against Symfony 8 on highest PHP version
-                    -   php-version: '8.5'
+                    -   php-version: '8.6'
                         symfony-version: '8.*'
 
         steps:
@@ -103,7 +103,7 @@ jobs:
                         symfony-version: '7.4.*'
 
                     # Test against Symfony 7.4 on highest PHP version
-                    -   php-version: '8.5'
+                    -   php-version: '8.6'
                         symfony-version: '7.4.*'
 
                     # Test against Symfony 8 on minimum PHP version
@@ -111,7 +111,7 @@ jobs:
                         symfony-version: '8.*'
 
                     # Test against Symfony 8 on highest PHP version
-                    -   php-version: '8.5'
+                    -   php-version: '8.6'
                         symfony-version: '8.*'
         steps:
             -   name: 'Checkout code'

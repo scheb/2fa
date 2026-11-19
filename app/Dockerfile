@@ -1,4 +1,4 @@
-FROM php:8.5-fpm
+FROM php:8.6-fpm
 WORKDIR /application
 
 ARG GIT_COMMIT_ID=""
