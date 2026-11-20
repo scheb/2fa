@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": "~8.4.0 || ~8.5.0",
+        "php": "~8.4.0 || ~8.5.0 || ~8.6.0",
         "lcobucci/clock": "^3.0",
         "lcobucci/jwt": "^5.0",
         "spomky-labs/otphp": "^11.4",
@@ -37,7 +37,7 @@
         "symfony/mailer": "^7.4 || ^8.0",
         "symfony/validator": "^7.4 || ^8.0",
         "symfony/yaml": "^7.4 || ^8.0",
-        "vimeo/psalm": "^6.0"
+        "vimeo/psalm": "^7.0"
     },
     "autoload": {
         "psr-4": {

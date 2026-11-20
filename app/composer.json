@@ -2,7 +2,7 @@
     "type": "project",
     "license": "MIT",
     "require": {
-        "php": "~8.4.0 || ~8.5.0",
+        "php": "~8.4.0 || ~8.5.0 || ~8.6.0",
         "doctrine/doctrine-bundle": "^3.1",
         "doctrine/orm": "^3.5.8",
         "egulias/email-validator": "^4.0",
