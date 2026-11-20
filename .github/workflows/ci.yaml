@@ -15,8 +15,11 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version:
-                    - '8.2'
+                include:
+                    # Test against Symfony 7 on highest PHP version
+                    # PHP CS Fixer currently supports PHP syntax only up to PHP 8.5
+                    -   php-version: '8.5'
+                        symfony-version: '7.*'
 
         steps:
             -   name: 'Checkout code'
@@ -27,6 +30,7 @@ jobs:
                 with:
                     php-version: '${{ matrix.php-version }}'
                     composer-token: ${{ secrets.GITHUB_TOKEN }}
+                    symfony-version: '${{ matrix.symfony-version }}'
 
             -   name: "PHP Coding Standards Fixer"
                 run: php-cs-fixer fix --dry-run --diff --using-cache=no
@@ -61,7 +65,7 @@ jobs:
                         symfony-version: '6.4.*'
 
                     # Test against Symfony 6.4 on highest PHP version
-                    -   php-version: '8.5'
+                    -   php-version: '8.6'
                         symfony-version: '6.4.*'
 
                     # Test against Symfony 7 on minimum PHP version
@@ -69,7 +73,7 @@ jobs:
                         symfony-version: '7.*'
 
                     # Test against Symfony 7 on highest PHP version
-                    -   php-version: '8.5'
+                    -   php-version: '8.6'
                         symfony-version: '7.*'
 
         steps:
@@ -103,7 +107,7 @@ jobs:
                         symfony-version: '6.4.*'
 
                     # Test against Symfony 6.4 on highest PHP version
-                    -   php-version: '8.5'
+                    -   php-version: '8.6'
                         symfony-version: '6.4.*'
 
                     # Test against Symfony 7 on minimum PHP version
@@ -111,7 +115,7 @@ jobs:
                         symfony-version: '7.*'
 
                     # Test against Symfony 7 on highest PHP version
-                    -   php-version: '8.5'
+                    -   php-version: '8.6'
                         symfony-version: '7.*'
         steps:
             -   name: 'Checkout code'
@@ -138,8 +142,10 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version:
-                    - '8.2'
+                include:
+                    # Test against Symfony 7 on highest PHP version
+                    -   php-version: '8.6'
+                        symfony-version: '7.*'
 
         steps:
             -   name: 'Checkout code'
@@ -151,6 +157,7 @@ jobs:
                     php-version: '${{ matrix.php-version }}'
                     php-coverage: 'pcov'
                     composer-token: ${{ secrets.GITHUB_TOKEN }}
+                    symfony-version: '${{ matrix.symfony-version }}'
 
             -   name: 'Run tests with coverage'
                 run: vendor/bin/phpunit --coverage-clover coverage/clover.xml
