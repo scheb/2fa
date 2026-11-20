@@ -26,7 +26,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class CheckTwoFactorCodeReuseListenerTest extends TestCase
 {
     private const string MFA_CODE = '123456';
-    private const string CACHE_KEY = 'scheb_two_factor_code_reuse.3468ccbd044e2fdfb0769b68b5c85d7660c6c12c';
+    private const string CACHE_KEY = 'scheb_two_factor_code_reuse.f636bc618d0052dd3b055f63785e411e47ee068e391970e0cc3eb3c9581439d4';
     private const string USER_IDENTIFIER = 'jdoe@example.com';
 
     private MockObject&EventDispatcherInterface $eventDispatcher;

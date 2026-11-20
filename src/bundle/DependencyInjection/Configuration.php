@@ -42,7 +42,7 @@ class Configuration implements ConfigurationInterface
                         UsernamePasswordToken::class,
                         PostAuthenticationToken::class,
                     ])
-                    ->prototype('scalar')->end()
+                    ->scalarPrototype()->end()
                 ->end()
                 ->arrayNode('ip_whitelist')
                     ->beforeNormalization()
@@ -50,7 +50,7 @@ class Configuration implements ConfigurationInterface
                         ->then(static fn (array $value): array => iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator($value)), false))
                     ->end()
                     ->defaultValue([])
-                    ->prototype('scalar')->end()
+                    ->scalarPrototype()->end()
                 ->end()
                 ->scalarNode('ip_whitelist_provider')->defaultValue('scheb_two_factor.default_ip_whitelist_provider')->end()
                 ->scalarNode('two_factor_token_factory')->defaultValue('scheb_two_factor.default_token_factory')->end()

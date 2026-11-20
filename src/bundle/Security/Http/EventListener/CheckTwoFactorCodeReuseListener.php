@@ -11,7 +11,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeEvent;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Event\TwoFactorCodeReusedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use function sha1;
+use function hash;
 
 /**
  * @final
@@ -78,7 +78,7 @@ class CheckTwoFactorCodeReuseListener implements EventSubscriberInterface
     private function getCacheKey(TwoFactorCodeEvent $event): string
     {
         return 'scheb_two_factor_code_reuse.'
-            .sha1($event->getUser()->getUserIdentifier().'.'.$event->getCode());
+            .hash('sha256', $event->getUser()->getUserIdentifier().'.'.$event->getCode());
     }
 
     /**
