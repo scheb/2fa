@@ -33,7 +33,7 @@ use Symfony\Contracts\Service\ResetInterface;
 use function assert;
 use function class_exists;
 use function count;
-use function spl_object_hash;
+use function spl_object_id;
 
 /**
  * @final
@@ -126,7 +126,7 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
 
             // Backwards compatibility for bundle version <=8
             // Remember the token to set the provider complete in onAuthenticationSuccess
-            $this->onCompleteTokens[spl_object_hash($authenticatedToken)] = $twoFactorToken;
+            $this->onCompleteTokens[spl_object_id($authenticatedToken)] = $twoFactorToken;
 
             return $authenticatedToken;
         }
@@ -162,14 +162,14 @@ class TwoFactorAuthenticator implements AuthenticatorInterface, InteractiveAuthe
         // Backwards compatibility for bundle version <=8
         // In case the two-factor process was completed, $token is no longer a TwoFactorToken
         // Set the provider completed on the remembered TwoFactorToken
-        $twoFactorToken = $this->onCompleteTokens[spl_object_hash($token)] ?? null;
+        $twoFactorToken = $this->onCompleteTokens[spl_object_id($token)] ?? null;
         if (null !== $twoFactorToken) {
             $currentProvider = $twoFactorToken->getCurrentTwoFactorProvider();
             if (null !== $currentProvider) {
                 $twoFactorToken->setTwoFactorProviderComplete($currentProvider);
             }
 
-            unset($this->onCompleteTokens[spl_object_hash($token)]);
+            unset($this->onCompleteTokens[spl_object_id($token)]);
         }
 
         $this->dispatchTwoFactorAuthenticationEvent(TwoFactorAuthenticationEvents::COMPLETE, $request, $token);
